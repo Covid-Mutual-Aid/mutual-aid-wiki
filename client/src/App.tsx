@@ -14,7 +14,7 @@ type MapConfig = {
 
 function App() {
   const [groups, setGroups] = useState<Group[]>([])
-  const [postcode, setPostcode] = useState<String>('')
+  const [postcode, setPostcode] = useState('')
   const [mapConfig, setMapConfig] = useState<MapConfig>({
     center: {
       lat: 55.3781,
