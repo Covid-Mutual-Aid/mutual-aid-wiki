@@ -19,7 +19,7 @@ const GroupMap = ({ groups }: Props) => {
     }
 
     const onLoad = (marker: any) => {
-      console.log('marker: ', marker)
+      // console.log('marker: ', marker)
     }
 
     return <Marker onLoad={onLoad} position={group.location_coord} />
