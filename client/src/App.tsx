@@ -7,9 +7,22 @@ import GroupsTable from './components/GroupsTable'
 import { Group, Coord } from './utils/types'
 import GroupMap from './components/GroupMap'
 
+type MapConfig = {
+  center: Coord
+  zoom: number
+}
+
 function App() {
   const [groups, setGroups] = useState<Group[]>([])
   const [postcode, setPostcode] = useState<String>('')
+  const [mapConfig, setMapConfig] = useState<MapConfig>({
+    center: {
+      lat: 55.3781,
+      lng: -3.436,
+    },
+    zoom: 5,
+  })
+
   const request = useRequest()
 
   useEffect(() => {
@@ -23,6 +36,10 @@ function App() {
       })
       .then(data => {
         const user = { lat: data.result.latitude, lng: data.result.longitude }
+        setMapConfig({
+          center: user,
+          zoom: 11,
+        })
         const withDistance = groups
           .map(g => ({
             ...g,
@@ -62,7 +79,7 @@ function App() {
         </Form>
 
         <br />
-        <GroupMap groups={groups} />
+        <GroupMap groups={groups} center={mapConfig.center} zoom={mapConfig.zoom} />
         <GroupsTable groups={groups} />
       </header>
     </div>
