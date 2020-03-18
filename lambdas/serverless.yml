@@ -5,8 +5,10 @@ service:
 #org: your-org-name
 
 custom:
-  DB_TABLE: ${self:provider.stage}-groups
+  DYNAMODB_TABLE: ${self:provider.stage}-groups
   dynamodb:
+    stages:
+      - dev
     start:
       port: 8000
       inMemory: true
@@ -15,7 +17,7 @@ custom:
     seed:
       domain:
         sources:
-          - table: ${self:custom.DB_TABLE}
+          - table: ${self:custom.DYNAMODB_TABLE}
             sources: [./migrations/groups-seed.json]
   serverless-offline:
     httpPort: 4000
@@ -38,22 +40,41 @@ provider:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-    DB_PREFIX: ${self:custom.DB_TABLE}
+    DYNAMODB_TABLE: ${self:custom.DYNAMODB_TABLE}
+    OFFLINE: true # Temp fix to tell if in local development
   iamRoleStatements:
-    - Effect: 'Allow'
+    - Effect: Allow
       Action:
-        - 'dynamodb:*'
-      Resource:
-        - 'arn:aws:dynamodb:*:*'
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.DYNAMODB_TABLE}'
 
 functions:
-  hello:
-    handler: handler.hello
+  groups:
+    handler: handler.groups
     events:
       - http:
           method: get
-          path: hello
+          path: groups
           cors: true
 
 resources:
-  Resources: ${file(migrations/groups.yml)}
+  Resources:
+    ExportDB:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.DYNAMODB_TABLE}

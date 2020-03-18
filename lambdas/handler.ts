@@ -3,22 +3,15 @@ import 'source-map-support/register'
 
 import dynamoClient from './src/lib/dynamodb'
 
-export const hello: APIGatewayProxyHandler = async (event, _context) => {
-  const res = await dynamoClient.scan({ TableName: 'dev-groups' }).promise()
+export const groups: APIGatewayProxyHandler = async (_event, _context) => {
+  const groups = await dynamoClient
+    .scan({ TableName: process.env.DYNAMODB_TABLE as string })
+    .promise()
+    .catch(err => err.message)
+    .then(x => x.Items)
+
   return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Headers': '*',
-      'access-control-allow-credentials': 'false',
-    },
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless Webpack (Typescript) v1.0! Your function executed successfully!',
-        input: event,
-        res,
-      },
-      null,
-      2
-    ),
+    body: JSON.stringify(groups),
   }
 }

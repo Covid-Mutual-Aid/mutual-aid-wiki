@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRequest } from './contexts/RequestProvider';
 
 function App() {
+  const [groups, setGroups] = useState<any[]>([]);
+  const request = useRequest();
+
+  useEffect(() => {
+    request('/dev/groups').then(setGroups)
+  }, [])
+
   return (
     <div className="App">
       <header className='App-header'>
@@ -8,14 +16,12 @@ function App() {
           Edit <code>src/App.tsx
             </code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {groups.map(group => (
+          <div key={group.id}>
+            <p>{group.name}</p>
+            <a href={group.facebook_link}>{group.facebook_link}</a>
+          </div>
+        ))}
       </header>
     </div>
   );

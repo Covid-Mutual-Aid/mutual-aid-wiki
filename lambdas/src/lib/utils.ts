@@ -1,1 +1,1 @@
-export const isOffline = () => process.env.IS_OFFLINE
+export const isOffline = () => process.env.OFFLINE
