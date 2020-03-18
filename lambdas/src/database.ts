@@ -14,18 +14,23 @@ const dynamoClient = isOffline()
   ? new AWS.DynamoDB.DocumentClient(offlineOptions)
   : new AWS.DynamoDB.DocumentClient()
 
+const TableName = process.env.DYNAMODB_TABLE as string
 import { Group } from './types'
 
 export const getGroups = () =>
   dynamoClient
-    .scan({ TableName: process.env.DYNAMODB_TABLE as string })
+    .scan({ TableName })
     .promise()
     .then(x => x.Items)
 
-export const addGroup = (group: Omit<Group, 'id'>) =>
+export const getGroup = ({ id }: { id: string }) =>
   dynamoClient
-    .put({
-      TableName: process.env.DYNAMODB_TABLE as string,
-      Item: { ...group, id: uuid() },
-    })
+    .get({ TableName, Key: { id } })
     .promise()
+    .then(x => x.Item)
+
+export const createGroup = (group: Group) =>
+  dynamoClient.put({ TableName, Item: { ...group, id: group.id || uuid() } }).promise()
+
+export const removeGroup = ({ id }: { id: string }) =>
+  dynamoClient.delete({ TableName, Key: { id } }).promise()

@@ -1,6 +1,9 @@
 import { spawn } from 'child_process'
 import { join } from 'path'
+import axios from 'axios'
+
 let slsOfflineProcess
+let localDynamo
 
 jest.setTimeout(30000)
 beforeEach(async function() {
@@ -14,8 +17,10 @@ afterEach(function() {
   console.log('[Tests Teardown] Done')
 })
 
-test('cool', () => {
+test('cool', async () => {
+  const res = await axios.get('http://localhost:4000/dev/groups')
   console.log('SLS OFFLINE')
+  console.log(res.data)
 })
 // Helper functions
 const startOffline = () =>

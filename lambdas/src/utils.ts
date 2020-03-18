@@ -35,7 +35,10 @@ export const lambda = (
   validation?: ValidateEvent
 ): APIGatewayProxyHandler => (event, context) =>
   Promise.resolve()
-    .then(() => (validation ? validateEvent(validation, event) : null))
+    .then(() => console.log('BODY', { validation }, event.body && JSON.parse(event.body)))
+    .then(() =>
+      validation && (validation.body || validation.params) ? validateEvent(validation, event) : null
+    )
     .then(() => callback(event, context))
     .then(res => ({
       statusCode: 200,
@@ -45,3 +48,9 @@ export const lambda = (
       statusCode: 500,
       body: err.message,
     }))
+
+export const lambdaPost = (
+  callback: (x: any) => Promise<any>,
+  validation?: ValidateStruct
+): APIGatewayProxyHandler =>
+  lambda(event => callback(JSON.parse(event.body as any)), { body: validation })

@@ -69,6 +69,30 @@ functions:
           path: createGroup
           cors: true
 
+  getGroup:
+    handler: handler.getGroup
+    events:
+      - http:
+          method: post
+          path: getGroup
+          cors: true
+
+  deleteGroup:
+    handler: handler.deleteGroup
+    events:
+      - http:
+          method: post
+          path: deleteGroup
+          cors: true
+
+  updateGroup:
+    handler: handler.updateGroup
+    events:
+      - http:
+          method: post
+          path: updateGroup
+          cors: true
+
 resources:
   Resources:
     ExportDB:

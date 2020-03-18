@@ -1,14 +1,19 @@
 import 'source-map-support/register'
 
-import { getGroups, addGroup } from './src/database'
-import { lambda } from './src/utils'
+import {
+  getGroups,
+  removeGroup,
+  getGroup as _getGroup,
+  createGroup as _createGroup,
+} from './src/database'
+import { lambda, lambdaPost } from './src/utils'
 
 export const groups = lambda(getGroups)
+export const getGroup = lambdaPost(_getGroup, { id: 'string' })
 
-export const createGroup = lambda(event => addGroup(JSON.parse(event.body as string)), {
-  body: {
-    name: 'string',
-    link_facebook: 'string',
-    location_name: 'string',
-  },
+export const createGroup = lambdaPost(_createGroup, {
+  name: 'string',
+  link_facebook: 'string',
+  location_name: 'string',
 })
+export const deleteGroup = lambdaPost(removeGroup, { id: 'string' })
