@@ -1,17 +1,14 @@
-import { APIGatewayProxyHandler } from 'aws-lambda'
 import 'source-map-support/register'
 
-import { getGroups } from './src/data'
+import { getGroups, addGroup } from './src/database'
+import { lambda } from './src/utils'
 
-export const groups: APIGatewayProxyHandler = async (_event, _context) =>
-  getGroups().then(groups => ({
-    statusCode: 200,
-    body: JSON.stringify(groups),
-  }))
+export const groups = lambda(getGroups)
 
-export const group: APIGatewayProxyHandler = async (_event, _context) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(_event),
-  }
-}
+export const createGroup = lambda(event => addGroup(JSON.parse(event.body as string)), {
+  body: {
+    name: 'string',
+    link_facebook: 'string',
+    location_name: 'string',
+  },
+})

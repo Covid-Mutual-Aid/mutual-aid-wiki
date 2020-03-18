@@ -7,9 +7,9 @@
     "preinstall": "cd client && yarn install && cd ../lambdas; yarn install",
     "db:setup": "cd lambdas && sls dynamodb install",
     "db:remove": "cd lambdas && sls dynamodb remove",
-    "db:start": "cd lambdas && sls dynamodb start",
+    "start:db": "cd lambdas && sls dynamodb start",
     "start:client": "cd client; yarn start",
-    "start:lambda": "cd lambdas; env OFFLINE=true sls offline",
+    "start:lambda": "cd lambdas; yarn start",
     "start": "run-p start:client start:lambda db:start"
   },
   "devDependencies": {

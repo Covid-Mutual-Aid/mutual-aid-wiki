@@ -3,12 +3,14 @@
     "lib": ["es2017"],
     "removeComments": true,
     "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
     "sourceMap": true,
     "target": "es2017",
     "outDir": "lib",
-    "strict": true,
     "allowSyntheticDefaultImports": true
   },
   "include": ["./**/*.ts"],

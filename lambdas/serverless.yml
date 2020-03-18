@@ -61,16 +61,12 @@ functions:
           path: groups
           cors: true
 
-  group:
-    handler: handler.groups
+  createGroup:
+    handler: handler.createGroup
     events:
       - http:
-          method: get
-          path: group
-          cors: true
-      - http:
           method: post
-          path: group
+          path: createGroup
           cors: true
 
 resources:
