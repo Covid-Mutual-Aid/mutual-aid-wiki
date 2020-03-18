@@ -14,3 +14,7 @@ code {
   height: calc(30vh + 10rem);
   overflow: scroll;
 }
+
+.group-map {
+  height: 40vh;
+}

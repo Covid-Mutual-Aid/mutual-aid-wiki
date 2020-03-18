@@ -31,8 +31,8 @@ const geolocatedGroupPromises = nonGeolocatedGroups.map(group => {
       const geolocated = {
         ...group,
         location_coord: {
-          lat: '' + response.data.results[0].geometry.location.lat, //Coerce into string for dynamoDB
-          lng: '' + response.data.results[0].geometry.location.lng,
+          lat: response.data.results[0].geometry.location.lat,
+          lng: response.data.results[0].geometry.location.lng,
         },
       }
       console.log(geolocated)

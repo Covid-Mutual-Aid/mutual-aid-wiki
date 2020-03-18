@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
+
 import { useRequest } from './contexts/RequestProvider'
 import GroupsTable from './components/GroupsTable'
 import { Group } from './utils/types'
+import GroupMap from './components/GroupMap'
 
 function App() {
   const [groups, setGroups] = useState<Group[]>([])
@@ -17,6 +19,9 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
+
+        <GroupMap groups={groups} />
+
         <GroupsTable groups={groups} />
       </header>
     </div>

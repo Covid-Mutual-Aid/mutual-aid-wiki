@@ -1832,6 +1832,25 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
+"@react-google-maps/api@^1.8.5":
+  version "1.8.5"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/api/-/api-1.8.5.tgz#42214279fc1faf4e8f394c0ca05d5ea9831662e4"
+  integrity sha512-6F1q/FxmKDKvM2+HEhfTQC3l1GT6ScnJP+Ch/gfpYdCUvmgF1WJXbiIwqWss/bbXOu4757KbETshDrAXmifakg==
+  dependencies:
+    "@react-google-maps/infobox" "1.8.4"
+    "@react-google-maps/marker-clusterer" "1.8.4"
+    invariant "2.2.4"
+
+"@react-google-maps/infobox@1.8.4":
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/infobox/-/infobox-1.8.4.tgz#0b47b005fed8e19b73d9dfef1e39e5ecd5e6846f"
+  integrity sha512-lbEBZTJLPN6OGwKpjO9adxTsV8xF/T8aeri6+/eLYwMfkhXutHhiUyTGpX/lK2tDhXRE/7E48IvseikiAl2E/g==
+
+"@react-google-maps/marker-clusterer@1.8.4":
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/marker-clusterer/-/marker-clusterer-1.8.4.tgz#83227c6f709ed69f860dabb1cc17dd58def3ef4e"
+  integrity sha512-7b10ORlAnf9PPGVATcS/T9C7AxD1IfGhkT9LpO9oD5E3lJ1Y5TIOCtxiWz1VSzm3RvtOY8uI/i4NuRGwR0bVyA==
+
 "@restart/context@^2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@restart/context/-/context-2.1.4.tgz#a99d87c299a34c28bd85bb489cb07bfd23149c02"
@@ -6014,7 +6033,7 @@ internal-ip@^4.3.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
-invariant@^2.2.2, invariant@^2.2.4:
+invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
