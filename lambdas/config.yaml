@@ -1,0 +1,4 @@
+dev:
+  DB_PREFIX: dev
+prod:
+  DB_PREFIX: prod

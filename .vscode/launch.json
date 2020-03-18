@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "Lambda",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["--inspect", "--debug-port=9229"],
+      "program": "${workspaceRoot}/lambdas/node_modules/serverless/bin/serverless",
+      "args": ["offline"],
+      "port": 9229,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch localhost",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/client/src"
+    }
+  ]
+}
