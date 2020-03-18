@@ -8,23 +8,21 @@ type Props = {
 }
 const GroupsTable = ({ groups }: Props) => {
   return (
-    <div className="group-table-wrapper">
-      <Table responsive striped bordered hover size="sm">
+    <div>
+      <Table className="table-fixed" responsive striped bordered hover size="sm">
         <thead>
           <tr>
             <th>Name</th>
             <th>Location</th>
-            <th>Link</th>
           </tr>
         </thead>
         <tbody>
           {groups.map((group, i) => (
             <tr key={i}>
-              <td>{group.name}</td>
-              <td>{group.location_name}</td>
               <td>
-                <a href={group.link_facebook}>link</a>
+                <a href={group.link_facebook}>{group.name}</a>
               </td>
+              <td>{group.location_name}</td>
             </tr>
           ))}
         </tbody>
