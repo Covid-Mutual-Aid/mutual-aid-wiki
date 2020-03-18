@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Form, Button } from 'react-bootstrap'
 
 import { useRequest } from './contexts/RequestProvider'
 import GroupsTable from './components/GroupsTable'
@@ -13,15 +14,27 @@ function App() {
     request('/dev/groups').then(setGroups)
   }, [])
 
+  const verifyPostcode = (postcode: string) => {
+    fetch('api.postcodes.io/postcodes/' + postcode).then(data => {
+      console.log(data)
+    })
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <Form>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Postcode</Form.Label>
+            <Form.Control type="email" placeholder="Enter postcode..." />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
 
+        <br />
         <GroupMap groups={groups} />
-
         <GroupsTable groups={groups} />
       </header>
     </div>

@@ -11,10 +11,12 @@ code {
 }
 
 .group-table-wrapper {
-  height: calc(30vh + 10rem);
-  overflow: scroll;
+  height: 300px;
+  display: block;
+  overflow-y: scroll;
+  width: 100%;
 }
 
-.group-map {
-  height: 40vh;
+.App {
+  padding: 4rem;
 }
