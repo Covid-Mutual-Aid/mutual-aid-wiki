@@ -10,10 +10,17 @@
     "start:db": "cd lambdas && sls dynamodb start",
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
-    "start": "run-p start:client start:lambda start:db"
+    "start": "run-p start:client start:lambda start:db",
+    "test:e2e": "jest ./tests/*.test.ts --detectOpenHandles"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^3.8.3"
+  },
+  "jest": {
+    "preset": "ts-jest"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -21,5 +28,9 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 100
+  },
+  "dependencies": {
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1"
   }
 }
