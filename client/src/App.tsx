@@ -52,7 +52,7 @@ function App() {
             <Form.Label>Postcode</Form.Label>
             <Form.Control
               onChange={handlePostcodeChange}
-              type="email"
+              type="text"
               placeholder="Enter postcode..."
             />
           </Form.Group>
