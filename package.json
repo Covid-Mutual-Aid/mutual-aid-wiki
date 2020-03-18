@@ -10,7 +10,7 @@
     "start:db": "cd lambdas && sls dynamodb start",
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
-    "start": "run-p start:client start:lambda db:start"
+    "start": "run-p start:client start:lambda start:db"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"
