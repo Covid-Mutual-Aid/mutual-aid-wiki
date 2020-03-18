@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useRequest } from './contexts/RequestProvider'
+import GroupsTable from './components/GroupsTable'
+import { Group } from './utils/types'
 
 function App() {
-  const [groups, setGroups] = useState<any[]>([])
+  const [groups, setGroups] = useState<Group[]>([])
   const request = useRequest()
 
   useEffect(() => {
@@ -15,12 +17,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        {groups.map((group, i) => (
-          <div key={i}>
-            <p>{group.name}</p>
-            <a href={group.link}>{group.link}</a>
-          </div>
-        ))}
+        <GroupsTable groups={groups} />
       </header>
     </div>
   )
