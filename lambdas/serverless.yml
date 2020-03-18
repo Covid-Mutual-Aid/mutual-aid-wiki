@@ -41,7 +41,6 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     DYNAMODB_TABLE: ${self:custom.DYNAMODB_TABLE}
-    OFFLINE: true # Temp fix to tell if in local development
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -60,6 +59,18 @@ functions:
       - http:
           method: get
           path: groups
+          cors: true
+
+  group:
+    handler: handler.groups
+    events:
+      - http:
+          method: get
+          path: group
+          cors: true
+      - http:
+          method: post
+          path: group
           cors: true
 
 resources:
