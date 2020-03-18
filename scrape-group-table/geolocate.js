@@ -26,9 +26,15 @@ console.log('Geolocating:')
 const geolocatedGroupPromises = nonGeolocatedGroups.map(group => {
   const term = encodeURIComponent(group.location_name)
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${term}&key=${process.env.GOOGLE_API_KEY}`
-  return axios({ url, timeout: 10000 })
+  return axios({ url, timeout: 40000 })
     .then(response => {
-      const geolocated = { ...group, location_coord: response.data.results[0].geometry.location }
+      const geolocated = {
+        ...group,
+        location_coord: {
+          lat: '' + response.data.results[0].geometry.location.lat, //Coerce into string for dynamoDB
+          lng: '' + response.data.results[0].geometry.location.lng,
+        },
+      }
       console.log(geolocated)
       return geolocated
     })
@@ -41,6 +47,7 @@ console.log('Writing:')
 Promise.all(geolocatedGroupPromises).then(newlyGeolocatedGroups => {
   const allGeolocatedGroups = existingGeolocatedGroups.concat(newlyGeolocatedGroups)
   fs.writeFileSync('geolocated-' + filename, JSON.stringify(allGeolocatedGroups.filter(g => g)))
+
   console.log('')
   console.log('There were ' + scrapedGroups.length + ' scrapedGroups already')
   console.log('There were ' + existingGeolocatedGroups.length + ' existingGeolocatedGroups already')

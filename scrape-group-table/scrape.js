@@ -14,7 +14,7 @@ x(
 )((err, groups) => {
   const nonEmptyValues = obj => Object.values(obj).reduce((a, c) => a + c).length !== 0
   const proccessed = groups.filter(nonEmptyValues).map((g, i) => ({
-    id: i,
+    id: i + '',
     name: g[1],
     link_facebook: g[2],
     location_name: g[0],
