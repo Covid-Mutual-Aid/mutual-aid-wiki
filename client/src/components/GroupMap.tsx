@@ -19,7 +19,7 @@ const GroupMap = ({ groups, center, zoom }: Props) => {
 
   return (
     <div className="group-map">
-      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyCKQeMu8vMl25We8EHBAmLJ7FxIqpjC-9Q">
+      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg">
         <GoogleMap
           id="circle-example"
           mapContainerStyle={{
