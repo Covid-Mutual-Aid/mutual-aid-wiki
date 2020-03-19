@@ -9,7 +9,7 @@ import RequestProvider from './contexts/RequestProvider'
 import App from './App'
 
 const Render = () => (
-  <RequestProvider request={useCallback((x: RequestInfo) => fetch(x).then(x => x.json()), [])}>
+  <RequestProvider request={useCallback((input: RequestInfo, init?: RequestInit) => fetch(input, init).then(x => x.json()), [])}>
     <App />
   </RequestProvider>
 )

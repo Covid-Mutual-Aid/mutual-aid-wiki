@@ -6,6 +6,7 @@ import { useRequest } from './contexts/RequestProvider'
 import GroupsTable from './components/GroupsTable'
 import { Group, Coord } from './utils/types'
 import GroupMap from './components/GroupMap'
+import CreateGroup from './components/CreateGroup'
 
 type MapConfig = {
   center: Coord
