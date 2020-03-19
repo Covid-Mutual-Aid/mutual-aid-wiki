@@ -5,9 +5,27 @@ import axios from 'axios'
 const seededData = require('../lambdas/migrations/groups-seed.json')
 let slsOfflineProcess
 
+const newTask = {
+  name: 'New Task2',
+  link_facebook: 'Link',
+  location_name: 'Location',
+  id: '4',
+  location_coord: { lng: -5.8101207, lat: 54.7261871 },
+}
+
 test('Get all groups', async () => {
-  const { data } = await axios.get('http://localhost:4000/dev/groups')
-  expect(data.map(x => x.id).sort()).toEqual(seededData.map(x => x.id).sort())
+  const { data: allTasks } = await axios.get('http://localhost:4000/dev/group/get')
+  const { data: singleTask } = await axios.get(
+    `http://localhost:4000/dev/group/get?id=${allTasks[0].id}`
+  )
+  await axios.post('http://localhost:4000/dev/group/create', newTask)
+  const { data: withNewTask } = await axios.get('http://localhost:4000/dev/group/get')
+
+  expect(allTasks.map(x => x.name).sort()).toEqual(seededData.map(x => x.name).sort())
+  expect(allTasks[0]).toEqual(singleTask)
+  expect(withNewTask.map(x => x.name).sort()).toEqual(
+    [...seededData, newTask].map(x => x.name).sort()
+  )
 })
 
 // Setup and teardown

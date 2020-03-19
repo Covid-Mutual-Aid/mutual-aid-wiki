@@ -17,7 +17,7 @@ const CreateGroup = () => {
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!location || !link || !name) return setValid(false)
-        request(`/dev/createGroup`, {
+        request(`/dev/group/create`, {
           method: 'POST',
           body: JSON.stringify({
             name,

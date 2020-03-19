@@ -55,61 +55,8 @@ provider:
       Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.DYNAMODB_TABLE}'
 
 functions:
-  groups:
-    handler: handler.groups
-    events:
-      - http:
-          method: get
-          path: groups
-          cors: true
-
-  createGroup:
-    handler: handler.createGroup
-    events:
-      - http:
-          method: post
-          path: createGroup
-          cors: true
-
-  getGroup:
-    handler: handler.getGroup
-    events:
-      - http:
-          method: post
-          path: getGroup
-          cors: true
-
-  deleteGroup:
-    handler: handler.deleteGroup
-    events:
-      - http:
-          method: post
-          path: deleteGroup
-          cors: true
-
-  updateGroup:
-    handler: handler.updateGroup
-    events:
-      - http:
-          method: post
-          path: updateGroup
-          cors: true
-
-  googlePlaceSuggest:
-    handler: handler.googlePlaceSuggest
-    events:
-      - http:
-          method: get
-          path: googlePlaceSuggest
-          cors: true
-
-  googlePlaceDetails:
-    handler: handler.googlePlaceDetails
-    events:
-      - http:
-          method: get
-          path: googlePlaceDetails
-          cors: true
+  - ${file(./services/database/functions.yml)}
+  - ${file(./services/google/functions.yml)}
 
 resources:
   Resources:

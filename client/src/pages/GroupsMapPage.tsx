@@ -19,7 +19,7 @@ function GroupsMapPage() {
   const request = useRequest()
 
   useEffect(() => {
-    request('/dev/groups').then(setGroups)
+    request('/dev/group/get').then(setGroups)
   }, [])
 
   const sortedByDistance = groups
@@ -87,11 +87,11 @@ function GroupsMapPage() {
             </Form.Row>
           </Form>
         ) : (
-          <div>
-            <h4>Showing groups nearest to {postcode}</h4>
-            <a onClick={() => setPostcodeOverlay(false)}>Use a different postcode</a>
-          </div>
-        )}
+            <div>
+              <h4>Showing groups nearest to {postcode}</h4>
+              <a onClick={() => setPostcodeOverlay(false)}>Use a different postcode</a>
+            </div>
+          )}
       </div>
 
       <br />

@@ -1,0 +1,23 @@
+get:
+  handler: services/database/handler.get
+  events:
+    - http:
+        method: get
+        path: group/get
+        cors: true
+
+create:
+  handler: services/database/handler.create
+  events:
+    - http:
+        method: post
+        path: group/create
+        cors: true
+
+delete:
+  handler: services/database/handler.delete
+  events:
+    - http:
+        method: post
+        path: group/delete
+        cors: true

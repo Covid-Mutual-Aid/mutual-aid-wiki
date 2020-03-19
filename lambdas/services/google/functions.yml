@@ -1,0 +1,15 @@
+googlePlaceSuggest:
+  handler: services/google/handler.placeSuggest
+  events:
+    - http:
+        method: get
+        path: google/placeSuggest
+        cors: true
+
+googlePlaceDetails:
+  handler: services/google/handler.placeDetails
+  events:
+    - http:
+        method: get
+        path: google/placeDetails
+        cors: true
