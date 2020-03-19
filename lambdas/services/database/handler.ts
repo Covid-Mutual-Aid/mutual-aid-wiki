@@ -25,6 +25,7 @@ export const putGroup = (group: Omit<Group, 'id'> & { id?: 'id' }) => {
     .promise()
     .then(() => Item)
 }
+
 export const scanGroups = () =>
   dynamoClient
     .scan({ TableName })

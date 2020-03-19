@@ -13,19 +13,24 @@ const newTask = {
 }
 
 test('Get all groups', async () => {
-  const { data: allTasks } = await axios.get('http://localhost:4000/dev/group/get')
-  expect(allTasks.map(x => x.name).sort()).toEqual(seededData.map(x => x.name).sort())
+  try {
+    const { data: allTasks } = await axios.get('http://localhost:4000/dev/group/get')
+    expect(allTasks.map(x => x.name).sort()).toEqual(seededData.map(x => x.name).sort())
 
-  const { data: singleTask } = await axios.get(
-    `http://localhost:4000/dev/group/get?id=${allTasks[0].id}`
-  )
-  expect(allTasks[0]).toEqual(singleTask)
+    const { data: singleTask } = await axios.get(
+      `http://localhost:4000/dev/group/get?id=${allTasks[0].id}`
+    )
+    expect(allTasks[0]).toEqual(singleTask)
 
-  await axios.post('http://localhost:4000/dev/group/create', newTask)
-  const { data: withNewTask } = await axios.get('http://localhost:4000/dev/group/get')
-  expect(withNewTask.map(x => x.name).sort()).toEqual(
-    [...seededData, newTask].map(x => x.name).sort()
-  )
+    await axios.post('http://localhost:4000/dev/group/create', newTask)
+    const { data: withNewTask } = await axios.get('http://localhost:4000/dev/group/get')
+    expect(withNewTask.map(x => x.name).sort()).toEqual(
+      [...seededData, newTask].map(x => x.name).sort()
+    )
+  } catch (err) {
+    console.log(err)
+    throw new Error(err)
+  }
 })
 
 // Setup and teardown
