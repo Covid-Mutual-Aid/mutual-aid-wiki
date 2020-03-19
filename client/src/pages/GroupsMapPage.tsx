@@ -6,7 +6,7 @@ import { useRequest } from '../contexts/RequestProvider'
 import GroupsTable from '../components/GroupsTable'
 import { Group, Coord } from '../utils/types'
 import GroupMap from '../components/GroupMap'
-import CreateGroup from '../components/CreateGroup'
+import CreateGroup from './CreateGroupPage'
 import { Link } from 'react-router-dom'
 
 type MapConfig = {
@@ -72,7 +72,7 @@ function GroupsMapPage() {
         {!postcodeOverlay ? (
           <Form>
             <Form.Row>
-              <Col xs={8} md={5}>
+              <Col xs={8} md={8}>
                 <Form.Group className="postcode-input">
                   <Form.Control
                     onChange={handlePostcodeChange}
@@ -82,14 +82,14 @@ function GroupsMapPage() {
                 </Form.Group>
                 <Form.Text className="text-muted">{postcodeError}</Form.Text>
               </Col>
-              <Col xs={4} md={3}>
-                <Button onClick={verifyPostcode} variant="primary">
+              <Col xs={4} md={2}>
+                <Button className="button-search" onClick={verifyPostcode} variant="primary">
                   Search
                 </Button>
               </Col>
-              <Col className="d-flex flex-row-reverse" xs={12} md={4}>
+              <Col className="d-flex flex-row-reverse" xs={12} md={2}>
                 <Link to="/create-group">
-                  <Button variant="light">Add group</Button>
+                  <Button variant="secondary">Add group</Button>
                 </Link>
               </Col>
             </Form.Row>

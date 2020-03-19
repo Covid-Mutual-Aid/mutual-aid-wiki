@@ -28,3 +28,7 @@ code {
 .postcode-input {
   margin-bottom: 0;
 }
+
+.button-search {
+  width: 100%;
+}
