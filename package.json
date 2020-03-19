@@ -11,7 +11,7 @@
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
     "start": "run-p start:client start:lambda start:db",
-    "test:e2e": "jest ./tests/*.test.ts --detectOpenHandles"
+    "test:e2e": "jest ./tests/*.test.ts"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",

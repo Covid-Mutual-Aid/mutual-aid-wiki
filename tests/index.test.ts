@@ -1,9 +1,8 @@
-import { spawn } from 'child_process'
+import { spawn, spawnSync } from 'child_process'
 import { join } from 'path'
 import axios from 'axios'
 
 const seededData = require('../lambdas/migrations/groups-seed.json')
-let slsOfflineProcess
 
 const newTask = {
   name: 'New Task2',
@@ -15,14 +14,15 @@ const newTask = {
 
 test('Get all groups', async () => {
   const { data: allTasks } = await axios.get('http://localhost:4000/dev/group/get')
+  expect(allTasks.map(x => x.name).sort()).toEqual(seededData.map(x => x.name).sort())
+
   const { data: singleTask } = await axios.get(
     `http://localhost:4000/dev/group/get?id=${allTasks[0].id}`
   )
+  expect(allTasks[0]).toEqual(singleTask)
+
   await axios.post('http://localhost:4000/dev/group/create', newTask)
   const { data: withNewTask } = await axios.get('http://localhost:4000/dev/group/get')
-
-  expect(allTasks.map(x => x.name).sort()).toEqual(seededData.map(x => x.name).sort())
-  expect(allTasks[0]).toEqual(singleTask)
   expect(withNewTask.map(x => x.name).sort()).toEqual(
     [...seededData, newTask].map(x => x.name).sort()
   )
@@ -35,37 +35,53 @@ beforeEach(async function() {
   return startOffline()
 })
 
-afterEach(function() {
+afterEach(function(done) {
   console.log('[Tests Teardown] Start')
-  stopSlsOffline()
+  stopSlsOffline(done as any)
   console.log('[Tests Teardown] Done')
 })
 
 // Helper functions
+let slsOfflineProcess
+let dynamoDB
+
 const startOffline = () =>
   new Promise((res, rej) => {
-    slsOfflineProcess = spawn('yarn', ['start'], { cwd: join(__dirname, '../lambdas') })
-    console.log(`Serverless: Offline started with PID : ${slsOfflineProcess.pid}`)
+    dynamoDB = spawn('yarn', ['start:db'], { cwd: join(__dirname, '../') })
+    console.log(`dynamodb: started with PID : ${dynamoDB.pid}`)
 
-    slsOfflineProcess.stdout.on('data', data => {
+    dynamoDB.stdout.on('data', data => {
+      console.log(data.toString().trim())
       if (
         data
           .toString()
           .trim()
-          .includes('server ready')
+          .includes('Dynamodb Local Started')
       ) {
-        console.log(data.toString().trim())
-        res()
+        slsOfflineProcess = spawn('yarn', ['start'], { cwd: join(__dirname, '../lambdas') })
+        console.log(`Serverless: Offline started with PID : ${slsOfflineProcess.pid}`)
+        slsOfflineProcess.stdout.on('data', data => {
+          if (
+            data
+              .toString()
+              .trim()
+              .includes('server ready')
+          ) {
+            console.log(data.toString().trim())
+            res()
+          }
+        })
+        slsOfflineProcess.stderr.on('data', errData => {
+          console.log(`Error starting Serverless Offline:\n${errData}`)
+          rej(errData)
+        })
       }
-    })
-
-    slsOfflineProcess.stderr.on('data', errData => {
-      console.log(`Error starting Serverless Offline:\n${errData}`)
-      rej(errData)
     })
   })
 
-const stopSlsOffline = () => {
+const stopSlsOffline = (done: any) => {
   slsOfflineProcess.kill()
-  console.log('Serverless Offline stopped')
+  dynamoDB.kill()
+  spawnSync('pkill', ['java'])
+  setTimeout(() => done(), 1000)
 }
