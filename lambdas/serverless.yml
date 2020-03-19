@@ -42,7 +42,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     DYNAMODB_TABLE: ${self:custom.DYNAMODB_TABLE}
-    GOOGLE_PLACES_API_KEY: ${env:GOOGLE_PLACES_API_KEY}
+    GOOGLE_API_KEY: ${env:GOOGLE_API_KEY}
   iamRoleStatements:
     - Effect: Allow
       Action:
