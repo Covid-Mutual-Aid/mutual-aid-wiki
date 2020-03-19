@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Table } from 'react-bootstrap'
+import { Table, Badge } from 'react-bootstrap'
 import { Group } from '../utils/types'
 
 type GroupWithDistance = Group & {
@@ -30,7 +30,12 @@ const GroupsTable = ({ groups }: Props) => {
                   </a>
                 </td>
                 <td>
-                  {location_name} {distance ? '(' + distance / 1000 + 'km)' : ''}
+                  {location_name}{' '}
+                  {distance ? (
+                    <Badge variant="success">{(distance / 1000).toFixed(1) + 'km'}</Badge>
+                  ) : (
+                    ''
+                  )}
                 </td>
               </tr>
             ))}

@@ -22,5 +22,9 @@ code {
 }
 
 .postcode-form {
-  height: 8rem;
+  height: 4rem;
+}
+
+.postcode-input {
+  margin-bottom: 0;
 }
