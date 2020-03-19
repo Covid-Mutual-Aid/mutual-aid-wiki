@@ -18,16 +18,14 @@ jobs:
         run: yarn install
       - name: Install Dependencies
         run: sudo npm install -g serverless
-      # - name: serverless deploy
-      #   uses: ./.github/actions/serverless
-      #   with:
-      #     args: package
-      #   env:
-      #     AWS_ACCESS_KEY_ID: 'cool'
-      #     AWS_SECRET_ACCESS_KEY: 'beans'
-      - name: Set Credentials
-        run: sudo serverless config credentials --provider aws --profile jt --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        working-directory: ./lambdas
-      - name: Deploy lambdas
-        run: sudo serverless deploy
-        working-directory: ./lambdas
+      - name: serverless deploy
+        uses: ./.github/actions/serverless
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # - name: Set Credentials
+      #   run: sudo serverless config credentials --provider aws --profile jt --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   working-directory: ./lambdas
+      # - name: Deploy lambdas
+      #   run: sudo serverless deploy
+      #   working-directory: ./lambdas
