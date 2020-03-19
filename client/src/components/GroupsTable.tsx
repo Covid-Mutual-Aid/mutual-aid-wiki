@@ -3,8 +3,12 @@ import React from 'react'
 import { Table } from 'react-bootstrap'
 import { Group } from '../utils/types'
 
+type GroupWithDistance = Group & {
+  distance?: number
+}
+
 type Props = {
-  groups: Group[]
+  groups: GroupWithDistance[]
 }
 const GroupsTable = ({ groups }: Props) => {
   return (
@@ -18,12 +22,16 @@ const GroupsTable = ({ groups }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {groups.map((group, i) => (
+            {groups.map(({ link_facebook, name, location_name, distance }, i) => (
               <tr key={i}>
                 <td>
-                  <a href={group.link_facebook}>{group.name}</a>
+                  <a href={link_facebook}>
+                    {name} {}
+                  </a>
                 </td>
-                <td>{group.location_name}</td>
+                <td>
+                  {location_name} {distance ? '(' + distance / 1000 + 'km)' : ''}
+                </td>
               </tr>
             ))}
           </tbody>

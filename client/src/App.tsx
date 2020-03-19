@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import haversine from 'haversine-distance'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Container, Fade } from 'react-bootstrap'
 
 import { useRequest } from './contexts/RequestProvider'
 import GroupsTable from './components/GroupsTable'
@@ -15,6 +15,7 @@ type MapConfig = {
 function App() {
   const [groups, setGroups] = useState<Group[]>([])
   const [postcode, setPostcode] = useState('')
+  const [postcodeOverlay, setPostcodeOverlay] = useState(false)
   const [mapConfig, setMapConfig] = useState<MapConfig>({
     center: {
       lat: 55.3781,
@@ -40,20 +41,21 @@ function App() {
           center: user,
           zoom: 11,
         })
-        const withDistance = groups
+        setPostcodeOverlay(true)
+        const sortedByDistance = groups
           .map(g => ({
             ...g,
             distance: haversine(user, g.location_coord),
           }))
           .sort((a, b) => (a.distance > b.distance ? 1 : -1))
-          .map(g => ({
-            name: g.name,
-            link_facebook: g.link_facebook,
-            location_name: g.location_name,
-            location_coord: g.location_coord,
-          }))
+        // .map(g => ({
+        //   name: g.name,
+        //   link_facebook: g.link_facebook,
+        //   location_name: g.location_name,
+        //   location_coord: g.location_coord,
+        // }))
 
-        setGroups(withDistance)
+        setGroups(sortedByDistance)
       })
   }
 
@@ -64,19 +66,27 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Form>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Postcode</Form.Label>
-            <Form.Control
-              onChange={handlePostcodeChange}
-              type="text"
-              placeholder="Enter postcode..."
-            />
-          </Form.Group>
-          <Button onClick={verifyPostcode} variant="primary">
-            Submit
-          </Button>
-        </Form>
+        <Container className="postcode-form">
+          {!postcodeOverlay ? (
+            <Form>
+              <Form.Group>
+                <Form.Control
+                  onChange={handlePostcodeChange}
+                  type="text"
+                  placeholder="Enter postcode..."
+                />
+              </Form.Group>
+              <Button onClick={verifyPostcode} variant="primary">
+                Submit
+              </Button>
+            </Form>
+          ) : (
+            <div>
+              <h4>Showing groups nearest to {postcode}</h4>
+              <a onClick={() => setPostcodeOverlay(false)}>Use a different postcode</a>
+            </div>
+          )}
+        </Container>
 
         <br />
         <GroupMap groups={groups} center={mapConfig.center} zoom={mapConfig.zoom} />
