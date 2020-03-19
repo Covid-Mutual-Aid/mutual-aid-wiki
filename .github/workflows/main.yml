@@ -17,4 +17,6 @@ jobs:
       - name: Install Dependencies
         run: yarn install
       - name: Run integration tests
-        run: yarn test:e2e
+        run: |
+          yarn db:setup
+          yarn test:e2e
