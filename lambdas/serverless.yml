@@ -1,5 +1,5 @@
 service:
-  name: search-by-postcode
+  name: lambdas
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -36,7 +36,6 @@ provider:
   runtime: nodejs12.x
   region: ${opt:region, 'eu-west-2'}
   stage: ${opt:stage, 'dev'}
-  deploymentBucket: search-by-postcode-lambdas
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
