@@ -8,6 +8,7 @@
     "start": "env OFFLINE=true sls offline"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.0.0-alpha.68",
     "source-map-support": "^0.5.10",

@@ -41,6 +41,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     DYNAMODB_TABLE: ${self:custom.DYNAMODB_TABLE}
+    GOOGLE_PLACES_API_KEY: AIzaSyCKQeMu8vMl25We8EHBAmLJ7FxIqpjC-9Q
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -91,6 +92,22 @@ functions:
       - http:
           method: post
           path: updateGroup
+          cors: true
+
+  googlePlaceSuggest:
+    handler: handler.googlePlaceSuggest
+    events:
+      - http:
+          method: get
+          path: googlePlaceSuggest
+          cors: true
+
+  googlePlaceDetails:
+    handler: handler.googlePlaceDetails
+    events:
+      - http:
+          method: get
+          path: googlePlaceDetails
           cors: true
 
 resources:
