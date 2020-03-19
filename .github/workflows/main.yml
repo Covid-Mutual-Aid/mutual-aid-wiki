@@ -27,6 +27,6 @@ jobs:
       #     AWS_SECRET_ACCESS_KEY: 'beans'
       - name: Deploy lambdas
         run: |
-          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          serverless deploy
+          sudo serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          sudo serverless deploy
         working-directory: ./lambdas
