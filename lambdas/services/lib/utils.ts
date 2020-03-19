@@ -47,7 +47,7 @@ export const lambda = (
     }))
     .catch(err => ({
       statusCode: 500,
-      body: err.message,
+      body: err.message || err,
     }))
 
 export const lambdaBody = (

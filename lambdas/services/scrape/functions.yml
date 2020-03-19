@@ -1,0 +1,4 @@
+scrapeGroups:
+  handler: services/scrape/handler.scrapeGroups
+updateGroups:
+  handler: services/scrape/handler.updateGroups

@@ -17,27 +17,35 @@ const dynamoClient = isOffline()
 
 const TableName = process.env.DYNAMODB_TABLE as string
 
+// Helpers
+export const putGroup = (group: Omit<Group, 'id'> & { id?: 'id' }) => {
+  const Item = { ...group, id: group.id || uuid() }
+  return dynamoClient
+    .put({ TableName, Item })
+    .promise()
+    .then(() => Item)
+}
+export const scanGroups = () =>
+  dynamoClient
+    .scan({ TableName })
+    .promise()
+    .then(x => x.Items as Group[])
+
+// Lambdas
 export const get = lambdaQuery((x?: { id?: string }) =>
   x && x.id
     ? dynamoClient
         .get({ TableName, Key: { id: x.id } })
         .promise()
         .then(x => x.Item)
-    : dynamoClient
-        .scan({ TableName })
-        .promise()
-        .then(x => x.Items)
+    : scanGroups()
 )
 
-export const create = lambdaBody(
-  (group: Group) =>
-    dynamoClient.put({ TableName, Item: { ...group, id: group.id || uuid() } }).promise(),
-  {
-    name: 'string',
-    link_facebook: 'string',
-    location_name: 'string',
-  }
-)
+export const create = lambdaBody((group: Group) => putGroup(group), {
+  name: 'string',
+  link_facebook: 'string',
+  location_name: 'string',
+})
 
 export const remove = lambdaBody(
   ({ id }: { id: string }) => dynamoClient.delete({ TableName, Key: { id } }).promise(),

@@ -1,4 +1,4 @@
-get:
+getGroup:
   handler: services/database/handler.get
   events:
     - http:
@@ -6,7 +6,7 @@ get:
         path: group/get
         cors: true
 
-create:
+createGroup:
   handler: services/database/handler.create
   events:
     - http:
@@ -14,7 +14,7 @@ create:
         path: group/create
         cors: true
 
-delete:
+deleteGroup:
   handler: services/database/handler.delete
   events:
     - http:
