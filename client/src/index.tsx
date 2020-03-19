@@ -9,7 +9,15 @@ import RequestProvider from './contexts/RequestProvider'
 import App from './App'
 
 const Render = () => (
-  <RequestProvider request={useCallback((input: RequestInfo, init?: RequestInit) => fetch(input, init).then(x => x.json()), [])}>
+  <RequestProvider
+    request={useCallback(
+      (input: RequestInfo, init?: RequestInit) =>
+        fetch('https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com' + input, init).then(x =>
+          x.json()
+        ),
+      []
+    )}
+  >
     <App />
   </RequestProvider>
 )
