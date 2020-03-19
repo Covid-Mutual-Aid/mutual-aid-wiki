@@ -12,7 +12,7 @@ const Render = () => (
   <RequestProvider
     request={useCallback(
       (input: RequestInfo, init?: RequestInit) =>
-        fetch('https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com' + input, init).then(x =>
+        fetch('https://3f9qskjpw5.execute-api.eu-west-2.amazonaws.com' + input, init).then(x =>
           x.json()
         ),
       []
