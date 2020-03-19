@@ -19,4 +19,4 @@ jobs:
       - name: Install Serverless Cli
         run: sudo npm i -g serverless
       - name: 'Deploy lambdas'
-        run: 'cd lambdas && sls --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }} deploy'
+        run: 'cd lambdas && sudo sls --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }} deploy'
