@@ -11,8 +11,7 @@
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
     "start": "run-p start:client start:lambda start:db",
-    "test:e2e": "jest ./tests/*.test.ts",
-    "sls": "serverless"
+    "test:e2e": "jest ./tests/*.test.ts"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
@@ -33,7 +32,6 @@
   "dependencies": {
     "axios": "^0.19.2",
     "jest": "^25.1.0",
-    "serverless": "^1.66.0",
     "ts-jest": "^25.2.1"
   }
 }
