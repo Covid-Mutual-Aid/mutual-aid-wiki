@@ -2357,16 +2357,6 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv-expand@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-5.1.0.tgz#3fbaf020bfd794884072ea26b1e9791d45a629f0"
-  integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
-
-dotenv@^8.2.0:
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
-  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
-
 duplexer3@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
@@ -5790,15 +5780,6 @@ serialize-javascript@^2.1.2:
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
   integrity sha512-rs9OggEUF0V4jUSecXazOYsLfu7OGK2qIn3c7IPBiffz32XniEp/TX9Xmc9LQfK2nQ2QKHvZ2oygKUGU0lG4jQ==
 
-serverless-dotenv-plugin@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/serverless-dotenv-plugin/-/serverless-dotenv-plugin-2.3.2.tgz#9ff1e6923538166030c80ec194d9fc8ecde698ac"
-  integrity sha512-ILoGzNFFR5FOStZB4oHBLHEj25vpxAGv/qIXO3mTAi5gVdLC16D8kIAnWdOom1y3sBGesgo/BajzBqCSizowew==
-  dependencies:
-    chalk "^3.0.0"
-    dotenv "^8.2.0"
-    dotenv-expand "^5.1.0"
-
 serverless-dynamodb-local@^0.2.39:
   version "0.2.39"
   resolved "https://registry.yarnpkg.com/serverless-dynamodb-local/-/serverless-dynamodb-local-0.2.39.tgz#9022bb8fa5d2271b1959bf8728b03c8680e66ca2"
@@ -5809,10 +5790,10 @@ serverless-dynamodb-local@^0.2.39:
     dynamodb-localhost "0.0.9"
     lodash "^4.17.0"
 
-serverless-offline@^6.0.0-alpha.68:
-  version "6.0.0-alpha.68"
-  resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-6.0.0-alpha.68.tgz#5ac993b79076efc4901c3e37e42b4a08c7c3ab02"
-  integrity sha512-ktvHHUx+ActFrAHxZ8psasG2DsRSMVCozyekwTocCJ3Az0o2J5q4PFG5IMqTd2PXWA+oY4E9b+ue2iFvKdE9Pg==
+serverless-offline@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-6.0.0.tgz#edc168f3292e225d0b2c1ed678c1996738f43d10"
+  integrity sha512-JtFOq747LPJgHmvB+TtWVycKvE0eBHu6r8uWS3dL19WQJsiow6CfSn4x21pdhfOLC2pLDcb4X0kQJbA+HVzSMg==
   dependencies:
     "@hapi/boom" "^7.4.11"
     "@hapi/h2o2" "^8.3.2"

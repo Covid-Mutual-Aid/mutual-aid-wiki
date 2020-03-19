@@ -16,18 +16,5 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install Dependencies
         run: yarn install
-      - name: Install Dependencies
-        run: npm install -g serverless
-      # - name: serverless deploy
-      #   uses: ./.github/actions/serverless
-      #   with:
-      #     args: package
-      #   env:
-      #     AWS_ACCESS_KEY_ID: 'cool'
-      #     AWS_SECRET_ACCESS_KEY: 'beans'
-      - name: Deploy lambdas
-        run: |
-          serverless config credentials --provider aws --profile jt --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          serverless deploy
-
-        working-directory: ./lambdas
+      - name: Run integration tests
+        run: yarn test:e2e
