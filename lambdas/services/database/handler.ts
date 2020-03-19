@@ -32,6 +32,22 @@ export const scanGroups = () =>
     .promise()
     .then(x => x.Items as Group[])
 
+export const removeGroup = ({ id }: { id: string }) =>
+  dynamoClient.delete({ TableName, Key: { id } }).promise()
+
+export const batchRemove = (groups: Group[]) =>
+  dynamoClient
+    .batchWrite({
+      RequestItems: {
+        [TableName]: [
+          groups
+            .filter(x => x.id && typeof x.id === 'string')
+            .map(x => ({ DeleteRequest: { Key: { id: x.id } } })) as any,
+        ],
+      },
+    })
+    .promise()
+
 // Lambdas
 export const get = lambdaQuery((x?: { id?: string }) =>
   x && x.id
@@ -48,7 +64,4 @@ export const create = lambdaBody((group: Group) => putGroup(group), {
   location_name: 'string',
 })
 
-export const remove = lambdaBody(
-  ({ id }: { id: string }) => dynamoClient.delete({ TableName, Key: { id } }).promise(),
-  { id: 'string' }
-)
+export const remove = lambdaBody(removeGroup, { id: 'string' })

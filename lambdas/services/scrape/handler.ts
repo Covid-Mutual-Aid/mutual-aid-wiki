@@ -1,7 +1,7 @@
 import Xray from 'x-ray'
 
 import { googleGeoLocate } from '../google/handler'
-import { scanGroups, putGroup } from '../database/handler'
+import { scanGroups, putGroup, removeGroup } from '../database/handler'
 
 import { lambda } from '../lib/utils'
 import { Group } from '../lib/types'
@@ -45,12 +45,24 @@ export const updateGroups = lambda(() =>
         groups.map(group => () =>
           geoLocateGroup(group)
             .then(putGroup)
-            .catch(() => group)
+            .catch(err => console.log(err.message))
         )
       )
     )
 )
 
-// Utility
+export const removeAllGroups = lambda(() =>
+  scanGroups().then(groups =>
+    allSeq(
+      groups.map(group => () =>
+        removeGroup(group)
+          .then(() => console.log(`deleted ${group.name}`))
+          .catch(err => err.message)
+      )
+    )
+  )
+)
+
+// UtilityremoveGroup
 const allSeq = <T>(x: (() => Promise<T>)[]) =>
   x.reduce((a, b) => a.then(all => b().then(n => [...all, n])), Promise.resolve([] as T[]))
