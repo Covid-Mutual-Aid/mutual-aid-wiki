@@ -19,7 +19,7 @@ jobs:
       - name: Install Serverless Cli
         run: sudo npm i -g serverless
       - name: Set project dir environment var
-        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/lambds"
+        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/lambdas"
       - name: 'Test working dir'
         run: 'ls'
       # - name: serverless deploy
