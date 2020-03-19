@@ -6,10 +6,6 @@ import { useRequest } from '../contexts/RequestProvider'
 import GroupsTable from '../components/GroupsTable'
 import { Group, Coord } from '../utils/types'
 import GroupMap from '../components/GroupMap'
-<<<<<<< HEAD
-import CreateGroup from './CreateGroupPage'
-=======
->>>>>>> b8447f190d27a139588dc9d3acb71c3f2345cc37
 import { Link } from 'react-router-dom'
 import useMapConfig from '../utils/useMapConfig'
 import useDebouncedValue from '../utils/useDebounceValue'
@@ -17,6 +13,8 @@ import useDebouncedValue from '../utils/useDebounceValue'
 function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])
   const [postcode, setPostcode] = useState('')
+  const [postcodeError, setPostcodeError] = useState('')
+  const [postcodeOverlay, setPostcodeOverlay] = useState(false)
   const [mapConfig, error] = useMapConfig(useDebouncedValue(200, postcode))
   const request = useRequest()
 
@@ -31,10 +29,38 @@ function GroupsMapPage() {
     }))
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
 
+  const verifyPostcode = () => {
+    fetch('https://api.postcodes.io/postcodes/' + postcode)
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        if (!data.result) {
+          setPostcodeError('Invalid postcode, please try again')
+          return
+        }
+        console.log(data)
+        setPostcode(data.result.postcode)
+        const user = { lat: data.result.latitude, lng: data.result.longitude }
+        setPostcodeOverlay(true)
+        const sortedByDistance = groups
+          .map(g => ({
+            ...g,
+            distance: haversine(user, g.location_coord),
+          }))
+          .sort((a, b) => (a.distance > b.distance ? 1 : -1))
+
+        setGroups(sortedByDistance)
+      })
+  }
+
+  const handlePostcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPostcode(e.target.value)
+  }
+
   return (
     <div>
       <div className="postcode-form">
-<<<<<<< HEAD
         {!postcodeOverlay ? (
           <Form>
             <Form.Row>
@@ -66,31 +92,6 @@ function GroupsMapPage() {
             <a onClick={() => setPostcodeOverlay(false)}>Use a different postcode</a>
           </div>
         )}
-=======
-        <div>
-          <h4>Showing groups nearest to {postcode}</h4>
-          {/* <a onClick={() => setPostcodeOverlay(false)}>Use a different postcode</a> */}
-        </div>
-        <Form>
-          <Form.Row>
-            <Col xs={8} md={5} mb={3}>
-              <Form.Group className="postcode-input">
-                <Form.Control
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostcode(e.target.value)}
-                  type="text"
-                  placeholder="Enter postcode..."
-                />
-              </Form.Group>
-              <Form.Text className="text-muted">{error ? 'Invalid postcode' : ''}</Form.Text>
-            </Col>
-            <Col className="d-flex flex-row-reverse" xs={12} md={4}>
-              <Link to="/create-group">
-                <Button variant="light">Add group</Button>
-              </Link>
-            </Col>
-          </Form.Row>
-        </Form>
->>>>>>> b8447f190d27a139588dc9d3acb71c3f2345cc37
       </div>
 
       <br />
