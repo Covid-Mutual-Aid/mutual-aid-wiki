@@ -16,18 +16,15 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install Dependencies
         run: yarn install
-      - name: Install Serverless Cli
-        run: sudo npm i -g serverless
-      - name: Set project dir environment var
-        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/lambdas"
-      - name: 'Test working dir'
-        run: 'ls'
+      - name: Install Dependencies
+        run: sudo npm install -g serverless
       # - name: serverless deploy
-      #   uses: serverless/github-action@master
+      #   uses: ./.github/actions/serverless
       #   with:
-      #     args: deploy
+      #     args: package
       #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      # - name: 'Deploy lambdas'
-      #   run: 'cd lambdas && sudo sls --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }} deploy'
+      #     AWS_ACCESS_KEY_ID: 'cool'
+      #     AWS_SECRET_ACCESS_KEY: 'beans'
+      - name: Deploy lambdas
+        run: sudo sls deploy --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        working-directory: ./lambdas
