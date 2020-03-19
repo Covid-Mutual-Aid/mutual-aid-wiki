@@ -1,0 +1,33 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [master]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Dependencies
+        run: yarn install
+      - name: Install Dependencies
+        run: npm install -g serverless
+      # - name: serverless deploy
+      #   uses: ./.github/actions/serverless
+      #   with:
+      #     args: package
+      #   env:
+      #     AWS_ACCESS_KEY_ID: 'cool'
+      #     AWS_SECRET_ACCESS_KEY: 'beans'
+      - name: Deploy lambdas
+        run: |
+          serverless config credentials --provider aws --profile jt --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          serverless deploy
+
+        working-directory: ./lambdas
