@@ -40,8 +40,15 @@ export const updateGroups = lambda(() =>
         scraped.filter(x => !existing.some(y => y.link_facebook === x.link_facebook))
       )
     )
-    .then(groups => allSeq(groups.map(group => () => geoLocateGroup(group))))
-    .then(groups => allSeq(groups.map(group => () => putGroup(group))))
+    .then(groups =>
+      allSeq(
+        groups.map(group => () =>
+          geoLocateGroup(group)
+            .then(putGroup)
+            .catch(() => group)
+        )
+      )
+    )
 )
 
 // Utility
