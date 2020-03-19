@@ -2,9 +2,15 @@ import { spawn } from 'child_process'
 import { join } from 'path'
 import axios from 'axios'
 
+const seededData = require('../lambdas/migrations/groups-seed.json')
 let slsOfflineProcess
-let localDynamo
 
+test('Get all groups', async () => {
+  const { data } = await axios.get('http://localhost:4000/dev/groups')
+  expect(data.map(x => x.id).sort()).toEqual(seededData.map(x => x.id).sort())
+})
+
+// Setup and teardown
 jest.setTimeout(30000)
 beforeEach(async function() {
   console.log('[Tests Bootstrap] Start')
@@ -17,15 +23,10 @@ afterEach(function() {
   console.log('[Tests Teardown] Done')
 })
 
-test('cool', async () => {
-  const res = await axios.get('http://localhost:4000/dev/groups')
-  console.log('SLS OFFLINE')
-  console.log(res.data)
-})
 // Helper functions
 const startOffline = () =>
   new Promise((res, rej) => {
-    slsOfflineProcess = spawn('sls', ['offline', 'start'], { cwd: join(__dirname, '../lambdas') })
+    slsOfflineProcess = spawn('yarn', ['start'], { cwd: join(__dirname, '../lambdas') })
     console.log(`Serverless: Offline started with PID : ${slsOfflineProcess.pid}`)
 
     slsOfflineProcess.stdout.on('data', data => {
@@ -33,7 +34,7 @@ const startOffline = () =>
         data
           .toString()
           .trim()
-          .includes('listening on http://')
+          .includes('server ready')
       ) {
         console.log(data.toString().trim())
         res()
