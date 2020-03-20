@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import * as Sentry from '@sentry/browser'
 
