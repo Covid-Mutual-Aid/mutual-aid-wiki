@@ -3,8 +3,8 @@ import Xray from 'x-ray'
 import { googleGeoLocate } from '../google/handler'
 import { scanGroups, putGroup, removeGroup } from '../database/handler'
 
-import { lambda } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
+import { lambda } from '../lib/lambdaUtils'
 import { uniqueBy, missingIn, allSeq, isSameGroup } from '../lib/utils'
 
 let x = Xray()
@@ -47,7 +47,8 @@ export const updateGroups = lambda(() =>
         groups.map(group => () =>
           geoLocateGroup(group)
             .then(putGroup)
-            .catch(err => console.log(err.message))
+            .catch(err => err.message)
+            .then(() => 'done')
         )
       )
     )
