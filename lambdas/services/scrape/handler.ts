@@ -42,8 +42,9 @@ const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
 export const scrapeGroups = lambda(scrape)
 export const updateGroups = lambda(() =>
   scrape()
-    .then(scraped =>
-      scanGroups().then(existing => scraped.filter(x => !existing.some(y => isSameGroup(x, y))))
+    .then(
+      scraped =>
+        scanGroups().then(existing => scraped.filter(x => !existing.some(y => isSameGroup(x, y)))) //the filter function needs to be tested
     )
     .then(groups =>
       allSeq(
