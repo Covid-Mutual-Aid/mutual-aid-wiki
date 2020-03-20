@@ -26,8 +26,8 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
             {groups.map(({ link_facebook, name, location_name, distance }, i) => (
               <tr key={i}>
                 <td>
-                  <a href={link_facebook}>
-                    {name} {}
+                  <a target="_blank" href={link_facebook}>
+                    {name}
                   </a>
                 </td>
                 <td>
