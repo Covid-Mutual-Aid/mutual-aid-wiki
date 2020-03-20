@@ -1,4 +1,4 @@
-import { Form, Button, Col } from 'react-bootstrap'
+import { Form, Button, Col, Container } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react'
 import haversine from 'haversine-distance'
 import { Link } from 'react-router-dom'
@@ -11,13 +11,12 @@ import { useMapState } from '../contexts/MapProvider'
 import useLocationSearch from '../utils/useLocationSearch'
 import { Group } from '../utils/types'
 
-
 function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
-  const { locate, error, name } = useLocationSearch();
-  const [{ center, group }] = useMapState();
+  const { locate, error, name } = useLocationSearch()
+  const [{ center, group }] = useMapState()
 
   const sortedByDistance = groups
     .map(g => ({
@@ -29,56 +28,64 @@ function GroupsMapPage() {
   const request = useRequest()
 
   useEffect(() => {
-    request('/group/get').then(setGroups).catch(console.log)
+    request('/group/get')
+      .then(setGroups)
+      .catch(console.log)
   }, [request])
 
   return (
     <div>
       <div className="place-form">
         {!placeOverlay ? (
-          <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault()
-            locate(place)
-          }}>
-            <Form.Row>
-              <Col xs={8} md={8}>
-                <Form.Group className="place-input">
-                  <Form.Control
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlace(e.target.value)}
-                    type="text"
-                    placeholder="Enter place..."
-                  />
-                </Form.Group>
-                <Form.Text className="text-muted">{error}</Form.Text>
-              </Col>
-              <Col xs={4} md={2}>
-                <Button className="button-search" onClick={() => locate(place)} variant="primary">
-                  Search
-                </Button>
-              </Col>
-              <Col className="d-flex flex-row-reverse" xs={12} md={2}>
-                <Link to="/create-group">
-                  <Button variant="secondary">Add group</Button>
-                </Link>
-              </Col>
-            </Form.Row>
-          </Form>
+          <Container>
+            <Form
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                e.preventDefault()
+                locate(place)
+              }}
+            >
+              <Form.Row>
+                <Col xs={12} md={8} className="input-height">
+                  <Form.Group className="place-input small-margin-bottom">
+                    <Form.Control
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setPlace(e.target.value)
+                      }
+                      type="text"
+                      placeholder="Enter place..."
+                    />
+                  </Form.Group>
+                  <Form.Text className="text-muted">{error}</Form.Text>
+                </Col>
+                <Col xs={8} md={2} className="input-height">
+                  <Button className="full-width" onClick={() => locate(place)} variant="primary">
+                    Search
+                  </Button>
+                </Col>
+                <Col xs={4} md={2} className="input-height">
+                  <Link to="/create-group">
+                    <Button className="full-width" variant="secondary">
+                      add group
+                    </Button>
+                  </Link>
+                </Col>
+              </Form.Row>
+            </Form>
+          </Container>
         ) : (
-            <div>
-              <h4>Showing groups nearest to {place}</h4>
-              <button type='button' className="blue" onClick={() => setPlaceOverlay(false)}>
-                Use a different place
+          <div>
+            <h4>Showing groups nearest to {place}</h4>
+            <button type="button" className="blue" onClick={() => setPlaceOverlay(false)}>
+              Use a different place
             </button>
-            </div>
-          )}
+          </div>
+        )}
       </div>
 
-      <br />
-      <GroupMap groups={groups} />
-      <GroupsTable
-        groups={sortedByDistance}
-        shouldDisplayDistance={!!(group || name)}
-      />
+      <div className="mt-2">
+        <GroupMap groups={groups} />
+        <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
+      </div>
     </div>
   )
 }

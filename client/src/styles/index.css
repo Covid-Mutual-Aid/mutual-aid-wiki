@@ -29,11 +29,19 @@ code {
   margin-bottom: 0;
 }
 
-.button-search {
+.full-width {
   width: 100%;
 }
 
 .blue {
   color: blue !important;
   cursor: pointer;
+}
+
+.small-margin-bottom {
+  margin-bottom: 0.2rem !important;
+}
+
+.input-height {
+  height: 4rem;
 }
