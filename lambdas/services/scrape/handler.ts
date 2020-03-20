@@ -44,7 +44,7 @@ export const updateGroups = lambda(() =>
     .then(scraped => scanGroups().then(existing => missingIn(isSameGroup)(existing, scraped)))
     .then(groups =>
       allSeq(
-        groups.slice(0, 30).map(group => () =>
+        groups.map(group => () =>
           geoLocateGroup(group)
             .then(putGroup)
             .catch(err => console.log(err.message))
