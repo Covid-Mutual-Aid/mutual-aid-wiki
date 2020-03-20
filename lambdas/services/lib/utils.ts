@@ -1,5 +1,8 @@
 import { Group } from './types'
 
+const env = require('../../env.json')
+export const GOOGLE_API_KEY = env.GOOGLE_API_KEY
+
 export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
   a: T,
   b: T
