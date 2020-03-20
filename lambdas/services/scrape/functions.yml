@@ -9,3 +9,6 @@ removeGroups:
 missingGroups:
   handler: services/scrape/handler.missingGroups
   timeout: 30
+purgeDuplicates:
+  handler: services/scrape/handler.purgeDuplicates
+  timeout: 200

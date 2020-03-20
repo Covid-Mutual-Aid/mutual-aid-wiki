@@ -2,8 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import * as Sentry from '@sentry/browser'
 
-import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/index.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import * as serviceWorker from './utils/serviceWorker'
 import RequestProvider from './contexts/RequestProvider'
 
@@ -20,7 +21,8 @@ const baseUrl =
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
   fetch(baseUrl + input, init).then(x => x.json()).catch(err => {
     if (accum > 5) return Promise.reject(err);
-    return new Promise(res => setTimeout(res, 500 * accum * accum)).then(() => request(input, init, accum + 1))
+    return new Promise(res => setTimeout(res, 500 * accum * accum))
+      .then(() => request(input, init, accum + 1))
   })
 
 const Render = () => (

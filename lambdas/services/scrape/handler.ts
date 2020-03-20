@@ -55,6 +55,17 @@ export const updateGroups = lambda(() =>
     )
 )
 
+export const purgeDuplicates = lambda(() =>
+  scanGroups()
+    .then(groups =>
+      groups.reduce<[Group[], Group[]]>(
+        ([u, s], b) => (u.some(x => isSameGroup(x, b)) ? [u, [...s, b]] : [[...u, b], s]),
+        [[], []]
+      )
+    )
+    .then(([_, dups]) => allSeq(dups.map(grp => () => removeGroup(grp))))
+)
+
 export const removeAllGroups = lambda(() =>
   scanGroups().then(groups =>
     allSeq(
