@@ -5,13 +5,14 @@
   "license": "MIT",
   "scripts": {
     "preinstall": "cd client && yarn install && cd ../lambdas; yarn install",
-    "db:setup": "cd lambdas && sls dynamodb install",
+    "db:setup": "cd lambdas && yarn sls dynamodb install",
     "db:remove": "cd lambdas && sls dynamodb remove",
-    "start:db": "cd lambdas && sls dynamodb start",
+    "start:db": "cd lambdas && yarn sls dynamodb start",
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
     "start": "run-p start:client start:lambda start:db",
-    "test:e2e": "jest ./tests/*.test.ts"
+    "test:e2e": "jest ./tests/*.test.ts",
+    "backup": "cd lambdas && sls invoke -f getGroup > ../groups.json"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",

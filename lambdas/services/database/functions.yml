@@ -5,6 +5,7 @@ getGroup:
         method: get
         path: group/get
         cors: true
+  timeout: 15
 
 createGroup:
   handler: services/database/handler.create

@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@types/googlemaps": "^3.39.3",
     "@types/react-select": "^3.0.11"
   }
 }
