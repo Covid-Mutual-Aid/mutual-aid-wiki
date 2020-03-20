@@ -9,9 +9,9 @@ import RequestProvider from './contexts/RequestProvider'
 import App from './App'
 
 const baseUrl =
-  document.location.hostname === 'localhost'
+  document.location.hostname === 'localhost/dev'
     ? ''
-    : 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com'
+    : 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
 
 const Render = () => (
   <RequestProvider

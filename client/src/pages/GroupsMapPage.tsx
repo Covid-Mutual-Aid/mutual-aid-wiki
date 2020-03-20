@@ -33,7 +33,7 @@ function GroupsMapPage() {
   const request = useRequest()
 
   useEffect(() => {
-    request('/dev/group/get').then(setGroups)
+    request('/group/get').then(setGroups)
   }, [])
 
   const sortedByDistance = groups
@@ -121,13 +121,13 @@ function GroupsMapPage() {
             </Form.Row>
           </Form>
         ) : (
-          <div>
-            <h4>Showing groups nearest to {place}</h4>
-            <a className="blue" onClick={resetHandler}>
-              Use a different place
+            <div>
+              <h4>Showing groups nearest to {place}</h4>
+              <a className="blue" onClick={resetHandler}>
+                Use a different place
             </a>
-          </div>
-        )}
+            </div>
+          )}
       </div>
 
       <br />

@@ -14,10 +14,10 @@ const Location = ({ onChange, placeholder }: { onChange: (x: any) => void, place
 
     return <AsyncCreatableSelect
         multi={false}
-        onChange={(x: any) => request<any>(`/dev/googlePlaceDetails?place_id=${x.value}`).then(y => onChange({ ...y.geometry.location, name: x.label }))}
+        onChange={(x: any) => request<any>(`/google/placeDetails?place_id=${x.value}`).then(y => onChange({ ...y.geometry.location, name: x.label }))}
         placeholder={placeholder}
         loadOptions={value => debounce(value)
-            .then((val) => request<{ description: string; place_id: string }[]>(`/dev/googlePlaceSuggest?place=${val}`))
+            .then((val) => request<{ description: string; place_id: string }[]>(`/google/placeSuggest?place=${val}`))
             .then(x => x.map(place => {
                 console.log(place)
                 return ({ value: place.place_id, label: place.description })
