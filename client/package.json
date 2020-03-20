@@ -5,6 +5,7 @@
   "proxy": "http://localhost:4000",
   "dependencies": {
     "@react-google-maps/api": "^1.8.5",
+    "@sentry/browser": "^5.15.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
