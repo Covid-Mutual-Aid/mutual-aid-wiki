@@ -1,7 +1,7 @@
 import uuid from 'uuid/v4'
 import AWS from 'aws-sdk'
 
-import { isOffline, lambdaQuery, lambdaBody } from '../lib/utils'
+import { isOffline, lambdaQuery, lambdaBody } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
 
 const offlineOptions = {
@@ -17,14 +17,8 @@ const dynamoClient = isOffline()
 
 const TableName = process.env.DYNAMODB_TABLE as string
 
-// Helpers
-export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
-  a: T,
-  b: T
-) =>
-  a.link_facebook === b.link_facebook || (a.name === b.name && a.location_name === b.location_name)
-
-export const putGroup = (group: Omit<Group, 'id'> & { id?: 'id' }) => {
+// Helper
+export const putGroup = (group: Omit<Group, 'id'> & { id?: string }) => {
   const Item = { ...group, id: group.id || uuid() }
   return dynamoClient
     .put({ TableName, Item })

@@ -1,10 +1,11 @@
 import Xray from 'x-ray'
 
 import { googleGeoLocate } from '../google/handler'
-import { scanGroups, putGroup, removeGroup, isSameGroup } from '../database/handler'
+import { scanGroups, putGroup, removeGroup } from '../database/handler'
 
-import { lambda } from '../lib/utils'
+import { lambda } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
+import { uniqueBy, missingIn, allSeq, isSameGroup } from '../lib/utils'
 
 let x = Xray()
 const documentEnpoint =
@@ -25,9 +26,7 @@ const scrape = (): Promise<Scraped[]> =>
             location_name: x[0].trim(),
           })) as Scraped[]
     )
-    .then(groups =>
-      groups.reduce((a, b) => (a.some(x => isSameGroup(x, b)) ? a : [...a, b]), [] as Scraped[])
-    )
+    .then(uniqueBy(isSameGroup))
 
 const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
   googleGeoLocate(encodeURIComponent(group.location_name)).then(response => ({
@@ -42,13 +41,10 @@ const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
 export const scrapeGroups = lambda(scrape)
 export const updateGroups = lambda(() =>
   scrape()
-    .then(
-      scraped =>
-        scanGroups().then(existing => scraped.filter(x => !existing.some(y => isSameGroup(x, y)))) //the filter function needs to be tested
-    )
+    .then(scraped => scanGroups().then(existing => missingIn(isSameGroup)(existing, scraped)))
     .then(groups =>
       allSeq(
-        groups.map(group => () =>
+        groups.slice(0, 30).map(group => () =>
           geoLocateGroup(group)
             .then(putGroup)
             .catch(err => console.log(err.message))
@@ -68,7 +64,3 @@ export const removeAllGroups = lambda(() =>
     )
   )
 )
-
-// UtilityremoveGroup
-const allSeq = <T>(x: (() => Promise<T>)[]) =>
-  x.reduce((a, b) => a.then(all => b().then(n => [...all, n])), Promise.resolve([] as T[]))

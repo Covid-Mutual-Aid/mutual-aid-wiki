@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { lambda } from '../lib/utils'
+import { lambda } from '../lib/lambdaUtils'
 
 const apiKey = process.env.GOOGLE_API_KEY
 const geocodeEndpoint = `https://maps.googleapis.com/maps/api/geocode`
