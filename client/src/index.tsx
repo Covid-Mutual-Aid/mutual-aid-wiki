@@ -8,13 +8,15 @@ import RequestProvider from './contexts/RequestProvider'
 
 import App from './App'
 
+const baseUrl =
+  document.location.hostname === 'localhost'
+    ? ''
+    : 'https://3f9qskjpw5.execute-api.eu-west-2.amazonaws.com'
+
 const Render = () => (
   <RequestProvider
     request={useCallback(
-      (input: RequestInfo, init?: RequestInit) =>
-        fetch('https://3f9qskjpw5.execute-api.eu-west-2.amazonaws.com' + input, init).then(x =>
-          x.json()
-        ),
+      (input: RequestInfo, init?: RequestInit) => fetch(baseUrl + input, init).then(x => x.json()),
       []
     )}
   >
