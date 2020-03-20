@@ -10,25 +10,24 @@ import { Link } from 'react-router-dom'
 import useMapConfig, { MapConfig } from '../utils/useMapConfig'
 import useDebouncedValue from '../utils/useDebounceValue'
 
+const compare = (a: Object, b: Object): boolean => JSON.stringify(a) === JSON.stringify(b)
+
 const API_KEY = 'AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg'
+const ukMapConfig = {
+  center: {
+    lat: 55.3781,
+    lng: -3.436,
+  },
+  zoom: 5,
+}
 
 function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])
   const [place, setPlace] = useState('')
   const [placeError, setPlaceError] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
-
-  // const [mapConfig, error] = useMapConfig(useDebouncedValue(200, place))
-
-  const ukMapConfig = {
-    center: {
-      lat: 55.3781,
-      lng: -3.436,
-    },
-    zoom: 5,
-  }
-
   const [mapConfig, setMapConfig] = useState<MapConfig>(ukMapConfig)
+  // const [mapConfig, error] = useMapConfig(useDebouncedValue(200, place))
 
   const request = useRequest()
 
@@ -55,53 +54,33 @@ function GroupsMapPage() {
           return
         }
 
-        const place = data.results[0]
+        const { formatted_address, geometry } = data.results[0]
 
-        setPlace(place.formatted_address)
-
-        const user = place.geometry.location
+        setPlaceOverlay(true)
+        setPlace(formatted_address)
         setMapConfig({
-          center: user,
+          center: geometry.location,
           zoom: 11,
         })
-        setPlaceOverlay(true)
-        const sortedByDistance = groups
-          .map(g => ({
-            ...g,
-            distance: haversine(user, g.location_coord),
-          }))
-          .sort((a, b) => (a.distance > b.distance ? 1 : -1))
-
-        setGroups(sortedByDistance)
       })
   }
-
-  const handleplaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlace(e.target.value)
-  }
-
-  const resetHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    setPlaceOverlay(false)
-    setMapConfig(ukMapConfig)
-  }
-
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    verifyplace()
-  }
-
-  const compare = (a: Object, b: Object): boolean => JSON.stringify(a) === JSON.stringify(b)
-
   return (
     <div>
       <div className="place-form">
         {!placeOverlay ? (
-          <Form onSubmit={submitHandler}>
+          <Form
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault()
+              verifyplace()
+            }}
+          >
             <Form.Row>
               <Col xs={8} md={8}>
                 <Form.Group className="place-input">
                   <Form.Control
-                    onChange={handleplaceChange}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setPlace(e.target.value)
+                    }}
                     type="text"
                     placeholder="Enter place..."
                   />
@@ -123,7 +102,13 @@ function GroupsMapPage() {
         ) : (
           <div>
             <h4>Showing groups nearest to {place}</h4>
-            <a className="blue" onClick={resetHandler}>
+            <a
+              className="blue"
+              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                setPlaceOverlay(false)
+                setMapConfig(ukMapConfig)
+              }}
+            >
               Use a different place
             </a>
           </div>
