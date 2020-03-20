@@ -5,7 +5,7 @@ service:
 #org: your-org-name
 
 custom:
-  DYNAMODB_TABLE: ${self:provider.stage}-groups9
+  DYNAMODB_TABLE: ${self:provider.stage}-groups10
   dynamodb:
     stages:
       - dev
