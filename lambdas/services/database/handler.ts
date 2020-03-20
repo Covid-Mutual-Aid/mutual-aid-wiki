@@ -3,6 +3,7 @@ import AWS from 'aws-sdk'
 
 import { isOffline, lambdaQuery, lambdaBody } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
+import { isSameGroup } from '../lib/utils'
 
 const offlineOptions = {
   region: 'localhost',
@@ -20,11 +21,21 @@ const TableName = process.env.DYNAMODB_TABLE as string
 // Helper
 export const putGroup = (group: Omit<Group, 'id'> & { id?: string }) => {
   const Item = { ...group, id: group.id || uuid() }
-  return dynamoClient
-    .put({ TableName, Item })
-    .promise()
-    .then(() => Item)
+  return scanGroups().then(groups =>
+    groups.some(x => isSameGroup(x, group))
+      ? null
+      : dynamoClient
+          .put({ TableName, Item })
+          .promise()
+          .then(() => Item)
+  )
 }
+
+export const getGroup = ({ id }: { id: string }) =>
+  dynamoClient
+    .get({ TableName, Key: { id } })
+    .promise()
+    .then(x => x.Item)
 
 export const scanGroups = () =>
   dynamoClient
@@ -50,12 +61,7 @@ export const batchRemove = (groups: Group[]) =>
 
 // Lambdas
 export const get = lambdaQuery((x?: { id?: string }) =>
-  x && x.id
-    ? dynamoClient
-        .get({ TableName, Key: { id: x.id } })
-        .promise()
-        .then(x => x.Item)
-    : scanGroups()
+  x && x.id ? getGroup(x as { id: string }) : scanGroups()
 )
 
 export const create = lambdaBody((group: Group) => putGroup(group), {
