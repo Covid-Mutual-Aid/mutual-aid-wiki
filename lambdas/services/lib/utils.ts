@@ -1,14 +1,18 @@
 import { Group } from './types'
+import { parse } from 'url'
 
 const env = require('../../env.json')
 export const GOOGLE_API_KEY = env.GOOGLE_API_KEY
+
+const norm = (x: string) => x.toLowerCase().trim()
+const normLink = (x: string) => parse(x).pathname?.replace(/\/$/, '')
 
 export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
   a: T,
   b: T
 ) =>
-  a.link_facebook.trim() === b.link_facebook.trim() ||
-  (a.name.trim() === b.name.trim() && a.location_name.trim() === b.location_name.trim())
+  normLink(norm(a.link_facebook)) === normLink(norm(b.link_facebook)) ||
+  (norm(a.name) === norm(b.name) && norm(a.location_name) === norm(b.location_name))
 
 export const missingIn = <T extends any>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
   b.filter(x => !a.some(y => fn(x, y)))
