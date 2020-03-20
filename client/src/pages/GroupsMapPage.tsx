@@ -10,13 +10,15 @@ import { Link } from 'react-router-dom'
 import useMapConfig, { MapConfig } from '../utils/useMapConfig'
 import useDebouncedValue from '../utils/useDebounceValue'
 
+const API_KEY = 'AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg'
+
 function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])
-  const [postcode, setPostcode] = useState('')
-  const [postcodeError, setPostcodeError] = useState('')
-  const [postcodeOverlay, setPostcodeOverlay] = useState(false)
+  const [place, setPlace] = useState('')
+  const [placeError, setPlaceError] = useState('')
+  const [placeOverlay, setPlaceOverlay] = useState(false)
 
-  // const [mapConfig, error] = useMapConfig(useDebouncedValue(200, postcode))
+  // const [mapConfig, error] = useMapConfig(useDebouncedValue(200, place))
 
   const ukMapConfig = {
     center: {
@@ -41,25 +43,26 @@ function GroupsMapPage() {
     }))
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
 
-  const verifyPostcode = () => {
-    fetch('https://api.postcodes.io/postcodes/' + postcode)
-      .then(response => {
-        return response.json()
-      })
+  const verifyplace = () => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=${API_KEY}`)
+      .then(response => response.json())
       .then(data => {
-        if (!data.result) {
-          setPostcodeError('Invalid postcode, please try again')
+        console.log(data)
+        if (data.results.length === 0) {
+          setPlaceError('Invalid location, please try again')
           return
         }
-        console.log(data)
-        setPostcode(data.result.postcode)
 
-        const user = { lat: data.result.latitude, lng: data.result.longitude }
+        const place = data.results[0]
+
+        setPlace(place.formatted_address)
+
+        const user = place.geometry.location
         setMapConfig({
           center: user,
           zoom: 11,
         })
-        setPostcodeOverlay(true)
+        setPlaceOverlay(true)
         const sortedByDistance = groups
           .map(g => ({
             ...g,
@@ -71,40 +74,40 @@ function GroupsMapPage() {
       })
   }
 
-  const handlePostcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPostcode(e.target.value)
+  const handleplaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlace(e.target.value)
   }
 
   const resetHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    setPostcodeOverlay(false)
+    setPlaceOverlay(false)
     setMapConfig(ukMapConfig)
   }
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    verifyPostcode()
+    verifyplace()
   }
 
   const compare = (a: Object, b: Object): boolean => JSON.stringify(a) === JSON.stringify(b)
 
   return (
     <div>
-      <div className="postcode-form">
-        {!postcodeOverlay ? (
+      <div className="place-form">
+        {!placeOverlay ? (
           <Form onSubmit={submitHandler}>
             <Form.Row>
               <Col xs={8} md={8}>
-                <Form.Group className="postcode-input">
+                <Form.Group className="place-input">
                   <Form.Control
-                    onChange={handlePostcodeChange}
+                    onChange={handleplaceChange}
                     type="text"
-                    placeholder="Enter postcode..."
+                    placeholder="Enter place..."
                   />
                 </Form.Group>
-                <Form.Text className="text-muted">{postcodeError}</Form.Text>
+                <Form.Text className="text-muted">{placeError}</Form.Text>
               </Col>
               <Col xs={4} md={2}>
-                <Button className="button-search" onClick={verifyPostcode} variant="primary">
+                <Button className="button-search" onClick={verifyplace} variant="primary">
                   Search
                 </Button>
               </Col>
@@ -117,9 +120,9 @@ function GroupsMapPage() {
           </Form>
         ) : (
           <div>
-            <h4>Showing groups nearest to {postcode}</h4>
+            <h4>Showing groups nearest to {place}</h4>
             <a className="blue" onClick={resetHandler}>
-              Use a different postcode
+              Use a different place
             </a>
           </div>
         )}
