@@ -14,23 +14,21 @@ const MapContext = createContext<{
     setMapState: React.Dispatch<React.SetStateAction<MapState>>;
 }>({ map: { current: null }, setMapState: () => null })
 
-const MapStateContext = createContext({
+
+const defaultState = {
     center: { lat: 55.3781, lng: -3.436 },
     name: '',
     zoom: 5,
-});
+}
+const MapStateContext = createContext([defaultState, defaultState]);
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
-    const [mapState, setMapState] = useState<MapState>({
-        center: { lat: 55.3781, lng: -3.436 },
-        name: '',
-        zoom: 5,
-    })
+    const [mapState, setMapState] = useState<MapState>(defaultState)
     const map = useRef<GoogleMap>(null);
 
     return (
         <MapContext.Provider value={useMemo(() => ({ map, setMapState }), [map, setMapState])}>
-            <MapStateContext.Provider value={mapState}>
+            <MapStateContext.Provider value={[mapState, defaultState]}>
                 {children}
             </MapStateContext.Provider>
         </MapContext.Provider>

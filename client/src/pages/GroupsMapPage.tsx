@@ -17,7 +17,7 @@ function GroupsMapPage() {
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
   const { locate, error } = useLocationSearch();
-  const { center, name } = useMapState();
+  const [{ center, name }] = useMapState();
 
   const sortedByDistance = groups
     .map(g => ({
