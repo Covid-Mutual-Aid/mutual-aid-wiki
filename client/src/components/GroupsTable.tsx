@@ -9,8 +9,9 @@ type GroupWithDistance = Group & {
 
 type Props = {
   groups: GroupWithDistance[]
+  shouldDisplayDistance: boolean
 }
-const GroupsTable = ({ groups }: Props) => {
+const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   return (
     <div>
       <div className="group-table-wrapper">
@@ -31,7 +32,7 @@ const GroupsTable = ({ groups }: Props) => {
                 </td>
                 <td>
                   {location_name}{' '}
-                  {distance ? (
+                  {distance && shouldDisplayDistance ? (
                     <Badge variant="success">{(distance / 1000).toFixed(1) + 'km'}</Badge>
                   ) : (
                     ''

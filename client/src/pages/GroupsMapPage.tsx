@@ -85,6 +85,8 @@ function GroupsMapPage() {
     verifyPostcode()
   }
 
+  const compare = (a: Object, b: Object): boolean => JSON.stringify(a) === JSON.stringify(b)
+
   return (
     <div>
       <div className="postcode-form">
@@ -125,7 +127,10 @@ function GroupsMapPage() {
 
       <br />
       <GroupMap groups={sortedByDistance} center={mapConfig.center} zoom={mapConfig.zoom} />
-      <GroupsTable groups={sortedByDistance} />
+      <GroupsTable
+        groups={sortedByDistance}
+        shouldDisplayDistance={!compare(ukMapConfig, mapConfig)}
+      />
     </div>
   )
 }
