@@ -11,18 +11,18 @@ code {
 }
 
 .group-table-wrapper {
-  height: 300px;
+  height: 600px;
   display: block;
   overflow-y: scroll;
   width: 100%;
 }
 
 .App {
-  padding: 4rem;
+  padding: 1rem;
 }
 
 .postcode-form {
-  height: 4rem;
+  height: 3rem;
 }
 
 .postcode-input {
@@ -31,4 +31,9 @@ code {
 
 .button-search {
   width: 100%;
+}
+
+.blue {
+  color: blue !important;
+  cursor: pointer;
 }

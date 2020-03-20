@@ -7,7 +7,7 @@ import GroupsTable from '../components/GroupsTable'
 import { Group, Coord } from '../utils/types'
 import GroupMap from '../components/GroupMap'
 import { Link } from 'react-router-dom'
-import useMapConfig from '../utils/useMapConfig'
+import useMapConfig, { MapConfig } from '../utils/useMapConfig'
 import useDebouncedValue from '../utils/useDebounceValue'
 
 function GroupsMapPage() {
@@ -15,7 +15,19 @@ function GroupsMapPage() {
   const [postcode, setPostcode] = useState('')
   const [postcodeError, setPostcodeError] = useState('')
   const [postcodeOverlay, setPostcodeOverlay] = useState(false)
-  const [mapConfig, error] = useMapConfig(useDebouncedValue(200, postcode))
+
+  // const [mapConfig, error] = useMapConfig(useDebouncedValue(200, postcode))
+
+  const ukMapConfig = {
+    center: {
+      lat: 55.3781,
+      lng: -3.436,
+    },
+    zoom: 5,
+  }
+
+  const [mapConfig, setMapConfig] = useState<MapConfig>(ukMapConfig)
+
   const request = useRequest()
 
   useEffect(() => {
@@ -41,7 +53,12 @@ function GroupsMapPage() {
         }
         console.log(data)
         setPostcode(data.result.postcode)
+
         const user = { lat: data.result.latitude, lng: data.result.longitude }
+        setMapConfig({
+          center: user,
+          zoom: 11,
+        })
         setPostcodeOverlay(true)
         const sortedByDistance = groups
           .map(g => ({
@@ -58,11 +75,21 @@ function GroupsMapPage() {
     setPostcode(e.target.value)
   }
 
+  const resetHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    setPostcodeOverlay(false)
+    setMapConfig(ukMapConfig)
+  }
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    verifyPostcode()
+  }
+
   return (
     <div>
       <div className="postcode-form">
         {!postcodeOverlay ? (
-          <Form>
+          <Form onSubmit={submitHandler}>
             <Form.Row>
               <Col xs={8} md={8}>
                 <Form.Group className="postcode-input">
@@ -87,11 +114,13 @@ function GroupsMapPage() {
             </Form.Row>
           </Form>
         ) : (
-            <div>
-              <h4>Showing groups nearest to {postcode}</h4>
-              <a onClick={() => setPostcodeOverlay(false)}>Use a different postcode</a>
-            </div>
-          )}
+          <div>
+            <h4>Showing groups nearest to {postcode}</h4>
+            <a className="blue" onClick={resetHandler}>
+              Use a different postcode
+            </a>
+          </div>
+        )}
       </div>
 
       <br />

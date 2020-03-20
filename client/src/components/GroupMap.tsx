@@ -23,7 +23,7 @@ const GroupMap = ({ groups, center, zoom }: Props) => {
         <GoogleMap
           id="circle-example"
           mapContainerStyle={{
-            height: '400px',
+            height: '600px',
             width: 'auto',
           }}
           zoom={zoom}
