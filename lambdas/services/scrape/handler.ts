@@ -1,7 +1,7 @@
 import Xray from 'x-ray'
 
 import { googleGeoLocate } from '../google/handler'
-import { scanGroups, putGroup, removeGroup } from '../database/handler'
+import { scanGroups, putGroup, removeGroup, isSameGroup } from '../database/handler'
 
 import { lambda } from '../lib/utils'
 import { Group } from '../lib/types'
@@ -26,7 +26,7 @@ const scrape = (): Promise<Scraped[]> =>
           })) as Scraped[]
     )
     .then(groups =>
-      groups.reduce((a, b) => (a.some(x => sameGroup(x, b)) ? a : [...a, b]), [] as Scraped[])
+      groups.reduce((a, b) => (a.some(x => isSameGroup(x, b)) ? a : [...a, b]), [] as Scraped[])
     )
 
 const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
@@ -43,7 +43,7 @@ export const scrapeGroups = lambda(scrape)
 export const updateGroups = lambda(() =>
   scrape()
     .then(scraped =>
-      scanGroups().then(existing => scraped.filter(x => !existing.some(y => sameGroup(x, y))))
+      scanGroups().then(existing => scraped.filter(x => !existing.some(y => isSameGroup(x, y))))
     )
     .then(groups =>
       allSeq(
@@ -71,6 +71,3 @@ export const removeAllGroups = lambda(() =>
 // UtilityremoveGroup
 const allSeq = <T>(x: (() => Promise<T>)[]) =>
   x.reduce((a, b) => a.then(all => b().then(n => [...all, n])), Promise.resolve([] as T[]))
-
-const sameGroup = (a: Scraped, b: Scraped) =>
-  a.link_facebook === b.link_facebook || (a.name === b.name && a.location_name === b.location_name)
