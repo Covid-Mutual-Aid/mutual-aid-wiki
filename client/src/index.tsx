@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import ReactDOM from 'react-dom'
+import * as Sentry from '@sentry/browser'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/index.css'
@@ -7,6 +8,8 @@ import * as serviceWorker from './utils/serviceWorker'
 import RequestProvider from './contexts/RequestProvider'
 
 import App from './App'
+
+Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
 const baseUrl =
   document.location.hostname === 'localhost'
