@@ -1,12 +1,12 @@
 import React, { createContext, useRef, useContext, useState, useMemo } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 
-import { Coord } from '../utils/types';
+import { Coord, Group } from '../utils/types';
 
 export type MapState = {
     center: Coord,
-    name: string,
     zoom: number,
+    group?: Group
 }
 
 const MapContext = createContext<{
@@ -15,12 +15,8 @@ const MapContext = createContext<{
 }>({ map: { current: null }, setMapState: () => null })
 
 
-const defaultState = {
-    center: { lat: 55.3781, lng: -3.436 },
-    name: '',
-    zoom: 5,
-}
-const MapStateContext = createContext([defaultState, defaultState]);
+const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 5 }
+const MapStateContext = createContext<[MapState, MapState]>([defaultState, defaultState]);
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
     const [mapState, setMapState] = useState<MapState>(defaultState)

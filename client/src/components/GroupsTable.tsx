@@ -25,10 +25,10 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {groups.map(({ link_facebook, name, location_name, distance, location_coord }, i) => (
-              <tr key={i} onClick={() => setMapState({ zoom: 11, name, center: location_coord })}>
+            {groups.map(({ link_facebook, name, location_name, distance, location_coord, id }) => (
+              <tr key={id} onClick={() => setMapState({ zoom: 11, group: { id, link_facebook, name, location_name, location_coord }, center: location_coord })}>
                 <td>
-                  <a target="_blank" href={link_facebook}>
+                  <a target="_blank" rel="noopener noreferrer" href={link_facebook}>
                     {name}
                   </a>
                 </td>

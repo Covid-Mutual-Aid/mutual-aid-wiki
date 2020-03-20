@@ -5,23 +5,27 @@ import { useMap } from '../contexts/MapProvider'
 
 const useLocationSearch = () => {
   const request = useRequest()
+  const [name, setName] = useState('')
   const [error, setError] = useState('')
   const { setMapState } = useMap()
 
-  const locate = useCallback((name: string) => {
-    request(`/google/geolocate?name=${name}`)
-      .then(res => (!res[0] ? Promise.reject() : res[0]))
-      .then(place =>
-        setMapState({
-          zoom: 11,
-          center: place.geometry.location,
-          name: place.formatted_address,
+  const locate = useCallback(
+    (name: string) => {
+      request(`/google/geolocate?name=${name}`)
+        .then(res => (!res[0] ? Promise.reject() : res[0]))
+        .then(place => {
+          setMapState({
+            zoom: 11,
+            center: place.geometry.location,
+          })
+          setName(place.formatted_address)
         })
-      )
-      .catch(() => setError('Invalid location, please try again'))
-  }, [])
+        .catch(() => setError('Invalid location, please try again'))
+    },
+    [request, setMapState]
+  )
 
-  return { locate, error }
+  return { locate, error, name }
 }
 
 export default useLocationSearch

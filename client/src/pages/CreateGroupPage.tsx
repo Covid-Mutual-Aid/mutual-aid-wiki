@@ -36,13 +36,14 @@ const CreateGroup = () => {
         <Form.Control placeholder="Facebook link" onChange={(e: any) => setLink(e.target.value)} />
       </Form.Group>
       <Location onChange={setLocation} placeholder={'Group location'} />
+      {!valid && <Form.Text className="text-muted">You must fill every field</Form.Text>}
       <Button variant="primary" type="submit" style={{ marginTop: '2rem' }}>
         Add Group
       </Button>
       <br />
       <br />
       <Link to="/">
-        <Button variant="danger">Exit</Button>
+        <Button variant="danger">Cancel</Button>
       </Link>
     </Form>
   )

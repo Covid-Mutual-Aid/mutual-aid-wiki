@@ -22,7 +22,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             zoom={z}
             center={{ lat, lng }}
           >
-            {groups.map(group => <Marker position={group.location_coord} key={group.id} onClick={() => setMapState({ center: group.location_coord, name: group.name, zoom: 11 })} />)}
+            {groups.map(group => <Marker position={group.location_coord} key={group.id} onClick={() => setMapState({ center: group.location_coord, group, zoom: 11 })} />)}
           </GoogleMap>)}
         </Spring>
       </LoadScript>

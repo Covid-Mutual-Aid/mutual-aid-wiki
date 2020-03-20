@@ -16,8 +16,8 @@ function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
-  const { locate, error } = useLocationSearch();
-  const [{ center, name }] = useMapState();
+  const { locate, error, name } = useLocationSearch();
+  const [{ center, group }] = useMapState();
 
   const sortedByDistance = groups
     .map(g => ({
@@ -30,7 +30,7 @@ function GroupsMapPage() {
 
   useEffect(() => {
     request('/group/get').then(setGroups).catch(console.log)
-  }, [])
+  }, [request])
 
   return (
     <div>
@@ -66,9 +66,9 @@ function GroupsMapPage() {
         ) : (
             <div>
               <h4>Showing groups nearest to {place}</h4>
-              <a className="blue" onClick={() => setPlaceOverlay(false)}>
+              <button type='button' className="blue" onClick={() => setPlaceOverlay(false)}>
                 Use a different place
-            </a>
+            </button>
             </div>
           )}
       </div>
@@ -77,7 +77,7 @@ function GroupsMapPage() {
       <GroupMap groups={groups} />
       <GroupsTable
         groups={sortedByDistance}
-        shouldDisplayDistance={!!name}
+        shouldDisplayDistance={!!(group || name)}
       />
     </div>
   )
