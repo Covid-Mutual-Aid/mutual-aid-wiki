@@ -5,7 +5,7 @@ service:
 #org: your-org-name
 
 custom:
-  DYNAMODB_TABLE: ${self:provider.stage}-groups2
+  DYNAMODB_TABLE: ${self:provider.stage}-groups7
   dynamodb:
     stages:
       - dev
@@ -36,6 +36,7 @@ provider:
   runtime: nodejs12.x
   region: ${opt:region, 'eu-west-2'}
   stage: ${opt:stage, 'dev'}
+  profile: covid
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:

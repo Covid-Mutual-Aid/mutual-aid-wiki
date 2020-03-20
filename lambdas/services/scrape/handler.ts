@@ -10,19 +10,26 @@ let x = Xray()
 const documentEnpoint =
   'https://docs.google.com/spreadsheets/u/0/d/e/2PACX-1vTvSFFG0ByJlzWLBVZ_-sYdhGLvMCCrbb_Fe9sA9LZ_Y_BFoq1BVEFGLf4t--pJ8gg73o0ULvqYlqdk/pubhtml/sheet?headers=false&gid=1451634215'
 
-// Helpers
-const scrape = (): Promise<Omit<Group, 'location_coord' | 'id'>[]> =>
-  x(documentEnpoint, 'tr', [['td']]).then(res =>
-    res
-      .filter(x => x.join('').length > 0)
-      .map((x: string[]) => ({
-        name: x[1],
-        link_facebook: x[2],
-        location_name: x[0],
-      }))
-  )
+type Scraped = Omit<Group, 'location_coord' | 'id'>
 
-const geoLocateGroup = (group: Omit<Group, 'location_coord' | 'id'>): Promise<Omit<Group, 'id'>> =>
+// Helpers
+const scrape = (): Promise<Scraped[]> =>
+  x(documentEnpoint, 'tr', [['td']])
+    .then(
+      res =>
+        res
+          .filter((x: any) => x.join('').length > 0)
+          .map((x: string[]) => ({
+            name: x[1].trim(),
+            link_facebook: x[2].trim(),
+            location_name: x[0].trim(),
+          })) as Scraped[]
+    )
+    .then(groups =>
+      groups.reduce((a, b) => (a.some(x => sameGroup(x, b)) ? a : [...a, b]), [] as Scraped[])
+    )
+
+const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
   googleGeoLocate(encodeURIComponent(group.location_name)).then(response => ({
     ...group,
     location_coord: {
@@ -36,9 +43,7 @@ export const scrapeGroups = lambda(scrape)
 export const updateGroups = lambda(() =>
   scrape()
     .then(scraped =>
-      scanGroups().then(existing =>
-        scraped.filter(x => !existing.some(y => y.link_facebook === x.link_facebook))
-      )
+      scanGroups().then(existing => scraped.filter(x => !existing.some(y => sameGroup(x, y))))
     )
     .then(groups =>
       allSeq(
@@ -66,3 +71,6 @@ export const removeAllGroups = lambda(() =>
 // UtilityremoveGroup
 const allSeq = <T>(x: (() => Promise<T>)[]) =>
   x.reduce((a, b) => a.then(all => b().then(n => [...all, n])), Promise.resolve([] as T[]))
+
+const sameGroup = (a: Scraped, b: Scraped) =>
+  a.link_facebook === b.link_facebook || (a.name === b.name && a.location_name === b.location_name)
