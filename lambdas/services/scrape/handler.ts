@@ -59,7 +59,8 @@ export const purgeDuplicates = lambda(() =>
   scanGroups()
     .then(groups =>
       groups.reduce<[Group[], Group[]]>(
-        ([u, s], b) => (u.some(x => isSameGroup(x, b)) ? [u, [...s, b]] : [[...u, b], s]),
+        ([uniqs, dups], g) =>
+          uniqs.some(gc => isSameGroup(gc, g)) ? [uniqs, [...dups, g]] : [[...uniqs, g], dups],
         [[], []]
       )
     )
