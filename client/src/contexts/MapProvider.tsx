@@ -1,13 +1,43 @@
-import React, { createContext, useRef, useContext } from 'react';
+import React, { createContext, useRef, useContext, useState, useMemo } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 
-const MapContext = createContext<React.RefObject<GoogleMap>>({ current: null })
+import { Coord } from '../utils/types';
+
+export type MapState = {
+    center: Coord,
+    name: string,
+    zoom: number,
+}
+
+const MapContext = createContext<{
+    map: React.RefObject<GoogleMap>;
+    setMapState: React.Dispatch<React.SetStateAction<MapState>>;
+}>({ map: { current: null }, setMapState: () => null })
+
+const MapStateContext = createContext({
+    center: { lat: 55.3781, lng: -3.436 },
+    name: '',
+    zoom: 5,
+});
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
+    const [mapState, setMapState] = useState<MapState>({
+        center: { lat: 55.3781, lng: -3.436 },
+        name: '',
+        zoom: 5,
+    })
     const map = useRef<GoogleMap>(null);
-    return <MapContext.Provider value={map}>{children}</MapContext.Provider>
+
+    return (
+        <MapContext.Provider value={useMemo(() => ({ map, setMapState }), [map, setMapState])}>
+            <MapStateContext.Provider value={mapState}>
+                {children}
+            </MapStateContext.Provider>
+        </MapContext.Provider>
+    )
 }
 
 export default MapProvider;
 
 export const useMap = () => useContext(MapContext)
+export const useMapState = () => useContext(MapStateContext)

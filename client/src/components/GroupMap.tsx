@@ -1,21 +1,11 @@
 import React from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import { Group, Coord } from '../utils/types'
 
-type Props = {
-  groups: Group[]
-  center: Coord
-  zoom: number
-}
+import { useMapState } from '../contexts/MapProvider'
+import { Group } from '../utils/types'
 
-const GroupMap = ({ groups, center, zoom }: Props) => {
-  const markers = groups.map(group => {
-    const onLoad = (marker: any) => {
-      // console.log('marker: ', marker)
-    }
-
-    return <Marker onLoad={onLoad} position={group.location_coord} key={group.id} />
-  })
+const GroupMap = ({ groups }: { groups: Group[] }) => {
+  const { zoom, center } = useMapState();
 
   return (
     <div className="group-map">
@@ -29,7 +19,7 @@ const GroupMap = ({ groups, center, zoom }: Props) => {
           zoom={zoom}
           center={center}
         >
-          {markers}
+          {groups.map(group => <Marker position={group.location_coord} key={group.id} />)}
         </GoogleMap>
       </LoadScript>
     </div>

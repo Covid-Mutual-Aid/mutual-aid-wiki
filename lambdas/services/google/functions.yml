@@ -13,3 +13,11 @@ googlePlaceDetails:
         method: get
         path: google/placeDetails
         cors: true
+
+googlePlaceQeolocate:
+  handler: services/google/handler.geolocate
+  events:
+    - http:
+        method: get
+        path: google/geolocate
+        cors: true

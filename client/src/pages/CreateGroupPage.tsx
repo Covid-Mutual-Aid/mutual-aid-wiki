@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
-import { useRequest } from '../contexts/RequestProvider'
+import React, { useState } from 'react'
 
+import { useRequest } from '../contexts/RequestProvider'
 import Location from '../components/Location'
-import { Link } from 'react-router-dom'
 
 const CreateGroup = () => {
   const request = useRequest()
+  const history = useHistory();
   const [valid, setValid] = useState(true)
   const [name, setName] = useState('')
   const [link, setLink] = useState('')
@@ -25,7 +26,7 @@ const CreateGroup = () => {
             location_name: location?.name,
             location_coord: { lng: location.lng, lat: location.lat },
           }),
-        })
+        }).then(() => history.push('/'))
       }}
     >
       <Form.Group controlId="formBasicEmail">
