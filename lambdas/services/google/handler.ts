@@ -14,7 +14,7 @@ export const googlePlaceDetails = (place_id: string) =>
 
 export const googleGeoLocate = (location: string) =>
   axios
-    .get(`${geocodeEndpoint}/json?address=${location}&key=${apiKey}`)
+    .get(`${geocodeEndpoint}/json?address=${location}&region=uk&key=${apiKey}`)
     .then(x => (x.data.error_message ? Promise.reject(new Error(x.data.error_message)) : x.data))
 
 // Lambdas

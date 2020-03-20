@@ -18,6 +18,12 @@ const dynamoClient = isOffline()
 const TableName = process.env.DYNAMODB_TABLE as string
 
 // Helpers
+export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
+  a: T,
+  b: T
+) =>
+  a.link_facebook === b.link_facebook || (a.name === b.name && a.location_name === b.location_name)
+
 export const putGroup = (group: Omit<Group, 'id'> & { id?: 'id' }) => {
   const Item = { ...group, id: group.id || uuid() }
   return dynamoClient
@@ -31,6 +37,22 @@ export const scanGroups = () =>
     .scan({ TableName })
     .promise()
     .then(x => x.Items as Group[])
+
+export const removeGroup = ({ id }: { id: string }) =>
+  dynamoClient.delete({ TableName, Key: { id } }).promise()
+
+export const batchRemove = (groups: Group[]) =>
+  dynamoClient
+    .batchWrite({
+      RequestItems: {
+        [TableName]: [
+          groups
+            .filter(x => x.id && typeof x.id === 'string')
+            .map(x => ({ DeleteRequest: { Key: { id: x.id } } })) as any,
+        ],
+      },
+    })
+    .promise()
 
 // Lambdas
 export const get = lambdaQuery((x?: { id?: string }) =>
@@ -48,7 +70,4 @@ export const create = lambdaBody((group: Group) => putGroup(group), {
   location_name: 'string',
 })
 
-export const remove = lambdaBody(
-  ({ id }: { id: string }) => dynamoClient.delete({ TableName, Key: { id } }).promise(),
-  { id: 'string' }
-)
+export const remove = lambdaBody(removeGroup, { id: 'string' })

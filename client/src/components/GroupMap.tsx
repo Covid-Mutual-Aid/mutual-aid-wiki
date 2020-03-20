@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { Group, Coord } from '../utils/types'
 
@@ -14,7 +14,7 @@ const GroupMap = ({ groups, center, zoom }: Props) => {
       // console.log('marker: ', marker)
     }
 
-    return <Marker onLoad={onLoad} position={group.location_coord} />
+    return <Marker onLoad={onLoad} position={group.location_coord} key={group.id} />
   })
 
   return (

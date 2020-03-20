@@ -3,3 +3,6 @@ scrapeGroups:
 updateGroups:
   handler: services/scrape/handler.updateGroups
   timeout: 900
+removeGroups:
+  handler: services/scrape/handler.removeAllGroups
+  timeout: 900
