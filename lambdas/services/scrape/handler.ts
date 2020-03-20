@@ -29,13 +29,15 @@ const scrape = (): Promise<Scraped[]> =>
     .then(uniqueBy(isSameGroup))
 
 const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
-  googleGeoLocate(encodeURIComponent(group.location_name)).then(response => ({
-    ...group,
-    location_coord: {
-      lat: response.results[0].geometry.location.lat,
-      lng: response.results[0].geometry.location.lng,
-    },
-  }))
+  googleGeoLocate(encodeURIComponent(group.location_name))
+    .then(results => ({
+      ...group,
+      location_coord: {
+        lat: results[0].geometry.location.lat,
+        lng: results[0].geometry.location.lng,
+      },
+    }))
+    .catch(err => Promise.reject(new Error(`Geolocation faile ${err.message}`)))
 
 // Lambdas
 export const scrapeGroups = lambda(scrape)
@@ -48,7 +50,6 @@ export const updateGroups = lambda(() =>
           geoLocateGroup(group)
             .then(putGroup)
             .catch(err => err.message)
-            .then(() => 'done')
         )
       )
     )

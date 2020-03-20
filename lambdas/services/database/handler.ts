@@ -23,11 +23,11 @@ export const putGroup = (group: Omit<Group, 'id'> & { id?: string }) => {
   const Item = { ...group, id: group.id || uuid() }
   return scanGroups().then(groups =>
     groups.some(x => isSameGroup(x, group))
-      ? null
+      ? 'Exists'
       : dynamoClient
           .put({ TableName, Item })
           .promise()
-          .then(() => Item)
+          .then(() => 'Done')
   )
 }
 
