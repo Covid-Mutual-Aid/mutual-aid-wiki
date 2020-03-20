@@ -44,7 +44,9 @@ function GroupsMapPage() {
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
 
   const verifyplace = () => {
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=${API_KEY}`)
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${place}&region=uk&key=${API_KEY}`
+    )
       .then(response => response.json())
       .then(data => {
         console.log(data)
