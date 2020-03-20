@@ -11,7 +11,7 @@ import App from './App'
 const baseUrl =
   document.location.hostname === 'localhost'
     ? ''
-    : 'https://3f9qskjpw5.execute-api.eu-west-2.amazonaws.com'
+    : 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/'
 
 const Render = () => (
   <RequestProvider
