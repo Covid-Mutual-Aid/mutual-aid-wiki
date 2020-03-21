@@ -22,7 +22,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
           <thead>
             <tr>
               <th>Location</th>
-              <th>Name</th>
+              <th>Group</th>
             </tr>
           </thead>
           <tbody>
