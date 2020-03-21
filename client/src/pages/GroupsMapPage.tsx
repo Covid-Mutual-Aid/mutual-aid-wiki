@@ -62,7 +62,12 @@ function GroupsMapPage() {
                   </Form.Group>
                 </Col>
                 <Col xs={7} md={2} className="input-height">
-                  <Button className="full-width" onClick={() => locate(place)} variant="primary">
+                  <Button
+                    className="full-width"
+                    onClick={() => locate(place)}
+                    variant="primary"
+                    // size="sm"
+                  >
                     Search
                   </Button>
                 </Col>
@@ -77,7 +82,11 @@ function GroupsMapPage() {
                     target="_blank"
                     href="https://docs.google.com/forms/d/e/1FAIpQLSdJrgqHazomhDsJDG3Nnye30Ys7sZEl-APCrQh80D1g-iQrgQ/viewform"
                   >
-                    <Button className="full-width" variant="secondary">
+                    <Button
+                      style={{ whiteSpace: 'nowrap' }}
+                      className="full-width"
+                      variant="secondary"
+                    >
                       Add Group
                     </Button>
                   </a>
