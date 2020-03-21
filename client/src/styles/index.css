@@ -45,7 +45,7 @@ code {
 .App {
   height: 100vh;
   display: grid;
-  grid: 8rem 1fr 1fr / 1fr;
+  grid: 0fr 1fr 1fr / 1fr;
 }
 
 .table-wrapper {
@@ -59,10 +59,4 @@ code {
 
 .group-map {
   height: 100%;
-}
-
-@media (max-width: 767px) {
-  .search-padding {
-    padding-top: 0.8rem;
-  }
 }
