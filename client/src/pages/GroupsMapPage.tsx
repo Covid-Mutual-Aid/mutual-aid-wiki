@@ -65,7 +65,7 @@ function GroupsMapPage() {
                 <Col xs={5} md={2} className="input-height">
                   <Link to="/create-group">
                     <Button className="full-width" variant="secondary">
-                      add group
+                      Add Group
                     </Button>
                   </Link>
                 </Col>
