@@ -1,18 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { Spring } from 'react-spring/renderprops'
 
 import { useMapState, useMap } from '../contexts/MapProvider'
 import { Group } from '../utils/types'
 
-const GroupMap = ({ groups }: { groups: Group[] }) => {
-  const [{ zoom, center }, inital] = useMapState()
-  const { setMapState } = useMap()
+type GoogleMapState = google.maps.Map | null
 
-  var shape = {
-    coords: [1, 1, 1, 20, 18, 20, 18, 1],
-    type: 'poly',
-  }
+const GroupMap = ({ groups }: { groups: Group[] }) => {
+  const [{ zoom, center, group }, inital] = useMapState()
+  const { setMapState } = useMap()
+  const [googleMapInstance, setGoogleMapInstance] = useState<GoogleMapState>(null)
+
+  const onLoad = React.useCallback(mapInstance => {
+    setGoogleMapInstance(mapInstance)
+    // do something with map Instance
+    console.log(mapInstance.getCenter())
+  }, [])
+
+  // onCenterChanged={(e: any) => console.log('called', e)}
 
   return (
     <div className="group-map">
@@ -20,13 +26,21 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
         <Spring from={{ z: inital.zoom, ...inital.center }} to={{ z: zoom, ...center }}>
           {({ z, lat, lng }) => (
             <GoogleMap
-              id="circle-example"
+              onLoad={onLoad}
               mapContainerStyle={{
                 height: '100%',
                 width: 'auto',
               }}
               zoom={z}
               center={{ lat, lng }}
+              onDragEnd={() => {
+                if (googleMapInstance instanceof google.maps.Map) {
+                  const center = googleMapInstance.getCenter()
+                  //Uncommenting the line below animates the Map the wrong way on drag end, but
+                  //at least we have the coordinates from the drag event.
+                  //setMapState({ zoom, group, center: { lat: center.lat(), lng: center.lng() } })
+                }
+              }}
             >
               {groups.map(group => (
                 <Marker
