@@ -16,6 +16,11 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      <div className="footer">
+        <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
+          open sourced on github
+        </a>
+      </div>
     </div>
   )
 }
