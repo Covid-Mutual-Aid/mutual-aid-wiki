@@ -17,7 +17,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             <GoogleMap
               id="circle-example"
               mapContainerStyle={{
-                height: '44vh',
+                height: '100%',
                 width: 'auto',
               }}
               zoom={z}

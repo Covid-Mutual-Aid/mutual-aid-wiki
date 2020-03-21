@@ -44,22 +44,19 @@ code {
 
 .App {
   height: 100vh;
-  /* padding: 1rem; */
-}
-
-.place-form {
-  height: 12vh;
-}
-
-.map-wrapper {
-  height: 44vh;
+  display: grid;
+  grid: 8rem 1fr 1fr / 1fr;
 }
 
 .table-wrapper {
-  height: 44vh;
+  /* height: 44vh; */
   overflow-y: scroll;
 }
 
 .search-padding {
-  padding-top: calc(1vh + 2vw);
+  padding-top: 2.4rem;
+}
+
+.group-map {
+  height: 100%;
 }

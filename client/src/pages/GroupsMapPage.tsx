@@ -34,7 +34,7 @@ function GroupsMapPage() {
   }, [request])
 
   return (
-    <div>
+    <>
       <div className="place-form">
         {!placeOverlay ? (
           <Container className="search-padding">
@@ -82,13 +82,11 @@ function GroupsMapPage() {
         )}
       </div>
 
-      <div className="map-wrapper">
-        <GroupMap groups={groups} />
-      </div>
+      <GroupMap groups={groups} />
       <div className="table-wrapper">
         <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
       </div>
-    </div>
+    </>
   )
 }
 
