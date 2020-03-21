@@ -60,3 +60,9 @@ code {
 .group-map {
   height: 100%;
 }
+
+@media (max-width: 767px) {
+  .search-padding {
+    padding-top: 0.8rem;
+  }
+}
