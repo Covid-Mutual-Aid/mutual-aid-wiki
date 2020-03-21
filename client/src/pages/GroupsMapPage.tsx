@@ -45,8 +45,13 @@ function GroupsMapPage() {
               }}
             >
               <Form.Row>
+                <Col>
+                  <Form.Text className="text-muted">{error}</Form.Text>
+                </Col>
+              </Form.Row>
+              <Form.Row>
                 <Col xs={12} md={8} className="input-height">
-                  <Form.Group className="place-input small-margin-bottom">
+                  <Form.Group className="place-input">
                     <Form.Control
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setPlace(e.target.value)
@@ -55,7 +60,6 @@ function GroupsMapPage() {
                       placeholder="Enter place..."
                     />
                   </Form.Group>
-                  <Form.Text className="text-muted">{error}</Form.Text>
                 </Col>
                 <Col xs={7} md={2} className="input-height">
                   <Button className="full-width" onClick={() => locate(place)} variant="primary">
