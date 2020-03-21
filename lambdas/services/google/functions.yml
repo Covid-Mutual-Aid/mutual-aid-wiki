@@ -21,3 +21,11 @@ googlePlaceQeolocate:
         method: get
         path: google/geolocate
         cors: true
+
+getSheet:
+  handler: services/google/sheets.getSheet
+  events:
+    - http:
+        method: get
+        path: google/getSheet
+        cors: true

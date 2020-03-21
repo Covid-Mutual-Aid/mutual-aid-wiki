@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "googleapis": "^48.0.0",
     "serverless": "^1.67.0",
     "source-map-support": "^0.5.10",
     "uuid": "^7.0.2",

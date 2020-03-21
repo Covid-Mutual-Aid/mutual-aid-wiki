@@ -56,7 +56,7 @@ provider:
 functions:
   - ${file(./services/database/functions.yml)}
   - ${file(./services/google/functions.yml)}
-  - ${file(./services/scrape/functions.yml)}
+  - ${file(./services/data/functions.yml)}
 
 resources:
   Resources:

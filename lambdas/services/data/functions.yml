@@ -1,0 +1,17 @@
+scrapeGroups:
+  handler: services/data/handler.scrapeGroups
+updateGroups:
+  handler: services/data/handler.updateGroups
+  timeout: 200
+removeGroups:
+  handler: services/data/handler.removeAllGroups
+  timeout: 200
+missingGroups:
+  handler: services/data/handler.missingGroups
+  timeout: 30
+purgeDuplicates:
+  handler: services/data/handler.purgeDuplicates
+  timeout: 200
+getGroupInfo:
+  handler: services/data/handler.getGroupInfo
+  timeout: 200
