@@ -37,7 +37,7 @@ function GroupsMapPage() {
     <div>
       <div className="place-form">
         {!placeOverlay ? (
-          <Container>
+          <Container className="search-padding">
             <Form
               onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault()
@@ -57,12 +57,12 @@ function GroupsMapPage() {
                   </Form.Group>
                   <Form.Text className="text-muted">{error}</Form.Text>
                 </Col>
-                <Col xs={8} md={2} className="input-height">
+                <Col xs={7} md={2} className="input-height">
                   <Button className="full-width" onClick={() => locate(place)} variant="primary">
                     Search
                   </Button>
                 </Col>
-                <Col xs={4} md={2} className="input-height">
+                <Col xs={5} md={2} className="input-height">
                   <Link to="/create-group">
                     <Button className="full-width" variant="secondary">
                       add group
@@ -82,8 +82,10 @@ function GroupsMapPage() {
         )}
       </div>
 
-      <div className="mt-2">
+      <div className="map-wrapper">
         <GroupMap groups={groups} />
+      </div>
+      <div className="table-wrapper">
         <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
       </div>
     </div>

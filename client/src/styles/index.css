@@ -17,10 +17,6 @@ code {
   width: 100%;
 }
 
-.App {
-  padding: 1rem;
-}
-
 .postcode-form {
   height: 3rem;
 }
@@ -44,4 +40,26 @@ code {
 
 .input-height {
   height: 4rem;
+}
+
+.App {
+  height: 100vh;
+  /* padding: 1rem; */
+}
+
+.place-form {
+  height: 12vh;
+}
+
+.map-wrapper {
+  height: 44vh;
+}
+
+.table-wrapper {
+  height: 44vh;
+  overflow-y: scroll;
+}
+
+.search-padding {
+  padding-top: calc(1vh + 2vw);
 }

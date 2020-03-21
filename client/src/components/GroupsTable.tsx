@@ -13,10 +13,10 @@ type Props = {
   shouldDisplayDistance: boolean
 }
 const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
-  const { setMapState } = useMap();
+  const { setMapState } = useMap()
   return (
     <div>
-      <div className="group-table-wrapper">
+      <div className="table-wrapper">
         <Table className="table-fixed" responsive striped bordered hover size="sm">
           <thead>
             <tr>
@@ -26,7 +26,16 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
           </thead>
           <tbody>
             {groups.map(({ link_facebook, name, location_name, distance, location_coord, id }) => (
-              <tr key={id} onClick={() => setMapState({ zoom: 11, group: { id, link_facebook, name, location_name, location_coord }, center: location_coord })}>
+              <tr
+                key={id}
+                onClick={() =>
+                  setMapState({
+                    zoom: 11,
+                    group: { id, link_facebook, name, location_name, location_coord },
+                    center: location_coord,
+                  })
+                }
+              >
                 <td>
                   <a target="_blank" rel="noopener noreferrer" href={link_facebook}>
                     {name}
@@ -37,8 +46,8 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
                   {distance && shouldDisplayDistance ? (
                     <Badge variant="success">{(distance / 1000).toFixed(1) + 'km'}</Badge>
                   ) : (
-                      ''
-                    )}
+                    ''
+                  )}
                 </td>
               </tr>
             ))}
