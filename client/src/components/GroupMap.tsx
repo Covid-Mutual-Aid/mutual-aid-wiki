@@ -9,6 +9,11 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
   const [{ zoom, center }, inital] = useMapState()
   const { setMapState } = useMap()
 
+  var shape = {
+    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+    type: 'poly',
+  }
+
   return (
     <div className="group-map">
       <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg">
@@ -25,6 +30,9 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             >
               {groups.map(group => (
                 <Marker
+                  opacity={
+                    group.location_coord.lat === lat && group.location_coord.lng === lng ? 1 : 0.2
+                  }
                   position={group.location_coord}
                   key={group.id}
                   onClick={() => setMapState({ center: group.location_coord, group, zoom: 11 })}
