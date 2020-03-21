@@ -27,52 +27,62 @@ const CreateGroup = () => {
   const [link, setLink] = useState('')
   const [location, setLocation] = useState<{ lat: string; lng: string; name: string } | null>(null)
   const [error, setError] = useState('')
+  const [sucessModal, setSuccessModal] = useState(false)
 
   return (
     <div style={{ width: '100%', padding: '1.5rem' }}>
-      <Form
-        style={{ maxWidth: '50rem', margin: '0 auto' }}
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-          e.preventDefault()
-          if (!validURL(link)) {
-            setError('Please enter a valid URL')
-            return
-          }
-          if (!location || !link || !name) return setValid(false)
-          request(`/group/create`, {
-            method: 'POST',
-            body: JSON.stringify({
-              name,
-              link_facebook: link,
-              location_name: location?.name,
-              location_coord: { lng: location.lng, lat: location.lat },
-            }),
-          }).then(() => history.push('/'))
-        }}
-      >
-        <Form.Group controlId="formBasicEmail">
-          <Form.Control placeholder="Group name" onChange={(e: any) => setName(e.target.value)} />
-        </Form.Group>
-        <Form.Group>
-          <Form.Text className="text-muted">{error}</Form.Text>
-          <Form.Control
-            placeholder="Facebook link"
-            onChange={(e: any) => setLink(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Location onChange={setLocation} placeholder={'Group location'} />
-        </Form.Group>
-        {!valid && <Form.Text className="text-muted">You must fill every field</Form.Text>}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Link to="/" style={{ marginRight: '1rem' }}>
-            <Button variant="light">Cancel</Button>
-          </Link>
-          <Button variant="primary" type="submit">
-            Add Group
-          </Button>
+      {sucessModal ? (
+        <div style={{ textAlign: 'center', padding: '4rem', color: '#28a745' }}>
+          <h3>Thanks for submitting your group</h3>
         </div>
-      </Form>
+      ) : (
+        <Form
+          style={{ maxWidth: '50rem', margin: '0 auto' }}
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault()
+            if (!validURL(link)) {
+              setError('Please enter a valid URL')
+              return
+            }
+            if (!location || !link || !name) return setValid(false)
+            request(`/group/create`, {
+              method: 'POST',
+              body: JSON.stringify({
+                name,
+                link_facebook: link,
+                location_name: location?.name,
+                location_coord: { lng: location.lng, lat: location.lat },
+              }),
+            }).then(() => {
+              setSuccessModal(true)
+              setTimeout(() => history.push('/'), 3000)
+            })
+          }}
+        >
+          <Form.Group controlId="formBasicEmail">
+            <Form.Control placeholder="Group name" onChange={(e: any) => setName(e.target.value)} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Text className="text-muted">{error}</Form.Text>
+            <Form.Control
+              placeholder="Facebook link"
+              onChange={(e: any) => setLink(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Location onChange={setLocation} placeholder={'Group location'} />
+          </Form.Group>
+          {!valid && <Form.Text className="text-muted">You must fill every field</Form.Text>}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+            <Link to="/" style={{ marginRight: '1rem' }}>
+              <Button variant="light">Cancel</Button>
+            </Link>
+            <Button variant="primary" type="submit">
+              Add Group
+            </Button>
+          </div>
+        </Form>
+      )}
     </div>
   )
 }
