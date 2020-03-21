@@ -64,10 +64,14 @@ export const get = lambdaQuery((x?: { id?: string }) =>
   x && x.id ? getGroup(x as { id: string }) : scanGroups()
 )
 
-export const create = lambdaBody((group: Group) => putGroup(group), {
+export const create = lambdaBody((group: Omit<Group, 'id'>) => putGroup(group), {
   name: 'string',
   link_facebook: 'string',
   location_name: 'string',
+  location_coord: {
+    lat: 'number',
+    lng: 'number',
+  },
 })
 
 export const remove = lambdaBody(removeGroup, { id: 'string' })
