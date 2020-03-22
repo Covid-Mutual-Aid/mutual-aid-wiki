@@ -8,6 +8,8 @@ export const SHEET_ID = env.SHEET_ID
 export const GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY
 export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
 
+export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
+
 const norm = (x: string) => x.toLowerCase().trim()
 const normLink = (x: string) => parse(x).pathname?.replace(/\/$/, '')
 
