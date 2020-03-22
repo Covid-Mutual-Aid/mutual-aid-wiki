@@ -12,6 +12,3 @@ missingGroups:
 purgeDuplicates:
   handler: services/data/handler.purgeDuplicates
   timeout: 200
-getGroupInfo:
-  handler: services/data/handler.getGroupInfo
-  timeout: 200

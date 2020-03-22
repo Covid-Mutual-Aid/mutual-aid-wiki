@@ -25,16 +25,16 @@ export const googleGeoLocate = (location: string) =>
 export const placeSuggest = lambda(
   event =>
     googlePlaceSuggest((event.queryStringParameters as any).place).then(x => x.data.predictions),
-  { params: { place: 'string' } }
+  { queryStringParameters: { place: 'string' } }
 )
 
 export const placeDetails = lambda(
   event =>
     googlePlaceDetails((event.queryStringParameters as any).place_id).then(x => x.data.result),
-  { params: { place_id: 'string' } }
+  { queryStringParameters: { place_id: 'string' } }
 )
 
 export const geolocate = lambda(
   event => googleGeoLocate((event.queryStringParameters as any).name),
-  { params: { name: 'string' } }
+  { queryStringParameters: { name: 'string' } }
 )

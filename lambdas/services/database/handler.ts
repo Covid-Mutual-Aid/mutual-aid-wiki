@@ -4,6 +4,7 @@ import AWS from 'aws-sdk'
 import { isOffline, lambdaQuery, lambdaBody } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
 import { isSameGroup } from '../lib/utils'
+import { addSheetRow } from '../google/sheets'
 
 const offlineOptions = {
   region: 'localhost',
@@ -64,14 +65,17 @@ export const get = lambdaQuery((x?: { id?: string }) =>
   x && x.id ? getGroup(x as { id: string }) : scanGroups()
 )
 
-export const create = lambdaBody((group: Omit<Group, 'id'>) => putGroup(group), {
-  name: 'string',
-  link_facebook: 'string',
-  location_name: 'string',
-  location_coord: {
-    lat: 'number',
-    lng: 'number',
-  },
-})
+export const create = lambdaBody(
+  (group: Omit<Group, 'id'>) => Promise.all([putGroup(group), addSheetRow(group)]),
+  {
+    name: 'string',
+    link_facebook: 'string',
+    location_name: 'string',
+    location_coord: {
+      lat: 'number',
+      lng: 'number',
+    },
+  }
+)
 
 export const remove = lambdaBody(removeGroup, { id: 'string' })

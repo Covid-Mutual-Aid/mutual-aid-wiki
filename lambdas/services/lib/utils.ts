@@ -3,6 +3,10 @@ import { parse } from 'url'
 
 const env = require('../../env.json')
 export const GOOGLE_API_KEY = env.GOOGLE_API_KEY
+export const SPREADSHEET_ID = env.SPREADSHEET_ID
+export const SHEET_ID = env.SHEET_ID
+export const GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY
+export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
 
 const norm = (x: string) => x.toLowerCase().trim()
 const normLink = (x: string) => parse(x).pathname?.replace(/\/$/, '')

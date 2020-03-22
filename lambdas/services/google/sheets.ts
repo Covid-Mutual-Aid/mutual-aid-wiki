@@ -1,8 +1,27 @@
 import { google, sheets_v4 } from 'googleapis'
-import { GOOGLE_API_KEY } from '../lib/utils'
+import {
+  GOOGLE_API_KEY,
+  SPREADSHEET_ID,
+  SHEET_ID,
+  GOOGLE_PRIVATE_KEY,
+  GOOGLE_CLIENT_EMAIL,
+} from '../lib/utils'
+import { Group } from '../lib/types'
+
 export const sheets = google.sheets('v4')
 
-export const spreadsheetId = '1FAIpQLSdJrgqHazomhDsJDG3Nnye30Ys7sZEl-APCrQh80D1g-iQrgQ'
+const spreadsheetId = SPREADSHEET_ID
+
+export const authorise = () =>
+  Promise.resolve().then(() =>
+    google.auth.getClient({
+      credentials: {
+        private_key: GOOGLE_PRIVATE_KEY,
+        client_email: GOOGLE_CLIENT_EMAIL,
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    })
+  )
 
 export const updateSheet = (auth: any) => (...args: sheets_v4.Schema$Request[]) =>
   sheets.spreadsheets.batchUpdate({
@@ -14,5 +33,39 @@ export const updateSheet = (auth: any) => (...args: sheets_v4.Schema$Request[]) 
     },
   })
 
+export const addRow = (
+  values: sheets_v4.Schema$CellData[],
+  sheetId: number
+): sheets_v4.Schema$Request => ({
+  appendCells: { sheetId, fields: '*', rows: [{ values }] },
+})
+
+const valueTypes: {
+  [x: string]: keyof sheets_v4.Schema$ExtendedValue
+} = {
+  number: 'numberValue',
+  string: 'stringValue',
+  boolean: 'boolValue',
+}
+
+export const getValueType = (x: number | string | boolean): sheets_v4.Schema$ExtendedValue => ({
+  [valueTypes[typeof x]]: x,
+})
+
 export const getSheet = () =>
-  sheets.spreadsheets.get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
+  sheets.spreadsheets
+    .get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
+    .then(spreadsheet =>
+      (spreadsheet.data.sheets || []).find(x => x.properties && x.properties.sheetId === SHEET_ID)
+    )
+
+export const addSheetRow = (group: Pick<Group, 'location_name' | 'name' | 'link_facebook'>) => {
+  const row = [group.location_name, group.name, group.link_facebook].map(value => ({
+    userEnteredValue: getValueType(value),
+  }))
+
+  return authorise()
+    .then(auth => updateSheet(auth)(addRow(row, SHEET_ID)))
+    .then(console.log)
+    .catch(console.log)
+}

@@ -8,12 +8,12 @@ type ValidateEvent<T extends ValidateStruct> = {
   queryStringParameters?: { [x: string]: T }
 }
 
-const validateEvent = (validation: ValidateEvent, event: APIGatewayProxyEvent) =>
+const validateEvent = (validation: ValidateEvent<any>, event: APIGatewayProxyEvent) =>
   new Promise((resolve, reject) => {
     const args = {
       ...(validation.body && event.body ? { body: JSON.parse(event.body) } : {}),
       ...(validation?.queryStringParameters && event.queryStringParameters
-        ? { params: event.queryStringParameters }
+        ? { queryStringParameters: event.queryStringParameters }
         : {}),
     }
     const valid = validate(validation as any, args)

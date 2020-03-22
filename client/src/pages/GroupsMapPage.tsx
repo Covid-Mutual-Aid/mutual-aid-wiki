@@ -66,7 +66,7 @@ function GroupsMapPage() {
                     className="full-width"
                     onClick={() => locate(place)}
                     variant="primary"
-                    // size="sm"
+                  // size="sm"
                   >
                     Search
                   </Button>
@@ -95,13 +95,13 @@ function GroupsMapPage() {
             </Form>
           </Container>
         ) : (
-          <div>
-            <h4>Showing groups nearest to {place}</h4>
-            <button type="button" className="blue" onClick={() => setPlaceOverlay(false)}>
-              Use a different place
+            <div>
+              <h4>Showing groups nearest to {place}</h4>
+              <button type="button" className="blue" onClick={() => setPlaceOverlay(false)}>
+                Use a different place
             </button>
-          </div>
-        )}
+            </div>
+          )}
       </div>
 
       <GroupMap groups={groups} />
