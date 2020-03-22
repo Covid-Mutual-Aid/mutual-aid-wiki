@@ -4,12 +4,13 @@
   "description": "Backend lambds for COVID-19 Search by postcode",
   "main": "handler.js",
   "scripts": {
-    "test": "jest src/*.test.{ts}",
+    "test": "jest services/**/*.ts",
     "start": "env OFFLINE=true sls offline",
     "sls": "serverless"
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "googleapis": "^48.0.0",
     "serverless": "^1.67.0",
     "source-map-support": "^0.5.10",
     "uuid": "^7.0.2",

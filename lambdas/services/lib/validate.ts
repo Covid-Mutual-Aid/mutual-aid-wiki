@@ -1,5 +1,6 @@
 export type ValidationTypes = 'string' | 'number'
-export type ValidateStruct = ValidationTypes | [ValidationTypes] | { [x: string]: ValidateStruct }
+export type ValidationObj = { [x: string]: ValidateStruct }
+export type ValidateStruct = ValidationTypes | [ValidationTypes] | ValidationObj
 
 const keys = <T extends { [x: string]: any }, K extends keyof T>(value: T) =>
   Object.keys(value) as K[]
@@ -20,3 +21,13 @@ export const validate = (valids: ValidateStruct, param: any): boolean => {
   if (valids === 'number') return isNumber(param)
   return false
 }
+
+export type Validated<T> = T extends 'string'
+  ? string
+  : T extends 'number'
+  ? number
+  : T extends { [x: string]: ValidateStruct }
+  ? { [key in keyof T]: Validated<T[key]> }
+  : T extends [ValidateStruct]
+  ? Validated<T[0]>[]
+  : never
