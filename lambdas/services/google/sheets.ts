@@ -40,18 +40,6 @@ export const addRow = (
   appendCells: { sheetId, fields: '*', rows: [{ values }] },
 })
 
-const valueTypes: {
-  [x: string]: keyof sheets_v4.Schema$ExtendedValue
-} = {
-  number: 'numberValue',
-  string: 'stringValue',
-  boolean: 'boolValue',
-}
-
-export const getValueType = (x: number | string | boolean): sheets_v4.Schema$ExtendedValue => ({
-  [valueTypes[typeof x]]: x,
-})
-
 export const getSheet = () =>
   sheets.spreadsheets
     .get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
@@ -60,8 +48,15 @@ export const getSheet = () =>
     )
 
 export const addSheetRow = (group: Pick<Group, 'location_name' | 'name' | 'link_facebook'>) => {
-  const row = [group.location_name, group.name, group.link_facebook].map(value => ({
-    userEnteredValue: getValueType(value),
+  const date = new Date()
+
+  const row = [
+    group.location_name,
+    `${date.toLocaleDateString()} ${date.toTimeString().replace(/\s.*/, '')}`,
+    group.name,
+    group.link_facebook,
+  ].map(value => ({
+    userEnteredValue: { stringValue: value },
   }))
 
   return authorise()

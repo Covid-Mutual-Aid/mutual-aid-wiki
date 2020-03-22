@@ -42,9 +42,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new CopyPlugin([
-      { from: path.join(__dirname, '.env'), to: path.join(__dirname, '.webpack/service/services') },
-    ]),
     // new ForkTsCheckerWebpackPlugin({
     //   eslint: true,
     //   eslintOptions: {
