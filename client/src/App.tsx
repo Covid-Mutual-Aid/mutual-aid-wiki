@@ -13,25 +13,23 @@ function inIframe() {
 
 function App() {
   return (
-    <>
-      <div className={`App ${inIframe() ? '' : 'App-Standalone'}`}>
-        <Router>
-          <Switch>
-            <Route path="/create-group">
-              <CreateGroupPage />
-            </Route>
-            <Route path="/">
-              <GroupsMapPage />
-            </Route>
-          </Switch>
-        </Router>
-      </div>
+    <div className={inIframe() ? 'App' : 'App-Standalone'}>
+      <Router>
+        <Switch>
+          <Route path="/create-group">
+            <CreateGroupPage />
+          </Route>
+          <Route path="/">
+            <GroupsMapPage />
+          </Route>
+        </Switch>
+      </Router>
       <div className="footer">
         <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
           open sourced on github
         </a>
       </div>
-    </>
+    </div>
   )
 }
 

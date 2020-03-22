@@ -51,12 +51,12 @@ code {
 .App-Standalone {
   padding: 4rem;
   height: 100%;
-  /* display: grid;
-  grid: 0fr 0fr 1fr 0fr / 1fr; */
+  display: grid;
+  grid: 0fr 1fr 1fr 0fr / 1fr;
 }
 
 .table-wrapper {
-  height: 44vh;
+  height: 45vh;
   overflow-y: scroll;
 }
 
