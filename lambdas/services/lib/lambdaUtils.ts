@@ -1,8 +1,6 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { ValidateStruct, ValidationTypes, validate, Validated, ValidationObj } from './validate'
 
-export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
-
 type ValidateEvent<T extends ValidateStruct> = {
   body?: T
   queryStringParameters?: { [x: string]: T }

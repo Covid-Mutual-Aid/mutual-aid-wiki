@@ -1,9 +1,9 @@
 import uuid from 'uuid/v4'
 import AWS from 'aws-sdk'
 
-import { isOffline, lambdaQuery, lambdaBody } from '../lib/lambdaUtils'
+import { lambdaQuery, lambdaBody } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
-import { isSameGroup } from '../lib/utils'
+import { isSameGroup, isOffline } from '../lib/utils'
 import { addSheetRow } from '../google/sheets'
 
 const offlineOptions = {
