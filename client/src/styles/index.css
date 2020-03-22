@@ -69,10 +69,18 @@ code {
 }
 
 .footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   padding: 2px;
   font-size: 0.8rem;
   text-align: center;
   border-top: 1px solid lightgray;
+  height: 3rem;
+}
+
+.footer a {
+  padding: 0 1rem;
 }
 
 .top-buttons {

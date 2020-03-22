@@ -28,6 +28,7 @@ function App() {
         <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
           open sourced on github
         </a>
+        <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
       </div>
     </div>
   )

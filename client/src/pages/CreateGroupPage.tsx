@@ -26,7 +26,8 @@ const CreateGroup = () => {
   const [name, setName] = useState('')
   const [link, setLink] = useState('')
   const [location, setLocation] = useState<{ lat: string; lng: string; name: string } | null>(null)
-  const [error, setError] = useState('')
+  const [linkValidationError, setLinkValidationError] = useState('')
+  const [requestError, setRequestError] = useState('')
   const [sucessModal, setSuccessModal] = useState(false)
 
   return (
@@ -41,7 +42,7 @@ const CreateGroup = () => {
           onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault()
             if (!validURL(link)) {
-              setError('Please enter a valid URL')
+              setLinkValidationError('Please enter a valid URL')
               return
             }
             if (!location || !link || !name) return setValid(false)
@@ -53,17 +54,21 @@ const CreateGroup = () => {
                 location_name: location?.name,
                 location_coord: { lng: location.lng, lat: location.lat },
               }),
-            }).then(() => {
-              setSuccessModal(true)
-              setTimeout(() => history.push('/'), 3000)
             })
+              .then(() => {
+                setSuccessModal(true)
+                setTimeout(() => history.push('/'), 3000)
+              })
+              .catch(err => {
+                setRequestError('There was an error processing your request, please try again.')
+              })
           }}
         >
           <Form.Group controlId="formBasicEmail">
             <Form.Control placeholder="Group name" onChange={(e: any) => setName(e.target.value)} />
           </Form.Group>
           <Form.Group>
-            <Form.Text className="text-muted">{error}</Form.Text>
+            <Form.Text className="text-muted">{linkValidationError}</Form.Text>
             <Form.Control
               placeholder="Facebook link"
               onChange={(e: any) => setLink(e.target.value)}
@@ -73,6 +78,7 @@ const CreateGroup = () => {
             <Location onChange={setLocation} placeholder={'Group location'} />
           </Form.Group>
           {!valid && <Form.Text className="text-muted">You must fill every field</Form.Text>}
+          {requestError.length > 0 && <Form.Text className="text-danger">{requestError}</Form.Text>}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             <Link to="/" style={{ marginRight: '1rem' }}>
               <Button variant="light">Cancel</Button>

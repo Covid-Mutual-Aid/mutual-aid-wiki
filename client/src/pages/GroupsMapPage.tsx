@@ -66,19 +66,19 @@ function GroupsMapPage() {
                     className="full-width"
                     onClick={() => locate(place)}
                     variant="primary"
-                  // size="sm"
+                    // size="sm"
                   >
                     Search
                   </Button>
                 </Col>
                 <Col xs={5} md={2} className="input-height">
-                  {/* <Link to="/create-group">
+                  <Link to="/create-group">
                     <Button className="full-width" variant="secondary">
                       Add Group
                     </Button>
-                  </Link> */}
+                  </Link>
                   {/* Maintain Google Doc as primary source of info */}
-                  <a
+                  {/* <a
                     target="_blank"
                     href="https://docs.google.com/forms/d/e/1FAIpQLSdJrgqHazomhDsJDG3Nnye30Ys7sZEl-APCrQh80D1g-iQrgQ/viewform"
                   >
@@ -89,19 +89,19 @@ function GroupsMapPage() {
                     >
                       Add Group
                     </Button>
-                  </a>
+                  </a> */}
                 </Col>
               </Form.Row>
             </Form>
           </Container>
         ) : (
-            <div>
-              <h4>Showing groups nearest to {place}</h4>
-              <button type="button" className="blue" onClick={() => setPlaceOverlay(false)}>
-                Use a different place
+          <div>
+            <h4>Showing groups nearest to {place}</h4>
+            <button type="button" className="blue" onClick={() => setPlaceOverlay(false)}>
+              Use a different place
             </button>
-            </div>
-          )}
+          </div>
+        )}
       </div>
 
       <GroupMap groups={groups} />
