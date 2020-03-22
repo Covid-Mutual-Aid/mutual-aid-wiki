@@ -19,8 +19,8 @@ export const scrapeSheet = (): Promise<Scraped[]> =>
         res
           .filter((x: any) => x.join('').length > 0)
           .map((x: string[]) => ({
-            name: x[1].trim(),
-            link_facebook: x[2].trim(),
+            name: x[2].trim(),
+            link_facebook: x[3].trim(),
             location_name: x[0].trim(),
           })) as Scraped[]
     )
@@ -35,4 +35,4 @@ export const geoLocateGroup = (group: Scraped): Promise<Omit<Group, 'id'>> =>
         lng: results[0].geometry.location.lng,
       },
     }))
-    .catch(err => Promise.reject(new Error(`Geolocation faile ${err.message}`)))
+    .catch(err => Promise.reject(new Error(`Geolocation failed ${err.message}`)))

@@ -2,7 +2,7 @@ import { scanGroups, putGroup, removeGroup } from '../database/handler'
 
 import { Group } from '../lib/types'
 import { lambda } from '../lib/lambdaUtils'
-import { missingIn, allSeq, isSameGroup } from '../lib/utils'
+import { missingIn, allSeq, isSameGroup, isCorrectlyNamed } from '../lib/utils'
 import { scrapeSheet, geoLocateGroup } from './utils'
 import Axios from 'axios'
 
@@ -32,6 +32,12 @@ export const purgeDuplicates = lambda(() =>
       )
     )
     .then(([_, dups]) => allSeq(dups.map(grp => () => removeGroup(grp))))
+)
+
+export const purgeIncorrectlyLabeledGroups = lambda(() =>
+  scanGroups()
+    .then(groups => groups.filter(g => !isCorrectlyNamed(g)))
+    .then(rejects => allSeq(rejects.map(reject => () => removeGroup(reject))))
 )
 
 export const removeAllGroups = lambda(() =>

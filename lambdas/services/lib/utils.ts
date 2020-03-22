@@ -11,6 +11,32 @@ export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
 const norm = (x: string) => x.toLowerCase().trim()
 const normLink = (x: string) => parse(x).pathname?.replace(/\/$/, '')
 
+// https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
+const validURL = (str: string) => {
+  var pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
+  )
+  return !!pattern.test(str)
+}
+
+export const isDateTimeString = (s: string) =>
+  !!/\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{1,2}:\d{1,2}/i.test(s.trim())
+
+export const isCorrectlyNamed = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
+  a: T
+) =>
+  validURL(a.link_facebook) &&
+  !isDateTimeString(a.name) &&
+  !isDateTimeString(a.location_name) &&
+  !validURL(a.name) &&
+  !validURL(a.location_name)
+
 export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
   a: T,
   b: T

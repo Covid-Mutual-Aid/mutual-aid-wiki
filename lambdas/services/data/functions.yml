@@ -1,5 +1,6 @@
 scrapeGroups:
   handler: services/data/handler.scrapeGroups
+  timeout: 200
 updateGroups:
   handler: services/data/handler.updateGroups
   timeout: 200
@@ -11,4 +12,7 @@ missingGroups:
   timeout: 30
 purgeDuplicates:
   handler: services/data/handler.purgeDuplicates
+  timeout: 200
+purgeIncorrectlyLabeledGroups:
+  handler: services/data/handler.purgeIncorrectlyLabeledGroups
   timeout: 200
