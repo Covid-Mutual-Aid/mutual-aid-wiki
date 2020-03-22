@@ -59,8 +59,5 @@ export const addSheetRow = (group: Pick<Group, 'location_name' | 'name' | 'link_
     userEnteredValue: { stringValue: value },
   }))
 
-  return authorise()
-    .then(auth => updateSheet(auth)(addRow(row, SHEET_ID)))
-    .then(console.log)
-    .catch(console.log)
+  return authorise().then(auth => updateSheet(auth)(addRow(row, SHEET_ID)))
 }
