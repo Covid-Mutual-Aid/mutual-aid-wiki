@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import GroupsMapPage from './pages/GroupsMapPage'
 import CreateGroupPage from './pages/CreateGroupPage'
+import { gtag } from './utils/types'
 
 function inIframe() {
   try {
@@ -12,6 +13,12 @@ function inIframe() {
 }
 
 function App() {
+  useEffect(() => {
+    if (!inIframe()) {
+      gtag('event', 'Viewed on covidmutualaid.cc')
+    }
+  }, [])
+
   return (
     <div className={inIframe() ? 'App' : 'App-Standalone'}>
       <Router>

@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { Spring } from 'react-spring/renderprops'
 
 import { useMapState, useMap } from '../contexts/MapProvider'
-import { Group } from '../utils/types'
+import { Group, gtag } from '../utils/types'
 
 type GoogleMapState = google.maps.Map | null
 
@@ -34,6 +34,10 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
               zoom={z}
               center={{ lat, lng }}
               onDragEnd={() => {
+                gtag('event', 'Map was dragged', {
+                  event_category: 'Map',
+                  event_label: 'Drag map',
+                })
                 if (googleMapInstance instanceof google.maps.Map) {
                   const center = googleMapInstance.getCenter()
                   //Uncommenting the line below animates the Map the wrong way on drag end, but
@@ -49,7 +53,13 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
                   }
                   position={group.location_coord}
                   key={group.id}
-                  onClick={() => setMapState({ center: group.location_coord, group, zoom: 11 })}
+                  onClick={() => {
+                    gtag('event', 'Marker was clicked', {
+                      event_category: 'Map',
+                      event_label: 'Click marker',
+                    })
+                    setMapState({ center: group.location_coord, group, zoom: 11 })
+                  }}
                 />
               ))}
             </GoogleMap>

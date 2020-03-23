@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
 import Location from '../components/Location'
+import { gtag } from '../utils/types'
 
 // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
 function validURL(str: string) {
@@ -41,6 +42,10 @@ const CreateGroup = () => {
           style={{ maxWidth: '50rem', margin: '0 auto' }}
           onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault()
+            gtag('event', 'Added Group', {
+              event_category: 'Group',
+              event_label: 'Clicked add group button',
+            })
             if (!validURL(link)) {
               setLinkValidationError('Please enter a valid URL')
               return

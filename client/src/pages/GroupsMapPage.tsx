@@ -9,7 +9,7 @@ import GroupMap from '../components/GroupMap'
 
 import { useMapState } from '../contexts/MapProvider'
 import useLocationSearch from '../utils/useLocationSearch'
-import { Group } from '../utils/types'
+import { Group, gtag } from '../utils/types'
 
 function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])
@@ -79,6 +79,12 @@ function GroupsMapPage() {
                   </Link> */}
                   {/* Maintain Google Doc as primary source of info */}
                   <a
+                    onClick={() =>
+                      gtag('event', 'Navigate to add group', {
+                        event_category: 'Group',
+                        event_label: 'Click add group button',
+                      })
+                    }
                     target="_blank"
                     href="https://docs.google.com/forms/d/e/1FAIpQLSdJrgqHazomhDsJDG3Nnye30Ys7sZEl-APCrQh80D1g-iQrgQ/viewform"
                   >

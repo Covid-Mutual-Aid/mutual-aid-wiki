@@ -1,8 +1,9 @@
 import React from 'react'
 import { Table, Badge } from 'react-bootstrap'
 
-import { Group } from '../utils/types'
+import { Group, gtag } from '../utils/types'
 import { useMap } from '../contexts/MapProvider'
+import TrackedLink from '../utils/TrackedLink'
 
 type GroupWithDistance = Group & {
   distance?: number
@@ -12,6 +13,7 @@ type Props = {
   groups: GroupWithDistance[]
   shouldDisplayDistance: boolean
 }
+
 const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   const { setMapState } = useMap()
   return (
@@ -29,13 +31,17 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
               <tr key={id}>
                 <td
                   style={{ cursor: 'pointer' }}
-                  onClick={() =>
+                  onClick={() => {
+                    gtag('event', 'Clicked location in row', {
+                      event_category: 'Table',
+                      event_label: 'Click location',
+                    })
                     setMapState({
                       zoom: 11,
                       group: { id, link_facebook, name, location_name, location_coord },
                       center: location_coord,
                     })
-                  }
+                  }}
                 >
                   {location_name}{' '}
                   {distance && shouldDisplayDistance ? (
@@ -45,7 +51,17 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
                   )}
                 </td>
                 <td>
-                  <a target="_blank" rel="noopener noreferrer" href={link_facebook}>
+                  <a
+                    onClick={() =>
+                      gtag('event', 'Visit facebook group', {
+                        event_category: 'Table',
+                        event_label: 'Click group url',
+                      })
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={link_facebook}
+                  >
                     {name}
                   </a>
                 </td>
