@@ -33,8 +33,9 @@
       function gtag() {
         dataLayer.push(arguments)
       }
-      gtag('js', new Date())
+      window.gtag = gtag
 
+      gtag('js', new Date())
       gtag('config', 'UA-161397715-1')
     </script>
     <!-- End of Google Analytics -->
