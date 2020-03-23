@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Badge } from 'react-bootstrap'
 
 import { Group } from '../utils/types'
-import { useMap } from '../contexts/MapProvider'
+import { useMap, useMapState } from '../contexts/MapProvider'
 import { gtag } from '../utils/gtag'
 
 type GroupWithDistance = Group & {
@@ -14,8 +14,13 @@ type Props = {
   shouldDisplayDistance: boolean
 }
 
+// row background rgba(0, 123, 255, 0.2)
+
 const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   const { setMapState } = useMap()
+  const [mapState] = useMapState()
+  // console.log(mapState)
+  const link = mapState.group ? mapState.group.link_facebook : ''
   return (
     <div>
       <div className="table-wrapper">
@@ -28,7 +33,10 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
           </thead>
           <tbody>
             {groups.map(({ link_facebook, name, location_name, distance, location_coord, id }) => (
-              <tr key={id}>
+              <tr
+                key={id}
+                style={link === link_facebook ? { backgroundColor: 'rgba(0, 123, 255, 0.2)' } : {}}
+              >
                 <td
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
