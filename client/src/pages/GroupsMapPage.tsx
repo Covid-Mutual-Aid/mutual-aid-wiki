@@ -42,6 +42,10 @@ function GroupsMapPage() {
             <Form
               onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault()
+                gtag('event', 'Searched for a location', {
+                  event_category: 'Map',
+                  event_label: 'Clicked search button',
+                })
                 locate(place)
               }}
             >

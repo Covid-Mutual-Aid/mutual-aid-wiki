@@ -40,7 +40,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
               >
                 <td
                   style={{ cursor: 'pointer' }}
-                  onClick={e => {
+                  onClick={() => {
                     gtag('event', 'Clicked location in row', {
                       event_category: 'Table',
                       event_label: 'Click location',
