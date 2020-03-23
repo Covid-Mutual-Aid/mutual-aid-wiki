@@ -15,7 +15,10 @@ function inIframe() {
 function App() {
   useEffect(() => {
     if (!inIframe()) {
-      gtag('event', 'Viewed on covidmutualaid.cc')
+      gtag('event', 'Viewed on covidmutualaid.cc', {
+        event_category: 'Iframe',
+        event_label: 'Viewed without iframe',
+      })
     }
   })
 
