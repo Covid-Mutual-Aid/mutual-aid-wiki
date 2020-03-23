@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Table, Badge } from 'react-bootstrap'
 
 import { Group } from '../utils/types'
@@ -19,11 +19,12 @@ type Props = {
 const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   const { setMapState } = useMap()
   const [mapState] = useMapState()
+  const tableWrapper = useRef<HTMLDivElement>(null)
   // console.log(mapState)
   const link = mapState.group ? mapState.group.link_facebook : ''
   return (
     <div>
-      <div className="table-wrapper">
+      <div ref={tableWrapper} className="table-wrapper">
         <Table className="table-fixed" responsive striped bordered hover size="sm">
           <thead>
             <tr>
@@ -39,11 +40,15 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
               >
                 <td
                   style={{ cursor: 'pointer' }}
-                  onClick={() => {
+                  onClick={e => {
                     gtag('event', 'Clicked location in row', {
                       event_category: 'Table',
                       event_label: 'Click location',
                     })
+                    if (tableWrapper.current) {
+                      tableWrapper.current.scrollTo(0, 0)
+                    }
+
                     setMapState({
                       zoom: 11,
                       group: { id, link_facebook, name, location_name, location_coord },
