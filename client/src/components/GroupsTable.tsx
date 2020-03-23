@@ -3,7 +3,6 @@ import { Table, Badge } from 'react-bootstrap'
 
 import { Group, gtag } from '../utils/types'
 import { useMap } from '../contexts/MapProvider'
-import TrackedLink from '../utils/TrackedLink'
 
 type GroupWithDistance = Group & {
   distance?: number
