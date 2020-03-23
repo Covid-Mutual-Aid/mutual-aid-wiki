@@ -49,7 +49,7 @@ code {
 }
 
 .App-Standalone {
-  padding: 4rem;
+  padding: 2rem 4rem;
   height: 100%;
   display: grid;
   grid: 0fr 1fr 1fr 0fr / 1fr;
@@ -85,4 +85,10 @@ code {
 
 .top-buttons {
   font-size: 1rem !important;
+}
+
+@media only screen and (max-width: 800px) {
+  .App-Standalone {
+    padding: 0;
+  }
 }
