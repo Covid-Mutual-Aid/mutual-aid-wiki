@@ -9,7 +9,8 @@ import GroupMap from '../components/GroupMap'
 
 import { useMapState } from '../contexts/MapProvider'
 import useLocationSearch from '../utils/useLocationSearch'
-import { Group, gtag } from '../utils/types'
+import { Group } from '../utils/types'
+import { gtag } from '../utils/gtag'
 
 function GroupsMapPage() {
   const [groups, setGroups] = useState<Group[]>([])

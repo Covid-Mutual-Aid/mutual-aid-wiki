@@ -10,5 +10,3 @@ export type Group = {
   location_name: string
   location_coord: Coord
 }
-
-export declare let gtag: any

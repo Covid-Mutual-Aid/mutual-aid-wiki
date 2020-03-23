@@ -3,7 +3,8 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { Spring } from 'react-spring/renderprops'
 
 import { useMapState, useMap } from '../contexts/MapProvider'
-import { Group, gtag } from '../utils/types'
+import { Group } from '../utils/types'
+import { gtag } from '../utils/gtag'
 
 type GoogleMapState = google.maps.Map | null
 

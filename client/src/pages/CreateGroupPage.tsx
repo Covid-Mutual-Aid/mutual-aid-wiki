@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
 import Location from '../components/Location'
-import { gtag } from '../utils/types'
+import { gtag } from '../utils/gtag'
 
 // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
 function validURL(str: string) {

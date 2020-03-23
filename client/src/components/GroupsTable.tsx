@@ -1,8 +1,9 @@
 import React from 'react'
 import { Table, Badge } from 'react-bootstrap'
 
-import { Group, gtag } from '../utils/types'
+import { Group } from '../utils/types'
 import { useMap } from '../contexts/MapProvider'
+import { gtag } from '../utils/gtag'
 
 type GroupWithDistance = Group & {
   distance?: number
