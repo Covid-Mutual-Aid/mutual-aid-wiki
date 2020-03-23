@@ -83,6 +83,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
           </tbody>
         </Table>
       </div>
+      <div className="scroll-overlay"></div>
     </div>
   )
 }

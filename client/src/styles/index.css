@@ -56,8 +56,26 @@ code {
 }
 
 .table-wrapper {
+  position: relative;
   height: 45vh;
   overflow-y: scroll;
+}
+
+.scroll-overlay {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.scroll-overlay::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  height: 30px;
+  left: 0px;
+  right: 0px;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255));
 }
 
 .search-padding {
