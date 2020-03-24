@@ -30,7 +30,7 @@ function App() {
   return (
     <div className={inIframe() ? 'App' : 'App-Standalone'}>
       <div className="embed-code">
-        {inIframe() ? (
+        {!inIframe() ? (
           <>
             <p className="primary" onClick={handleShow}>
               embed this map into your website
