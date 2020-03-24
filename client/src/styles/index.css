@@ -115,6 +115,15 @@ code {
   text-decoration: underline;
 }
 
+.link {
+  cursor: pointer;
+  color: rgb(0, 123, 255);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
 @media only screen and (max-width: 800px) {
   .App-Standalone {
     padding: 0;
