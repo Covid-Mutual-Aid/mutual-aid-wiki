@@ -4,6 +4,7 @@ import GroupsMapPage from './pages/GroupsMapPage'
 import CreateGroupPage from './pages/CreateGroupPage'
 import { gtag } from './utils/gtag'
 import { Button, Modal } from 'react-bootstrap'
+import copy from 'copy-to-clipboard'
 
 function inIframe() {
   try {
@@ -13,8 +14,13 @@ function inIframe() {
   }
 }
 
+const embedCode = `<iframe src="https://covidmutualaid.cc/" frameborder="0" width="1200" height="1400"
+title="Covid-19 Mutual Aid Groups" aria-label="United Kingdom local authority districts (2018) Symbol map" scrolling="no" style="border: none;" frameborder="0">
+</iframe>`
+
 function App() {
   const [show, setShow] = useState(false)
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false)
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
@@ -40,11 +46,7 @@ function App() {
                 <Modal.Title>Embed Code</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <code>
-                  {`<iframe src="https://covidmutualaid.cc/" frameborder="0" width="1200" height="1400"
-                      title="Covid-19 Mutual Aid Groups" aria-label="United Kingdom local authority districts (2018) Symbol map" scrolling="no" style="border: none;" frameborder="0">
-                    </iframe>`}
-                </code>
+                <code>{embedCode}</code>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
@@ -71,8 +73,14 @@ function App() {
         <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
           open sourced on github
         </a>
-        <span className="link" onClick={handleShow}>
-          embed this map
+        <span
+          className="link"
+          onClick={e => {
+            copy(embedCode)
+            setCopiedToClipboard(true)
+          }}
+        >
+          {!copiedToClipboard ? 'embed this map' : 'code copied to clipboard!'}
         </span>
         {/* <p>This map is updated every 5 minutes</p> */}
         <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
