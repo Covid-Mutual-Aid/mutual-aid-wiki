@@ -52,7 +52,7 @@ code {
   padding: 2rem 4rem;
   height: 100%;
   display: grid;
-  grid: 0fr 1fr 1fr 0fr / 1fr;
+  grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
 }
 
 .table-wrapper {
@@ -103,6 +103,16 @@ code {
 
 .top-buttons {
   font-size: 1rem !important;
+}
+
+.embed-code {
+  text-align: center;
+  color: rgb(0, 123, 255);
+  cursor: pointer;
+}
+
+.embed-code:hover {
+  text-decoration: underline;
 }
 
 @media only screen and (max-width: 800px) {
