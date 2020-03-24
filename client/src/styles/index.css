@@ -45,7 +45,7 @@ code {
 .App {
   height: 100vh;
   display: grid;
-  grid: 0fr 1fr 1fr 0fr / 1fr;
+  grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
 }
 
 .App-Standalone {
