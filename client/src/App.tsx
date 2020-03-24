@@ -70,8 +70,8 @@ function App() {
         </Switch>
       </Router>
       <div className="footer">
-        <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
-          open sourced on github
+        <a target="_blank" href="https://covidmutualaid.cc/">
+          visit full site
         </a>
         <span
           className="link"
@@ -84,6 +84,9 @@ function App() {
         </span>
         {/* <p>This map is updated every 5 minutes</p> */}
         <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
+        <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
+          open sourced on github
+        </a>
       </div>
     </div>
   )
