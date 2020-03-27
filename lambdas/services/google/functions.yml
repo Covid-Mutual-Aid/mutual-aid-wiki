@@ -21,11 +21,3 @@ googlePlaceQeolocate:
         method: get
         path: google/geolocate
         cors: true
-
-getSheet:
-  handler: services/google/sheets.getSheet
-getGroupsFromSheet:
-  handler: services/google/sheets.getGroupsFromSheet
-  timeout: 200
-createDedupeSheet:
-  handler: services/google/sheets.createDedupeSheet
