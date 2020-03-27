@@ -77,13 +77,13 @@ function GroupsMapPage() {
                   </Button>
                 </Col>
                 <Col xs={5} md={2} className="input-height">
-                  {/* <Link to="/create-group">
+                  <Link to="/create-group">
                     <Button className="full-width" variant="secondary">
                       Add Group
                     </Button>
-                  </Link> */}
+                  </Link>
                   {/* Maintain Google Doc as primary source of info */}
-                  <a
+                  {/* <a
                     onClick={() =>
                       gtag('event', 'Navigate to add group', {
                         event_category: 'Group',
@@ -92,15 +92,15 @@ function GroupsMapPage() {
                     }
                     target="_blank"
                     href="https://docs.google.com/forms/d/e/1FAIpQLSdJrgqHazomhDsJDG3Nnye30Ys7sZEl-APCrQh80D1g-iQrgQ/viewform"
-                  >
-                    <Button
+                  > */}
+                  {/* <Button
                       style={{ whiteSpace: 'nowrap' }}
                       className="full-width"
                       variant="secondary"
                     >
                       Add Group
                     </Button>
-                  </a>
+                  </a> */}
                 </Col>
               </Form.Row>
             </Form>
