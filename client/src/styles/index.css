@@ -1,4 +1,11 @@
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -8,6 +15,23 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.App {
+  height: 100vh;
+  display: grid;
+  grid: 0fr 1fr 10rem / 1fr;
+}
+
+.App-Standalone {
+  padding: 2rem 4rem;
+  height: 100%;
+  display: grid;
+  grid: 0fr 1fr 10rem / 1fr;
 }
 
 .group-table-wrapper {
@@ -42,22 +66,9 @@ code {
   height: 4rem;
 }
 
-.App {
-  height: 100vh;
-  display: grid;
-  grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
-}
-
-.App-Standalone {
-  padding: 2rem 4rem;
-  height: 100%;
-  display: grid;
-  grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
-}
-
 .table-wrapper {
   position: relative;
-  height: 45vh;
+  /* height: 45vh; */
   overflow-y: scroll;
 }
 

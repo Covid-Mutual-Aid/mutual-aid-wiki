@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { Spring } from 'react-spring/renderprops'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 import { useMapState, useMap } from '../contexts/MapProvider'
 import { Group } from '../utils/types'
@@ -9,8 +9,8 @@ import { gtag } from '../utils/gtag'
 type GoogleMapState = google.maps.Map | null
 
 const GroupMap = ({ groups }: { groups: Group[] }) => {
-  const [{ zoom, center, group }, inital] = useMapState()
-  const { setMapState } = useMap()
+  const [{ zoom, center }, inital] = useMapState()
+  const { setMapState, map } = useMap()
   const [googleMapInstance, setGoogleMapInstance] = useState<GoogleMapState>(null)
 
   const onLoad = React.useCallback(mapInstance => {
@@ -27,6 +27,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
         <Spring from={{ z: inital.zoom, ...inital.center }} to={{ z: zoom, ...center }}>
           {({ z, lat, lng }) => (
             <GoogleMap
+              ref={map}
               onLoad={onLoad}
               mapContainerStyle={{
                 height: '100%',
@@ -39,12 +40,6 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
                   event_category: 'Map',
                   event_label: 'Drag map',
                 })
-                if (googleMapInstance instanceof google.maps.Map) {
-                  const center = googleMapInstance.getCenter()
-                  //Uncommenting the line below animates the Map the wrong way on drag end, but
-                  //at least we have the coordinates from the drag event.
-                  //setMapState({ zoom, group, center: { lat: center.lat(), lng: center.lng() } })
-                }
               }}
             >
               {groups.map(group => (

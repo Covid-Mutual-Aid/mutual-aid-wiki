@@ -1,7 +1,6 @@
 import { Form, Button, Col, Container } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react'
 import haversine from 'haversine-distance'
-import { Link } from 'react-router-dom'
 
 import { useRequest } from '../contexts/RequestProvider'
 import GroupsTable from '../components/GroupsTable'
@@ -35,7 +34,7 @@ function GroupsMapPage() {
   }, [request])
 
   return (
-    <>
+    <div style={{ display: 'grid', grid: '10rem 1fr 1fr / 1fr' }}>
       <div className="place-form">
         {!placeOverlay ? (
           <Container className="search-padding">
@@ -119,7 +118,7 @@ function GroupsMapPage() {
       <div className="table-wrapper">
         <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
       </div>
-    </>
+    </div>
   )
 }
 
