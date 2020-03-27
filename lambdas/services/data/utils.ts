@@ -19,10 +19,14 @@ export const scrapeSheet = (): Promise<Scraped[]> =>
         res
           .filter((x: any) => x.join('').length > 0)
           .map((x: string[]) => ({
-            name: x[2].trim(),
-            link_facebook: x[3].trim(),
+            name: x[1].trim(),
+            link_facebook: x[2].trim(),
             location_name: x[0].trim(),
-          })) as Scraped[]
+          }))
+          .map((x: any) => {
+            console.log(x)
+            return x
+          }) as Scraped[]
     )
     .then(uniqueBy(isSameGroup))
 
