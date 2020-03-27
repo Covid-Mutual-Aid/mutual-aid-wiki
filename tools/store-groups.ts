@@ -21,15 +21,16 @@ const groupsFile = join(__dirname, '../data/groups.json')
 const getdata = () =>
   axios
     .get(groupsEndpoint)
-    .then(groups => writeFileSync(groupsFile, JSON.stringify(groups), 'utf8'))
+    .then(({ data }) => writeFileSync(groupsFile, JSON.stringify(data), 'utf8'))
 
-getdata().then(() => {})
-execSync('echo downloading groups')
+getdata().then(() => {
+  execSync('echo downloading groups')
 
-execSync('cd ./data')
-execSync('git init')
-execSync('git add .')
-execSync('git config user.name "Dan Beaven"')
-execSync('git config user.email "dm.beaven@gmail.com"')
-execSync('git commit -m "docs(docs): update gh-pages"')
-execSync(`git push --force --quiet "https://${ghToken}@${repository}" master:groups`)
+  execSync('cd ./data')
+  execSync('git init')
+  execSync('git add .')
+  execSync('git config user.name "Dan Beaven"')
+  execSync('git config user.email "dm.beaven@gmail.com"')
+  execSync('git commit -m "docs(docs): update gh-pages"')
+  execSync(`git push --force --quiet "https://${ghToken}@${repository}" master:groups`)
+})
