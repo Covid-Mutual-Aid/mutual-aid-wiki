@@ -82,7 +82,6 @@ function App() {
         >
           {!copiedToClipboard ? 'embed this map' : 'code copied to clipboard!'}
         </span>
-        {/* <p>This map is updated every 5 minutes</p> */}
         <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
         <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
           open sourced on github

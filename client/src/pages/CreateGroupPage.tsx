@@ -47,7 +47,9 @@ const CreateGroup = () => {
               event_label: 'Clicked add group button',
             })
             if (!validURL(link)) {
-              setLinkValidationError('Please enter a valid URL')
+              setLinkValidationError(
+                'Please enter a valid URL (the http bit is important), e.g https://www.facebook.com/groups/123456789'
+              )
               return
             }
             if (!location || !link || !name) return setValid(false)
