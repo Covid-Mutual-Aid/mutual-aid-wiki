@@ -66,7 +66,8 @@ export const get = lambdaQuery((x?: { id?: string }) =>
 )
 
 export const create = lambdaBody(
-  (group: Omit<Group, 'id'>) => Promise.all([putGroup(group), addSheetRow(group)]),
+  (group: Omit<Group, 'id'>) =>
+    isOffline() ? putGroup(group) : Promise.all([putGroup(group), addSheetRow(group)]),
   {
     name: 'string',
     link_facebook: 'string',
