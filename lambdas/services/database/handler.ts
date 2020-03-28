@@ -12,7 +12,7 @@ export const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
   readAll().then(groups =>
-    groups.some(x => isSameGroup(x, group)) ? 'Exists' : create(group).then(() => 'Added')
+    groups.some(g => isSameGroup(g, group)) ? 'Exists' : create(group).then(() => 'Added')
   )
 
 // Lambdas
@@ -39,6 +39,7 @@ export const createGroup = lambdaBody(
       : (Promise.all([createNoDuplicates(group), addSheetRow(group)]) as any),
   {
     name: 'string',
+    emails: ['string'],
     link_facebook: 'string',
     location_name: 'string',
     location_coord: {

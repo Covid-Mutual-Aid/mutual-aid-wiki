@@ -17,10 +17,7 @@
     "x-ray": "^2.3.4"
   },
   "jest": {
-    "preset": [
-      "ts-jest",
-      "@shelf/jest-dynamodb"
-    ]
+    "preset": "ts-jest"
   },
   "devDependencies": {
     "@shelf/jest-dynamodb": "^1.7.0",
