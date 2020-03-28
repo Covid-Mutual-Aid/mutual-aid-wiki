@@ -60,3 +60,16 @@ export const omit = <T extends Record<any, any>, K extends keyof T>(k: K) => (x:
     (all, key) => (key === k ? all : { ...all, [key]: x[key] }),
     {} as any
   )
+
+export const renameKey = <O extends Record<any, any>, F extends keyof O, T extends string>(
+  from: F,
+  to: T
+) => (x: O): Omit<O, F> & { [Key in T]: O[F] } => {
+  let n = omit(from)(x)
+  return { ...n, [to]: x[to] }
+}
+
+export const comp2 = <A extends any, B extends any, C extends any>(
+  fn1: (x: B) => C,
+  fn2: (x: A) => B
+) => (x: A) => fn1(fn2(x))

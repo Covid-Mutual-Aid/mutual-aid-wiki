@@ -1,4 +1,4 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { DocumentClient, GetItemInput } from 'aws-sdk/clients/dynamodb'
 import { isOffline } from './utils'
 import uuid from 'uuid/v4'
 
@@ -34,7 +34,7 @@ export default function createDynamoApi<T extends Record<string, any> & { id: st
           Item: { ...x, id: x.id || uuid(), pub_id: x.pub_id || uuid() },
         })
         .promise(),
-    read: <K extends Partial<T>>(key: K) =>
+    read: <K extends GetItemInput['Key']>(key: K) =>
       dynamoClient
         .get({ TableName, Key: key })
         .promise()

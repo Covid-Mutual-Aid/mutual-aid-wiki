@@ -32,13 +32,13 @@ const useGroup = () => {
 
   const get = () => request(`/group/get?id=${id}`).then(grp => mounted.current && setGroup(grp))
   const save = () =>
-    request(`/group/create`, { method: 'POST', body: JSON.stringify(group) }).then(get)
+    request(`/group/update`, { method: 'POST', body: JSON.stringify(group) }).then(get)
 
   useEffect(() => {
     get()
     return () => void (mounted.current = false)
   }, [])
-
+  console.log(group)
   return { group, setGroup, save }
 }
 

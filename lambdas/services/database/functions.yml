@@ -7,6 +7,14 @@ getGroup:
         cors: true
   timeout: 15
 
+updateGroup:
+  handler: services/database/handler.updateGroup
+  events:
+    - http:
+        method: post
+        path: group/update
+        cors: true
+
 createGroup:
   handler: services/database/handler.createGroup
   events:

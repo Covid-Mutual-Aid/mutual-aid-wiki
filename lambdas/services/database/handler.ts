@@ -1,11 +1,11 @@
 import { lambdaQuery, lambdaBody } from '../lib/lambdaUtils'
 import { Group } from '../lib/types'
-import { isSameGroup, isOffline, omit } from '../lib/utils'
+import { isSameGroup, isOffline, omit, renameKey } from '../lib/utils'
 import { addSheetRow } from '../google/sheets'
 import createDynamoApi from '../lib/dynamodb'
 
 const TableName = process.env.DYNAMODB_TABLE as string
-const { create, remove, read, readAll } = createDynamoApi<Group>(TableName)
+const { create, remove, readAll } = createDynamoApi<Group>(TableName)
 
 // Helper
 export const createNoDuplicates = (
@@ -16,10 +16,20 @@ export const createNoDuplicates = (
   )
 
 // Lambdas
-export const getGroup = lambdaQuery((x?: { pub_id?: string }) =>
-  x && x.pub_id
-    ? read(x as { pub_id: string }).then(omit('id'))
-    : readAll().then(x => x.map(omit('id')))
+export const getGroup = lambdaQuery((x?: { id?: string }) =>
+  readAll().then(groups =>
+    x && x.id
+      ? renameKey('pub_id', 'id')(groups.find(y => y.id === x.id || y.pub_id === x.id) || {})
+      : groups.map(renameKey('pub_id', 'id'))
+  )
+)
+
+export const updateGroup = lambdaBody(group =>
+  readAll().then(groups => {
+    const grp = groups.find(x => x.id === group.id)
+    if (!grp) return Promise.reject('No group with id')
+    return create({ ...grp, ...omit('id')(group) })
+  })
 )
 
 export const createGroup = lambdaBody(
