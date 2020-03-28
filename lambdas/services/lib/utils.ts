@@ -54,3 +54,9 @@ export const uniqueBy = <T>(fn: (a: T, b: T) => boolean) => (arr: T[]) =>
 
 export const allSeq = <T>(x: (() => Promise<T>)[]) =>
   x.reduce((a, b) => a.then(all => b().then(n => [...all, n])), Promise.resolve([] as T[]))
+
+export const omit = <T extends Record<any, any>, K extends keyof T>(k: K) => (x: T): Omit<T, K> =>
+  Object.keys(x).reduce<Omit<T, K>>(
+    (all, key) => (key === k ? all : { ...all, [key]: x[key] }),
+    {} as any
+  )

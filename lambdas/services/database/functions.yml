@@ -1,5 +1,5 @@
 getGroup:
-  handler: services/database/handler.get
+  handler: services/database/handler.getGroup
   events:
     - http:
         method: get
@@ -8,7 +8,7 @@ getGroup:
   timeout: 15
 
 createGroup:
-  handler: services/database/handler.create
+  handler: services/database/handler.createGroup
   events:
     - http:
         method: post
@@ -16,7 +16,7 @@ createGroup:
         cors: true
 
 deleteGroup:
-  handler: services/database/handler.delete
+  handler: services/database/handler.removeGroup
   events:
     - http:
         method: post

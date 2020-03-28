@@ -1,5 +1,6 @@
 export type Group = {
   id: string
+  pub_id: string
   name: string
   link_facebook: string
   location_name: string
