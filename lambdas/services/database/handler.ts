@@ -12,15 +12,27 @@ export const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
   readAll().then(groups =>
-    groups.some(g => isSameGroup(g, group)) ? 'Exists' : create(group).then(() => 'Added')
+    groups.some(g => isSameGroup(g, group))
+      ? 'Exists'
+      : create({ ...group, created_at: Date.now() }).then(() => 'Added')
   )
 
 // Lambdas
+const sanitize = (x?: Group) =>
+  !x
+    ? null
+    : {
+        name: x.name,
+        link_facebook: x.link_facebook,
+        location_name: x.location_name,
+        location_coord: x.location_coord,
+      }
+
 export const getGroup = lambdaQuery((x?: { id?: string }) =>
   readAll().then(groups =>
     x && x.id
-      ? renameKey('pub_id', 'id')(groups.find(y => y.id === x.id || y.pub_id === x.id) || {})
-      : groups.map(renameKey('pub_id', 'id'))
+      ? sanitize(groups.find(y => y.id === x.id || y.pub_id === x.id))
+      : groups.map(sanitize)
   )
 )
 
@@ -28,7 +40,7 @@ export const updateGroup = lambdaBody(group =>
   readAll().then(groups => {
     const grp = groups.find(x => x.id === group.id)
     if (!grp) return Promise.reject('No group with id')
-    return create({ ...grp, ...omit('id')(group) })
+    return create({ updated_at: Date.now(), ...grp, ...omit('id')(group) })
   })
 )
 
