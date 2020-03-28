@@ -17,9 +17,13 @@
     "x-ray": "^2.3.4"
   },
   "jest": {
-    "preset": "ts-jest"
+    "preset": [
+      "ts-jest",
+      "@shelf/jest-dynamodb"
+    ]
   },
   "devDependencies": {
+    "@shelf/jest-dynamodb": "^1.7.0",
     "@types/aws-lambda": "^8.10.46",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^25.1.4",

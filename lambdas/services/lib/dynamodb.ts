@@ -1,6 +1,13 @@
-import AWS from 'aws-sdk'
+import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { isOffline } from './utils'
 import uuid from 'uuid/v4'
+
+const isTest = process.env.JEST_WORKER_ID
+const testOptions = {
+  endpoint: 'localhost:8000',
+  sslEnabled: false,
+  region: 'local-env',
+}
 
 const offlineOptions = {
   region: 'localhost',
@@ -9,9 +16,11 @@ const offlineOptions = {
   secretAccessKey: 'DEFAULT_SECRET', // needed if you don't have aws credentials at all in env
 }
 
-export const dynamoClient = isOffline()
-  ? new AWS.DynamoDB.DocumentClient(offlineOptions)
-  : new AWS.DynamoDB.DocumentClient()
+export const dynamoClient = isTest
+  ? new DocumentClient(testOptions)
+  : isOffline()
+  ? new DocumentClient(offlineOptions)
+  : new DocumentClient()
 
 // Helper
 export default function createDynamoApi<T extends Record<string, any> & { id: string }>(
