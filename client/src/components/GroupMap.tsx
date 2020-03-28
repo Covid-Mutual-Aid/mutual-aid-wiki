@@ -47,13 +47,13 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
                 }
               }}
             >
-              {groups.map(group => (
+              {groups.map((group, i) => (
                 <Marker
                   opacity={
                     group.location_coord.lat === lat && group.location_coord.lng === lng ? 1 : 0.2
                   }
                   position={group.location_coord}
-                  key={group.id}
+                  key={i}
                   onClick={() => {
                     gtag('event', 'Marker was clicked', {
                       event_category: 'Map',

@@ -14,13 +14,10 @@ type Props = {
   shouldDisplayDistance: boolean
 }
 
-// row background rgba(0, 123, 255, 0.2)
-
 const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   const { setMapState } = useMap()
   const [mapState] = useMapState()
   const tableWrapper = useRef<HTMLDivElement>(null)
-  // console.log(mapState)
   const link = mapState.group ? mapState.group.link_facebook : ''
   return (
     <div>
@@ -33,9 +30,9 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {groups.map(({ link_facebook, name, location_name, distance, location_coord, id }) => (
+            {groups.map(({ link_facebook, name, location_name, distance, location_coord }, i) => (
               <tr
-                key={id}
+                key={i}
                 style={link === link_facebook ? { backgroundColor: 'rgba(0, 123, 255, 0.2)' } : {}}
               >
                 <td
@@ -51,7 +48,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
 
                     setMapState({
                       zoom: 11,
-                      group: { id, link_facebook, name, location_name, location_coord },
+                      group: { link_facebook, name, location_name, location_coord },
                       center: location_coord,
                     })
                   }}

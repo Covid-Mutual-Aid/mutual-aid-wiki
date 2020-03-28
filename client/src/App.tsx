@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import GroupsMapPage from './pages/GroupsMapPage'
 import CreateGroupPage from './pages/CreateGroupPage'
+import EditGroupPage from './pages/EditGroupPage'
 import { gtag } from './utils/gtag'
 import { Button, Modal } from 'react-bootstrap'
 import copy from 'copy-to-clipboard'
@@ -63,6 +64,9 @@ function App() {
         <Switch>
           <Route path="/create-group">
             <CreateGroupPage />
+          </Route>
+          <Route path="/edit-group/:id">
+            <EditGroupPage />
           </Route>
           <Route path="/">
             <GroupsMapPage />
