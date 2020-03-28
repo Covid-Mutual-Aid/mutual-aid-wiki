@@ -1,39 +1,28 @@
 import { DocumentClient, GetItemInput } from 'aws-sdk/clients/dynamodb'
 import { isOffline } from './utils'
-import uuid from 'uuid/v4'
-
-const isTest = process.env.JEST_WORKER_ID
-const testOptions = {
-  endpoint: 'localhost:8000',
-  sslEnabled: false,
-  region: 'local-env',
-}
+import { v4 as uuid } from 'uuid'
 
 const offlineOptions = {
   region: 'localhost',
   endpoint: 'http://localhost:8000',
-  accessKeyId: 'DEFAULT_ACCESS_KEY', // needed if you don't have aws credentials at all in env
-  secretAccessKey: 'DEFAULT_SECRET', // needed if you don't have aws credentials at all in env
+  accessKeyId: 'DEFAULT_ACCESS_KEY',
+  secretAccessKey: 'DEFAULT_SECRET',
 }
 
-export const dynamoClient = isTest
-  ? new DocumentClient(testOptions)
-  : isOffline()
-  ? new DocumentClient(offlineOptions)
-  : new DocumentClient()
+export const dynamoClient = isOffline() ? new DocumentClient(offlineOptions) : new DocumentClient()
 
 // Helper
 export default function createDynamoApi<T extends Record<string, any> & { id: string }>(
   TableName: string
 ) {
   return {
-    create: <G extends Omit<T, 'id' | 'pub_id'>>(x: G) =>
-      dynamoClient
-        .put({
-          TableName,
-          Item: { ...x, id: x.id || uuid(), pub_id: x.pub_id || uuid() },
-        })
-        .promise(),
+    create: <G extends Omit<T, 'id' | 'pub_id'>>(x: G) => {
+      const Item = { ...x, id: (x.id || uuid()) as string, pub_id: (x.pub_id || uuid()) as string }
+      return dynamoClient
+        .put({ TableName, Item })
+        .promise()
+        .then(() => Item)
+    },
     read: <K extends GetItemInput['Key']>(key: K) =>
       dynamoClient
         .get({ TableName, Key: key })

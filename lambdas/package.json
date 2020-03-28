@@ -5,25 +5,21 @@
   "main": "handler.js",
   "scripts": {
     "test": "jest services/**/*.ts",
+    "test:e2e": "jest ./tests/*.test.ts",
     "start": "env OFFLINE=true sls offline",
     "sls": "serverless"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "googleapis": "^48.0.0",
-    "serverless": "^1.67.0",
     "source-map-support": "^0.5.10",
     "uuid": "^7.0.2",
     "x-ray": "^2.3.4"
   },
   "jest": {
-    "preset": [
-      "ts-jest",
-      "@shelf/jest-dynamodb"
-    ]
+    "preset": "ts-jest"
   },
   "devDependencies": {
-    "@shelf/jest-dynamodb": "^1.7.0",
     "@types/aws-lambda": "^8.10.46",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^25.1.4",
@@ -35,6 +31,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "jest": "^25.1.0",
+    "serverless": "^1.67.0",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.0.0",
     "serverless-webpack": "^5.2.0",

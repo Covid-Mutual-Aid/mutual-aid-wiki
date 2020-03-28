@@ -101,7 +101,6 @@ describe('purgeIncorrectlyNamedFields', () => {
 
   test('Removes correctly named groups from array', () => {
     const correctlyNamedGroups = arr.filter(isCorrectlyNamed)
-    console.log(correctlyNamedGroups)
     expect(
       correctlyNamedGroups.length === 1 &&
         JSON.stringify(correctlyNamedGroups[0]) === JSON.stringify(arr[0])
