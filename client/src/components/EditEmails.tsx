@@ -67,7 +67,7 @@ const EditEmails = ({ initEmails, onChange }: Props) => {
               }
             }}
           >
-            Add
+            Add Email
           </Button>
         </InputGroup.Append>
       </InputGroup>

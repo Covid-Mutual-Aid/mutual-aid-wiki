@@ -93,6 +93,7 @@ const CreateGroup = () => {
             <Link to="/" style={{ marginRight: '1rem' }}>
               <Button variant="light">Cancel</Button>
             </Link>
+            {/* When an already existing group is added, the button below should be secondary until a change has been made */}
             <Button variant={isReady ? 'primary' : 'secondary'} type="submit">
               Add Group
             </Button>

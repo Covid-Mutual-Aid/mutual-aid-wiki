@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
+import { ReactMultiEmail, isEmail } from 'react-multi-email'
+import 'react-multi-email/style.css'
 
 import { GroupWithEmails } from '../utils/types'
 import { Form, Badge } from 'react-bootstrap'
@@ -85,10 +87,37 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
           }}
         />
       </Form.Group>
-      <EditEmails
+      {/* <EditEmails
         initEmails={group.emails}
         onChange={emails => setGroup((g: GroupWithEmails) => ({ ...group, emails }))}
-      />
+      /> */}
+
+      <Form.Group>
+        {group.emails.length === 0 ? (
+          <Form.Text className="text-muted">One or more contact emails...</Form.Text>
+        ) : (
+          ''
+        )}
+        <ReactMultiEmail
+          placeholder={`e.g "your_admin_email@gmail.com"`}
+          emails={group.emails}
+          onChange={(emails: string[]) => setGroup((g: GroupWithEmails) => ({ ...group, emails }))}
+          validateEmail={email => {
+            return isEmail(email)
+          }}
+          getLabel={(email: string, index: number, removeEmail: (index: number) => void) => {
+            return (
+              <div data-tag key={index}>
+                {email}
+                <span data-tag-handle onClick={() => removeEmail(index)}>
+                  ×
+                </span>
+              </div>
+            )
+          }}
+        />
+      </Form.Group>
+
       <Form.Group>
         <Form.Text className="text-muted">{validation.link_facebook ? '' : linkErrorMsg}</Form.Text>
         <Form.Control
