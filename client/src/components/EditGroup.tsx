@@ -45,8 +45,17 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
   })
 
   useEffect(() => {
-    onChange(group, Object.keys(validation) as Array<keyof Validation>)
-    if (onComplete && group.name && group.link_facebook && group.location_name) {
+    onChange(
+      group,
+      (Object.keys(validation) as Array<keyof Validation>).filter(k => !validation[k])
+    )
+    if (
+      onComplete &&
+      validation.name &&
+      validation.emails &&
+      validation.link_facebook &&
+      validation.location_name
+    ) {
       onComplete(group)
     }
   }, [group])
