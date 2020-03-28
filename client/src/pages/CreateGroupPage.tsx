@@ -26,7 +26,7 @@ const CreateGroup = () => {
   const [isReady, setIsReady] = useState(false)
   const [triedToSubmit, setTriedToSubmit] = useState(false)
 
-  const [requestError, setRequestError] = useState('')
+  const [requestError, setRequestError] = useState<[string, GroupWithEmails]>(['', group])
   const [sucessModal, setSuccessModal] = useState(false)
 
   return (
@@ -55,14 +55,17 @@ const CreateGroup = () => {
               .then(res => {
                 console.log(res)
                 if (res === 'Exists') {
-                  setRequestError('This group already exists.')
+                  setRequestError(['This group already exists.', group])
                   return
                 }
                 setSuccessModal(true)
                 setTimeout(() => history.push('/'), 3000)
               })
               .catch(err => {
-                setRequestError('There was an error processing your request, please try again.')
+                setRequestError([
+                  'There was an error processing your request, please try again.',
+                  group,
+                ])
               })
           }}
         >
@@ -76,8 +79,11 @@ const CreateGroup = () => {
             onComplete={() => setIsReady(true)}
           />
 
-          {requestError.length > 0 && <Form.Text className="text-danger">{requestError}</Form.Text>}
-          {validation.length > 0 && triedToSubmit && requestError.length === 0 && (
+          {requestError[0].length > 0 &&
+            JSON.stringify(group) === JSON.stringify(requestError[1]) && (
+              <Form.Text className="text-danger">{requestError[0]}</Form.Text>
+            )}
+          {validation.length > 0 && triedToSubmit && requestError[0].length === 0 && (
             <Form.Text className="text-danger">
               Still need: {validation.map(v => `"` + v + `"` + ` `)}
             </Form.Text>
