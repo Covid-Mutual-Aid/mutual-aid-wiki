@@ -1,21 +1,22 @@
-import { scanGroups, putGroup, removeGroup } from '../database/handler'
-
 import { Group } from '../lib/types'
 import { lambda } from '../lib/lambdaUtils'
 import { missingIn, allSeq, isSameGroup, isCorrectlyNamed } from '../lib/utils'
 import { scrapeSheet, geoLocateGroup } from './utils'
-import Axios from 'axios'
+import createDynamoApi from '../lib/dynamodb'
+
+const TableName = process.env.DYNAMODB_TABLE as string
+const { create, remove, readAll } = createDynamoApi<Group>(TableName)
 
 // Lambdas
 export const scrapeGroups = lambda(scrapeSheet)
 export const updateGroups = lambda(() =>
   scrapeSheet()
-    .then(scraped => scanGroups().then(existing => missingIn(isSameGroup)(existing, scraped)))
+    .then(scraped => readAll().then(existing => missingIn(isSameGroup)(existing, scraped)))
     .then(groups =>
       allSeq(
         groups.map(group => () =>
           geoLocateGroup(group)
-            .then(putGroup)
+            .then(grp => create(grp))
             .catch(err => err.message)
         )
       )
@@ -23,7 +24,7 @@ export const updateGroups = lambda(() =>
 )
 
 export const purgeDuplicates = lambda(() =>
-  scanGroups()
+  readAll()
     .then(groups =>
       groups.reduce<[Group[], Group[]]>(
         ([uniqs, dups], g) =>
@@ -31,20 +32,20 @@ export const purgeDuplicates = lambda(() =>
         [[], []]
       )
     )
-    .then(([_, dups]) => allSeq(dups.map(grp => () => removeGroup(grp))))
+    .then(([_, dups]) => allSeq(dups.map(grp => () => remove(grp))))
 )
 
 export const purgeIncorrectlyLabeledGroups = lambda(() =>
-  scanGroups()
+  readAll()
     .then(groups => groups.filter(g => !isCorrectlyNamed(g)))
-    .then(rejects => allSeq(rejects.map(reject => () => removeGroup(reject))))
+    .then(rejects => allSeq(rejects.map(reject => () => remove(reject))))
 )
 
 export const removeAllGroups = lambda(() =>
-  scanGroups().then(groups =>
+  readAll().then(groups =>
     allSeq(
       groups.map(group => () =>
-        removeGroup(group)
+        remove(group)
           .then(() => console.log(`deleted ${group.name}`))
           .catch(err => err.message)
       )

@@ -25,7 +25,7 @@ const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 
   fetch(baseUrl + input, init)
     .then(x => x.json())
     .catch(err => {
-      if (accum > 5) return Promise.reject(err)
+      if (accum > 2) return Promise.reject(err)
       return new Promise(res => setTimeout(res, 500 * accum * accum)).then(() =>
         request(input, init, accum + 1)
       )

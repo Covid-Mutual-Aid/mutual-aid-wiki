@@ -1,4 +1,11 @@
-import { isSameGroup, missingIn, uniqueBy, isDateTimeString, isCorrectlyNamed } from './utils'
+import {
+  isSameGroup,
+  missingIn,
+  uniqueBy,
+  isDateTimeString,
+  isCorrectlyNamed,
+  normLink,
+} from './utils'
 
 const group1 = { link_facebook: 'foo', name: 'foo', location_name: 'foo' }
 const group2 = { link_facebook: 'bar', name: 'bar', location_name: 'bar' }
@@ -8,7 +15,6 @@ const corrGroup = {
   name: 'Test Name',
   location_name: 'Test Location Name',
 }
-
 const inCorrGroup1 = {
   link_facebook: '19/03/2020 14:15:12',
   name: '19/03/2020 14:15:12',
@@ -27,6 +33,31 @@ const inCorrGroup4 = {
   name: 'http://facebook.com',
 }
 
+const testA = {
+  location_name: 'Hove, UK',
+  name: 'test',
+  link_facebook: 'http://asjdkad.com',
+  location_coord: { lng: -0.168749, lat: 50.8279319 },
+}
+
+const testB = {
+  name: 'Here is a test here is antoher test ',
+  location_name: 'Hove, UK',
+  link_facebook: 'http://testinginginginging.com',
+  location_coord: { lat: 50.8279319, lng: -0.168749 },
+}
+
+describe('normLink', () => {
+  test('Removes host for facebook URLs', () => {
+    expect(normLink('http://facebook.com/groups/123456789') === '/groups/123456789').toBe(true)
+  })
+  test('Returns string for non facebook urls', () => {
+    expect(
+      normLink('http://test.com/groups/123456789') === 'http://test.com/groups/123456789'
+    ).toBe(true)
+  })
+})
+
 describe('isSamegroup', () => {
   test('same facebook link', () => {
     expect(isSameGroup(group1, group2)).toBe(false)
@@ -38,6 +69,9 @@ describe('isSamegroup', () => {
   test('Should trim string values', () => {
     expect(isSameGroup({ ...group1, name: 'bar' }, group2)).toBe(false)
     expect(isSameGroup({ ...group1, name: 'bar', location_name: 'bar' }, group2)).toBe(true)
+  })
+  test('Should be the same value', () => {
+    expect(isSameGroup(testA, testB)).toBe(false)
   })
 })
 
@@ -101,7 +135,6 @@ describe('purgeIncorrectlyNamedFields', () => {
 
   test('Removes correctly named groups from array', () => {
     const correctlyNamedGroups = arr.filter(isCorrectlyNamed)
-    console.log(correctlyNamedGroups)
     expect(
       correctlyNamedGroups.length === 1 &&
         JSON.stringify(correctlyNamedGroups[0]) === JSON.stringify(arr[0])

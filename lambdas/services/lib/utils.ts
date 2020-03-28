@@ -10,8 +10,25 @@ export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
 
 export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
 
+// Url {
+//   protocol: 'http:',
+//   slashes: true,
+//   auth: null,
+//   host: 'facebook.com',
+//   port: null,
+//   hostname: 'facebook.com',
+//   hash: null,
+//   search: null,
+//   query: null,
+//   pathname: '/groups/123456789',
+//   path: '/groups/123456789',
+//   href: 'http://facebook.com/groups/123456789'
+// }
 const norm = (x: string) => x.toLowerCase().trim()
-const normLink = (x: string) => parse(x).pathname?.replace(/\/$/, '')
+export const normLink = (s: string) => {
+  const { host, pathname } = parse(s)
+  return host === 'facebook.com' ? pathname?.replace(/\/$/, '') : s
+}
 
 // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
 const validURL = (str: string) => {
@@ -54,3 +71,22 @@ export const uniqueBy = <T>(fn: (a: T, b: T) => boolean) => (arr: T[]) =>
 
 export const allSeq = <T>(x: (() => Promise<T>)[]) =>
   x.reduce((a, b) => a.then(all => b().then(n => [...all, n])), Promise.resolve([] as T[]))
+
+export const omit = <T extends Record<any, any>, K extends keyof T>(k: K) => (x: T): Omit<T, K> =>
+  Object.keys(x).reduce<Omit<T, K>>(
+    (all, key) => (key === k ? all : { ...all, [key]: x[key] }),
+    {} as any
+  )
+
+export const renameKey = <O extends Record<any, any>, F extends keyof O, T extends string>(
+  from: F,
+  to: T
+) => (x: O): Omit<O, F> & { [Key in T]: O[F] } => {
+  let n = omit(from)(x)
+  return { ...n, [to]: x[to] }
+}
+
+export const comp2 = <A extends any, B extends any, C extends any>(
+  fn1: (x: B) => C,
+  fn2: (x: A) => B
+) => (x: A) => fn1(fn2(x))

@@ -11,12 +11,19 @@
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
     "start": "run-p start:client start:lambda start:db",
-    "test:e2e": "jest ./tests/*.test.ts",
     "backup": "cd lambdas && sls invoke -f getGroup > ../groups.json"
+  },
+  "repository": "https://github.com/Covid-Mutual-Aid/search-by-postcode.git",
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn backup; git add groups.json"
+    }
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.1",
+    "axios": "^0.19.2",
+    "husky": "^4.2.3",
     "npm-run-all": "^4.1.5",
     "typescript": "^3.8.3"
   },
@@ -31,7 +38,6 @@
     "printWidth": 100
   },
   "dependencies": {
-    "axios": "^0.19.2",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1"
   }

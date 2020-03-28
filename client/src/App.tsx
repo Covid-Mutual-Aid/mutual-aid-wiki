@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import GroupsMapPage from './pages/GroupsMapPage'
 import CreateGroupPage from './pages/CreateGroupPage'
+import EditGroupPage from './pages/EditGroupPage'
 import { gtag } from './utils/gtag'
 import { Button, Modal } from 'react-bootstrap'
 import copy from 'copy-to-clipboard'
@@ -64,6 +65,9 @@ function App() {
           <Route path="/create-group">
             <CreateGroupPage />
           </Route>
+          <Route path="/edit-group/:id">
+            <EditGroupPage />
+          </Route>
           <Route path="/">
             <GroupsMapPage />
           </Route>
@@ -82,7 +86,6 @@ function App() {
         >
           {!copiedToClipboard ? 'embed this map' : 'code copied to clipboard!'}
         </span>
-        {/* <p>This map is updated every 5 minutes</p> */}
         <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
         <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
           open sourced on github

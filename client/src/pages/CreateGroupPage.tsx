@@ -3,32 +3,30 @@ import { Form, Button } from 'react-bootstrap'
 import React, { useState } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import Location from '../components/Location'
 import { gtag } from '../utils/gtag'
-
-// https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
-function validURL(str: string) {
-  var pattern = new RegExp(
-    '^(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$',
-    'i'
-  ) // fragment locator
-  return !!pattern.test(str)
-}
+import EditGroup, { Validation } from '../components/EditGroup'
+import { Group, GroupWithEmails } from '../utils/types'
 
 const CreateGroup = () => {
   const request = useRequest()
   const history = useHistory()
-  const [valid, setValid] = useState(true)
-  const [name, setName] = useState('')
-  const [link, setLink] = useState('')
-  const [location, setLocation] = useState<{ lat: string; lng: string; name: string } | null>(null)
-  const [linkValidationError, setLinkValidationError] = useState('')
-  const [requestError, setRequestError] = useState('')
+  const [group, setGroup] = useState<GroupWithEmails>({
+    name: '',
+    emails: [],
+    location_name: '',
+    link_facebook: '',
+    location_coord: {
+      lat: 0,
+      lng: 0,
+    },
+  })
+
+  const [validation, setValidation] = useState<Array<keyof Validation>>([])
+
+  const [isReady, setIsReady] = useState(false)
+  const [triedToSubmit, setTriedToSubmit] = useState(false)
+
+  const [requestError, setRequestError] = useState<[string, GroupWithEmails]>(['', group])
   const [sucessModal, setSuccessModal] = useState(false)
 
   return (
@@ -42,53 +40,61 @@ const CreateGroup = () => {
           style={{ maxWidth: '50rem', margin: '0 auto' }}
           onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault()
+            setTriedToSubmit(true)
+            if (!isReady) return
+
             gtag('event', 'Added Group', {
               event_category: 'Group',
               event_label: 'Clicked add group button',
             })
-            if (!validURL(link)) {
-              setLinkValidationError('Please enter a valid URL')
-              return
-            }
-            if (!location || !link || !name) return setValid(false)
+
             request(`/group/create`, {
               method: 'POST',
-              body: JSON.stringify({
-                name,
-                link_facebook: link,
-                location_name: location?.name,
-                location_coord: { lng: location.lng, lat: location.lat },
-              }),
+              body: JSON.stringify(group),
             })
-              .then(() => {
+              .then(res => {
+                console.log(res)
+                if (res === 'Exists') {
+                  setRequestError(['This group already exists.', group])
+                  return
+                }
                 setSuccessModal(true)
                 setTimeout(() => history.push('/'), 3000)
               })
               .catch(err => {
-                setRequestError('There was an error processing your request, please try again.')
+                setRequestError([
+                  'There was an error processing your request, please try again.',
+                  group,
+                ])
               })
           }}
         >
-          <Form.Group controlId="formBasicEmail">
-            <Form.Control placeholder="Group name" onChange={(e: any) => setName(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Text className="text-muted">{linkValidationError}</Form.Text>
-            <Form.Control
-              placeholder="Facebook link"
-              onChange={(e: any) => setLink(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Location onChange={setLocation} placeholder={'Group location'} />
-          </Form.Group>
-          {!valid && <Form.Text className="text-muted">You must fill every field</Form.Text>}
-          {requestError.length > 0 && <Form.Text className="text-danger">{requestError}</Form.Text>}
+          <EditGroup
+            initGroup={group}
+            onChange={(g, v) => {
+              console.log(g)
+              setGroup(g)
+              setValidation(v)
+            }}
+            onComplete={() => setIsReady(true)}
+          />
+
+          {requestError[0].length > 0 &&
+            JSON.stringify(group) === JSON.stringify(requestError[1]) && (
+              <Form.Text className="text-danger">{requestError[0]}</Form.Text>
+            )}
+          {validation.length > 0 && triedToSubmit && requestError[0].length === 0 && (
+            <Form.Text className="text-danger">
+              Still need: {validation.map(v => `"` + v + `"` + ` `)}
+            </Form.Text>
+          )}
+
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
             <Link to="/" style={{ marginRight: '1rem' }}>
               <Button variant="light">Cancel</Button>
             </Link>
-            <Button variant="primary" type="submit">
+            {/* When an already existing group is added, the button below should be secondary until a change has been made */}
+            <Button variant={isReady ? 'primary' : 'secondary'} type="submit">
               Add Group
             </Button>
           </div>
