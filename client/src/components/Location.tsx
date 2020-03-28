@@ -21,6 +21,9 @@ const Location = ({
 
   return (
     <AsyncCreatableSelect
+      styles={{
+        placeholder: styles => ({ ...styles, color: 'rgba(0, 0, 0, 0.3) !important;' }),
+      }}
       multi={false}
       onChange={(x: any) =>
         request<any>(`/google/placeDetails?place_id=${x.value}`).then(y =>
