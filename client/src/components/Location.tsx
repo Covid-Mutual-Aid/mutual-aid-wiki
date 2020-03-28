@@ -37,7 +37,6 @@ const Location = ({
           )
           .then(x => x.map(place => ({ value: place.place_id, label: place.description })))
           .catch(err => {
-            console.log(err)
             return []
           })
       }

@@ -25,7 +25,7 @@ import EditGroup from '../components/EditGroup'
 //   }
 
 const useGroup = () => {
-  const [group, setGroup] = useState<null | Group>(null)
+  const [group, setGroup] = useState<null | (Group & { emails: string[] })>(null)
   const { id } = useParams<{ id: string }>()
   const request = useRequest()
   const mounted = useRef(true)
@@ -57,7 +57,6 @@ const EditGroupPage = ({}) => {
       >
         <div style={{ maxWidth: '50rem', margin: '0 auto' }}>
           <EditGroup initGroup={group} onChange={setGroup} />
-
           <div>
             <button type="submit">save</button>
           </div>
