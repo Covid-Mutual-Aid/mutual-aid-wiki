@@ -97,8 +97,8 @@ code {
   height: 3rem;
 }
 
-.footer a {
-  padding: 0 1rem;
+.footer * {
+  padding: 0 0.5rem;
 }
 
 .top-buttons {

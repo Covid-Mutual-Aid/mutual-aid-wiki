@@ -74,8 +74,11 @@ function App() {
         </Switch>
       </Router>
       <div className="footer">
+        <a target="_blank" href="https://airtable.com/shrHitFm25IJ2bo10">
+          edit your group
+        </a>
         <a target="_blank" href="https://covidmutualaid.cc/">
-          visit full site
+          full site
         </a>
         <span
           className="link"
@@ -84,11 +87,11 @@ function App() {
             setCopiedToClipboard(true)
           }}
         >
-          {!copiedToClipboard ? 'embed this map' : 'code copied to clipboard!'}
+          {!copiedToClipboard ? 'embed' : 'code copied!'}
         </span>
         <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
         <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
-          open sourced on github
+          open source
         </a>
       </div>
     </div>
