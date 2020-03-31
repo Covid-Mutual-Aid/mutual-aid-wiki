@@ -6,6 +6,7 @@ service:
 
 custom:
   GROUPS_TABLE: ${self:provider.stage}-groups10
+  LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-searches
   dynamodb:
     stages:
       - dev
@@ -42,6 +43,7 @@ provider:
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     GROUPS_TABLE: ${self:custom.GROUPS_TABLE}
+    LOCATION_SEARCHES_TABLE: ${self:custom.LOCATION_SEARCHES_TABLE}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -51,16 +53,19 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.GROUPS_TABLE}'
+      Resource:
+        - { 'Fn::GetAtt': ['DynamoDbGroups', 'Arn'] } #you will also see the logical IDs below where they are provisioned
+        - { 'Fn::GetAtt': ['DynamoDbLocationSearches', 'Arn'] }
 
 functions:
   - ${file(./services/database/functions.yml)}
   - ${file(./services/google/functions.yml)}
   - ${file(./services/data/functions.yml)}
+  - ${file(./services/searches/functions.yml)}
 
 resources:
   Resources:
-    ExportDB:
+    DynamoDbGroups:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
@@ -74,3 +79,17 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.GROUPS_TABLE}
+    DynamoDbLocationSearches:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.LOCATION_SEARCHES_TABLE}

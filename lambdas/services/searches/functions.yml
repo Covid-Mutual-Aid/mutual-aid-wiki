@@ -1,0 +1,15 @@
+getLocationSearches:
+  handler: services/searches/handler.getLocationSearches
+  events:
+    - http:
+        method: get
+        path: search/location/get
+        cors: true
+
+addLocationSearch:
+  handler: services/searches/handler.addLocationSearch
+  events:
+    - http:
+        method: post
+        path: search/location/add
+        cors: true

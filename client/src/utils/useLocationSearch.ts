@@ -19,8 +19,20 @@ const useLocationSearch = () => {
             center: place.geometry.location,
           })
           setName(place.formatted_address)
+          return place
         })
         .catch(() => setError('Invalid location, please try again'))
+        .then(place =>
+          request('/search/location/add', {
+            method: 'POST',
+            body: JSON.stringify({
+              query: name,
+              place_id: place.place_id,
+              coords: place.geometry.location,
+              address: place.formatted_address,
+            }),
+          }).catch(err => console.error('Failed to add search', err))
+        )
     },
     [request, setMapState]
   )
