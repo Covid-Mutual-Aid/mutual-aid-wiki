@@ -1,10 +1,10 @@
 import { Group } from '../lib/types'
-import { lambda } from '../lib/lambdaUtils'
+import lambda from '../lib/lambdaUtils'
 import { missingIn, allSeq, isSameGroup, isCorrectlyNamed } from '../lib/utils'
 import { scrapeSheet, geoLocateGroup } from './utils'
 import createDynamoApi from '../lib/dynamodb'
 
-const TableName = process.env.DYNAMODB_TABLE as string
+const TableName = process.env.GROUPS_TABLE as string
 const { create, remove, readAll } = createDynamoApi<Group>(TableName)
 
 // Lambdas
