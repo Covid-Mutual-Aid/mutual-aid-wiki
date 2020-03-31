@@ -1,5 +1,7 @@
 import axios from 'axios'
-import { lambda } from '../lib/lambdaUtils'
+import P from 'ts-prove'
+
+import lambda from '../lib/lambdaUtils'
 import { GOOGLE_API_KEY } from '../lib/utils'
 
 const geocodeEndpoint = `https://maps.googleapis.com/maps/api/geocode`
@@ -22,19 +24,14 @@ export const googleGeoLocate = (location: string) =>
     )
 
 // Lambdas
-export const placeSuggest = lambda(
-  event =>
-    googlePlaceSuggest((event.queryStringParameters as any).place).then(x => x.data.predictions),
-  { queryStringParameters: { place: 'string' } }
+export const placeSuggest = lambda.queryParams(P.shape({ place: P.string }))(params =>
+  googlePlaceSuggest(params.place).then(x => x.data.predictions)
 )
 
-export const placeDetails = lambda(
-  event =>
-    googlePlaceDetails((event.queryStringParameters as any).place_id).then(x => x.data.result),
-  { queryStringParameters: { place_id: 'string' } }
+export const placeDetails = lambda.queryParams(P.shape({ place_id: P.string }))(params =>
+  googlePlaceDetails(params.place_id).then(x => x.data.result)
 )
 
-export const geolocate = lambda(
-  event => googleGeoLocate((event.queryStringParameters as any).name),
-  { queryStringParameters: { name: 'string' } }
+export const geolocate = lambda.queryParams(P.shape({ name: P.string }))(params =>
+  googleGeoLocate(params.name)
 )

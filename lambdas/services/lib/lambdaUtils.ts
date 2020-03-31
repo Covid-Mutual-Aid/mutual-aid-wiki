@@ -1,46 +1,17 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent, Context } from 'aws-lambda'
-import { ValidateStruct, ValidationTypes, validate, Validated, ValidationObj } from './validate'
+import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from 'aws-lambda'
+import { Proof, isSuccess, ProofType } from 'ts-prove'
 
-type ValidateEvent<T extends ValidateStruct> = {
-  body?: T
-  queryStringParameters?: { [x: string]: T }
+const promiseProof = <T extends any>(proof: Proof<T>) => (arg: any) => {
+  const result = proof(arg)
+  if (isSuccess(result)) return Promise.resolve(result[1])
+  return Promise.reject((result as any)[0])
 }
 
-const validateEvent = (validation: ValidateEvent<any>, event: APIGatewayProxyEvent) =>
-  new Promise((resolve, reject) => {
-    const args = {
-      ...(validation.body && event.body ? { body: JSON.parse(event.body) } : {}),
-      ...(validation?.queryStringParameters && event.queryStringParameters
-        ? { queryStringParameters: event.queryStringParameters }
-        : {}),
-    }
-    const valid = validate(validation as any, args)
-    return valid
-      ? resolve()
-      : reject(
-          new Error(
-            `Invalid parameters: \n\n ${JSON.stringify(validation, null, 2)} \n\n  ${JSON.stringify(
-              args,
-              null,
-              2
-            )}`
-          )
-        )
-  })
-
-export const lambda = <T extends ValidateStruct>(
-  callback: (event: APIGatewayProxyEvent & Validated<T>, context: Context) => Promise<any>,
-  validation?: ValidateEvent<T>
-): APIGatewayProxyHandler => (event, context) =>
-  Promise.resolve()
-    .then(() => console.log('BODY', { validation }, event.body && JSON.parse(event.body)))
-    .then(() =>
-      validation && (validation.body || validation.queryStringParameters)
-        ? validateEvent(validation, event)
-        : null
-    )
-    .then(() => console.log('Validated'))
-    .then(() => callback(event as any, context))
+const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any) => (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> =>
+  Promise.resolve(callback(event, context))
     .then(res => ({
       statusCode: 200,
       body: JSON.stringify(res),
@@ -51,16 +22,22 @@ export const lambda = <T extends ValidateStruct>(
       body: err.message || err,
     }))
 
-export const lambdaBody = <T extends ValidationObj>(
-  callback: (x: Validated<T>) => Promise<any>,
-  validation?: T
-): APIGatewayProxyHandler =>
-  lambda(event => callback(JSON.parse(event.body as any)), { body: validation })
+lambda.body = <T extends Proof<any>>(proof?: T) => (callback: (x: ProofType<T>) => Promise<any>) =>
+  lambda(event =>
+    Promise.resolve(
+      !proof ? JSON.parse(event.body || '{}') : promiseProof(proof)(JSON.parse(event.body || '{}'))
+    ).then(callback)
+  )
 
-export const lambdaQuery = <T extends ValidationObj>(
-  callback: (x: Validated<T>) => Promise<any>,
-  validation?: { [x: string]: ValidationTypes }
-): APIGatewayProxyHandler =>
-  lambda(event => callback(event.queryStringParameters as any), {
-    queryStringParameters: validation,
-  })
+lambda.queryParams = <T extends Proof<any>>(proof?: T) => (
+  callback: (x: ProofType<T>) => Promise<any>
+) =>
+  lambda(event =>
+    Promise.resolve(
+      !proof
+        ? event.queryStringParameters || ({} as any)
+        : promiseProof(proof)(event.queryStringParameters || {})
+    ).then(callback)
+  )
+
+export default lambda
