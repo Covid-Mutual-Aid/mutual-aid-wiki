@@ -5,7 +5,7 @@ service:
 #org: your-org-name
 
 custom:
-  DYNAMODB_TABLE: ${self:provider.stage}-groups10
+  GROUPS_TABLE: ${self:provider.stage}-groups10
   dynamodb:
     stages:
       - dev
@@ -17,7 +17,7 @@ custom:
     seed:
       domain:
         sources:
-          - table: ${self:custom.DYNAMODB_TABLE}
+          - table: ${self:custom.GROUPS_TABLE}
             sources: [./migrations/groups-seed.json]
   serverless-offline:
     httpPort: 4000
@@ -41,7 +41,7 @@ provider:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-    DYNAMODB_TABLE: ${self:custom.DYNAMODB_TABLE}
+    GROUPS_TABLE: ${self:custom.GROUPS_TABLE}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -51,7 +51,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.DYNAMODB_TABLE}'
+      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:custom.GROUPS_TABLE}'
 
 functions:
   - ${file(./services/database/functions.yml)}
@@ -73,4 +73,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.DYNAMODB_TABLE}
+        TableName: ${self:custom.GROUPS_TABLE}
