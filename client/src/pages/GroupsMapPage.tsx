@@ -62,7 +62,7 @@ function GroupsMapPage() {
                 </Col>
               </Form.Row>
               <Form.Row>
-                <Col xs={12} md={8} className="input-height">
+                <Col xs={9} md={10} className="input-height cvd_search_input">
                   <Form.Group className="place-input">
                     <Form.Control
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -73,7 +73,7 @@ function GroupsMapPage() {
                     />
                   </Form.Group>
                 </Col>
-                <Col xs={7} md={2} className="input-height">
+                <Col xs={3} md={2} className="input-height cvd_search_button">
                   <Button
                     className="full-width"
                     onClick={() => locate(place)}
@@ -83,7 +83,7 @@ function GroupsMapPage() {
                     Search
                   </Button>
                 </Col>
-                <Col xs={5} md={2} className="input-height">
+                <Col xs={12} md={12} className="input-height cvd_add_group_button">
                   <Link to="/create-group">
                     <Button className="full-width" variant="secondary">
                       Add Group
@@ -122,10 +122,12 @@ function GroupsMapPage() {
         )}
       </div>
 
-      <GroupMap groups={groups} />
       <div className="table-wrapper">
         <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
       </div>
+
+      <GroupMap groups={groups} />
+
     </>
   )
 }

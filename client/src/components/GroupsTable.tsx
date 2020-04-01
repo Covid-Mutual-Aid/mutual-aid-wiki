@@ -21,12 +21,24 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   const link = mapState.group ? mapState.group.link_facebook : ''
   return (
     <div>
-      <div ref={tableWrapper} className="table-wrapper">
-        <Table className="table-fixed" responsive striped bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Group</th>
+      <div ref={tableWrapper} className="thrv_wrapper thrv_table tcb-fixed tcb-mobile-table" data-css="tve-u-171214d9098">
+        <Table className="tve_table tcb-fixed tve_table_flat" data-css="tve-u-171214d9099" striped bordered hover size="sm">
+          <thead data-css="tve-u-171214d909a">
+            <tr className="tve_table_row">
+              <th className="tve_table_cell">
+                <div className="thrv_wrapper thrv_text_element">
+                  <p data-css="tve-u-171214d909c">
+                    <span>
+                      Location
+                    </span>
+                  </p>
+                </div>
+              </th>
+              <th className="tve_table_cell">
+                <div className="thrv_wrapper thrv_text_element">
+                  <p data-css="tve-u-171214d909d">Group</p>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -53,27 +65,31 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
                     })
                   }}
                 >
-                  {location_name}{' '}
-                  {distance && shouldDisplayDistance ? (
-                    <Badge variant="success">{(distance / 1000).toFixed(1) + 'km'}</Badge>
-                  ) : (
-                    ''
-                  )}
+                  <p>
+                    {location_name}{' '}
+                    {distance && shouldDisplayDistance ? (
+                      <Badge variant="success">{(distance / 1000).toFixed(1) + 'km'}</Badge>
+                    ) : (
+                      ''
+                    )}
+                  </p>
                 </td>
                 <td>
-                  <a
-                    onClick={() =>
-                      gtag('event', 'Visit facebook group', {
-                        event_category: 'Table',
-                        event_label: 'Click group url',
-                      })
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={link_facebook}
-                  >
-                    {name}
-                  </a>
+                  <p>
+                    <a
+                      onClick={() =>
+                        gtag('event', 'Visit facebook group', {
+                          event_category: 'Table',
+                          event_label: 'Click group url',
+                        })
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={link_facebook}
+                    >
+                      {name}
+                    </a>
+                  </p>
                 </td>
               </tr>
             ))}

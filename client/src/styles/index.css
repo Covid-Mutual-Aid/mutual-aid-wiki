@@ -49,7 +49,6 @@ code {
 }
 
 .App-Standalone {
-  padding: 2rem 4rem;
   height: 100%;
   display: grid;
   grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
@@ -57,7 +56,7 @@ code {
 
 .table-wrapper {
   position: relative;
-  height: 45vh;
+  height: 28vh;
   overflow-y: scroll;
 }
 
@@ -79,11 +78,13 @@ code {
 }
 
 .search-padding {
-  padding-top: 1.6rem;
+  padding: 0 !important;
 }
 
 .group-map {
   height: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .footer {
@@ -157,10 +158,4 @@ code {
   text-align: left;
   top: 0.2rem !important;
   padding: 0.2em;
-}
-
-@media only screen and (max-width: 800px) {
-  .App-Standalone {
-    padding: 0;
-  }
 }
