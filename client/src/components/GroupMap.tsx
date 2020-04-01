@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
 import { Spring } from 'react-spring/renderprops'
 
 import { useMapState, useMap } from '../contexts/MapProvider'
@@ -19,6 +19,13 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
     console.log(mapInstance.getCenter())
   }, [])
 
+  const options = {
+    minimumClusterSize: 6,
+    clusterClass: 'map-cluster-icon',
+    imagePath:
+      'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+  }
+
   // onCenterChanged={(e: any) => console.log('called', e)}
 
   return (
@@ -34,7 +41,6 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
               }}
               zoom={z}
               center={{ lat, lng }}
-              ref={console.log}
               onDragEnd={() => {
                 gtag('event', 'Map was dragged', {
                   event_category: 'Map',
@@ -48,22 +54,29 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
                 }
               }}
             >
-              {groups.map((group, i) => (
-                <Marker
-                  opacity={
-                    group.location_coord.lat === lat && group.location_coord.lng === lng ? 1 : 0.2
-                  }
-                  position={group.location_coord}
-                  key={i}
-                  onClick={() => {
-                    gtag('event', 'Marker was clicked', {
-                      event_category: 'Map',
-                      event_label: 'Click marker',
-                    })
-                    setMapState({ center: group.location_coord, group, zoom: 11 })
-                  }}
-                />
-              ))}
+              <MarkerClusterer options={options}>
+                {clusterer =>
+                  groups.map((group, i) => (
+                    <Marker
+                      opacity={
+                        group.location_coord.lat === lat && group.location_coord.lng === lng
+                          ? 1
+                          : 0.8
+                      }
+                      position={group.location_coord}
+                      clusterer={clusterer}
+                      key={i}
+                      onClick={() => {
+                        gtag('event', 'Marker was clicked', {
+                          event_category: 'Map',
+                          event_label: 'Click marker',
+                        })
+                        setMapState({ center: group.location_coord, group, zoom: 11 })
+                      }}
+                    />
+                  ))
+                }
+              </MarkerClusterer>
             </GoogleMap>
           )}
         </Spring>

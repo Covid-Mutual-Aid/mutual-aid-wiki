@@ -164,3 +164,7 @@ code {
     padding: 0;
   }
 }
+
+.map-cluster-icon div {
+  /* color: red !important; */
+}
