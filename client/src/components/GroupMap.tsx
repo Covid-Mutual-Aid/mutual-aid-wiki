@@ -76,7 +76,6 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             }
           </MarkerClusterer>
         </GoogleMap>
-        )}
       </LoadScript>
     </div>
   )
