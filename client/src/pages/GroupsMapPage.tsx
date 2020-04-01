@@ -1,7 +1,7 @@
 import { Form, Button, Col, Container } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react'
 import haversine from 'haversine-distance'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { useRequest } from '../contexts/RequestProvider'
 import GroupsTable from '../components/GroupsTable'
@@ -12,7 +12,12 @@ import useLocationSearch from '../utils/useLocationSearch'
 import { Group } from '../utils/types'
 import { gtag } from '../utils/gtag'
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search)
+}
+
 function GroupsMapPage() {
+  const query = useQuery()
   const [groups, setGroups] = useState<Group[]>([])
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
@@ -27,8 +32,10 @@ function GroupsMapPage() {
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
 
   const request = useRequest()
+  const searchTerm = query.get('place')
 
   useEffect(() => {
+    if (searchTerm && searchTerm.length > 0) locate(searchTerm)
     request('/group/get')
       .then(setGroups)
       .catch(console.log)

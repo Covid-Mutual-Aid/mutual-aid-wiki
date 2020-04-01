@@ -6,6 +6,7 @@ import EditGroupPage from './pages/EditGroupPage'
 import { gtag } from './utils/gtag'
 import { Button, Modal } from 'react-bootstrap'
 import copy from 'copy-to-clipboard'
+import SearchesPage from './pages/SearchesPage'
 
 function inIframe() {
   try {
@@ -67,6 +68,9 @@ function App() {
           </Route>
           <Route path="/edit-group/:id">
             <EditGroupPage />
+          </Route>
+          <Route path="/searches">
+            <SearchesPage />
           </Route>
           <Route path="/">
             <GroupsMapPage />

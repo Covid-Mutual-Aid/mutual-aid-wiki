@@ -34,6 +34,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
               }}
               zoom={z}
               center={{ lat, lng }}
+              ref={console.log}
               onDragEnd={() => {
                 gtag('event', 'Map was dragged', {
                   event_category: 'Map',
