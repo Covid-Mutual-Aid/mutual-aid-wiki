@@ -165,6 +165,27 @@ code {
   overflow-x: hidden !important;
 }
 
-#tcb_landing_page .thrv_text_element a {
+#tcb_landing_page .footer .thrv_text_element a {
   border-bottom: none;
+}
+
+.tcb-mobile-table [data-css='tve-u-171214d9099'] td::before {
+  width: calc(25% - 5px) !important;
+}
+
+.tcb-mobile-table td {
+  display: table-cell;
+  position: relative;
+  width: initial !important;
+  padding-left: 0% !important;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tcb-mobile-table [data-css='tve-u-171214d9099'] td {
+  padding-left: 0% !important;
+}
+
+:not(#tve) [data-css='tve-u-171214d9099'] > tbody > tr > td {
+  border: none;
 }
