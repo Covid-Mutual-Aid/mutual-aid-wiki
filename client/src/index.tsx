@@ -16,7 +16,10 @@ import MapProvider from './contexts/MapProvider'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
-const baseUrl = 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
+const baseUrl =
+  document.location.hostname === 'localhost'
+    ? '/dev'
+    : 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
   fetch(baseUrl + input, init)
