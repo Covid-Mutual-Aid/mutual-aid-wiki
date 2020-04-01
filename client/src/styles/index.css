@@ -58,6 +58,7 @@ code {
   position: relative;
   height: 44vh;
   overflow-y: scroll;
+  border-bottom: solid white 20px;
 }
 
 .scroll-overlay {
@@ -162,4 +163,8 @@ code {
 
 .thrv_table {
   overflow-x: hidden !important;
+}
+
+#tcb_landing_page .thrv_text_element a {
+  border-bottom: none;
 }
