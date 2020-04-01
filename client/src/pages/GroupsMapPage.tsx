@@ -17,9 +17,11 @@ function useQuery() {
 }
 
 function GroupsMapPage() {
+  const request = useRequest()
   const query = useQuery()
+  const searchTerm = query.get('place')
   const [groups, setGroups] = useState<Group[]>([])
-  const [place, setPlace] = useState('')
+  const [place, setPlace] = useState(searchTerm ? searchTerm : '')
   const [placeOverlay, setPlaceOverlay] = useState(false)
   const { locate, error, name } = useLocationSearch()
   const [{ center, group }] = useMapState()
@@ -30,9 +32,6 @@ function GroupsMapPage() {
       distance: haversine(center, g.location_coord),
     }))
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
-
-  const request = useRequest()
-  const searchTerm = query.get('place')
 
   useEffect(() => {
     if (searchTerm && searchTerm.length > 0) locate(searchTerm)
@@ -65,6 +64,7 @@ function GroupsMapPage() {
                 <Col xs={9} md={10} className="input-height cvd_search_input">
                   <Form.Group className="place-input">
                     <Form.Control
+                      value={place}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setPlace(e.target.value)
                       }

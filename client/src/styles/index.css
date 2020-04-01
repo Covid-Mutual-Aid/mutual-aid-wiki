@@ -159,3 +159,7 @@ code {
   top: 0.2rem !important;
   padding: 0.2em;
 }
+
+.thrv_table {
+  overflow-x: hidden !important;
+}
