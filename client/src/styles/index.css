@@ -56,7 +56,7 @@ code {
 
 .table-wrapper {
   position: relative;
-  height: 28vh;
+  height: 44vh;
   overflow-y: scroll;
 }
 
@@ -83,8 +83,8 @@ code {
 
 .group-map {
   height: 100%;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  /* margin-top: 20px;
+  margin-bottom: 20px; */
 }
 
 .footer {
