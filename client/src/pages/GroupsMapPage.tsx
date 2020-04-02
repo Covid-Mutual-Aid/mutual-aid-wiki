@@ -44,7 +44,7 @@ function GroupsMapPage() {
     <>
       <div className="place-form">
         {!placeOverlay ? (
-          <Container className="search-padding">
+          <div className="">
             <Form
               onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault()
@@ -83,12 +83,16 @@ function GroupsMapPage() {
                     Search
                   </Button>
                 </Col>
-                <Col xs={12} md={12} className="input-height cvd_add_group_button">
+                <Col
+                  xs={12}
+                  md={12}
+                  className="input-height thrv_text_element cvd_add_group_button"
+                >
                   Or you can register your mutual aid group <Link to="/create-group">here</Link>
                 </Col>
               </Form.Row>
             </Form>
-          </Container>
+          </div>
         ) : (
           <div>
             <h4>Showing groups nearest to {place}</h4>
