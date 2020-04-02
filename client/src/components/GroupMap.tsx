@@ -22,7 +22,9 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
     minimumClusterSize: 6,
     clusterClass: 'map-cluster-icon',
     imagePath:
-      'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+      process.env.PUBLIC_URL + '/cluster_marker_',
+    styles: [
+    ]
   }
 
   // onCenterChanged={(e: any) => console.log('called', e)}
