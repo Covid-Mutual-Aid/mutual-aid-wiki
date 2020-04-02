@@ -197,6 +197,9 @@ code {
   border: none;
 }
 
-.map-cluster-icon div {
-  /* color: red !important; */
+@media only screen and (max-width: 767px) {
+  [data-css='tve-u-1711da6f4b6'] {
+    padding: 0px !important;
+    margin-bottom: 0px !important;
+  }
 }
