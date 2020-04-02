@@ -69,7 +69,7 @@ function GroupsMapPage() {
                         setPlace(e.target.value)
                       }
                       type="text"
-                      placeholder="Enter place..."
+                      placeholder="Find my local group"
                     />
                   </Form.Group>
                 </Col>

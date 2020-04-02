@@ -172,7 +172,7 @@ code {
 .tcb-mobile-table [data-css='tve-u-171214d9099'] td::before {
   width: calc(25% - 5px) !important;
 }
-
+/* 
 .tcb-mobile-table td {
   display: table-cell;
   position: relative;
@@ -188,4 +188,4 @@ code {
 
 :not(#tve) [data-css='tve-u-171214d9099'] > tbody > tr > td {
   border: none;
-}
+} */
