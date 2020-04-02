@@ -7,6 +7,7 @@ import { gtag } from './utils/gtag'
 import { Button, Modal } from 'react-bootstrap'
 import copy from 'copy-to-clipboard'
 import SearchesPage from './pages/SearchesPage'
+import HeatMap from './components/HeatMap'
 
 function inIframe() {
   try {
@@ -63,6 +64,9 @@ function App() {
       </div>
       <Router>
         <Switch>
+          <Route path="/heatmap">
+            <HeatMap />
+          </Route>
           <Route path="/create-group">
             <CreateGroupPage />
           </Route>
