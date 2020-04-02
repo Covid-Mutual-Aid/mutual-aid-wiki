@@ -18,14 +18,20 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
     console.log(mapInstance.getCenter())
   }, [])
 
-  const options = {
+  const clustererOptions = {
     minimumClusterSize: 6,
     clusterClass: 'map-cluster-icon',
     imagePath:
-      process.env.PUBLIC_URL + '/cluster_marker_',
-    styles: [
-    ]
+      process.env.PUBLIC_URL + '/cluster_marker_'
   }
+
+  const clustererStyles = [{
+    anchorText:[-5,0],
+    textColor: "white",
+    url: process.env.PUBLIC_URL + '/cluster_marker_1.png',
+    height: 60,
+    width: 45
+  }]
 
   // onCenterChanged={(e: any) => console.log('called', e)}
 
@@ -53,7 +59,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             }
           }}
         >
-          <MarkerClusterer options={options}>
+          <MarkerClusterer options={clustererOptions} styles={clustererStyles}>
             {clusterer =>
               groups.map((group, i) => (
                 <Marker
@@ -66,6 +72,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
                   position={group.location_coord}
                   clusterer={clusterer}
                   key={i}
+                  icon={process.env.PUBLIC_URL + '/marker.png'}
                   onClick={() => {
                     gtag('event', 'Marker was clicked', {
                       event_category: 'Map',
