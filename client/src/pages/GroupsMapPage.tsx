@@ -60,7 +60,7 @@ function GroupsMapPage() {
                   <Form.Text className="text-muted">{error}</Form.Text>
                 </Col>
               </Form.Row>
-              <Form.Row>
+              <Form.Row className="cvd-search-row">
                 <Col xs={9} md={10} className="input-height cvd_search_input">
                   <Form.Group className="place-input">
                     <Form.Control
