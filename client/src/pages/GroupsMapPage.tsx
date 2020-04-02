@@ -84,7 +84,7 @@ function GroupsMapPage() {
                   </Button>
                 </Col>
                 <Col xs={12} md={12} className="input-height cvd_add_group_button">
-                  <Link to="/create-group">Or add your group...</Link>
+                  Or you can register your mutual aid group <Link to="/create-group">here</Link>
                 </Col>
               </Form.Row>
             </Form>
