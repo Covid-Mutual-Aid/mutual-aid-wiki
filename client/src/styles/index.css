@@ -215,3 +215,12 @@ code {
 .tve_scT {
   margin: 0px;
 }
+
+@media (max-width: 767px) {
+  .tcb-mobile-table th,
+  .tcb-mobile-table thead {
+    position: relative;
+    top: 0px;
+    left: 0px;
+  }
+}
