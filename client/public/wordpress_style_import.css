@@ -179,3 +179,7 @@ body.tcb-full-footer .thrv_footer {
     margin-top: 0;
     overflow-y: hidden;
 }
+
+.cvd-search-row {
+	margin-left: 0px !important;
+}
