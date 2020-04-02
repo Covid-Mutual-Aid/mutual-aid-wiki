@@ -51,6 +51,8 @@ code {
   height: 100%;
   display: grid;
   grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
+  padding: 2rem;
+  max-width: 60rem;
 }
 
 .table-wrapper {
