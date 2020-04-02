@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "googleapis": "^48.0.0",
+    "pusher": "^3.0.1",
     "source-map-support": "^0.5.10",
     "ts-prove": "^1.1.0",
     "uuid": "^7.0.2",

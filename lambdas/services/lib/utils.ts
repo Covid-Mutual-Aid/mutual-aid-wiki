@@ -7,6 +7,8 @@ export const SPREADSHEET_ID = env.SPREADSHEET_ID
 export const SHEET_ID = env.SHEET_ID
 export const GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY
 export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
+export const PUSHER_KEY = env.PUSHER_KEY
+export const PUSHER_SECRET = env.PUSHER_SECRET
 
 export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
 
