@@ -21,16 +21,25 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
   const link = mapState.group ? mapState.group.link_facebook : ''
   return (
     <div>
-      <div ref={tableWrapper} className="thrv_wrapper thrv_table tcb-fixed tcb-mobile-table" data-css="tve-u-171214d9098">
-        <Table className="tve_table tcb-fixed tve_table_flat" data-css="tve-u-171214d9099" striped bordered hover size="sm">
+      <div
+        ref={tableWrapper}
+        className="tcb-styled-list thrv_wrapper thrv_table tcb-fixed tcb-mobile-table"
+        data-css="tve-u-171214d9098"
+      >
+        <Table
+          className="tve_table tcb-fixed tve_table_flat"
+          data-css="tve-u-171214d9099"
+          striped
+          bordered
+          hover
+          size="sm"
+        >
           <thead data-css="tve-u-171214d909a">
             <tr className="tve_table_row">
               <th className="tve_table_cell">
                 <div className="thrv_wrapper thrv_text_element">
                   <p data-css="tve-u-171214d909c">
-                    <span>
-                      Location
-                    </span>
+                    <span>Location</span>
                   </p>
                 </div>
               </th>

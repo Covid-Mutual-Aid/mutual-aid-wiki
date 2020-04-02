@@ -36,7 +36,7 @@ function App() {
   })
 
   return (
-    <div className={inIframe() ? 'App' : 'App-Standalone'}>
+    <div id="tcb_landing_page" className={inIframe() ? 'App' : 'App-Standalone'}>
       <div className="embed-code">
         {!inIframe() ? (
           <>
