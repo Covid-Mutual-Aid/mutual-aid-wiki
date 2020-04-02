@@ -27,7 +27,8 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
 
   const clustererStyles = [{
     anchorText:[-5,0],
-    textColor: "white",
+    textColor: "black",
+    textSize: 13,
     url: process.env.PUBLIC_URL + '/cluster_marker_1.png',
     height: 60,
     width: 45
