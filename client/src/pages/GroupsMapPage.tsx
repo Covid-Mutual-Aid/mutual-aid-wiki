@@ -11,6 +11,8 @@ import { useMapState } from '../contexts/MapProvider'
 import useLocationSearch from '../utils/useLocationSearch'
 import { Group } from '../utils/types'
 import { gtag } from '../utils/gtag'
+import { useGroups } from '../contexts/GroupsContext'
+import GroupsList from '../components/GroupsList'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search)
@@ -18,7 +20,7 @@ function useQuery() {
 
 function GroupsMapPage() {
   const query = useQuery()
-  const [groups, setGroups] = useState<Group[]>([])
+  const groups = useGroups()
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
   const { locate, error, name } = useLocationSearch()
@@ -36,7 +38,7 @@ function GroupsMapPage() {
 
   useEffect(() => {
     if (searchTerm && searchTerm.length > 0) locate(searchTerm)
-    request('/group/get').then(setGroups).catch(console.log)
+    // request('/group/get').then(setGroups).catch(console.log)
   }, [request])
 
   return (
@@ -99,7 +101,8 @@ function GroupsMapPage() {
       </div>
 
       <div className="table-wrapper">
-        <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
+        {/* <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} /> */}
+        <GroupsList />
       </div>
       <GroupMap groups={groups} />
     </>

@@ -13,6 +13,7 @@ import RequestProvider from './contexts/RequestProvider'
 
 import App from './App'
 import MapProvider from './contexts/MapProvider'
+import GroupsProvider from './contexts/GroupsContext'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
@@ -27,7 +28,9 @@ const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 
 const Render = () => (
   <RequestProvider request={request}>
     <MapProvider>
-      <App />
+      <GroupsProvider>
+        <App />
+      </GroupsProvider>
     </MapProvider>
   </RequestProvider>
 )
