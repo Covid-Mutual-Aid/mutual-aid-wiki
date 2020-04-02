@@ -38,14 +38,16 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
             <tr className="tve_table_row">
               <th className="tve_table_cell">
                 <div className="thrv_wrapper thrv_text_element">
-                  <p data-css="tve-u-171214d909c">
+                  <p style={{ textAlign: 'center' }} data-css="tve-u-171214d909c">
                     <span>Location</span>
                   </p>
                 </div>
               </th>
               <th className="tve_table_cell">
                 <div className="thrv_wrapper thrv_text_element">
-                  <p data-css="tve-u-171214d909d">Group</p>
+                  <p style={{ textAlign: 'center' }} data-css="tve-u-171214d909d">
+                    Group
+                  </p>
                 </div>
               </th>
             </tr>

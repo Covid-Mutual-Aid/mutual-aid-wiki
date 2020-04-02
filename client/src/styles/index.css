@@ -224,3 +224,7 @@ code {
     left: 0px;
   }
 }
+
+th [data-css='tve-u-171214d909a'] {
+  text-align: center !important;
+}
