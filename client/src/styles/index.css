@@ -44,13 +44,15 @@ code {
 
 .App {
   display: grid;
-  grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
+  grid: 0fr 0fr 0fr 1fr 0fr / 1fr;
+  height: 100vh;
+  max-width: 60rem;
 }
 
 .App-Standalone {
   height: 100%;
   display: grid;
-  grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
+  grid: 0fr 0fr 0fr 1fr 0fr / 1fr;
   padding: 2rem;
   max-width: 60rem;
 }
@@ -204,4 +206,8 @@ code {
     padding: 0px !important;
     margin-bottom: 0px !important;
   }
+}
+
+#root {
+  height: 100vh;
 }
