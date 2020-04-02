@@ -172,6 +172,10 @@ code {
 .tcb-mobile-table [data-css='tve-u-171214d9099'] td::before {
   width: calc(25% - 5px) !important;
 }
+
+.search-button-blue {
+  background-color: rgb(0, 79, 202) !important;
+}
 /* 
 .tcb-mobile-table td {
   display: table-cell;

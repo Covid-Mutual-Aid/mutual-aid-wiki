@@ -75,7 +75,7 @@ function GroupsMapPage() {
                 </Col>
                 <Col xs={3} md={2} className="input-height cvd_search_button">
                   <Button
-                    className="full-width"
+                    className="full-width search-button-blue"
                     onClick={() => locate(place)}
                     variant="primary"
                     // size="sm"
