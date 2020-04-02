@@ -176,6 +176,10 @@ code {
 .search-button-blue {
   background-color: rgb(0, 79, 202) !important;
 }
+
+:not(#tve) [data-css='tve-u-171214d9099'] {
+  border: 1px solid rgb(220, 227, 233);
+}
 /* 
 .tcb-mobile-table td {
   display: table-cell;
