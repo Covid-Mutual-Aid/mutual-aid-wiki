@@ -6,7 +6,7 @@ service:
 
 custom:
   GROUPS_TABLE: ${self:provider.stage}-groups10
-  LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-searches
+  LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-search
   dynamodb:
     stages:
       - dev
@@ -54,7 +54,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - { 'Fn::GetAtt': ['DynamoDbGroups', 'Arn'] } #you will also see the logical IDs below where they are provisioned
+        - { 'Fn::GetAtt': ['ExportDB', 'Arn'] } #you will also see the logical IDs below where they are provisioned
         - { 'Fn::GetAtt': ['DynamoDbLocationSearches', 'Arn'] }
 
 functions:
@@ -65,7 +65,7 @@ functions:
 
 resources:
   Resources:
-    DynamoDbGroups:
+    ExportDB:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:

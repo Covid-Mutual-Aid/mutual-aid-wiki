@@ -1,5 +1,6 @@
 getLocationSearches:
   handler: services/searches/handler.getLocationSearches
+  timeout: 15
   events:
     - http:
         method: get
