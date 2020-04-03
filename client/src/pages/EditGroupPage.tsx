@@ -39,7 +39,7 @@ const useGroup = () => {
     })
 
   const save = () =>
-    request(`/group/update`, { method: 'POST', body: JSON.stringify(group) }).then(get)
+    request(`/group/update`, { method: 'POST', body: JSON.stringify({ ...group, id }) }).then(get)
 
   useEffect(() => {
     get()
