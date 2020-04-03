@@ -30,7 +30,15 @@ const useGroup = () => {
   const request = useRequest()
   const mounted = useRef(true)
 
-  const get = () => request(`/group/get?id=${id}`).then(grp => mounted.current && setGroup(grp))
+  const get = () =>
+    request(`/group/get?id=${id}`).then((grp) => {
+      mounted.current
+
+      if (!grp.email) {
+        setGroup({ ...grp, emails: [] })
+      }
+      setGroup(grp)
+    })
   const save = () =>
     request(`/group/update`, { method: 'POST', body: JSON.stringify(group) }).then(get)
 
