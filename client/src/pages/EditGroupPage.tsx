@@ -32,19 +32,10 @@ const useGroup = () => {
 
   const get = () =>
     request(`/group/get?id=${id}`).then((grp) => {
-<<<<<<< HEAD
       if (!grp) return null
       !grp.email
         ? mounted.current && setGroup({ ...grp, emails: [] })
         : mounted.current && setGroup(grp)
-=======
-      mounted.current
-
-      if (!grp.email) {
-        setGroup({ ...grp, emails: [] })
-      }
-      setGroup(grp)
->>>>>>> a0e7fc7bbf2c03b6a846ac888cb2e159678ba190
     })
 
   const save = () =>
