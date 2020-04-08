@@ -58,7 +58,7 @@ code {
 .table-wrapper {
   position: relative;
   height: 45vh;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 .scroll-overlay {
@@ -165,6 +165,28 @@ code {
   }
 }
 
-.map-cluster-icon div {
-  /* color: red !important; */
+.thrive-a {
+  cursor: pointer;
+  color: rgb(0, 79, 202);
+  font-weight: var(--g-regular-weight, normal);
+  text-decoration: none;
+  --eff: thick;
+  --eff-color: rgb(89, 213, 219);
+  --eff-faded: rgba(89, 213, 219, 0.6);
+  --eff-ensure-contrast: rgba(89, 213, 219, 0.6);
+  --eff-ensure-contrast-complement: rgba(95, 89, 219, 0.6);
+  box-shadow: none;
+  border-bottom: 0.15em solid var(--eff-color);
+  background-image: none;
+  animation: 0s ease 0s 1 normal none running none;
+  transition: none 0s ease 0s;
+  padding-left: 0px;
+}
+
+.thrive-a:hover {
+  color: rgb(160, 222, 225);
+  font-weight: var(--g-regular-weight, normal);
+  text-decoration: none;
+  background-image: none;
+  box-shadow: none;
 }
