@@ -1,15 +1,13 @@
 import React, { useState, useLayoutEffect, useReducer } from 'react'
+import haversineDistance from 'haversine-distance'
 import styled from 'styled-components'
 
-import { useMapControls } from '../../contexts/MapProvider'
-import { useGroups } from '../../contexts/GroupsContext'
-import haversineDistance from 'haversine-distance'
 import { useSearch } from '../../contexts/SearchContext'
+import { useGroups } from '../../contexts/GroupsContext'
 
 const GroupsList = () => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
-  const { panTo, zoomTo } = useMapControls()
-  const { groups, setSelected } = useGroups()
+  const { groups, setSelected, selected } = useGroups()
   const { place } = useSearch()
 
   const visibleGroups = groups
@@ -23,19 +21,13 @@ const GroupsList = () => {
   return (
     <Styles>
       {visibleGroups.map((group, i) => (
-        <div key={group.name + i}>
-          <h4
-            onClick={() => {
-              setSelected(group)
-            }}
-          >
-            {group.name}
-          </h4>
+        <GroupWrapper key={group.id} selected={group.id === selected}>
+          <h4 onClick={() => setSelected(group.id)}>{group.name}</h4>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <p>{group.location_name}</p>
             <a href={group.link_facebook}>link</a>
           </div>
-        </div>
+        </GroupWrapper>
       ))}
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
         {groups.length > 0 && limit < groups.length && (
@@ -48,9 +40,22 @@ const GroupsList = () => {
   )
 }
 
+const GroupWrapper = styled.div<{ selected: boolean }>`
+  transition: background 0.3s;
+  background: ${(p) => (p.selected ? 'rgba(255, 0, 0, 0.11)' : 'rgba(255, 0, 0, 0);')};
+  padding: 0.5rem 1rem;
+  & h4 {
+    cursor: pointer;
+    margin-top: 0;
+  }
+  & a,
+  p {
+    margin-bottom: 0;
+  }
+`
+
 const Styles = styled.div`
   height: 100%;
-  padding: 0 1rem;
   overflow-y: scroll;
   padding-top: 2rem;
   transition: box-shadow 0.3s;
@@ -58,9 +63,7 @@ const Styles = styled.div`
   &:hover {
     box-shadow: inset 0px 8px 11px -11px #959595;
   }
-  & h4 {
-    cursor: pointer;
-  }
+
   & button {
     background-color: transparent;
     border: none;

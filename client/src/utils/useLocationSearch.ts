@@ -12,8 +12,8 @@ const useLocationSearch = () => {
   const locate = useCallback(
     (name: string) => {
       request(`/google/geolocate?name=${name}`)
-        .then(res => (!res[0] ? Promise.reject() : res[0]))
-        .then(place => {
+        .then((res) => (!res[0] ? Promise.reject() : res[0]))
+        .then((place) => {
           setMapState({
             zoom: 11,
             center: place.geometry.location,
@@ -22,17 +22,17 @@ const useLocationSearch = () => {
           return place
         })
         .catch(() => setError('Invalid location, please try again'))
-        .then(place =>
-          request('/search/location/add', {
-            method: 'POST',
-            body: JSON.stringify({
-              query: name,
-              place_id: place.place_id,
-              coords: place.geometry.location,
-              address: place.formatted_address,
-            }),
-          }).catch(err => console.error('Failed to add search', err))
-        )
+      // .then((place) =>
+      //   request('/search/location/add', {
+      //     method: 'POST',
+      //     body: JSON.stringify({
+      //       query: name,
+      //       place_id: place.place_id,
+      //       coords: place.geometry.location,
+      //       address: place.formatted_address,
+      //     }),
+      //   }).catch((err) => console.error('Failed to add search', err))
+      // )
     },
     [request, setMapState]
   )
