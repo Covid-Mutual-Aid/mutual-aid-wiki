@@ -33,5 +33,12 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GOOGLE_API_KEY: ${{ GOOGLE_API_KEY }}
+          SPREADSHEET_ID: ${{ SPREADSHEET_ID }}
+          SHEET_ID: ${{ SHEET_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ GOOGLE_CLIENT_EMAIL }}
+          PUSHER_KEY: ${{ PUSHER_KEY }}
+          PUSHER_SECRET: ${{ PUSHER_SECRET }}
       # - name: Run tests
       #   run: yarn test:e2e
