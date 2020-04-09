@@ -10,10 +10,15 @@ const GroupsList = () => {
   const { groups, setSelected, selected } = useGroups()
   const { place } = useSearch()
 
+  const selectedGroup = groups.find((x) => x.id === selected)
   const visibleGroups = groups
     .map((g) => ({
       ...g,
-      distance: place ? haversineDistance(place.coords, g.location_coord) : 0,
+      distance: selectedGroup
+        ? haversineDistance(selectedGroup.location_coord, g.location_coord)
+        : place
+        ? haversineDistance(place.coords, g.location_coord)
+        : 0,
     }))
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
     .slice(0, limit)
@@ -22,7 +27,14 @@ const GroupsList = () => {
     <Styles>
       {visibleGroups.map((group, i) => (
         <GroupWrapper key={group.id} selected={group.id === selected}>
-          <h4 onClick={() => setSelected(group.id)}>{group.name}</h4>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+          >
+            <h4 onClick={() => setSelected(group.id)}>{group.name}</h4>
+            {group.distance > 0 && (
+              <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
+            )}
+          </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <p>{group.location_name}</p>
             <a href={group.link_facebook}>link</a>
@@ -51,6 +63,12 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
   & a,
   p {
     margin-bottom: 0;
+  }
+  & .distance {
+    background: green;
+    color: white;
+    padding: 0.2rem;
+    border-radius: 5px;
   }
 `
 
