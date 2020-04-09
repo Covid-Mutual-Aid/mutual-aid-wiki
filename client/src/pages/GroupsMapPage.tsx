@@ -43,49 +43,51 @@ function GroupsMapPage() {
     <>
       <div className="place-form">
         {!placeOverlay ? (
-          <Container className="search-padding">
-            <Form
-              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                e.preventDefault()
-                gtag('event', 'Searched for a location', {
-                  event_category: 'Map',
-                  event_label: 'Clicked search button',
-                })
-                locate(place)
-              }}
-            >
-              <Form.Row>
-                <Col>
-                  <Form.Text className="text-muted">{error}</Form.Text>
-                </Col>
-              </Form.Row>
-              <Form.Row>
-                <Col xs={12} md={8} className="input-height">
-                  <Form.Group className="place-input">
-                    <Form.Control
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setPlace(e.target.value)
-                      }
-                      type="text"
-                      placeholder="Enter place..."
-                    />
-                  </Form.Group>
-                </Col>
-                <Col xs={7} md={2} className="input-height">
-                  <Button className="full-width" onClick={() => locate(place)} variant="primary">
-                    Search
-                  </Button>
-                </Col>
-                <Col xs={5} md={2} className="input-height">
-                  <Link to="/create-group">
-                    <Button className="full-width" variant="secondary">
-                      Add Group
-                    </Button>
-                  </Link>
-                </Col>
-              </Form.Row>
-            </Form>
-          </Container>
+          <Form
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault()
+              gtag('event', 'Searched for a location', {
+                event_category: 'Map',
+                event_label: 'Clicked search button',
+              })
+              locate(place)
+            }}
+          >
+            <Form.Row>
+              <Col>
+                <Form.Text className="text-muted">{error}</Form.Text>
+              </Col>
+            </Form.Row>
+            <Form.Row className="cvd-search-row">
+              <Col xs={9} md={10} className="input-height cvd_search_input">
+                <Form.Group className="place-input">
+                  <Form.Control
+                    value={place}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlace(e.target.value)}
+                    type="text"
+                    placeholder="Find my local group"
+                  />
+                </Form.Group>
+              </Col>
+              <Col xs={3} md={2} className="input-height cvd_search_button">
+                <Button
+                  style={{ backgroundColor: 'rgb(0, 79, 202)' }}
+                  className="full-width search-button-blue"
+                  onClick={() => locate(place)}
+                  variant="primary"
+                  // size="sm"
+                >
+                  Search
+                </Button>
+              </Col>
+              <Col xs={12} md={12} className="input-height thrv_text_element cvd_add_group_button">
+                Or you can register your mutual aid group{' '}
+                <Link className="thrive-a" to="/create-group">
+                  here
+                </Link>
+              </Col>
+            </Form.Row>
+          </Form>
         ) : (
           <div>
             <h4>Showing groups nearest to {place}</h4>

@@ -34,7 +34,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
         <div>Location</div>
         <div>Group</div>
       </div>
-      <div className="groups-list">
+      <div className="groups-list" ref={tableWrapper}>
         {currentGroups.map(
           ({ link_facebook, name, location_name, distance, location_coord }, i) => (
             <div
@@ -45,6 +45,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
               <div
                 className="location"
                 onClick={() => {
+                  setDisplayCount(31)
                   gtag('event', 'Clicked location in row', {
                     event_category: 'Table',
                     event_label: 'Click location',
@@ -96,9 +97,8 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
 }
 
 const Wrapper = styled.div`
-  display: grid;
-  grid: 0fr 1fr 0fr/ 1fr;
   height: 100%;
+  padding-bottom: 2rem;
 
   .headers {
     top: 0;
@@ -126,7 +126,7 @@ const Wrapper = styled.div`
   .groups-list {
     margin-top: 3rem;
     position: relative;
-    height: 45vh;
+    height: calc(100% - 3rem);
     overflow-y: scroll;
   }
 
