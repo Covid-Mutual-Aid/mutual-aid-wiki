@@ -8647,10 +8647,10 @@ ts-node@^3.2.0:
     v8flags "^3.0.0"
     yn "^2.0.0"
 
-ts-prove@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/ts-prove/-/ts-prove-1.1.0.tgz#0ee2a7692624de6890467550031c14ac9e0a7581"
-  integrity sha512-aadXJ/t/TffzUH31q0WmyxWvaPGIPtl9cyKuNrBN6djDc7rgapVyw1dV5+RMul6+sgSlS+1d2EXhRsVlaqlxCQ==
+ts-prove@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/ts-prove/-/ts-prove-1.1.2.tgz#b64754d152e02676a6ead06d65844b3eb61e13a3"
+  integrity sha512-W6ueo/3LCbKj8gJaIoXsh79WHS43AIVtDPmXHsfS7SIEEZCQblf1jKtny1DyXaUzsHoByLJv5zLqYziJ3/zKLg==
 
 tsconfig@^6.0.0:
   version "6.0.0"

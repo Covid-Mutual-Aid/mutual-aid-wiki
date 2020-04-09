@@ -51,7 +51,7 @@ export const updateGroup = lambda.body()((group) =>
 export const createGroup = lambda.body(
   P.shape({
     name: P.string,
-    emails: P.arrayOf(P.string),
+    emails: P.array(P.string),
     link_facebook: P.string,
     location_name: P.string,
     location_coord: P.shape({
