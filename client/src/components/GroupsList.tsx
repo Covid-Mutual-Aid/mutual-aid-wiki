@@ -3,7 +3,7 @@ import { Table, Column, ListRowRenderer } from 'react-virtualized'
 import { useGroups } from '../contexts/GroupsContext'
 
 const GroupsList = () => {
-  const groups = useGroups()
+  const { groups } = useGroups()
 
   return (
     <Table
