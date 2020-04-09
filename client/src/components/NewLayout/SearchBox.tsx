@@ -50,7 +50,6 @@ const SearchBox = () => {
 
 const Styles = styled.div`
   padding: 0 1rem;
-  margin-bottom: 2rem;
   input {
     width: 100%;
     outline: none;

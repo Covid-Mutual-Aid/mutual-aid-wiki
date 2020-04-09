@@ -13,7 +13,7 @@ const MapContext = createContext<{
   setMapState: React.Dispatch<React.SetStateAction<MapState>>
 }>({ map: { current: null }, setMapState: () => null })
 
-const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 5 }
+export const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 5 }
 const MapStateContext = createContext<[MapState, MapState]>([defaultState, defaultState])
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {

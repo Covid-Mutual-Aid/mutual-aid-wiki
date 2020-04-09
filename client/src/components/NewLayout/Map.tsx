@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
 
-import { useMapState, useMap, useMapControls } from '../../contexts/MapProvider'
+import { defaultState, useMap, useMapControls } from '../../contexts/MapProvider'
 import { useGroups } from '../../contexts/GroupsContext'
-import { gtag } from '../../utils/gtag'
 import { useSearch } from '../../contexts/SearchContext'
+import { gtag } from '../../utils/gtag'
 
 const gaTags = {
   mapMoved: () =>
@@ -22,9 +22,8 @@ const gaTags = {
 
 const GroupMap = () => {
   const { panTo, zoomTo } = useMapControls()
-  const [{ zoom, center }] = useMapState()
-  const { setMapState, map } = useMap()
-  const { groups, selected } = useGroups()
+  const { map } = useMap()
+  const { groups, selected, setSelected } = useGroups()
   const { place } = useSearch()
 
   useEffect(() => {
@@ -37,10 +36,10 @@ const GroupMap = () => {
       panTo(place.coords)
       zoomTo(11)
     } else {
-      panTo(center)
-      zoomTo(zoom)
+      panTo(defaultState.center)
+      zoomTo(defaultState.zoom)
     }
-  }, [place, panTo, center])
+  }, [place, panTo])
 
   const options = {
     minimumClusterSize: 6,
@@ -53,33 +52,23 @@ const GroupMap = () => {
     <MapStyles>
       <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg">
         <GoogleMap
-          onLoad={(x) => {
-            ;(map as any).current = x
-          }}
+          onLoad={(x) => void ((map as any).current = x)}
           options={{ streetViewControl: false }}
-          mapContainerStyle={{
-            height: '100%',
-            width: 'auto',
-          }}
-          zoom={zoom}
-          center={center}
+          mapContainerStyle={{ height: '100%', width: 'auto' }}
+          zoom={defaultState.zoom}
+          center={defaultState.center}
           onDragEnd={gaTags.mapMoved}
         >
           <MarkerClusterer options={options}>
             {(clusterer) =>
-              groups.map((group, i) => (
+              groups.map((group) => (
                 <Marker
-                  opacity={
-                    group.location_coord.lat === center.lat &&
-                    group.location_coord.lng === center.lng
-                      ? 1
-                      : 0.8
-                  }
+                  opacity={selected === group.id ? 1 : 0.7}
                   position={group.location_coord}
                   clusterer={clusterer}
-                  key={i}
+                  key={group.id}
                   onClick={() => {
-                    setMapState({ center: group.location_coord, group, zoom: 11 })
+                    setSelected(group.id)
                     gaTags.groupClicked()
                   }}
                 />
