@@ -19,10 +19,10 @@ Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' 
 const baseUrl =
   document.location.hostname === 'localhost'
     ? '/dev'
-    : 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
+    : 'https://3tqh6rxt46.execute-api.eu-west-2.amazonaws.com/development'
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
-  fetch(baseUrl + input, init).then(x => x.json())
+  fetch(baseUrl + input, init).then((x) => x.json())
 
 const Render = () => (
   <RequestProvider request={request}>
