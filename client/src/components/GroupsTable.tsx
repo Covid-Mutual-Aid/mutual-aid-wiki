@@ -96,6 +96,10 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
 }
 
 const Wrapper = styled.div`
+  display: grid;
+  grid: 0fr 1fr 0fr/ 1fr;
+  height: 100%;
+
   .headers {
     top: 0;
     width: 100%;
