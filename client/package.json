@@ -29,6 +29,8 @@
     "react-select": "^3.0.8",
     "react-spring": "^8.0.27",
     "react-virtualized": "^9.21.2",
+    "spring": "mnmly/spring",
+    "styled-components": "^5.0.1",
     "typescript": "~3.7.2",
     "whatwg-fetch": "^3.0.0"
   },
@@ -56,6 +58,7 @@
   "devDependencies": {
     "@types/googlemaps": "^3.39.3",
     "@types/react-select": "^3.0.11",
-    "@types/react-virtualized": "^9.21.8"
+    "@types/react-virtualized": "^9.21.8",
+    "@types/styled-components": "^5.0.1"
   }
 }

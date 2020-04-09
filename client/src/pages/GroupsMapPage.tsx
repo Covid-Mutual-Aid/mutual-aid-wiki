@@ -20,14 +20,14 @@ function useQuery() {
 
 function GroupsMapPage() {
   const query = useQuery()
-  const groups = useGroups()
+  const { groups } = useGroups()
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
   const { locate, error, name } = useLocationSearch()
   const [{ center, group }] = useMapState()
 
   const sortedByDistance = groups
-    .map(g => ({
+    .map((g) => ({
       ...g,
       distance: haversine(center, g.location_coord),
     }))

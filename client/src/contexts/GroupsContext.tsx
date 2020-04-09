@@ -1,18 +1,34 @@
-import React, { createContext, useState, useEffect, useContext } from 'react'
+import React, { createContext, useState, useEffect, useContext, useMemo } from 'react'
 import { Group } from '../utils/types'
 import { useRequest } from './RequestProvider'
 
-const GroupsContext = createContext<Group[]>([])
+const GroupsContext = createContext<{
+  groups: Group[]
+  selected: Group | null
+  setSelected: React.Dispatch<React.SetStateAction<Group | null>>
+}>({
+  groups: [],
+  selected: null,
+  setSelected: (x) => null,
+})
 
 const GroupsProvider = ({ children }: { children: React.ReactNode }) => {
   const [groups, setGroups] = useState<Group[]>([])
+  const [selected, setSelected] = useState<Group | null>(null)
+
   const request = useRequest()
 
   useEffect(() => {
     request('/group/get').then(setGroups)
   }, [request])
 
-  return <GroupsContext.Provider value={groups}>{children}</GroupsContext.Provider>
+  return (
+    <GroupsContext.Provider
+      value={useMemo(() => ({ groups, selected, setSelected }), [groups, selected, setSelected])}
+    >
+      {children}
+    </GroupsContext.Provider>
+  )
 }
 
 export const useGroups = () => useContext(GroupsContext)
