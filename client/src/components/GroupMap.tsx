@@ -12,18 +12,28 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
   const { setMapState } = useMap()
   const [googleMapInstance, setGoogleMapInstance] = useState<GoogleMapState>(null)
 
-  const onLoad = React.useCallback(mapInstance => {
+  const onLoad = React.useCallback((mapInstance) => {
     setGoogleMapInstance(mapInstance)
     // do something with map Instance
     console.log(mapInstance.getCenter())
   }, [])
 
-  const options = {
+  const clustererOptions = {
     minimumClusterSize: 6,
     clusterClass: 'map-cluster-icon',
-    imagePath:
-      'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+    imagePath: process.env.PUBLIC_URL + '/cluster_marker_',
   }
+
+  const clustererStyles = [
+    {
+      anchorText: [-5, 0],
+      textColor: 'black',
+      textSize: 13,
+      url: process.env.PUBLIC_URL + '/cluster_marker_1.png',
+      height: 60,
+      width: 45,
+    },
+  ]
 
   // onCenterChanged={(e: any) => console.log('called', e)}
 
@@ -51,8 +61,8 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             }
           }}
         >
-          <MarkerClusterer options={options}>
-            {clusterer =>
+          <MarkerClusterer options={clustererOptions} styles={clustererStyles}>
+            {(clusterer) =>
               groups.map((group, i) => (
                 <Marker
                   opacity={
@@ -64,6 +74,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
                   position={group.location_coord}
                   clusterer={clusterer}
                   key={i}
+                  icon={process.env.PUBLIC_URL + '/marker.png'}
                   onClick={() => {
                     gtag('event', 'Marker was clicked', {
                       event_category: 'Map',
