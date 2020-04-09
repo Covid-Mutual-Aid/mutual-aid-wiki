@@ -24,11 +24,16 @@ const GroupMap = () => {
   const { panTo, zoomTo } = useMapControls()
   const [{ zoom, center }] = useMapState()
   const { setMapState, map } = useMap()
-  const { groups } = useGroups()
+  const { groups, selected } = useGroups()
   const { place } = useSearch()
 
   useEffect(() => {
-    if (place) {
+    if (selected) {
+      const group = groups.find((x) => x.id === selected)
+      if (!group) return
+      panTo(group.location_coord)
+      zoomTo(11)
+    } else if (place) {
       panTo(place.coords)
       zoomTo(11)
     } else {

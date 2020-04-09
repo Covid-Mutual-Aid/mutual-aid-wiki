@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSearch } from '../../contexts/SearchContext'
+import { useGroups } from '../../contexts/GroupsContext'
 
 const SearchBox = () => {
   const [search, setSearch] = useState('')
   const { onSearch, place } = useSearch()
+  const { setSelected } = useGroups()
   return (
     <Styles>
       <form
@@ -13,6 +15,7 @@ const SearchBox = () => {
           e.preventDefault()
           setSearch('')
           onSearch(search)
+          setSelected(null)
         }}
       >
         <input

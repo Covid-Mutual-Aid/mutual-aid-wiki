@@ -52,7 +52,7 @@ const CreateGroup = () => {
               method: 'POST',
               body: JSON.stringify(group),
             })
-              .then(res => {
+              .then((res) => {
                 console.log(res)
                 if (res === 'Exists') {
                   setRequestError(['This group already exists.', group])
@@ -61,7 +61,7 @@ const CreateGroup = () => {
                 setSuccessModal(true)
                 setTimeout(() => history.push('/'), 3000)
               })
-              .catch(err => {
+              .catch((err) => {
                 setRequestError([
                   'There was an error processing your request, please try again.',
                   group,
@@ -85,7 +85,7 @@ const CreateGroup = () => {
             )}
           {validation.length > 0 && triedToSubmit && requestError[0].length === 0 && (
             <Form.Text className="text-danger">
-              Still need: {validation.map(v => `"` + v + `"` + ` `)}
+              Still need: {validation.map((v) => `"` + v + `"` + ` `)}
             </Form.Text>
           )}
 

@@ -5,7 +5,7 @@ import { animate, animateMulti } from '../utils/animate'
 export type MapState = {
   center: Coord
   zoom: number
-  group?: Group
+  group?: Omit<Group, 'id'>
 }
 
 const MapContext = createContext<{

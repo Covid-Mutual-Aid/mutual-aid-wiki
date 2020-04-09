@@ -4,8 +4,8 @@ import { useRequest } from './RequestProvider'
 
 const GroupsContext = createContext<{
   groups: Group[]
-  selected: Group | null
-  setSelected: React.Dispatch<React.SetStateAction<Group | null>>
+  selected: string | null
+  setSelected: React.Dispatch<React.SetStateAction<string | null>>
 }>({
   groups: [],
   selected: null,
@@ -14,7 +14,7 @@ const GroupsContext = createContext<{
 
 const GroupsProvider = ({ children }: { children: React.ReactNode }) => {
   const [groups, setGroups] = useState<Group[]>([])
-  const [selected, setSelected] = useState<Group | null>(null)
+  const [selected, setSelected] = useState<string | null>(null)
 
   const request = useRequest()
 

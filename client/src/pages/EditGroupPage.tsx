@@ -25,12 +25,12 @@ import EditGroup from '../components/EditGroup'
 //   }
 
 const useGroup = () => {
-  const [group, setGroup] = useState<null | (Group & { emails: string[] })>(null)
+  const [group, setGroup] = useState<null | (Omit<Group, 'id'> & { emails: string[] })>(null)
   const { id } = useParams<{ id: string }>()
   const request = useRequest()
   const mounted = useRef(true)
 
-  const get = () => request(`/group/get?id=${id}`).then(grp => mounted.current && setGroup(grp))
+  const get = () => request(`/group/get?id=${id}`).then((grp) => mounted.current && setGroup(grp))
   const save = () =>
     request(`/group/update`, { method: 'POST', body: JSON.stringify(group) }).then(get)
 
