@@ -23,11 +23,12 @@ const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any
     }))
 
 lambda.body = <T extends Proof<any>>(proof?: T) => (callback: (x: ProofType<T>) => Promise<any>) =>
-  lambda((event) =>
-    Promise.resolve(
+  lambda((event) => {
+    console.log('post body', JSON.parse(event.body || '{}'))
+    return Promise.resolve(
       !proof ? JSON.parse(event.body || '{}') : promiseProof(proof)(JSON.parse(event.body || '{}'))
     ).then(callback)
-  )
+  })
 
 lambda.queryParams = <T extends Proof<any>>(proof?: T) => (
   callback: (x: ProofType<T>) => Promise<any>
