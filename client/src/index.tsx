@@ -19,7 +19,9 @@ import StateProvider from './contexts/StateContext'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
-const baseUrl = 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
+const baseUrl =
+  (window as any).endpoint || 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
+// 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
 // document.location.hostname === 'localhost'
 //   ? '/dev'
 //   : 'https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev'
