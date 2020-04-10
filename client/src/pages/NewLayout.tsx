@@ -13,11 +13,22 @@ const NewLayout = () => {
   return (
     <LayoutStyles className="new-layout" sidebar={open}>
       <div className="side-bar">
-        <div onClick={toggleSidebar} className="toggle">
-          <div>{open ? '<' : '>'}</div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <h3>Find local mutal aid groups</h3>
+        <div className="panel">
+          <div onClick={toggleSidebar} className="toggle">
+            <div>{open ? '<' : '>'}</div>
+          </div>
+          <div className="nav">
+            <div>LOG IN</div>
+            <div>CLAIM GROUP</div>
+            <div>HELP</div>
+          </div>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+          >
+            <h3>
+              Find local <br /> mutal aid groups
+            </h3>
+          </div>
         </div>
         <SearchBox />
         <GroupsList />
@@ -29,23 +40,44 @@ const NewLayout = () => {
 
 const LayoutStyles = styled.div<{ sidebar: boolean }>`
   display: grid;
-  grid: 100% / ${(p) => (p.sidebar ? '25rem' : '1rem')} 1fr;
+  grid: 100% / ${(p) => (p.sidebar ? '30rem' : '1rem')} 1fr;
   height: 100vh;
   transition: grid 0.3s;
+
+  .panel {
+    padding: 1rem;
+  }
+
+  .nav {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    flex-basis: center;
+    color: rgba(0, 0, 0, 0.6);
+
+    div {
+      border-radius: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 0 1rem;
+      margin: 0 0.2rem;
+    } 
+  }
 
   .toggle {
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    right: -2rem;
+    right: -1.2rem;
     top: 50%;
-    width: 2rem;
+    width: 1.2rem;
     height: 4rem;
     background-color: white;
     border-radius: 0 10px 10px 0;
     transition: transform 0.3s;
     cursor: pointer;
+    border-left: 1px solid rgba(0, 0, 0, 0.06);
     /* transform: translateX(${(p) => (p.sidebar ? '0rem' : '4rem')}); */
     
     div {
@@ -56,10 +88,8 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   .side-bar {
     display: grid;
     grid: 0fr 0fr 0fr 1fr / 1fr;
-    width: 25rem;
-    transition: padding-right transform 0.3s;
-    transform: translateX(${(p) => (p.sidebar ? '0rem' : '-24rem')});
-    padding-right: ${(p) => (p.sidebar ? '0rem' : '4rem')};
+    width: 30rem;
+    transform: translateX(${(p) => (p.sidebar ? '0rem' : '-29rem')});
     height: 100%;
     box-shadow: 0px 0px 22px -9px #959595;
     background-color: white;
@@ -67,11 +97,12 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     z-index: 2;
     display: flex;
     flex-flow: column;
+    transition: all 0.3s;
 
     h3 {
       padding: 1rem;
-      font-size: 1.4rem;
-      font-weight: bold;
+      font-size: 2.2rem;
+      font-weight: 800;
     }
   }
 `

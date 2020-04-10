@@ -82,7 +82,8 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
 
   .visit {
     display: flex;
-    justify-content: center;
+    /* justify-content: end; */
+    flex-direction: row-reverse;
     align-items: center;
     width: 4rem;
   }
