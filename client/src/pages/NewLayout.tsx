@@ -13,9 +13,9 @@ const NewLayout = () => {
   return (
     <LayoutStyles className="new-layout" sidebar={open}>
       <div className="side-bar">
+        <div onClick={toggleSidebar} className="toggle"></div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <h3>Find your local mutal aid group</h3>
-          <button onClick={toggleSidebar} className="toggle" />
+          <h3>Find local mutal aid groups</h3>
         </div>
         <SearchBox />
         <GroupsList />
@@ -36,7 +36,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     transform: translateX(${(p) => (p.sidebar ? '0rem' : '-21rem')});
     padding-right: ${(p) => (p.sidebar ? '0rem' : '4rem')};
     height: 100%;
-    overflow: hidden;
+    overflow-y: hidden;
     box-shadow: 0px 0px 22px -9px #959595;
     background-color: white;
     position: relative;
@@ -49,12 +49,12 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
       font-weight: bold;
     }
     .toggle {
-      border: none;
-      outline: none;
+      transform: translateX(100px);
       width: 2rem;
       height: 2rem;
-      padding: 1rem;
-      margin: 1rem;
+      z-index: 1;
+      /* padding: 1rem;
+      margin: 1rem; */
       background-color: blue;
       transition: transform 0.3s;
       transform: translateX(${(p) => (p.sidebar ? '0rem' : '4rem')});

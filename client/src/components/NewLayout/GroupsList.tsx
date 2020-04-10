@@ -35,7 +35,7 @@ const GroupsList = () => {
             >
               <h4 onClick={() => onSelect(group.id)}>{group.name}</h4>
             </div>
-            <p>
+            <p className="location-name">
               {group.location_name}
               {group.distance > 0 && (
                 <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
@@ -121,6 +121,11 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
     padding: 0.2rem;
     font-weight: 800;
     border-radius: 5px;
+  }
+
+  .location-name {
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 `
 

@@ -35,7 +35,7 @@ const SearchBox = () => {
         {search.place && (
           <>
             <div style={{ padding: '1rem 0' }}>
-              show results nearest:{' '}
+              Showing groups for:{' '}
               <p style={{ fontWeight: 'bold' }}>
                 {search.place.name} <span onClick={() => onSearch()}>clear</span>
               </p>
@@ -48,8 +48,7 @@ const SearchBox = () => {
 }
 
 const SearchGroup = styled.div`
-  height: 2.8rem;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   overflow: hidden;
 
@@ -63,20 +62,21 @@ const SearchGroup = styled.div`
   }
 
   input {
-    width: calc(100% - 8rem);
+    width: calc(100% - 4rem);
     outline: none;
     border: none;
     background-color: transparent;
     padding: 0.5rem 1rem;
   }
   button {
-    height: 2.8rem;
-    width: 8rem;
-    padding: 0;
     border: none;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    height: 2.8rem;
+    width: 4rem;
+    padding: 0;
     outline: none;
-    background-color: blue;
-    color: white;
+    background-color: transparent;
+    color: blue;
   }
 `
 
@@ -88,7 +88,6 @@ const Styles = styled.div`
     color: blue;
   }
   .add-group {
-    margin-top: 0.5rem;
     padding: 0.5rem 1rem;
     color: blue;
     cursor: pointer;
