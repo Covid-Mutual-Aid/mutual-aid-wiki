@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "clean": "rm -rf node_modules || true && rm -rf client/node_modules || true && rm -rf lambdas/node_modules",
     "preinstall": "cd client && yarn install && cd ../lambdas; yarn install",
     "db:setup": "cd lambdas && yarn sls dynamodb install",
     "db:remove": "cd lambdas && sls dynamodb remove",
