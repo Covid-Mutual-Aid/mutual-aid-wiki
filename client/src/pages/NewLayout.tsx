@@ -6,10 +6,12 @@ import SearchBox from '../components/NewLayout/SearchBox'
 import GroupsList from '../components/NewLayout/GroupsList'
 import InfoBox from '../components/NewLayout/InfoBox'
 
+import '../styles/new-layout.css'
+
 const NewLayout = () => {
   const [open, toggleSidebar] = useReducer((x) => !x, true)
   return (
-    <LayoutStyles sidebar={open}>
+    <LayoutStyles className="new-layout" sidebar={open}>
       <div className="side-bar">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <h3>Find your local mutal aid group</h3>
@@ -18,12 +20,7 @@ const NewLayout = () => {
         <SearchBox />
         <GroupsList />
       </div>
-      <div className="map-container">
-        <div className="info-box">
-          <InfoBox />
-        </div>
-        <Map />
-      </div>
+      <Map />
     </LayoutStyles>
   )
 }
@@ -48,7 +45,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     flex-flow: column;
     h3 {
       padding: 1rem;
-      font-size: 3rem;
+      font-size: 1.4rem;
       font-weight: bold;
     }
     .toggle {
@@ -61,16 +58,6 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
       background-color: blue;
       transition: transform 0.3s;
       transform: translateX(${(p) => (p.sidebar ? '0rem' : '4rem')});
-    }
-  }
-  .map-container {
-    display: grid;
-    grid: 0fr 1fr / 1fr;
-    .info-box {
-      width: 100%;
-      height: 4rem;
-      background-color: white;
-      box-shadow: 0px 0px 22px -9px #959595;
     }
   }
 `

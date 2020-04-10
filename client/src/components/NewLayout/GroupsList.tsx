@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { useData } from '../../contexts/DataProvider'
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 
+import icons from '../../utils/icons'
+
 const GroupsList = () => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
   const { groups } = useData()
@@ -14,15 +16,11 @@ const GroupsList = () => {
     selected,
   } = usePlaceState()
 
-  const selectedGroup = groups.find((x) => x.id === selected)
+  // const selectedGroup = groups.find((x) => x.id === selected)
   const visibleGroups = groups
     .map((g) => ({
       ...g,
-      distance: selectedGroup
-        ? haversineDistance(selectedGroup.location_coord, g.location_coord)
-        : place
-        ? haversineDistance(place.coords, g.location_coord)
-        : 0,
+      distance: place ? haversineDistance(place.coords, g.location_coord) : 0,
     }))
     .sort((a, b) => (a.distance > b.distance ? 1 : -1))
     .slice(0, limit)
@@ -31,17 +29,29 @@ const GroupsList = () => {
     <Styles>
       {visibleGroups.map((group, i) => (
         <GroupWrapper key={group.id} selected={group.id === selected}>
-          <div
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
-          >
-            <h4 onClick={() => onSelect(group.id)}>{group.name}</h4>
-            {group.distance > 0 && (
-              <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
-            )}
+          <div className="content">
+            <div
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+            >
+              <h4 onClick={() => onSelect(group.id)}>{group.name}</h4>
+            </div>
+            <p>
+              {group.location_name}
+              {group.distance > 0 && (
+                <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
+              )}
+            </p>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p>{group.location_name}</p>
-            <a href={group.link_facebook}>link</a>
+          <div className="visit">
+            <a href={group.link_facebook}>
+              {((url) =>
+                url.includes('whatsapp')
+                  ? icons('wa', 'green')
+                  : url.includes('facebook')
+                  ? icons('fb', 'blue')
+                  : icons('link'))(group.link_facebook ? group.link_facebook : '')}
+              {/* <a href={group.link_facebook}>link</a> */}
+            </a>
           </div>
         </GroupWrapper>
       ))}
@@ -58,24 +68,48 @@ const GroupsList = () => {
 
 const GroupWrapper = styled.div<{ selected: boolean }>`
   transition: background 0.3s;
-  background-color: white;
-  padding: 0.5rem 1rem;
-  box-shadow: 0px 0px 20px 0px #d7d7d7;
-  position: sticky;
-  top: 0;
+  background: ${(p) => (p.selected ? 'rgba(255, 0, 0, 0.11)' : 'rgba(255, 0, 0, 0);')};
+  padding: 0.8rem 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  line-height: 0.8;
+
+  display: flex;
+  flex-direction: row;
+
+  .content {
+    width: calc(100% - 4rem);
+  }
+
+  .visit {
+    display: flex;
+    justify-content: center;
+    width: 4rem;
+  }
+
+  &:first-child {
+    border-top: none;
+  }
   & h4 {
     cursor: pointer;
     margin-top: 0;
-    overflow: hidden;
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  & h4:hover {
+    cursor: pointer;
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 1);
   }
   & a,
   p {
     margin-bottom: 0;
+    color: rgba(0, 0, 0, 0.6);
   }
   & .distance {
-    background: green;
-    color: white;
+    color: rgba(21, 158, 21, 0.71);
     padding: 0.2rem;
+    font-weight: 800;
     border-radius: 5px;
   }
 `
