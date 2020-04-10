@@ -10,44 +10,39 @@ import SearchesPage from './pages/SearchesPage'
 import HeatMap from './components/HeatMap'
 
 import NewLayout from './pages/NewLayout'
-import StateProvider from './contexts/StateContext'
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/newlayout">
-          <StateProvider>
-            <NewLayout />
-          </StateProvider>
-        </Route>
-        <Route path="/heatmap">
-          <Layout>
-            <HeatMap />
-          </Layout>
-        </Route>
-        <Route path="/create-group">
-          <Layout>
-            <CreateGroupPage />
-          </Layout>
-        </Route>
-        <Route path="/edit-group/:id">
-          <Layout>
-            <EditGroupPage />
-          </Layout>
-        </Route>
-        <Route path="/searches">
-          <Layout>
-            <SearchesPage />
-          </Layout>
-        </Route>
-        <Route path="/">
-          <Layout>
-            <GroupsMapPage />
-          </Layout>
-        </Route>
-      </Switch>
-    </Router>
+    <Switch>
+      <Route path="/newlayout">
+        <NewLayout />
+      </Route>
+      <Route path="/heatmap">
+        <Layout>
+          <HeatMap />
+        </Layout>
+      </Route>
+      <Route path="/create-group">
+        <Layout>
+          <CreateGroupPage />
+        </Layout>
+      </Route>
+      <Route path="/edit-group/:id">
+        <Layout>
+          <EditGroupPage />
+        </Layout>
+      </Route>
+      <Route path="/searches">
+        <Layout>
+          <SearchesPage />
+        </Layout>
+      </Route>
+      <Route path="/">
+        <Layout>
+          <GroupsMapPage />
+        </Layout>
+      </Route>
+    </Switch>
   )
 }
 
