@@ -7,6 +7,7 @@ env.json
 
 # Serverless directories
 .serverless
+stack.json
 
 # Webpack directories
 .webpack

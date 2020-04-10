@@ -7,6 +7,8 @@ service:
 custom:
   GROUPS_TABLE: ${self:provider.stage}-groups10
   LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-search
+  output:
+    file: ../stack.json
   dynamodb:
     stages:
       - dev
@@ -31,6 +33,7 @@ plugins:
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-stack-output
 
 provider:
   name: aws
