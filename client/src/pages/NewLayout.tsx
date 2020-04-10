@@ -19,7 +19,6 @@ const NewLayout = () => {
           </div>
           <div className="nav">
             <div>LOG IN</div>
-            <div>CLAIM GROUP</div>
             <div>HELP</div>
           </div>
           <div

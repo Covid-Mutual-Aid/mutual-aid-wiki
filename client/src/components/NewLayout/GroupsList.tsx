@@ -68,7 +68,7 @@ const GroupsList = () => {
 
 const GroupWrapper = styled.div<{ selected: boolean }>`
   transition: background 0.3s;
-  background: ${(p) => (p.selected ? 'rgba(255, 0, 0, 0.11)' : 'rgba(255, 0, 0, 0);')};
+  background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.11)' : 'rgba(0, 0, 255, 0);')};
   padding: 0.8rem 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   line-height: 0.8;
