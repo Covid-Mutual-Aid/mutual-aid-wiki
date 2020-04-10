@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { useSearch } from '../../contexts/SearchContext'
-import { useGroups } from '../../contexts/GroupsContext'
+import { usePlaceMethod } from '../../contexts/StateContext'
+import { useData } from '../../contexts/DataProvider'
 
 const SearchBox = () => {
   const [search, setSearch] = useState('')
-  const { onSearch, place } = useSearch()
-  const { setSelected } = useGroups()
+  const { onSearch, onSelect } = usePlaceMethod()
   return (
     <Styles>
       <form
@@ -15,7 +14,7 @@ const SearchBox = () => {
           e.preventDefault()
           setSearch('')
           onSearch(search)
-          setSelected(null)
+          onSelect()
         }}
       >
         <input
@@ -32,18 +31,6 @@ const SearchBox = () => {
           </button>
         </div>
       </form>
-      <div>
-        {place && (
-          <>
-            <div style={{ padding: '1rem 0' }}>
-              show results nearest: <span style={{ fontWeight: 'bold' }}>{place.name}</span>
-              <button type="button" className="clear" onClick={() => onSearch()}>
-                clear
-              </button>
-            </div>
-          </>
-        )}
-      </div>
     </Styles>
   )
 }

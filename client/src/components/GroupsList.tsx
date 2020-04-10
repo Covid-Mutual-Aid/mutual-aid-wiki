@@ -1,9 +1,9 @@
 import React from 'react'
 import { Table, Column, ListRowRenderer } from 'react-virtualized'
-import { useGroups } from '../contexts/GroupsContext'
+import { useData } from '../contexts/DataProvider'
 
 const GroupsList = () => {
-  const { groups } = useGroups()
+  const { groups } = useData()
 
   return (
     <Table

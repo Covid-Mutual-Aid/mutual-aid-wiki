@@ -10,16 +10,16 @@ import SearchesPage from './pages/SearchesPage'
 import HeatMap from './components/HeatMap'
 
 import NewLayout from './pages/NewLayout'
-import SearchProvider from './contexts/SearchContext'
+import StateProvider from './contexts/StateContext'
 
 function App() {
   return (
     <Router>
       <Switch>
         <Route path="/newlayout">
-          <SearchProvider>
+          <StateProvider>
             <NewLayout />
-          </SearchProvider>
+          </StateProvider>
         </Route>
         <Route path="/heatmap">
           <Layout>

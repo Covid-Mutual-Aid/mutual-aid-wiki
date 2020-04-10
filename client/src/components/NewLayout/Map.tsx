@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
 
 import { defaultState, useMap, useMapControls } from '../../contexts/MapProvider'
-import { useGroups } from '../../contexts/GroupsContext'
-import { useSearch } from '../../contexts/SearchContext'
+import { useData } from '../../contexts/DataProvider'
+import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 import { gtag } from '../../utils/gtag'
 
 const gaTags = {
@@ -23,8 +23,12 @@ const gaTags = {
 const GroupMap = () => {
   const { panTo, zoomTo } = useMapControls()
   const { map } = useMap()
-  const { groups, selected, setSelected } = useGroups()
-  const { place } = useSearch()
+  const { groups } = useData()
+  const {
+    search: { place },
+    selected,
+  } = usePlaceState()
+  const { onSelect } = usePlaceMethod()
 
   useEffect(() => {
     if (selected) {
@@ -68,7 +72,7 @@ const GroupMap = () => {
                   clusterer={clusterer}
                   key={group.id}
                   onClick={() => {
-                    setSelected(group.id)
+                    onSelect(group.id)
                     gaTags.groupClicked()
                   }}
                 />

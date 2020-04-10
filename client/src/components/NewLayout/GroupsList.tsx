@@ -2,13 +2,17 @@ import React, { useState, useLayoutEffect, useReducer } from 'react'
 import haversineDistance from 'haversine-distance'
 import styled from 'styled-components'
 
-import { useSearch } from '../../contexts/SearchContext'
-import { useGroups } from '../../contexts/GroupsContext'
+import { useData } from '../../contexts/DataProvider'
+import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 
 const GroupsList = () => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
-  const { groups, setSelected, selected } = useGroups()
-  const { place } = useSearch()
+  const { groups } = useData()
+  const { onSelect } = usePlaceMethod()
+  const {
+    search: { place },
+    selected,
+  } = usePlaceState()
 
   const selectedGroup = groups.find((x) => x.id === selected)
   const visibleGroups = groups
@@ -30,7 +34,7 @@ const GroupsList = () => {
           <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
           >
-            <h4 onClick={() => setSelected(group.id)}>{group.name}</h4>
+            <h4 onClick={() => onSelect(group.id)}>{group.name}</h4>
             {group.distance > 0 && (
               <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
             )}
@@ -54,8 +58,11 @@ const GroupsList = () => {
 
 const GroupWrapper = styled.div<{ selected: boolean }>`
   transition: background 0.3s;
-  background: ${(p) => (p.selected ? 'rgba(255, 0, 0, 0.11)' : 'rgba(255, 0, 0, 0);')};
+  background-color: white;
   padding: 0.5rem 1rem;
+  box-shadow: 0px -9px 8px -4px #bbb;
+  position: sticky;
+  top: 0;
   & h4 {
     cursor: pointer;
     margin-top: 0;
@@ -75,7 +82,6 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
 const Styles = styled.div`
   height: 100%;
   overflow-y: scroll;
-  padding-top: 2rem;
   transition: box-shadow 0.3s;
   box-shadow: inset 0px 0px 11px -11px #959595;
   &:hover {

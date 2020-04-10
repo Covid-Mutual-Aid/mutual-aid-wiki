@@ -13,8 +13,8 @@ import RequestProvider from './contexts/RequestProvider'
 
 import App from './App'
 import MapProvider from './contexts/MapProvider'
-import GroupsProvider from './contexts/GroupsContext'
-import SearchProvider from './contexts/SearchContext'
+import GroupsProvider from './contexts/DataProvider'
+import StateProvider from './contexts/StateContext'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
