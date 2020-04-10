@@ -25,12 +25,29 @@ const GroupMap = () => {
   const { groups } = useData()
   const { onSelect } = usePlaceMethod()
 
-  const options = {
+  // const options = {
+  //   minimumClusterSize: 6,
+  //   clusterClass: 'map-cluster-icon',
+  //   imagePath:
+  //     'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+  // }
+
+  const clustererOptions = {
     minimumClusterSize: 6,
     clusterClass: 'map-cluster-icon',
-    imagePath:
-      'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+    imagePath: process.env.PUBLIC_URL + '/cluster_marker_',
   }
+
+  const clustererStyles = [
+    {
+      anchorText: [-5, 0],
+      textColor: 'black',
+      textSize: 13,
+      url: process.env.PUBLIC_URL + '/cluster_marker_1.png',
+      height: 60,
+      width: 45,
+    },
+  ]
 
   return (
     <MapStyles>
@@ -43,7 +60,7 @@ const GroupMap = () => {
           center={defaultState.center}
           onDragEnd={gaTags.mapMoved}
         >
-          <MarkerClusterer options={options}>
+          <MarkerClusterer options={clustererOptions} styles={clustererStyles}>
             {(clusterer) =>
               groups.map((group) => (
                 <Marker
@@ -51,6 +68,7 @@ const GroupMap = () => {
                   position={group.location_coord}
                   clusterer={clusterer}
                   key={group.id}
+                  icon={process.env.PUBLIC_URL + '/marker.png'}
                   onClick={() => {
                     onSelect(group.id)
                     gaTags.groupClicked()

@@ -1,50 +1,65 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { usePlaceMethod } from '../../contexts/StateContext'
+import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
 
 const SearchBox = () => {
-  const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
   const { onSearch, onSelect } = usePlaceMethod()
+  const { search } = usePlaceState()
   return (
     <Styles>
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          setSearch('')
-          onSearch(search)
+          setSearchInput('')
+          onSearch(searchInput)
           onSelect()
         }}
       >
         <input
-          value={search}
+          value={searchInput}
           placeholder="Enter place"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearchInput(e.target.value)}
         />
+        <button type="submit" className="search">
+          search
+        </button>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button type="button" className="add-group">
-            Add Group
-          </button>
-          <button type="submit" className="search">
-            search
-          </button>
+          <p className="add-group">Or add a group</p>
         </div>
       </form>
+      <div>
+        {search.place && (
+          <>
+            <div style={{ padding: '1rem 0' }}>
+              show results nearest:{' '}
+              <p style={{ fontWeight: 'bold' }}>
+                {search.place.name} <span onClick={() => onSearch()}>clear</span>
+              </p>
+            </div>
+          </>
+        )}
+      </div>
     </Styles>
   )
 }
 
 const Styles = styled.div`
   padding: 0 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
   input {
-    width: 100%;
+    width: calc(100% - 8rem);
     outline: none;
     border: 1px solid black;
+    border-radius: 4px;
     background-color: transparent;
     padding: 0.5rem 1rem;
   }
   button {
+    width: 8rem;
     border: none;
     outline: none;
     background-color: transparent;
@@ -55,6 +70,8 @@ const Styles = styled.div`
   .add-group {
     margin-top: 0.5rem;
     padding: 0.5rem 1rem;
+    color: blue;
+    cursor: pointer;
   }
   .search {
     margin-top: 0.5rem;
