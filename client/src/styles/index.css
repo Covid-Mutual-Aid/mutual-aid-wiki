@@ -49,7 +49,7 @@ code {
 }
 
 .App-Standalone {
-  padding: 2rem 4rem;
+  padding: 1rem 2rem;
   height: 100%;
   display: grid;
   grid: 0fr 0fr 1fr 1fr 0fr / 1fr;
@@ -189,4 +189,8 @@ code {
   text-decoration: none;
   background-image: none;
   box-shadow: none;
+}
+
+html {
+  height: 100%;
 }

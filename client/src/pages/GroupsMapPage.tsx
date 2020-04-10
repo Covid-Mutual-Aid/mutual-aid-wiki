@@ -101,8 +101,8 @@ function GroupsMapPage() {
       </div>
 
       <div className="table-wrapper">
-        {/* <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} /> */}
-        <GroupsList />
+        <GroupsTable groups={sortedByDistance} shouldDisplayDistance={!!(group || name)} />
+        {/* <GroupsList /> */}
       </div>
       <GroupMap groups={groups} />
     </>
