@@ -79,7 +79,7 @@ const GroupsTable = ({ groups, shouldDisplayDistance }: Props) => {
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={link_facebook}
+                  href={link_facebook.includes('http') ? link_facebook : 'http://' + link_facebook}
                 >
                   {name}
                 </a>
