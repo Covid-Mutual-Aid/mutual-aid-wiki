@@ -11,7 +11,7 @@ import { useMapState } from '../contexts/MapProvider'
 import useLocationSearch from '../utils/useLocationSearch'
 import { Group } from '../utils/types'
 import { gtag } from '../utils/gtag'
-import { useGroups } from '../contexts/GroupsContext'
+import { useData } from '../contexts/DataProvider'
 import GroupsList from '../components/GroupsList'
 
 function useQuery() {
@@ -20,7 +20,7 @@ function useQuery() {
 
 function GroupsMapPage() {
   const query = useQuery()
-  const { groups } = useGroups()
+  const { groups } = useData()
   const [place, setPlace] = useState('')
   const [placeOverlay, setPlaceOverlay] = useState(false)
   const { locate, error, name } = useLocationSearch()
