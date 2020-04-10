@@ -66,6 +66,7 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
   & h4 {
     cursor: pointer;
     margin-top: 0;
+    overflow: hidden;
   }
   & a,
   p {
