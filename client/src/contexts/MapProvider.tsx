@@ -56,6 +56,7 @@ export const useMapControls = () => {
 }
 
 const useControlMap = () => {
+  const { map } = useContext(MapContext)
   const { panTo, zoomTo } = useMapControls()
   const { groups } = useData()
   const {
@@ -68,7 +69,7 @@ const useControlMap = () => {
       const group = groups.find((x) => x.id === selected)
       if (!group) return
       panTo(group.location_coord)
-      zoomTo(11)
+      if (map.current && map.current.getZoom() < 13) zoomTo(13)
     } else if (place) {
       panTo(place.coords)
       zoomTo(11)
