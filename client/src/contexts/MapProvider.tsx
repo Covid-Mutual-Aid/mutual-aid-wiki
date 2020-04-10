@@ -1,6 +1,8 @@
 import React, { createContext, useRef, useContext, useState, useMemo, useEffect } from 'react'
 import { Coord, Group } from '../utils/types'
-import { animate, animateMulti } from '../utils/animate'
+import { animate } from '../utils/animate'
+import { usePlaceState } from './StateContext'
+import { useData } from './DataProvider'
 
 export type MapState = {
   center: Coord
@@ -19,10 +21,10 @@ const MapStateContext = createContext<[MapState, MapState]>([defaultState, defau
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [mapState, setMapState] = useState<MapState>(defaultState)
   const map = useRef<google.maps.Map>(null)
-
   return (
     <MapContext.Provider value={useMemo(() => ({ map, setMapState }), [map, setMapState])}>
       <MapStateContext.Provider value={[mapState, defaultState]}>
+        <MapControls />
         {children}
       </MapStateContext.Provider>
     </MapContext.Provider>
@@ -51,4 +53,32 @@ export const useMapControls = () => {
   useEffect(() => unsub)
 
   return { panTo, zoomTo }
+}
+
+const useControlMap = () => {
+  const { panTo, zoomTo } = useMapControls()
+  const { groups } = useData()
+  const {
+    search: { place },
+    selected,
+  } = usePlaceState()
+
+  useEffect(() => {
+    if (selected) {
+      const group = groups.find((x) => x.id === selected)
+      if (!group) return
+      panTo(group.location_coord)
+      zoomTo(11)
+    } else if (place) {
+      panTo(place.coords)
+      zoomTo(11)
+    } else {
+      panTo(defaultState.center)
+      zoomTo(defaultState.zoom)
+    }
+  }, [place, panTo])
+}
+const MapControls = () => {
+  useControlMap()
+  return null
 }

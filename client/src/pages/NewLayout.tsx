@@ -35,7 +35,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   transition: grid 0.3s;
   .side-bar {
     width: 25rem;
-    transition: transform 0.3s;
+    transition: padding-right transform 0.3s;
     transform: translateX(${(p) => (p.sidebar ? '0rem' : '-21rem')});
     padding-right: ${(p) => (p.sidebar ? '0rem' : '4rem')};
     height: 100%;

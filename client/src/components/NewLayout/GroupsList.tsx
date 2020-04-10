@@ -60,7 +60,7 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
   transition: background 0.3s;
   background-color: white;
   padding: 0.5rem 1rem;
-  box-shadow: 0px -9px 8px -4px #bbb;
+  box-shadow: 0px 0px 20px 0px #d7d7d7;
   position: sticky;
   top: 0;
   & h4 {

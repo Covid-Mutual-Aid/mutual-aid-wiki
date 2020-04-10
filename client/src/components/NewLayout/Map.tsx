@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
 
 import { defaultState, useMap, useMapControls } from '../../contexts/MapProvider'
-import { useData } from '../../contexts/DataProvider'
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
+import { useData } from '../../contexts/DataProvider'
 import { gtag } from '../../utils/gtag'
 
 const gaTags = {
@@ -21,29 +21,9 @@ const gaTags = {
 }
 
 const GroupMap = () => {
-  const { panTo, zoomTo } = useMapControls()
   const { map } = useMap()
   const { groups } = useData()
-  const {
-    search: { place },
-    selected,
-  } = usePlaceState()
   const { onSelect } = usePlaceMethod()
-
-  useEffect(() => {
-    if (selected) {
-      const group = groups.find((x) => x.id === selected)
-      if (!group) return
-      panTo(group.location_coord)
-      zoomTo(11)
-    } else if (place) {
-      panTo(place.coords)
-      zoomTo(11)
-    } else {
-      panTo(defaultState.center)
-      zoomTo(defaultState.zoom)
-    }
-  }, [place, panTo])
 
   const options = {
     minimumClusterSize: 6,
@@ -67,7 +47,7 @@ const GroupMap = () => {
             {(clusterer) =>
               groups.map((group) => (
                 <Marker
-                  opacity={selected === group.id ? 1 : 0.7}
+                  opacity={0.7}
                   position={group.location_coord}
                   clusterer={clusterer}
                   key={group.id}
@@ -90,4 +70,4 @@ const MapStyles = styled.div`
   height: 100%;
 `
 
-export default GroupMap
+export default React.memo(GroupMap)
