@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
+import icons from '../../utils/icons'
 
 const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')
@@ -18,18 +19,18 @@ const SearchBox = () => {
           onSelect()
         }}
       >
-        <input
-          value={searchInput}
-          placeholder="Enter place"
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <button type="submit" className="search">
-          search
-        </button>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p className="add-group">Or add a group</p>
-        </div>
+        <SearchGroup>
+          <input
+            value={searchInput}
+            placeholder="Enter place"
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <button type="submit">{icons('search')}</button>
+        </SearchGroup>
       </form>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <p className="add-group">Or add a group</p>
+      </div>
       <div>
         {search.place && (
           <>
@@ -46,24 +47,43 @@ const SearchBox = () => {
   )
 }
 
-const Styles = styled.div`
-  padding: 0 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+const SearchGroup = styled.div`
+  height: 2.8rem;
+  border: 1px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+
+  input:focus {
+    outline: none;
+  }
+
+  input,
+  button {
+    height: 100%;
+  }
 
   input {
     width: calc(100% - 8rem);
     outline: none;
-    border: 1px solid black;
-    border-radius: 4px;
+    border: none;
     background-color: transparent;
     padding: 0.5rem 1rem;
   }
   button {
+    height: 2.8rem;
     width: 8rem;
+    padding: 0;
     border: none;
     outline: none;
-    background-color: transparent;
+    background-color: blue;
+    color: white;
   }
+`
+
+const Styles = styled.div`
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
   .clear {
     color: blue;
   }

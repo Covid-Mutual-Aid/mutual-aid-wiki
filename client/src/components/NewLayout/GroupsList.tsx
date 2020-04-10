@@ -43,15 +43,15 @@ const GroupsList = () => {
             </p>
           </div>
           <div className="visit">
-            <a href={group.link_facebook}>
-              {((url) =>
-                url.includes('whatsapp')
+            {((url) => (
+              <a href={url.includes('http') ? url : 'http://' + url}>
+                {url.includes('whatsapp')
                   ? icons('wa', 'green')
                   : url.includes('facebook')
                   ? icons('fb', 'blue')
-                  : icons('link'))(group.link_facebook ? group.link_facebook : '')}
-              {/* <a href={group.link_facebook}>link</a> */}
-            </a>
+                  : icons('link')}
+              </a>
+            ))(group.link_facebook ? group.link_facebook : '')}
           </div>
         </GroupWrapper>
       ))}
@@ -83,7 +83,17 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
   .visit {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 4rem;
+  }
+
+  .visit a {
+    opacity: 0.6;
+    transition: all 0.2s;
+  }
+
+  .visit a:hover {
+    opacity: 1;
   }
 
   &:first-child {
