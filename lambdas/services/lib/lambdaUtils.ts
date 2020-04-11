@@ -6,7 +6,6 @@ import { failedRequest } from './slack'
 const promiseProof = <T extends any>(proof: Proof<T>, arg: any): Promise<T> =>
   new Promise((res, rej) => {
     const result = proof(arg)
-    console.log('PROOF RESULT', result)
     if (Array.isArray(result) && isProved(result)) return res(result[1])
     return rej((result as any)[0])
   })
@@ -22,13 +21,17 @@ const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any
       headers: { 'Access-Control-Allow-Origin': '*' },
     }))
     .catch((err) =>
-      failedRequest({
-        method: event.httpMethod,
-        path: event.path,
-        params: event.queryStringParameters,
-        body: event.body,
-        resource: event.resource,
-      }).then(() => ({
+      Promise.resolve(
+        isOffline() || process.env.TESTING
+          ? err
+          : failedRequest({
+              method: event.httpMethod,
+              path: event.path,
+              params: event.queryStringParameters,
+              body: event.body,
+              resource: event.resource,
+            }).then(() => err)
+      ).then((err) => ({
         statusCode: 500,
         body: JSON.stringify({ error: err.message || err }),
       }))
@@ -42,8 +45,8 @@ const prooveArgs = (selector: (event: APIGatewayProxyEvent) => any) => <T extend
 ) =>
   new Promise<ProofType<T>>((resolve, reject) => {
     const data = (selector(event) || {}) as ProofType<T>
-    if (!proof || !isOffline()) return resolve(data)
-    promiseProof(proof, data).then(resolve).catch(reject)
+    if (!proof || isOffline()) return resolve(data)
+    return promiseProof(proof, data).then(resolve).catch(reject)
   }).then(callback)
 
 export const useBody = prooveArgs((event) => JSON.parse(event.body || '{}'))

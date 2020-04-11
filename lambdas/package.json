@@ -4,7 +4,7 @@
   "description": "Backend lambds for COVID-19 Search by postcode",
   "main": "handler.js",
   "scripts": {
-    "test": "jest services/**/*.ts",
+    "test": "env TESTING=true jest services/**/*.ts",
     "test:e2e": "jest ./tests/*.test.ts",
     "start": "env OFFLINE=true sls offline",
     "sls": "serverless"
