@@ -16,16 +16,21 @@ export default function createDynamoTableApi<
         .put({ TableName, Item: trans(x) })
         .promise()
         .then(() => trans(x)),
+    update: <G extends Partial<T> & { id: string }>(x: G) =>
+      client
+        .put({ TableName, Item: { ...x, updated_at: Date.now() } })
+        .promise()
+        .then(() => x),
     get: <K extends GetItemInput['Key']>(key: K) =>
       client
         .get({ TableName, Key: key })
         .promise()
-        .then((x) => x.Item as T),
+        .then((x) => x.Item as R),
     scan: () =>
       client
         .scan({ TableName })
         .promise()
-        .then((x) => x.Items as G[]),
+        .then((x) => x.Items as R[]),
     remove: <K extends Partial<T>>(key: K) => client.delete({ TableName, Key: key }).promise(),
     batchCreate: <G extends PartialP<T, 'id'>>(items: G[]) =>
       batchRequest(client, TableName, items.map(trans).map(putRequest)),

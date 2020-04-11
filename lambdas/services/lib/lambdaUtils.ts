@@ -52,4 +52,18 @@ const prooveArgs = (selector: (event: APIGatewayProxyEvent) => any) => <T extend
 export const useBody = prooveArgs((event) => JSON.parse(event.body || '{}'))
 export const useParams = prooveArgs((event) => event.queryStringParameters)
 
+type HTTPMethods = 'GET' | 'POST' | 'PUT' | 'DELETE'
+
+export const useMethod = <
+  T extends {
+    [Key in HTTPMethods]?: (event: APIGatewayProxyEvent, context: Context) => Promise<any>
+  }
+>(
+  methods: T
+) => (event: APIGatewayProxyEvent, context: Context) => {
+  if (!methods[event.httpMethod as HTTPMethods])
+    return Promise.reject(`Unreconised http method ${event.httpMethod}`)
+  return (methods[event.httpMethod as HTTPMethods] as any)(event, context)
+}
+
 export default lambda

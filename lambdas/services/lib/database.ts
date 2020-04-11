@@ -17,10 +17,22 @@ export const dynamoClient = isOffline() ? new DocumentClient(offlineOptions) : n
 export const groupsdb = createDynamoTableApi<Group, StoredGroup>(
   dynamoClient,
   process.env.GROUPS_TABLE as string,
-  (x) => ({ ...x, id: uuid(), pub_id: uuid(), created_at: new Date().toISOString() })
+  (x) => ({
+    id: uuid(),
+    pub_id: uuid(),
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    ...x,
+  })
 )
+
 export const searchesdb = createDynamoTableApi<Search, StoredSearch>(
   dynamoClient,
   process.env.LOCATION_SEARCHES_TABLE as string,
-  (x) => ({ ...x, id: uuid(), created_at: new Date().toISOString() })
+  (x) => ({
+    id: uuid(),
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    ...x,
+  })
 )
