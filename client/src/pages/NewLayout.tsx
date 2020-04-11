@@ -9,6 +9,7 @@ import InfoBox from '../components/NewLayout/InfoBox'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 import '../styles/new-layout.css'
+import icons from '../utils/icons'
 
 const NewLayout = () => {
   const [open, toggleSidebar] = useReducer((x) => !x, true)
@@ -17,12 +18,16 @@ const NewLayout = () => {
       <div className="side-bar">
         <div className="panel">
           <div onClick={toggleSidebar} className="toggle">
-            <div>{open ? '<' : '>'}</div>
+            {open ? icons('chevronL') : icons('chevronR')}
           </div>
           <div className="nav">
-            <div>LOG IN</div>
-            <div>HELP</div>
-            <div onClick={toggleSidebar}>OPEN/CLOSE</div>
+            <div className="options">
+              <div>LOG IN</div>
+              <div>HELP</div>
+            </div>
+            <div className="map">
+              <div onClick={toggleSidebar}>{icons('map', 'white')}</div>
+            </div>
           </div>
           <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
@@ -51,19 +56,54 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   }
 
   .nav {
-    padding: 1rem 0;
     display: flex;
     flex-direction: row;
     font-weight: bold;
     flex-basis: center;
     color: rgba(0, 0, 0, 0.6);
+    justify-content: space-between;
+    align-items: center;
 
-    div {
+    .options {
+      display: flex;
+      flex-direction: row;
+      height: 1.8rem
+    }
+
+    .options div {
       border-radius: 20px;
       border: 1px solid rgba(0, 0, 0, 0.1);
       padding: 0 1rem;
       margin: 0 0.2rem;
-    } 
+    }
+
+    .map {
+      cursor: pointer;
+      overflow: none;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      transition: box-shadow 0.3s;
+    }
+
+    .map div {
+      transition: box-shadow 0.2s;
+      opacity: 0;
+      margin-right: -3rem;
+      transition: all 0.2s;
+      width: 3rem;
+      border-radius: 50%;
+      height: 3rem;
+      background-color: lightgreen;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .map:hover {
+      /* box-shadow: 0px 0px 22px -9px #959595; */
+      box-shadow: 0px 0px 22px -4px rgba(111, 111, 111, 0.69);
+    }
   }
 
   .toggle {
@@ -111,17 +151,24 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   @media (max-width: ${MOBILE_BREAKPOINT}) {
     grid: 100% / ${(p) => (p.sidebar ? '100vw' : '1rem')} 1fr;
 
-    .toggle {
-      top: 10%;
-      width: 2.6rem;
-      height: 4rem;
-      right: -2.6rem;
+    .nav {
+      .map div {
+        opacity: 1;
+        margin-right: 0;
+      }
+
+      .toggle {
+        top: 10%;
+        width: 2.6rem;
+        height: 4rem;
+        right: -2.6rem;
+      }
     }
-    
+
     .side-bar {
-      width: 100vw;
-      transform: translateX(${(p) => (p.sidebar ? '0rem' : 'calc(1rem - 100vw)')});
-    }
+        width: 100vw;
+        transform: translateX(${(p) => (p.sidebar ? '0rem' : 'calc(1rem - 100vw)')});
+      }
   }
 `
 
