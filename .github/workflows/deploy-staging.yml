@@ -41,6 +41,11 @@ jobs:
           PUSHER_KEY: '${{ secrets.PUSHER_KEY }}'
           PUSHER_SECRET: '${{ secrets.PUSHER_SECRET }}'
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+      - name: 'Run intergration tests'
+        run: 'yarn test:e2e'
+        working-directory: lambdas
+        env:
+          STAGE: staging
       - name: 'Update client endpoint'
         run: 'node scripts/netlify-snippets.js'
         env:

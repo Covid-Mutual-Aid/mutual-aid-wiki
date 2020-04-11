@@ -17,5 +17,6 @@ const routes = {
 }
 
 test('Getting groups', async () => {
+  if (!process.env.STAGE !== 'staging') return
   const groups = await axios.get(endpoint + routes.getGroup)
 })
