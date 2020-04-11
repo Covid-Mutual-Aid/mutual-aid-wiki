@@ -4,12 +4,12 @@ import styled from 'styled-components'
 import Map from '../components/NewLayout/Map'
 import SearchBox from '../components/NewLayout/SearchBox'
 import GroupsList from '../components/NewLayout/GroupsList'
-import InfoBox from '../components/NewLayout/InfoBox'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 import '../styles/new-layout.css'
 import icons from '../utils/icons'
+import Nav from '../components/NewLayout/Nav'
 
 const NewLayout = () => {
   const [open, toggleSidebar] = useReducer((x) => !x, true)
@@ -20,15 +20,11 @@ const NewLayout = () => {
           <div onClick={toggleSidebar} className="toggle">
             {open ? icons('chevronL') : icons('chevronR')}
           </div>
-          <div className="nav">
-            <div className="options">
-              <div>LOG IN</div>
-              <div>HELP</div>
-            </div>
+          <Nav>
             <div className="map">
               <div onClick={toggleSidebar}>{icons('map', 'white')}</div>
             </div>
-          </div>
+          </Nav>
           <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
           >
@@ -55,55 +51,32 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     padding: 1rem;
   }
 
-  .nav {
+  .map {
+    cursor: pointer;
+    overflow: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    transition: box-shadow 0.3s;
+  }
+
+  .map div {
+    transition: box-shadow 0.2s;
+    opacity: 0;
+    margin-right: -3rem;
+    transition: all 0.2s;
+    width: 3rem;
+    border-radius: 50%;
+    height: 3rem;
+    background-color: lightgreen;
     display: flex;
-    flex-direction: row;
-    font-weight: bold;
-    flex-basis: center;
-    color: rgba(0, 0, 0, 0.6);
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+  }
 
-    .options {
-      display: flex;
-      flex-direction: row;
-      height: 1.8rem
-    }
-
-    .options div {
-      border-radius: 20px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      padding: 0 1rem;
-      margin: 0 0.2rem;
-    }
-
-    .map {
-      cursor: pointer;
-      overflow: none;
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      transition: box-shadow 0.3s;
-    }
-
-    .map div {
-      transition: box-shadow 0.2s;
-      opacity: 0;
-      margin-right: -3rem;
-      transition: all 0.2s;
-      width: 3rem;
-      border-radius: 50%;
-      height: 3rem;
-      background-color: lightgreen;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .map:hover {
-      /* box-shadow: 0px 0px 22px -9px #959595; */
-      box-shadow: 0px 0px 22px -4px rgba(111, 111, 111, 0.69);
-    }
+  .map:hover {
+    /* box-shadow: 0px 0px 22px -9px #959595; */
+    box-shadow: 0px 0px 22px -4px rgba(111, 111, 111, 0.69);
   }
 
   .toggle {
@@ -151,11 +124,9 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   @media (max-width: ${MOBILE_BREAKPOINT}) {
     grid: 100% / ${(p) => (p.sidebar ? '100vw' : '1rem')} 1fr;
 
-    .nav {
-      .map div {
-        opacity: 1;
-        margin-right: 0;
-      }
+    .map div {
+      opacity: 1;
+      margin-right: 0;
     }
 
     .toggle {

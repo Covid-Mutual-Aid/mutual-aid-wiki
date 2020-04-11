@@ -10,12 +10,20 @@ import SearchesPage from './pages/SearchesPage'
 import HeatMap from './components/HeatMap'
 
 import NewLayout from './pages/NewLayout'
+import HelpPage from './pages/HelpPage'
+import AboutPage from './pages/AboutPage'
 
 function App() {
   return (
     <Switch>
       <Route path="/newlayout">
         <NewLayout />
+      </Route>
+      <Route path="/help">
+        <HelpPage />
+      </Route>
+      <Route path="/about">
+        <AboutPage />
       </Route>
       <Route path="/heatmap">
         <Layout>
