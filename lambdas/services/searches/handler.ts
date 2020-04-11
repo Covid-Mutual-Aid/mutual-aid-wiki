@@ -8,8 +8,10 @@ const proveLocationSearch = P.shape({
   coords: P.shape({ lat: P.number, lng: P.number }),
 })
 
-import { searchesdb } from '../lib/database'
-const { create, scan } = searchesdb
+import db from '../lib/database'
 
-export const getLocationSearches = lambda(scan)
-export const addLocationSearch = lambda(useBody(proveLocationSearch)(create))
+export const getLocationSearches = lambda(() =>
+  db.search.get(['id', 'address', 'coords', 'place_id', 'query'])
+)
+
+export const addLocationSearch = lambda(useBody(proveLocationSearch)(db.search.create))

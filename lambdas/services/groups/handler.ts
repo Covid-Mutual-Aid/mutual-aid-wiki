@@ -1,49 +1,35 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import P from 'ts-prove'
 
-import { isSameGroup, isOffline, omit } from '../lib/utils'
 import lambda, { useParams, useBody } from '../lib/lambdaUtils'
+import { isSameGroup, isOffline } from '../lib/utils'
 import { Group } from '../lib/types'
 
 import { addSheetRow } from '../google/sheets'
 import { groupCreated } from '../lib/slack'
 
-import { groupsdb } from '../lib/database'
-const { create, scan, batchCreate, batchDelete } = groupsdb
+import db from '../lib/database'
 
 // Helper
-export const createNoDuplicates = (
+const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
-  scan().then((groups) =>
-    groups.some((g) => isSameGroup(g, group))
-      ? 'Exists'
-      : create({ ...group, created_at: Date.now() }).then(() => 'Added')
-  )
+  db.groups
+    .get(['name', 'link_facebook', 'location_coord', 'location_name'])
+    .then((groups) =>
+      groups.some((g) => isSameGroup(g as any, group))
+        ? Promise.resolve('Exists')
+        : (db.groups.create(group) as any)
+    )
 
-// Lambdas
-const sanitize = (x: Group & { pub_id: string }): Omit<Group, 'pub_id'> => ({
-  id: x.pub_id,
-  name: x.name,
-  link_facebook: x.link_facebook,
-  location_name: x.location_name,
-  location_coord: x.location_coord,
-})
-
-export const getGroup = lambda(
-  useParams(P.shape({ id: P.optional(P.string) }))((x) =>
-    scan().then((groups) => groups.map(sanitize))
+export const getGroups = lambda(
+  useParams()((x) =>
+    db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord'])
   )
 )
 
 export const updateGroup = lambda(
-  useBody()((group) =>
-    scan().then((groups) => {
-      const grp = groups.find((x) => x.id === group.id)
-      if (!grp) return Promise.reject('No group with id')
-      return create({ updated_at: Date.now(), ...grp, ...omit('id')(group) })
-    })
-  )
+  useBody(P.shape({ id: P.string }))((group) => db.groups.update(group))
 )
 
 export const createGroup = lambda(
@@ -74,7 +60,8 @@ export const createGroup = lambda(
 
 export const createGroupsBatch = (event: APIGatewayProxyEvent) => {
   const groups = JSON.parse(event.body || '{}')
-  return batchCreate(groups)
+  return db.groups
+    .createBatch(groups)
     .then((x) => ({
       statusCode: 200,
       body: 'DONE',
@@ -86,4 +73,7 @@ export const createGroupsBatch = (event: APIGatewayProxyEvent) => {
       headers: { 'Access-Control-Allow-Origin': '*' },
     }))
 }
-export const deleteAll = lambda(() => scan().then(batchDelete))
+
+export const deleteAll = lambda(() =>
+  db.groups.get(['id']).then((x) => db.groups.deleteBatch(x.map((y) => y.id)))
+)

@@ -1,5 +1,5 @@
-getGroup:
-  handler: services/groups/handler.getGroup
+getGroups:
+  handler: services/groups/handler.getGroups
   events:
     - http:
         method: get
