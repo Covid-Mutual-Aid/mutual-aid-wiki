@@ -1,31 +1,28 @@
-import AWS from 'aws-sdk'
+import { APIGatewayProxyEvent } from 'aws-lambda'
 import P from 'ts-prove'
 
 import { isSameGroup, isOffline, omit } from '../lib/utils'
 import lambda, { useParams, useBody } from '../lib/lambdaUtils'
-import { Group, SanitizedGroup } from '../lib/types'
+import { Group } from '../lib/types'
 
 import { addSheetRow } from '../google/sheets'
-import createDynamoApi from '../lib/dynamodb'
 import { groupCreated } from '../lib/slack'
-import { APIGatewayProxyEvent } from 'aws-lambda'
 
-const TableName = process.env.GROUPS_TABLE as string
-
-const { create, remove, readAll, batchCreate, batchDelete } = createDynamoApi<Group>(TableName)
+import { groupsdb } from '../lib/database'
+const { create, scan, batchCreate, batchDelete } = groupsdb
 
 // Helper
 export const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
-  readAll().then((groups) =>
+  scan().then((groups) =>
     groups.some((g) => isSameGroup(g, group))
       ? 'Exists'
       : create({ ...group, created_at: Date.now() }).then(() => 'Added')
   )
 
 // Lambdas
-const sanitize = (x: Group): SanitizedGroup => ({
+const sanitize = (x: Group & { pub_id: string }): Omit<Group, 'pub_id'> => ({
   id: x.pub_id,
   name: x.name,
   link_facebook: x.link_facebook,
@@ -35,13 +32,13 @@ const sanitize = (x: Group): SanitizedGroup => ({
 
 export const getGroup = lambda(
   useParams(P.shape({ id: P.optional(P.string) }))((x) =>
-    readAll().then((groups) => groups.map(sanitize))
+    scan().then((groups) => groups.map(sanitize))
   )
 )
 
 export const updateGroup = lambda(
   useBody()((group) =>
-    readAll().then((groups) => {
+    scan().then((groups) => {
       const grp = groups.find((x) => x.id === group.id)
       if (!grp) return Promise.reject('No group with id')
       return create({ updated_at: Date.now(), ...grp, ...omit('id')(group) })
@@ -89,4 +86,4 @@ export const createGroupsBatch = (event: APIGatewayProxyEvent) => {
       headers: { 'Access-Control-Allow-Origin': '*' },
     }))
 }
-export const deleteAll = lambda(() => readAll().then(batchDelete))
+export const deleteAll = lambda(() => scan().then(batchDelete))

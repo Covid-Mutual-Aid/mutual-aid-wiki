@@ -1,17 +1,16 @@
-import { Group } from '../lib/types'
-import lambda from '../lib/lambdaUtils'
-import { missingIn, allSeq, isSameGroup, isCorrectlyNamed, readGroupsFile } from '../lib/utils'
+import { missingIn, allSeq, isSameGroup, isCorrectlyNamed } from '../lib/utils'
 import { scrapeSheet, geoLocateGroup } from './utils'
-import createDynamoApi from '../lib/dynamodb'
+import lambda from '../lib/lambdaUtils'
+import { Group } from '../lib/types'
 
-const TableName = process.env.GROUPS_TABLE as string
-const { create, remove, readAll } = createDynamoApi<Group>(TableName)
+import { groupsdb } from '../lib/database'
+const { create, scan, remove } = groupsdb
 
 // Lambdas
 export const scrapeGroups = lambda(scrapeSheet)
 export const updateGroups = lambda(() =>
   scrapeSheet()
-    .then((scraped) => readAll().then((existing) => missingIn(isSameGroup)(existing, scraped)))
+    .then((scraped) => scan().then((existing) => missingIn(isSameGroup)(existing, scraped)))
     .then((groups) =>
       allSeq(
         groups.map((group) => () =>
@@ -24,7 +23,7 @@ export const updateGroups = lambda(() =>
 )
 
 export const purgeDuplicates = lambda(() =>
-  readAll()
+  scan()
     .then((groups) =>
       groups.reduce<[Group[], Group[]]>(
         ([uniqs, dups], g) =>
@@ -36,13 +35,13 @@ export const purgeDuplicates = lambda(() =>
 )
 
 export const purgeIncorrectlyLabeledGroups = lambda(() =>
-  readAll()
+  scan()
     .then((groups) => groups.filter((g) => !isCorrectlyNamed(g)))
     .then((rejects) => allSeq(rejects.map((reject) => () => remove(reject))))
 )
 
 export const removeAllGroups = lambda(() =>
-  readAll().then((groups) =>
+  scan().then((groups) =>
     allSeq(
       groups.map((group) => () =>
         remove(group)

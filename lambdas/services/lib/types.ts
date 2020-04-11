@@ -1,12 +1,18 @@
 export type Group = {
   id: string
-  pub_id: string
   name: string
   emails?: string[]
   link_facebook: string
   location_name: string
   location_coord: { lat: number; lng: number }
 }
+export type StoredGroup = Group & { id: string; pub_id: string; created_at: string }
 
-type Rebuild<T extends Record<any, any>> = { [K in keyof T]: T[K] }
-export type SanitizedGroup = Rebuild<Omit<Group, 'pub_id'>>
+export type Search = {
+  id: string
+  query: string
+  place_id: string
+  address: string
+  coords: { lat: number; lng: number }
+}
+export type StoredSearch = Search & { id: string; created_at: string }
