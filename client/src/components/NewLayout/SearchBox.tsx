@@ -14,9 +14,12 @@ const SearchBox = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          setSearchInput('')
-          onSearch(searchInput)
-          onSelect()
+
+          if (searchInput.length > 1) {
+            setSearchInput('')
+            onSearch(searchInput)
+            onSelect()
+          }
         }}
       >
         <SearchGroup>
