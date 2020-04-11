@@ -6,6 +6,8 @@ import tidyLink from '../../utils/tidyLink'
 import { iconFromUrl } from '../../utils/icons'
 import GroupItem from './GroupItem'
 
+import { MOBILE_BREAKPOINT } from '../../utils/CONSTANTS'
+
 const InfoBox = () => {
   const { groups } = useData()
   const { onSearch } = usePlaceMethod()
@@ -36,7 +38,6 @@ const InfoBox = () => {
 
 const Wrapper = styled.div<{ isOpen: boolean }>`
   position: absolute;
-  top: 0;
   left: calc(50% - (18rem * 0.5));
   width: 18rem;
   box-shadow: 0px 0px 22px -9px #959595;
@@ -54,6 +55,16 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
 
   & .open {
     top: 0;
+  }
+
+  @media (max-width: ${MOBILE_BREAKPOINT}) {
+    top: initial;
+    bottom: ${(p) => (p.isOpen ? '0' : '-20rem')};
+    transition: bottom 0.3s;
+
+    & .open {
+      bottom: 0;
+    }
   }
 `
 

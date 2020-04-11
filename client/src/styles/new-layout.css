@@ -3,3 +3,8 @@
 .new-layout {
   font-family: 'Source Sans Pro', sans-serif;
 }
+
+html,
+body {
+  overflow: hidden;
+}

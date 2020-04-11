@@ -6,6 +6,8 @@ import SearchBox from '../components/NewLayout/SearchBox'
 import GroupsList from '../components/NewLayout/GroupsList'
 import InfoBox from '../components/NewLayout/InfoBox'
 
+import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+
 import '../styles/new-layout.css'
 
 const NewLayout = () => {
@@ -106,8 +108,15 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_BREAKPOINT}) {
     grid: 100% / ${(p) => (p.sidebar ? '100vw' : '1rem')} 1fr;
+
+    .toggle {
+      top: 10%;
+      width: 2.6rem;
+      height: 4rem;
+      right: -2.6rem;
+    }
     
     .side-bar {
       width: 100vw;
