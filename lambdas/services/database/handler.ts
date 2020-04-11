@@ -1,3 +1,4 @@
+import AWS from 'aws-sdk'
 import P from 'ts-prove'
 
 import { isSameGroup, isOffline, omit } from '../lib/utils'
@@ -9,6 +10,8 @@ import createDynamoApi from '../lib/dynamodb'
 import { groupCreated } from '../lib/slack'
 
 const TableName = process.env.GROUPS_TABLE as string
+const BackupBucket = process.env.BACKUP_BUCKET as string
+
 const { create, remove, readAll } = createDynamoApi<Group>(TableName)
 
 // Helper
@@ -72,4 +75,31 @@ export const createGroup = lambda(
   )
 )
 
-export const removeGroup = lambda(useBody(P.shape({ id: P.string }))(remove))
+export const createBackup = () => {
+  const s3 = new AWS.S3()
+  const date = new Date().toISOString()
+
+  return readAll().then((groups) =>
+    s3
+      .putObject({
+        Bucket: BackupBucket,
+        Key: `backups/backup-${date}.json`,
+        ContentType: 'application/json',
+        ACL: 'public-read',
+        Body: JSON.stringify({
+          created_at: new Date().toISOString(),
+          groups,
+        }),
+      })
+      .promise()
+      .then(() =>
+        s3.putObject({
+          Bucket: BackupBucket,
+          Key: `groups.json`,
+          ContentType: 'application/json',
+          ACL: 'public-read',
+          Body: JSON.stringify(groups),
+        })
+      )
+  )
+}

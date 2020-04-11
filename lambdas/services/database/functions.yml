@@ -30,3 +30,8 @@ deleteGroup:
         method: post
         path: group/delete
         cors: true
+
+createBackup:
+  handler: services/database/handler.createBackup
+  events:
+    - schedule: rate(6 hours)

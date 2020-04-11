@@ -1,6 +1,6 @@
 import { Group } from '../lib/types'
 import lambda from '../lib/lambdaUtils'
-import { missingIn, allSeq, isSameGroup, isCorrectlyNamed } from '../lib/utils'
+import { missingIn, allSeq, isSameGroup, isCorrectlyNamed, readGroupsFile } from '../lib/utils'
 import { scrapeSheet, geoLocateGroup } from './utils'
 import createDynamoApi from '../lib/dynamodb'
 

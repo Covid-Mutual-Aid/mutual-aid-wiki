@@ -1,4 +1,4 @@
-import { DocumentClient, GetItemInput } from 'aws-sdk/clients/dynamodb'
+import { DocumentClient, GetItemInput, WriteRequest } from 'aws-sdk/clients/dynamodb'
 import { isOffline } from './utils'
 import { v4 as uuid } from 'uuid'
 
@@ -27,26 +27,31 @@ export default function createDynamoApi<T extends Record<string, any> & { id: st
       dynamoClient
         .get({ TableName, Key: key })
         .promise()
-        .then(x => x.Item as T),
+        .then((x) => x.Item as T),
     readAll: () =>
       dynamoClient
         .scan({ TableName })
         .promise()
-        .then(x => x.Items as T[]),
+        .then((x) => x.Items as T[]),
     remove: <K extends Partial<T>>(key: K) =>
       dynamoClient.delete({ TableName, Key: key }).promise(),
+    batchCreate: (items: T[]) => batchRequest(TableName, items.map(putRequest)),
+    batchDelete: (items: T[]) => batchRequest(TableName, items.map(deleteRequest)),
   }
 }
 
-// export const batchRemove = (groups: Group[]) =>
-//   dynamoClient
-//     .batchWrite({
-//       RequestItems: {
-//         [TableName]: [
-//           groups
-//             .filter(x => x.id && typeof x.id === 'string')
-//             .map(x => ({ DeleteRequest: { Key: { id: x.id } } })) as any,
-//         ],
-//       },
-//     })
-//     .promise()
+const putRequest = <T extends { id: string }>(item: T): WriteRequest => ({
+  PutRequest: { Item: item as any },
+})
+const deleteRequest = <T extends { id: string }>({ id }: T): WriteRequest => ({
+  DeleteRequest: { Key: { id: id as any } },
+})
+
+const batchRequest = (tableName: string, items: WriteRequest[]): Promise<void> => {
+  if (items.length < 1) return Promise.resolve()
+  const [current, rest] = [items.slice(0, 25), items.slice(25)]
+  return dynamoClient
+    .batchWrite({ RequestItems: { [tableName]: current } })
+    .promise()
+    .then(() => batchRequest(tableName, rest))
+}

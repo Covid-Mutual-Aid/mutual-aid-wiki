@@ -1,3 +1,7 @@
+import { readFile } from 'fs'
+import { join } from 'path'
+import { promisify } from 'util'
+
 import { Group } from './types'
 import { parse } from 'url'
 
@@ -13,6 +17,7 @@ export const SLACK_API_TOKEN = env.SLACK_API_TOKEN
 
 export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
 
+export const readGroupsFile = () => promisify(readFile)(join(__dirname, '../../groups.json'))
 // Url {
 //   protocol: 'http:',
 //   slashes: true,
