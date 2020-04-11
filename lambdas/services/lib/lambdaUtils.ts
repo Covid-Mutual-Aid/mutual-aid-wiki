@@ -1,5 +1,7 @@
 import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from 'aws-lambda'
 import { Proof, isProved, ProofType } from 'ts-prove'
+import { isOffline } from './utils'
+import { resolve } from 'dns'
 
 const promiseProof = <T extends any>(proof: Proof<T>) => (arg: any) => {
   const result = proof(arg)
@@ -23,26 +25,23 @@ const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any
     }))
 
 lambda.body = <T extends Proof<any>>(proof?: T) => (callback: (x: ProofType<T>) => Promise<any>) =>
-  lambda((event) => {
-    console.log('post body', JSON.parse(event.body || '{}'))
-    return new Promise((resolve, reject) => {
-      const body = JSON.parse(event.body || '{}') as Record<string, any>
-      if (!proof) return resolve(body)
-      const result = proof(body)
-      if (isProved(result)) return resolve(body)
-      return reject(result[0])
-    })
-  })
+  lambda((event) =>
+    new Promise<ProofType<T>>((resolve, reject) => {
+      const data = JSON.parse(event.body || '{}') as ProofType<T>
+      if (!proof || !isOffline) return resolve(data)
+      return promiseProof(proof)(data)
+    }).then(callback)
+  )
 
 lambda.queryParams = <T extends Proof<any>>(proof?: T) => (
   callback: (x: ProofType<T>) => Promise<any>
 ) =>
   lambda((event) =>
-    Promise.resolve(
-      !proof
-        ? event.queryStringParameters || ({} as any)
-        : promiseProof(proof)(event.queryStringParameters || {})
-    ).then(callback)
+    new Promise<ProofType<T>>((resolve, reject) => {
+      const data = event.queryStringParameters as ProofType<T>
+      if (!proof || !isOffline) return resolve(data)
+      return promiseProof(proof)(data)
+    }).then(callback)
   )
 
 export default lambda
