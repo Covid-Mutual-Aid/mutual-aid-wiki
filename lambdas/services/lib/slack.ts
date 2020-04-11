@@ -23,13 +23,7 @@ export const failedRequest = (data: Record<string, any>) =>
     {
       type: 'divider',
     },
-    {
-      type: 'section',
-      fields: (Object.keys(data) as (keyof Group)[]).map((key) => ({
-        type: 'plain_text',
-        text: `${key}: ${data[key]}`,
-      })),
-    },
+    createFieldsSection(data),
   ])
 
 export const groupCreated = (group: Partial<Group>) =>
@@ -41,14 +35,14 @@ export const groupCreated = (group: Partial<Group>) =>
         text: 'Group created',
       },
     },
-    {
-      type: 'divider',
-    },
-    {
-      type: 'section',
-      fields: (Object.keys(group) as (keyof Group)[]).map((key) => ({
-        type: 'plain_text',
-        text: `${key}: ${group[key]}`,
-      })),
-    },
+    { type: 'divider' },
+    createFieldsSection(group),
   ])
+
+const createFieldsSection = (x: Record<string, any>) => ({
+  type: 'section',
+  fields: (Object.keys(x) as (keyof Group)[]).map((key) => ({
+    type: 'plain_text',
+    text: `${key}: ${JSON.stringify(x[key])}`,
+  })),
+})
