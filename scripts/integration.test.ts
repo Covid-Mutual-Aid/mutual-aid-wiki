@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const endpoint = require('../stack.json').ServiceEndpoint
 
-const endpoints = {
+const routes = {
   getGroup: '/group/get',
   updateGroup: '/group/update',
   createGroup: '/group/create',
@@ -15,3 +15,7 @@ const endpoints = {
   getLocationSearches: '/search/location/get',
   addLocationSearch: '/search/location/get',
 }
+
+test('Getting groups', async () => {
+  const groups = await axios.get(endpoint + routes.getGroup)
+})
