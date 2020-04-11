@@ -65,7 +65,7 @@ provider:
         - { 'Fn::GetAtt': ['DynamoDbLocationSearches', 'Arn'] }
 
 functions:
-  - ${file(./services/database/functions.yml)}
+  - ${file(./services/groups/functions.yml)}
   - ${file(./services/google/functions.yml)}
   - ${file(./services/data/functions.yml)}
   - ${file(./services/searches/functions.yml)}
