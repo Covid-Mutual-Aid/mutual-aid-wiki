@@ -31,7 +31,6 @@ jobs:
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
           yarn sls deploy --verbose
         env:
-          CI: false
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
