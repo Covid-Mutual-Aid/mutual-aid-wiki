@@ -19,7 +19,7 @@ const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any
     .then((res) => ({
       statusCode: 200,
       body: JSON.stringify(res),
-      headers: { 'Access-Control-Allow-Origin': 'covidmutualaid.cc' },
+      headers: { 'Access-Control-Allow-Origin': '*' },
     }))
     .catch((err) =>
       failedRequest({
