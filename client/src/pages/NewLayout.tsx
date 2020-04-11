@@ -20,6 +20,7 @@ const NewLayout = () => {
           <div className="nav">
             <div>LOG IN</div>
             <div>HELP</div>
+            <div onClick={toggleSidebar}>OPEN/CLOSE</div>
           </div>
           <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
@@ -102,6 +103,15 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
       padding: 1rem;
       font-size: 2.2rem;
       font-weight: 800;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid: 100% / ${(p) => (p.sidebar ? '100vw' : '1rem')} 1fr;
+    
+    .side-bar {
+      width: 100vw;
+      transform: translateX(${(p) => (p.sidebar ? '0rem' : 'calc(1rem - 100vw)')});
     }
   }
 `

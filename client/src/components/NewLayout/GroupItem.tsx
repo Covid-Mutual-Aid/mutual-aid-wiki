@@ -44,7 +44,7 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
   flex-direction: row;
 
   .content {
-    width: calc(100% - 4rem);
+    width: calc(100% - 2rem);
   }
 
   .visit {
@@ -52,7 +52,7 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
     /* justify-content: end; */
     flex-direction: row-reverse;
     align-items: center;
-    width: 4rem;
+    width: 2rem;
   }
 
   .visit a {
