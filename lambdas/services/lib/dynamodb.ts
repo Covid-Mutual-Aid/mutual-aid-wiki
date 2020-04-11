@@ -35,7 +35,11 @@ export default function createDynamoApi<T extends Record<string, any> & { id: st
         .then((x) => x.Items as T[]),
     remove: <K extends Partial<T>>(key: K) =>
       dynamoClient.delete({ TableName, Key: key }).promise(),
-    batchCreate: (items: T[]) => batchRequest(TableName, items.map(putRequest)),
+    batchCreate: (items: T[]) =>
+      batchRequest(
+        TableName,
+        items.map((x) => ({ ...x, id: uuid(), pub_id: uuid() })).map(putRequest)
+      ),
     batchDelete: (items: T[]) => batchRequest(TableName, items.map(deleteRequest)),
   }
 }

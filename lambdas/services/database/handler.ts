@@ -8,11 +8,11 @@ import { Group, SanitizedGroup } from '../lib/types'
 import { addSheetRow } from '../google/sheets'
 import createDynamoApi from '../lib/dynamodb'
 import { groupCreated } from '../lib/slack'
+import { APIGatewayProxyEvent } from 'aws-lambda'
 
 const TableName = process.env.GROUPS_TABLE as string
-const BackupBucket = process.env.BACKUP_BUCKET as string
 
-const { create, remove, readAll } = createDynamoApi<Group>(TableName)
+const { create, remove, readAll, batchCreate, batchDelete } = createDynamoApi<Group>(TableName)
 
 // Helper
 export const createNoDuplicates = (
@@ -75,31 +75,18 @@ export const createGroup = lambda(
   )
 )
 
-export const createBackup = () => {
-  const s3 = new AWS.S3()
-  const date = new Date().toISOString()
-
-  return readAll().then((groups) =>
-    s3
-      .putObject({
-        Bucket: BackupBucket,
-        Key: `backups/backup-${date}.json`,
-        ContentType: 'application/json',
-        ACL: 'public-read',
-        Body: JSON.stringify({
-          created_at: new Date().toISOString(),
-          groups,
-        }),
-      })
-      .promise()
-      .then(() =>
-        s3.putObject({
-          Bucket: BackupBucket,
-          Key: `groups.json`,
-          ContentType: 'application/json',
-          ACL: 'public-read',
-          Body: JSON.stringify(groups),
-        })
-      )
-  )
+export const createGroupsBatch = (event: APIGatewayProxyEvent) => {
+  const groups = JSON.parse(event.body || '{}')
+  return batchCreate(groups)
+    .then((x) => ({
+      statusCode: 200,
+      body: 'DONE',
+      headers: { 'Access-Control-Allow-Origin': '*' },
+    }))
+    .catch((err) => ({
+      statusCode: 200,
+      body: err.message || err,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+    }))
 }
+export const deleteAll = lambda(() => readAll().then(batchDelete))

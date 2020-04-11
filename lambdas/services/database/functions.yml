@@ -31,7 +31,15 @@ deleteGroup:
         path: group/delete
         cors: true
 
-createBackup:
-  handler: services/database/handler.createBackup
+createGroupsBatch:
+  handler: services/database/handler.createGroupsBatch
+  timeout: 100
   events:
-    - schedule: rate(6 hours)
+    - http:
+        method: post
+        path: group/createbatch
+        cors: true
+
+deleteAll:
+  handler: services/database/handler.deleteAll
+  timeout: 100
