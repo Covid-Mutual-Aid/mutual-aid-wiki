@@ -1,7 +1,6 @@
 import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from 'aws-lambda'
 import { Proof, isProved, ProofType } from 'ts-prove'
 import { isOffline } from './utils'
-import { resolve } from 'dns'
 
 const promiseProof = <T extends any>(proof: Proof<T>) => (arg: any) => {
   const result = proof(arg)
