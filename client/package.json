@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:4000",
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.6.5",
     "@react-google-maps/api": "^1.8.5",
     "@sentry/browser": "^5.15.0",
     "@testing-library/jest-dom": "^4.2.4",
