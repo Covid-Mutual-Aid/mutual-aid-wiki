@@ -1,23 +1,54 @@
-// import { WebClient } from '@slack/web-api'
+import { WebClient, ChatPostMessageArguments } from '@slack/web-api'
+import { SLACK_API_TOKEN } from './utils'
+import { Group } from './types'
 
-// let slack = new Slack()
-// slack.setWebhook(process.env.SLACK_WEB_HOOK)
+const slackClient = new WebClient(SLACK_API_TOKEN)
 
-// const slackMessage = (text, attachments) =>
-//   new Promise((resolve, reject) => {
-//     slack.webhook(
-//       {
-//         channel: process.env.STAGE === 'dev' ? '#london-talks-dev' : '#london-talks',
-//         username: 'webhookbot',
-//         mrkdwn: true,
-//         text,
-//         attachments,
-//       },
-//       function (err, response) {
-//         if (err) return reject(err)
-//         return resolve(response)
-//       }
-//     )
-//   })
+export const messageSlack = (text: string, blocks: ChatPostMessageArguments['blocks'] = []) =>
+  slackClient.chat.postMessage({
+    channel: '#lambdas-covidmutualaid',
+    text,
+    blocks,
+  })
 
-// export default slackMessage
+export const failedRequest = (data: Record<string, any>) =>
+  messageSlack('Failed request', [
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: 'Failed request',
+      },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      type: 'section',
+      fields: (Object.keys(data) as (keyof Group)[]).map((key) => ({
+        type: 'plain_text',
+        text: `${key}: ${data[key]}`,
+      })),
+    },
+  ])
+
+export const groupCreated = (group: Partial<Group>) =>
+  messageSlack('Group created', [
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: 'Group created',
+      },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      type: 'section',
+      fields: (Object.keys(group) as (keyof Group)[]).map((key) => ({
+        type: 'plain_text',
+        text: `${key}: ${group[key]}`,
+      })),
+    },
+  ])

@@ -2,7 +2,7 @@ import P, { ProofType } from 'ts-prove'
 
 import { triggorLocationSearch } from '../lib/pusher'
 import createDynamoApi from '../lib/dynamodb'
-import lambda from '../lib/lambdaUtils'
+import lambda, { useBody } from '../lib/lambdaUtils'
 import { v4 as uuid } from 'uuid'
 
 const proveLocationSearch = P.shape({
@@ -18,8 +18,10 @@ const { create, readAll } = createDynamoApi<ProofType<typeof proveLocationSearch
 )
 
 export const getLocationSearches = lambda(readAll)
-export const addLocationSearch = lambda.body(proveLocationSearch)(data =>
-  create({ ...data, id: uuid(), createdAt: Date.now() }).then(() =>
-    triggorLocationSearch(data.coords)
+export const addLocationSearch = lambda(
+  useBody(proveLocationSearch)((data) =>
+    create({ ...data, id: uuid(), createdAt: Date.now() }).then(() =>
+      triggorLocationSearch(data.coords)
+    )
   )
 )

@@ -11,13 +11,13 @@ const { create, remove, readAll } = createDynamoApi<Group>(TableName)
 export const scrapeGroups = lambda(scrapeSheet)
 export const updateGroups = lambda(() =>
   scrapeSheet()
-    .then(scraped => readAll().then(existing => missingIn(isSameGroup)(existing, scraped)))
-    .then(groups =>
+    .then((scraped) => readAll().then((existing) => missingIn(isSameGroup)(existing, scraped)))
+    .then((groups) =>
       allSeq(
-        groups.map(group => () =>
+        groups.map((group) => () =>
           geoLocateGroup(group)
-            .then(grp => create(grp))
-            .catch(err => err.message)
+            .then((grp) => create(grp))
+            .catch((err) => err.message)
         )
       )
     )
@@ -25,29 +25,29 @@ export const updateGroups = lambda(() =>
 
 export const purgeDuplicates = lambda(() =>
   readAll()
-    .then(groups =>
+    .then((groups) =>
       groups.reduce<[Group[], Group[]]>(
         ([uniqs, dups], g) =>
-          uniqs.some(gc => isSameGroup(gc, g)) ? [uniqs, [...dups, g]] : [[...uniqs, g], dups],
+          uniqs.some((gc) => isSameGroup(gc, g)) ? [uniqs, [...dups, g]] : [[...uniqs, g], dups],
         [[], []]
       )
     )
-    .then(([_, dups]) => allSeq(dups.map(grp => () => remove(grp))))
+    .then(([_, dups]) => allSeq(dups.map((grp) => () => remove(grp))))
 )
 
 export const purgeIncorrectlyLabeledGroups = lambda(() =>
   readAll()
-    .then(groups => groups.filter(g => !isCorrectlyNamed(g)))
-    .then(rejects => allSeq(rejects.map(reject => () => remove(reject))))
+    .then((groups) => groups.filter((g) => !isCorrectlyNamed(g)))
+    .then((rejects) => allSeq(rejects.map((reject) => () => remove(reject))))
 )
 
 export const removeAllGroups = lambda(() =>
-  readAll().then(groups =>
+  readAll().then((groups) =>
     allSeq(
-      groups.map(group => () =>
+      groups.map((group) => () =>
         remove(group)
           .then(() => console.log(`deleted ${group.name}`))
-          .catch(err => err.message)
+          .catch((err) => err.message)
       )
     )
   )

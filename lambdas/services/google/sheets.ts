@@ -49,7 +49,7 @@ export const addRow = (
 export const getSheets = () =>
   sheets.spreadsheets
     .get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
-    .then(spreadsheet => (spreadsheet.data.sheets || []).map(x => x.properties))
+    .then((spreadsheet) => (spreadsheet.data.sheets || []).map((x) => x.properties))
 
 export const getGroupRow = (group: Pick<Group, 'location_name' | 'name' | 'link_facebook'>) => {
   const date = new Date()
@@ -58,7 +58,7 @@ export const getGroupRow = (group: Pick<Group, 'location_name' | 'name' | 'link_
     `${date.toLocaleDateString()} ${date.toTimeString().replace(/\s.*/, '')}`,
     group.name,
     group.link_facebook,
-  ].map(value => ({
+  ].map((value) => ({
     userEnteredValue: { stringValue: value },
   }))
 }
@@ -66,21 +66,21 @@ export const getGroupRow = (group: Pick<Group, 'location_name' | 'name' | 'link_
 export const addSheetRow = (
   group: Pick<Group, 'location_name' | 'name' | 'link_facebook'>,
   sheetId?: string
-) => authorise().then(auth => updateSheet(auth)(addRow(getGroupRow(group), sheetId || SHEET_ID)))
+) => authorise().then((auth) => updateSheet(auth)(addRow(getGroupRow(group), sheetId || SHEET_ID)))
 
 export const getGroupsFromSheet = (sheetId?: string) =>
   sheets.spreadsheets
     .get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
-    .then(spreadsheet =>
-      (spreadsheet.data.sheets || []).find(x => x.properties?.sheetId === sheetId || SHEET_ID)
+    .then((spreadsheet) =>
+      (spreadsheet.data.sheets || []).find((x) => x.properties?.sheetId === sheetId || SHEET_ID)
     )
-    .then(x => {
+    .then((x) => {
       const rowData = x && x.data && x.data[0] && x.data[0].rowData
       if (!rowData) return Promise.reject('No row data')
       return rowData
-        .map(x => {
+        .map((x) => {
           const values = (x.values || []).map(
-            x => x.userEnteredValue && x.userEnteredValue.stringValue
+            (x) => x.userEnteredValue && x.userEnteredValue.stringValue
           )
           return {
             location_name: values[0] as string,
@@ -88,7 +88,7 @@ export const getGroupsFromSheet = (sheetId?: string) =>
             link_facebook: values[3] as string,
           }
         })
-        .filter(x => x.location_name && x.name && x.link_facebook)
+        .filter((x) => x.location_name && x.name && x.link_facebook)
     })
 
 export const createDedupeSheet = async () => {
@@ -96,17 +96,17 @@ export const createDedupeSheet = async () => {
   const auth = await authorise()
   const currentGroups = await getGroupsFromSheet()
     .then(uniqueBy(isSameGroup))
-    .then(groups => groups.map(getGroupRow))
+    .then((groups) => groups.map(getGroupRow))
 
   return Promise.resolve()
     .then(() => updateSheet(auth)(addSheet(name)))
-    .then(res => res.data.updatedSpreadsheet?.sheets?.find(x => x.properties?.title === name))
-    .then(sheet =>
+    .then((res) => res.data.updatedSpreadsheet?.sheets?.find((x) => x.properties?.title === name))
+    .then((sheet) =>
       updateSheet(auth)({
         appendCells: {
           sheetId: sheet?.properties?.sheetId,
           fields: '*',
-          rows: currentGroups.map(values => ({ values })),
+          rows: currentGroups.map((values) => ({ values })),
         },
       })
     )

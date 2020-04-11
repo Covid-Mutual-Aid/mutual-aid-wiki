@@ -9,7 +9,7 @@ export const GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY
 export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
 export const PUSHER_KEY = env.PUSHER_KEY
 export const PUSHER_SECRET = env.PUSHER_SECRET
-export const SLACK_WEBHOOK = env.SLACK_WEBHOOK
+export const SLACK_API_TOKEN = env.SLACK_API_TOKEN
 
 export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
 
