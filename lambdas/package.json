@@ -10,6 +10,7 @@
     "sls": "serverless"
   },
   "dependencies": {
+    "@slack/web-api": "^5.8.0",
     "axios": "^0.19.2",
     "googleapis": "^48.0.0",
     "pusher": "^3.0.1",

@@ -1,13 +1,7 @@
 import { Group } from './types'
 import { parse } from 'url'
 
-let env
-try {
-  env = require('../../env.json')
-} catch (err) {
-  env = process.env
-}
-
+const env = process.env
 export const GOOGLE_API_KEY = env.GOOGLE_API_KEY
 export const SPREADSHEET_ID = env.SPREADSHEET_ID
 export const SHEET_ID = env.SHEET_ID
@@ -15,6 +9,7 @@ export const GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY
 export const GOOGLE_CLIENT_EMAIL = env.GOOGLE_CLIENT_EMAIL
 export const PUSHER_KEY = env.PUSHER_KEY
 export const PUSHER_SECRET = env.PUSHER_SECRET
+export const SLACK_WEBHOOK = env.SLACK_WEBHOOK
 
 export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
 

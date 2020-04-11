@@ -28,7 +28,7 @@ lambda.body = <T extends Proof<any>>(proof?: T) => (callback: (x: ProofType<T>) 
   lambda((event) =>
     new Promise<ProofType<T>>((resolve, reject) => {
       const data = JSON.parse(event.body || '{}') as ProofType<T>
-      if (!proof || !isOffline) return resolve(data)
+      if (!proof || !isOffline()) return resolve(data)
       promiseProof(proof, data).then(resolve).catch(reject)
     }).then(callback)
   )
@@ -39,7 +39,7 @@ lambda.queryParams = <T extends Proof<any>>(proof?: T) => (
   lambda((event) =>
     new Promise<ProofType<T>>((resolve, reject) => {
       const data = event.queryStringParameters as ProofType<T>
-      if (!proof || !isOffline) return resolve(data)
+      if (!proof || !isOffline()) return resolve(data)
       promiseProof(proof, data).then(resolve).catch(reject)
     }).then(callback)
   )

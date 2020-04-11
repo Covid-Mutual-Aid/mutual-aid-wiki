@@ -40,6 +40,7 @@ jobs:
           GOOGLE_CLIENT_EMAIL: '${{ secrets.GOOGLE_CLIENT_EMAIL }}'
           PUSHER_KEY: '${{ secrets.PUSHER_KEY }}'
           PUSHER_SECRET: '${{ secrets.PUSHER_SECRET }}'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: 'Update client endpoint'
         run: 'node scripts/netlify-snippets.js'
         env:
