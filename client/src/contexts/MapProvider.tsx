@@ -69,10 +69,10 @@ const useControlMap = () => {
       const group = groups.find((x) => x.id === selected)
       if (!group) return
       panTo(group.location_coord)
-      if (map.current && map.current.getZoom() < 13) zoomTo(13)
+      if (map.current && map.current.getZoom() < 15) zoomTo(15)
     } else if (place) {
       panTo(place.coords)
-      zoomTo(11)
+      zoomTo(12)
     } else {
       panTo(defaultState.center)
       zoomTo(defaultState.zoom)

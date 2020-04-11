@@ -18,15 +18,15 @@ const InfoBox = () => {
 
   const selectedGroup = groups.find((x) => x.id === selected)
   return (
-    <Wrapper isOpen={!!(place || selectedGroup)}>
-      {place && (
+    <Wrapper isOpen={!!selectedGroup}>
+      {/* {place && (
         <div className={place ? 'open' : ''}>
           show results nearest: <span style={{ fontWeight: 'bold' }}>{place.name}</span>
           <button type="button" className="clear" onClick={() => onSearch()}>
             clear
           </button>
         </div>
-      )}
+      )} */}
       {selectedGroup && (
         <>
           <GroupItem selected={false} group={selectedGroup} onSelect={() => null} />
@@ -60,6 +60,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   @media (max-width: ${MOBILE_BREAKPOINT}) {
     top: initial;
     bottom: ${(p) => (p.isOpen ? '0' : '-20rem')};
+    margin-bottom: 4rem;
     transition: bottom 0.3s;
 
     & .open {

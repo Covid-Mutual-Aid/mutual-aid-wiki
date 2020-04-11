@@ -21,9 +21,9 @@ const GroupItem = ({
         </div>
         <p className="location-name">
           {group.location_name}
-          {group.distance && group.distance > 0 && (
+          {group.distance && group.distance > 0 ? (
             <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
-          )}
+          ) : null}
         </p>
       </div>
       <div className="visit">

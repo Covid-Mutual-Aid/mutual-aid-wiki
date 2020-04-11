@@ -156,13 +156,13 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
         opacity: 1;
         margin-right: 0;
       }
+    }
 
-      .toggle {
-        top: 10%;
-        width: 2.6rem;
-        height: 4rem;
-        right: -2.6rem;
-      }
+    .toggle {
+      top: 10%;
+      width: 2.6rem;
+      height: 4rem;
+      right: -2.6rem;
     }
 
     .side-bar {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
@@ -29,12 +29,14 @@ const SearchBox = () => {
         </SearchGroup>
       </form>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <p className="add-group">Or add a group</p>
+        <Link to="/create-group">
+          <p className="add-group">Or add a group</p>
+        </Link>
       </div>
-      {/* <div>
+      <div>
         {search.place && (
           <>
-            <div style={{ padding: '1rem 0' }}>
+            <div style={{ padding: '0rem 1rem' }}>
               Showing groups for:{' '}
               <p style={{ fontWeight: 'bold' }}>
                 {search.place.name} <span onClick={() => onSearch()}>clear</span>
@@ -42,7 +44,7 @@ const SearchBox = () => {
             </div>
           </>
         )}
-      </div> */}
+      </div>
     </Styles>
   )
 }
