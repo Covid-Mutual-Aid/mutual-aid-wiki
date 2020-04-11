@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
 
+import InfoBox from './InfoBox'
+
 import { defaultState, useMap, useMapControls } from '../../contexts/MapProvider'
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
@@ -25,13 +27,6 @@ const GroupMap = () => {
   const { groups } = useData()
   const { onSelect } = usePlaceMethod()
 
-  // const options = {
-  //   minimumClusterSize: 6,
-  //   clusterClass: 'map-cluster-icon',
-  //   imagePath:
-  //     'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-  // }
-
   const clustererOptions = {
     minimumClusterSize: 6,
     clusterClass: 'map-cluster-icon',
@@ -51,6 +46,7 @@ const GroupMap = () => {
 
   return (
     <MapStyles>
+      <InfoBox />
       <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg">
         <GoogleMap
           onLoad={(x) => void ((map as any).current = x)}
@@ -84,6 +80,7 @@ const GroupMap = () => {
 }
 
 const MapStyles = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
 `

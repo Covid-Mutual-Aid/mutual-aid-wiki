@@ -77,7 +77,6 @@ function GroupsMapPage() {
                   className="full-width search-button-blue"
                   onClick={() => locate(place)}
                   variant="primary"
-                  // size="sm"
                 >
                   Search
                 </Button>

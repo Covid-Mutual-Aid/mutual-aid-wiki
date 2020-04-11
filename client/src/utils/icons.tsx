@@ -67,4 +67,11 @@ const icons = (name: 'wa' | 'fb' | 'link' | 'search', color?: string) =>
     ),
   }[name])
 
+export const iconFromUrl = (url: string) =>
+  url.includes('whatsapp')
+    ? icons('wa', 'green')
+    : url.includes('facebook')
+    ? icons('fb', 'blue')
+    : icons('link')
+
 export default icons

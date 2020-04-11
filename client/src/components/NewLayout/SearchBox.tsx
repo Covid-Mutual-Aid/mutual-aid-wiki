@@ -31,7 +31,7 @@ const SearchBox = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <p className="add-group">Or add a group</p>
       </div>
-      <div>
+      {/* <div>
         {search.place && (
           <>
             <div style={{ padding: '1rem 0' }}>
@@ -42,7 +42,7 @@ const SearchBox = () => {
             </div>
           </>
         )}
-      </div>
+      </div> */}
     </Styles>
   )
 }

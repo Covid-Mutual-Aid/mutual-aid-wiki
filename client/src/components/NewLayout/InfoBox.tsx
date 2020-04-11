@@ -1,6 +1,10 @@
 import React from 'react'
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
+import styled from 'styled-components'
+import tidyLink from '../../utils/tidyLink'
+import { iconFromUrl } from '../../utils/icons'
+import GroupItem from './GroupItem'
 
 const InfoBox = () => {
   const { groups } = useData()
@@ -12,26 +16,45 @@ const InfoBox = () => {
 
   const selectedGroup = groups.find((x) => x.id === selected)
   return (
-    <div>
+    <Wrapper isOpen={!!(place || selectedGroup)}>
       {place && (
-        <>
-          <div style={{ padding: '1rem 0' }}>
-            show results nearest: <span style={{ fontWeight: 'bold' }}>{place.name}</span>
-            <button type="button" className="clear" onClick={() => onSearch()}>
-              clear
-            </button>
-          </div>
-        </>
+        <div className={place ? 'open' : ''}>
+          show results nearest: <span style={{ fontWeight: 'bold' }}>{place.name}</span>
+          <button type="button" className="clear" onClick={() => onSearch()}>
+            clear
+          </button>
+        </div>
       )}
       {selectedGroup && (
         <>
-          <div style={{ padding: '1rem 0' }}>
-            <h4>{selectedGroup.name}</h4>
-          </div>
+          <GroupItem selected={false} group={selectedGroup} onSelect={() => null} />
         </>
       )}
-    </div>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div<{ isOpen: boolean }>`
+  position: absolute;
+  top: 0;
+  left: calc(50% - (18rem * 0.5));
+  width: 18rem;
+  box-shadow: 0px 0px 22px -9px #959595;
+  margin: 1rem;
+  padding: 1rem;
+  z-index: 1;
+  background-color: white;
+  border-radius: 8px;
+  transition: top 0.3s;
+  top: ${(p) => (p.isOpen ? '0' : '-20rem')};
+
+  h4 {
+    font-size: 1.2rem;
+  }
+
+  & .open {
+    top: 0;
+  }
+`
 
 export default InfoBox
