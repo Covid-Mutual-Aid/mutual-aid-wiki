@@ -24,7 +24,7 @@ const createNoDuplicates = (
 
 export const getGroups = lambda(
   useParams()((x) =>
-    db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord'])
+    db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails'])
   )
 )
 

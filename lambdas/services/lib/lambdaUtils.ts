@@ -45,12 +45,18 @@ const prooveArgs = (selector: (event: APIGatewayProxyEvent) => any) => <T extend
 ) =>
   new Promise<ProofType<T>>((resolve, reject) => {
     const data = (selector(event) || {}) as ProofType<T>
-    if (!proof || isOffline()) return resolve(data)
+    if (!proof || !isOffline()) return resolve(data)
     return promiseProof(proof, data).then(resolve).catch(reject)
   }).then(callback)
 
 export const useBody = prooveArgs((event) => JSON.parse(event.body || '{}'))
 export const useParams = prooveArgs((event) => event.queryStringParameters)
+export const useBoth = <A extends Proof<any>, B extends Proof<any>>(body: A, params: B) => <
+  R extends any = any
+>(
+  callback: (body: ProofType<A>, params: ProofType<B>) => Promise<R>
+) => (event: APIGatewayProxyEvent, _context: Context) =>
+  useBody(body)((b) => useParams(params)((p) => callback(b, p))(event, _context))(event, _context)
 
 type HTTPMethods = 'GET' | 'POST' | 'PUT' | 'DELETE'
 

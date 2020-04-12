@@ -1017,6 +1017,13 @@
     jest-diff "^25.1.0"
     pretty-format "^25.1.0"
 
+"@types/jsonwebtoken@^8.3.9":
+  version "8.3.9"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.9.tgz#48da9a49997e4eb046733e6878f583d7448f0594"
+  integrity sha512-00rI8GbOKuRtoYxltFSRTVUXCRLbuYwln2/nUMPtFU9JGS7if+nnmLjeoFGmqsNCmblPLAaeQ/zMLVsHr6T5bg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/lodash@^4.14.123":
   version "4.14.149"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
@@ -7772,10 +7779,10 @@ serverless-dynamodb-local@^0.2.39:
     dynamodb-localhost "0.0.9"
     lodash "^4.17.0"
 
-serverless-offline@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-6.1.2.tgz#1c0705adffe1a3868945a9fb2aec56362c0cec34"
-  integrity sha512-uPphAkEWivs6wdSwS2AFmqW0wTy2CU5vlE9Q0GJI4bjheeormasEw40dDWBnODufGPEI8JcKmh2tlnzxkLj/7Q==
+serverless-offline@^6.1.4:
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/serverless-offline/-/serverless-offline-6.1.4.tgz#506662526fdd9d640de5bf802573171ce0df67a3"
+  integrity sha512-HDvFlPFZA0Pwr3EqS6bQ0zakxcF94+GyEJNM8TRsneOqDr1Wx6kFxBt5cCCzkCUt5RVsmFoHBSAu942N5XVEUg==
   dependencies:
     "@hapi/boom" "^7.4.11"
     "@hapi/h2o2" "^8.3.2"

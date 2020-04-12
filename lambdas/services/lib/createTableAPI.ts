@@ -20,6 +20,8 @@ export default function createTableAPI<T extends { [x: string]: any } & { id: st
     updated_at: new Date().toISOString(),
   })
   return {
+    TableName,
+    client,
     get: <A extends (keyof T)[]>(attributes: A) =>
       client
         .scan({

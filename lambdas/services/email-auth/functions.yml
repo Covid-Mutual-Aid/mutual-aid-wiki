@@ -1,0 +1,14 @@
+emailAuthLink:
+  handler: services/email-auth/handler.emailAuthLink
+  events:
+    - http:
+        method: post
+        path: email/send
+        cors: true
+verify:
+  handler: services/email-auth/handler.verify
+  events:
+    - http:
+        method: get
+        path: email/send
+        cors: true

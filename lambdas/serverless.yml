@@ -69,6 +69,7 @@ functions:
   - ${file(./services/google/functions.yml)}
   - ${file(./services/data/functions.yml)}
   - ${file(./services/searches/functions.yml)}
+  - ${file(./services/email-auth/functions.yml)}
 
 resources:
   Resources:
