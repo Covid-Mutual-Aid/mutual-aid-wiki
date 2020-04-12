@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 import P from 'ts-prove'
 
-import lambda, { useParams, useBody } from '../lib/lambdaUtils'
+import lambda, { useParams, useBody, useBoth } from '../lib/lambdaUtils'
 import { isSameGroup, isOffline } from '../lib/utils'
 import { Group } from '../lib/types'
 
@@ -9,6 +9,7 @@ import { addSheetRow } from '../google/sheets'
 import { groupCreated } from '../lib/slack'
 
 import db from '../lib/database'
+import { verify } from '../lib/jwt'
 
 // Helper
 const createNoDuplicates = (
@@ -29,7 +30,16 @@ export const getGroups = lambda(
 )
 
 export const updateGroup = lambda(
-  useBody(P.shape({ id: P.string }))((group) => db.groups.update(group))
+  useBoth(
+    P.shape({ id: P.string }),
+    P.shape({ token: P.string })
+  )((body, params) =>
+    verify(params.token).then((ids) =>
+      ids.includes(body.id)
+        ? db.groups.update(body)
+        : Promise.reject('You are not verified to edit this group')
+    )
+  )
 )
 
 export const createGroup = lambda(

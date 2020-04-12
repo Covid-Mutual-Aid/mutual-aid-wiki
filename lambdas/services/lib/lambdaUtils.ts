@@ -10,11 +10,14 @@ const promiseProof = <T extends any>(proof: Proof<T>, arg: any): Promise<T> =>
     return rej((result as any)[0])
   })
 
-const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any) => (
-  event: APIGatewayProxyEvent,
-  context: Context
-): Promise<APIGatewayProxyResult> =>
-  new Promise((res) => res(callback(event, context)))
+const lambda = (
+  callback: (
+    this: { event: APIGatewayProxyEvent; context: Context },
+    event: APIGatewayProxyEvent,
+    context: Context
+  ) => any
+) => (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> =>
+  new Promise((res) => res(callback.bind({ event, context })(event, context)))
     .then((res) => ({
       statusCode: 200,
       body: JSON.stringify(res),
@@ -39,24 +42,26 @@ const lambda = (callback: (event: APIGatewayProxyEvent, context: Context) => any
 
 const prooveArgs = (selector: (event: APIGatewayProxyEvent) => any) => <T extends Proof<any>>(
   proof?: T
-) => <R extends any = any>(callback: (arg: ProofType<T>) => Promise<R>) => (
-  event: APIGatewayProxyEvent,
-  _context: Context
-) =>
+) => <R extends any = any>(
+  callback: (
+    this: { event: APIGatewayProxyEvent; context: Context },
+    arg: ProofType<T>
+  ) => Promise<R>
+) => (event: APIGatewayProxyEvent, context: Context) =>
   new Promise<ProofType<T>>((resolve, reject) => {
     const data = (selector(event) || {}) as ProofType<T>
     if (!proof || !isOffline()) return resolve(data)
     return promiseProof(proof, data).then(resolve).catch(reject)
-  }).then(callback)
+  }).then(callback.bind({ event, context }))
 
 export const useBody = prooveArgs((event) => JSON.parse(event.body || '{}'))
 export const useParams = prooveArgs((event) => event.queryStringParameters)
-export const useBoth = <A extends Proof<any>, B extends Proof<any>>(body: A, params: B) => <
-  R extends any = any
->(
-  callback: (body: ProofType<A>, params: ProofType<B>) => Promise<R>
-) => (event: APIGatewayProxyEvent, _context: Context) =>
-  useBody(body)((b) => useParams(params)((p) => callback(b, p))(event, _context))(event, _context)
+export const useBoth = <A extends Proof<any>, B extends Proof<any>>(body: A, params: B) => (
+  callback: (body: ProofType<A>, params: ProofType<B>) => any
+) => (event: APIGatewayProxyEvent, context: Context) =>
+  useBody(body)((b) =>
+    useParams(params)((p) => callback.bind({ event, context })(b, p))(event, context)
+  )(event, context)
 
 type HTTPMethods = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
