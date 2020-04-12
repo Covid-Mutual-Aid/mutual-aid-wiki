@@ -2,14 +2,13 @@ import { APIGatewayProxyEvent } from 'aws-lambda'
 import P from 'ts-prove'
 
 import lambda, { useParams, useBody, useBoth } from '../lib/lambdaUtils'
-import { isSameGroup, isOffline } from '../lib/utils'
-import { Group } from '../lib/types'
-
+import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
 import { groupCreated } from '../lib/slack'
-
-import db from '../lib/database'
+import { isSameGroup } from '../lib/utils'
+import { Group } from '../lib/types'
 import { verify } from '../lib/jwt'
+import db from '../lib/database'
 
 // Helper
 const createNoDuplicates = (
@@ -65,6 +64,14 @@ export const createGroup = lambda(
             ]) as any)
       )
       .then(() => groupCreated(group).then(() => group))
+  )
+)
+
+export const attachEmail = lambda(
+  useParams(P.shape({ id: P.string, email: P.string, token: P.string }))((params) =>
+    db.authkeys
+      .getById(params.token, ['association', 'id'])
+      .then((auth) => db.groups.update({ id: params.id, emails: [params.email] }))
   )
 )
 

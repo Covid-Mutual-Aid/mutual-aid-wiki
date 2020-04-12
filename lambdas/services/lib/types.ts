@@ -6,12 +6,6 @@ export type Group = {
   location_name: string
   location_coord: { lat: number; lng: number }
 }
-export type StoredGroup = Group & {
-  id: string
-  pub_id: string
-  created_at: number
-  updated_at: number
-}
 
 export type Search = {
   id: string
@@ -20,4 +14,7 @@ export type Search = {
   address: string
   coords: { lat: number; lng: number }
 }
-export type StoredSearch = Search & { id: string; created_at: number; updated_at: number }
+
+export type AuthKey =
+  | { id: string; access_type: 'ANY'; association: null }
+  | { id: string; access_type: 'TABLE' | 'TABLE_ITEM'; association: string }

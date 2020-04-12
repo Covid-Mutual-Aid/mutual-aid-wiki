@@ -10,11 +10,12 @@
     "sls": "serverless"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.0.0",
     "@slack/web-api": "^5.8.0",
+    "airtable": "^0.8.1",
     "axios": "^0.19.2",
     "googleapis": "^48.0.0",
     "jsonwebtoken": "^8.5.1",
-    "pusher": "^3.0.1",
     "serverless-stack-output": "^0.2.3",
     "source-map-support": "^0.5.10",
     "ts-prove": "^1.1.2",
@@ -25,6 +26,7 @@
     "preset": "ts-jest"
   },
   "devDependencies": {
+    "@types/airtable": "^0.5.7",
     "@types/aws-lambda": "^8.10.46",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^25.1.4",

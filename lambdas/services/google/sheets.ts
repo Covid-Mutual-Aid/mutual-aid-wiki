@@ -1,25 +1,18 @@
 import { google, sheets_v4 } from 'googleapis'
-import {
-  GOOGLE_API_KEY,
-  SPREADSHEET_ID,
-  SHEET_ID,
-  GOOGLE_PRIVATE_KEY,
-  GOOGLE_CLIENT_EMAIL,
-  uniqueBy,
-  isSameGroup,
-} from '../lib/utils'
+import { uniqueBy, isSameGroup } from '../lib/utils'
 import { Group } from '../lib/types'
+import ENV from '../lib/environment'
 
 export const sheets = google.sheets('v4')
 
-const spreadsheetId = SPREADSHEET_ID
+const spreadsheetId = ENV.SPREADSHEET_ID
 
 export const authorise = () =>
   Promise.resolve().then(() =>
     google.auth.getClient({
       credentials: {
-        private_key: GOOGLE_PRIVATE_KEY,
-        client_email: GOOGLE_CLIENT_EMAIL,
+        private_key: ENV.GOOGLE_PRIVATE_KEY,
+        client_email: ENV.GOOGLE_CLIENT_EMAIL,
       },
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     })
@@ -48,7 +41,7 @@ export const addRow = (
 
 export const getSheets = () =>
   sheets.spreadsheets
-    .get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
+    .get({ spreadsheetId, auth: ENV.GOOGLE_API_KEY, includeGridData: true })
     .then((spreadsheet) => (spreadsheet.data.sheets || []).map((x) => x.properties))
 
 export const getGroupRow = (group: Pick<Group, 'location_name' | 'name' | 'link_facebook'>) => {
@@ -66,13 +59,16 @@ export const getGroupRow = (group: Pick<Group, 'location_name' | 'name' | 'link_
 export const addSheetRow = (
   group: Pick<Group, 'location_name' | 'name' | 'link_facebook'>,
   sheetId?: string
-) => authorise().then((auth) => updateSheet(auth)(addRow(getGroupRow(group), sheetId || SHEET_ID)))
+) =>
+  authorise().then((auth) =>
+    updateSheet(auth)(addRow(getGroupRow(group), sheetId || (ENV.SHEET_ID as any)))
+  )
 
 export const getGroupsFromSheet = (sheetId?: string) =>
   sheets.spreadsheets
-    .get({ spreadsheetId, auth: GOOGLE_API_KEY, includeGridData: true })
+    .get({ spreadsheetId, auth: ENV.GOOGLE_API_KEY, includeGridData: true })
     .then((spreadsheet) =>
-      (spreadsheet.data.sheets || []).find((x) => x.properties?.sheetId === sheetId || SHEET_ID)
+      (spreadsheet.data.sheets || []).find((x) => x.properties?.sheetId === sheetId || ENV.SHEET_ID)
     )
     .then((x) => {
       const rowData = x && x.data && x.data[0] && x.data[0].rowData

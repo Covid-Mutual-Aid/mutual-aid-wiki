@@ -1,11 +1,7 @@
 import { DocumentClient, WriteRequest } from 'aws-sdk/clients/dynamodb'
 import { v4 as uuid } from 'uuid'
 
-type GetReturn<T extends { [x: string]: any }, A extends (keyof T)[]> = {
-  [Key in A[number]]: T[A[number]]
-}
-
-export default function createTableAPI<T extends { [x: string]: any } & { id: string }>({
+export default function createTableAPI<T extends { id: string }>({
   table,
   client,
 }: {
@@ -29,7 +25,7 @@ export default function createTableAPI<T extends { [x: string]: any } & { id: st
           ...(attributes ? { AttributesToGet: attributes as string[] } : {}),
         })
         .promise()
-        .then((x) => x.Items as GetReturn<T, A>[]),
+        .then((x) => x.Items as Pick<T, A[number]>[]),
 
     getById: <A extends (keyof T)[]>(id: string, attributes: A) =>
       client
@@ -39,7 +35,7 @@ export default function createTableAPI<T extends { [x: string]: any } & { id: st
           AttributesToGet: attributes as string[],
         })
         .promise()
-        .then((x) => x.Item as GetReturn<T, A>),
+        .then((x) => x.Item as Pick<T, A[number]>),
 
     create: (item: Omit<T, 'id'>) => {
       const Item = create(item)
@@ -58,7 +54,7 @@ export default function createTableAPI<T extends { [x: string]: any } & { id: st
           TableName,
           Key: { id: item.id },
           ExpressionAttributeValues: modifiedKeys.reduce(
-            (a, b) => ({ ...a, [`:${b}`]: item[b] }),
+            (a, b) => ({ ...a, [`:${b}`]: (item as any)[b] }),
             {}
           ),
           UpdateExpression: `SET ${modifiedKeys.reduce((a, b) => a + `, ${b} = :${b}`).slice(1)}`,

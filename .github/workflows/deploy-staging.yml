@@ -41,15 +41,21 @@ jobs:
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
           yarn sls deploy --verbose --stage staging
         env:
-          AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-          GOOGLE_API_KEY: '${{ secrets.GOOGLE_API_KEY }}'
-          SPREADSHEET_ID: '${{ secrets.SPREADSHEET_ID }}'
-          SHEET_ID: '${{ secrets.SHEET_ID }}'
-          GOOGLE_PRIVATE_KEY: '${{ secrets.GOOGLE_PRIVATE_KEY }}'
-          GOOGLE_CLIENT_EMAIL: '${{ secrets.GOOGLE_CLIENT_EMAIL }}'
-          PUSHER_KEY: '${{ secrets.PUSHER_KEY }}'
-          PUSHER_SECRET: '${{ secrets.PUSHER_SECRET }}'
+          # AWS
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:
+            ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            # Google
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          # Airtable
+          AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
+          AIRTABLE_ATTACH_EMAIL_BASE: ${{ secrets.AIRTABLE_ATTACH_EMAIL_BASE }}
+          # other
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
       - name: 'Run intergration tests'
         run: 'yarn test:e2e'

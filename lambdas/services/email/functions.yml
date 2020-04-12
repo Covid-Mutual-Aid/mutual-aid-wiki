@@ -1,0 +1,23 @@
+emailEditGroupLink:
+  handler: services/email/handler.emailEditGroupLink
+  events:
+    - http:
+        method: post
+        path: email/editgroup
+        cors: true
+
+attachEmailToGroup:
+  handler: services/email/handler.attachEmailToGroup
+  events:
+    - http:
+        method: post
+        path: email/attachemail
+        cors: true
+
+getEvent:
+  handler: services/email/handler.getEvent
+  events:
+    - http:
+        method: get
+        path: temp
+        cors: true

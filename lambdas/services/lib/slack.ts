@@ -1,8 +1,8 @@
 import { WebClient, ChatPostMessageArguments } from '@slack/web-api'
-import { SLACK_API_TOKEN } from './utils'
+import env from '../lib/environment'
 import { Group } from './types'
 
-const slackClient = new WebClient(SLACK_API_TOKEN)
+const slackClient = new WebClient(env.SLACK_API_TOKEN)
 
 export const messageSlack = (text: string, blocks: ChatPostMessageArguments['blocks'] = []) =>
   slackClient.chat.postMessage({
