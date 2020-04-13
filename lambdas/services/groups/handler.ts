@@ -31,6 +31,7 @@ export const getGroups = lrx((req$) =>
   )
 )
 
+// /group/update?token={ jwt }
 export const updateGroup = lrx((req$) =>
   req$.pipe(
     authorise$,
@@ -41,6 +42,7 @@ export const updateGroup = lrx((req$) =>
   )
 )
 
+// /group/create
 export const createGroup = lrx((req$) =>
   req$.pipe(
     body$,
@@ -58,6 +60,7 @@ export const createGroup = lrx((req$) =>
   )
 )
 
+// /group/associate?token={ jwt }&email=""&id=""
 export const associateEmail = lrx((req$) =>
   req$.pipe(
     authorise$,

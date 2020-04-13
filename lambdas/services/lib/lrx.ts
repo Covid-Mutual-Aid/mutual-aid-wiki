@@ -8,11 +8,14 @@ import { isOffline } from './environment'
 export type LRXReq = { event: APIGatewayProxyEvent; context: Context }
 
 // Lambda Observable wrapper
-const lambda = (req$: (x: Observable<LRXReq>) => Observable<APIGatewayProxyResult>) => (
-  event: APIGatewayProxyEvent,
-  context: Context
-) =>
-  req$(of({ event, context }))
+const lambda = (
+  req$: (
+    x: Observable<LRXReq>,
+    event: APIGatewayProxyEvent,
+    context: Context
+  ) => Observable<APIGatewayProxyResult>
+) => (event: APIGatewayProxyEvent, context: Context) =>
+  req$(of({ event, context }), event, context)
     .toPromise()
     .catch((err) =>
       Promise.resolve(
