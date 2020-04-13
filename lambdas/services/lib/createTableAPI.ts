@@ -1,5 +1,14 @@
 import { DocumentClient, WriteRequest } from 'aws-sdk/clients/dynamodb'
 import { v4 as uuid } from 'uuid'
+import { is } from 'ts-prove'
+
+const toExp = (x: any): any => {
+  if (is.string(x)) return { S: x }
+  if (is.number(x)) return { N: x }
+  if (Array.isArray(x)) return { L: x.map(toExp) }
+  if (x && typeof x === 'object')
+    return { M: Object.keys(x).reduce((all, key) => ({ ...all, [key]: toExp(x[key]) }), {}) }
+}
 
 export default function createTableAPI<T extends { id: string }>({
   table,
@@ -49,19 +58,27 @@ export default function createTableAPI<T extends { id: string }>({
 
     update: (item: Partial<T> & { id: string }) => {
       const modifiedKeys = Object.keys(item).filter((x) => x !== 'id')
+      const param = {
+        TableName,
+        Key: { id: item.id },
+        ExpressionAttributeValues: modifiedKeys.reduce(
+          (a, b) => ({ ...a, [`:${b}`]: (item as any)[b] }),
+          { [':updated_at']: Date.now() }
+        ),
+        ExpressionAttributeNames: modifiedKeys.reduce(
+          (all, key) => ({ ...all, [`#${key}`]: key }),
+          { ['#updated_at']: 'updated_at' }
+        ),
+        UpdateExpression: `SET ${modifiedKeys.reduce(
+          (a, b) => a + `, #${b} = :${b}`,
+          '#updated_at = :updated_at'
+        )}`,
+        ReturnValues: 'ALL_NEW',
+      }
       return client
-        .update({
-          TableName,
-          Key: { id: item.id },
-          ExpressionAttributeValues: modifiedKeys.reduce(
-            (a, b) => ({ ...a, [`:${b}`]: (item as any)[b] }),
-            {}
-          ),
-          UpdateExpression: `SET ${modifiedKeys.reduce((a, b) => a + `, ${b} = :${b}`).slice(1)}`,
-          ReturnValues: 'ALL_NEW',
-        })
+        .update(param)
         .promise()
-        .then((x) => x.$response.data)
+        .then((x) => (x.$response.data as any).Attributes)
     },
 
     delete: (id: string) => client.delete({ TableName, Key: { id } }).promise(),

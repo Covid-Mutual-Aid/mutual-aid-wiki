@@ -1,68 +1,130 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { GoogleMap, Marker, LoadScript, GroundOverlay } from '@react-google-maps/api'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import { Group } from '../utils/types'
-
+import { Group, GroupWithEmails } from '../utils/types'
+import { InputGroup } from '../styles/styles'
+import styled from 'styled-components'
 import Location from '../components/Location'
-import EditGroup from '../components/EditGroup'
 
-// const useGroup = () => {
-//   const [name, setName] = useState('')
-// }
-
-// {
-//     "id": "0",
-//     "name": "Group name",
-//     "link_facebook": "Facebook group/website (Link/URL) Please only provide one link",
-//     "location_name": "Location",
-//     "location_coord": {
-//       "lat": 37.0908236,
-//       "lng": -95.7127471
-//     }
-//   }
-
-const useGroup = () => {
-  const [group, setGroup] = useState<null | (Omit<Group, 'id'> & { emails: string[] })>(null)
-  const { id } = useParams<{ id: string }>()
+const CreateGroup = () => {
   const request = useRequest()
-  const mounted = useRef(true)
+  const history = useHistory()
+  const { id, token } = useParams<{ id: string; token: string }>()
 
-  const get = () => request(`/group/get?id=${id}`).then((grp) => mounted.current && setGroup(grp))
-  const save = () =>
-    request(`/group/update`, { method: 'POST', body: JSON.stringify({ ...group, id }) }).then(get)
+  const [email, setEmail] = useState('')
+  const [group, setGroup] = useState<GroupWithEmails>({
+    name: '',
+    emails: [],
+    location_name: '',
+    link_facebook: '',
+    location_coord: {
+      lat: 0,
+      lng: 0,
+    },
+  })
+  const [sucessModal, setSuccessModal] = useState(false)
 
   useEffect(() => {
-    get()
-    return () => void (mounted.current = false)
-  }, [])
+    request(`/group/get?id=${id}`).then(setGroup)
+  }, [id, request])
   console.log(group)
-  return { group, setGroup, save }
-}
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    request(`/group/update?token=${token}`, {
+      method: 'POST',
+      body: JSON.stringify(group),
+    }).then((x) => {
+      console.log(x)
+      // setSuccessModal(true)
+      // return new Promise((res) => setTimeout(res, 1000))
+    })
+    // .then(() => history.replace('/'))
+  }
 
-const EditGroupPage = ({}) => {
-  const { group, setGroup, save } = useGroup()
-
-  if (!group) return null
   return (
-    <div style={{ display: 'grid', grid: '20rem 1fr 1fr / 1fr', height: '100%', width: '100%' }}>
-      {/* <Form
-        style={{ width: '100%', padding: '1.5rem' }}
-        onSubmit={(e: any) => {
-          e.preventDefault()
-          save()
-        }}
-      >
-        <div style={{ maxWidth: '50rem', margin: '0 auto' }}>
-          <EditGroup initGroup={group} onChange={setGroup} />
-          <div>
-            <button type="submit">save</button>
-          </div>
+    <Wrapper>
+      {sucessModal ? (
+        <div style={{ textAlign: 'center', padding: '4rem', color: '#28a745' }}>
+          <h3>Thanks for submitting your group</h3>
         </div>
-      </Form> */}
-    </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <h4>Enter group information</h4>
+          <InputGroup>
+            <input
+              placeholder="Group name"
+              value={group.name}
+              onChange={(e) => setGroup({ ...group, name: e.target.value })}
+            />
+          </InputGroup>
+          <h4>Enter any emails you want to associate with this group</h4>
+          <InputGroup>
+            <input
+              placeholder="Enter an email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setGroup((x) => ({ ...group, emails: [...x.emails, email] }))
+                setEmail('')
+              }}
+            >
+              add
+            </button>
+          </InputGroup>
+          {group.emails.map((email, i) => (
+            <InputGroup style={{ margin: '1rem 0' }} key={email + i}>
+              <p style={{ padding: '0 .3rem', width: '100%' }}>{email}</p>
+              <button
+                type="button"
+                onClick={() =>
+                  setGroup((x) => ({ ...group, emails: x.emails.filter((y) => y !== email) }))
+                }
+              >
+                remove
+              </button>
+            </InputGroup>
+          ))}
+
+          <h4>Enter link to the group</h4>
+          <InputGroup>
+            <input
+              placeholder="http..."
+              value={group.link_facebook}
+              onChange={(e) => setGroup({ ...group, link_facebook: e.target.value })}
+            />
+          </InputGroup>
+          <h4>Enter location for the group</h4>
+
+          <Location
+            onChange={({ name, lat, lng }) => {
+              setGroup((x) => ({ ...group, location_name: name, location_coord: { lat, lng } }))
+            }}
+            placeholder={'e.g "SE14 4NW"'}
+          />
+          <button type="submit">submit</button>
+        </form>
+      )}
+    </Wrapper>
   )
 }
 
-export default EditGroupPage
+export default CreateGroup
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  form {
+    width: 100%;
+    max-width: 30rem;
+  }
+  h4 {
+    padding: 1.5rem 0rem 0.5rem 1rem;
+    margin: 0;
+  }
+`

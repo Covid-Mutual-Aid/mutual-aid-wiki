@@ -1,6 +1,6 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
-import { Group, Search, AuthKey } from '../lib/types'
+import { Group, Search } from '../lib/types'
 import createTableAPI from './createTableAPI'
 import { isOffline, tables } from './environment'
 
@@ -23,15 +23,9 @@ export const searchesdb = createTableAPI<Search>({
   client: dynamoClient,
 })
 
-export const authkeysdb = createTableAPI<AuthKey>({
-  table: tables.AUTHENTICATED_KEYS_TABLE as string,
-  client: dynamoClient,
-})
-
 const db = {
   search: searchesdb,
   groups: groupsdb,
-  authkeys: authkeysdb,
 }
 
 export default db

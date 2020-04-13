@@ -1,14 +1,12 @@
+import { switchMap } from 'rxjs/operators'
+import { sign } from 'jsonwebtoken'
 import P from 'ts-prove'
 
-import lambda, { useBody } from '../lib/lambdaUtils'
-import airtable from '../lib/external/airtable'
+import lrx, { response$, body$ } from '../lib/lrx'
+import { authorise$ } from '../lib/authenticate'
+import { prove$ } from '../lib/proofs'
 import ENV from '../lib/environment'
 import db from '../lib/database'
-import lrx, { response$, body$ } from '../lib/lrx'
-import { prove$ } from '../lib/proofs'
-import { switchMap } from 'rxjs/operators'
-import { sign } from '../lib/external/jwt'
-import { authorise$ } from '../lib/authenticate'
 
 export const requestGroupEdit = lrx((req$, event) =>
   req$.pipe(
@@ -21,13 +19,10 @@ export const requestGroupEdit = lrx((req$, event) =>
         .then((grps) => (grps.length === 0 ? Promise.reject('No group with email exists') : grps))
     ),
     switchMap((grps) =>
-      grps.map(
-        (grp) =>
-          `${event.headers.origin}/group/${grp.id}/edit?token=${sign(
-            { id: grp.id },
-            { expiresIn: '1h' }
-          )}`
-      )
+      grps.map((grp) => {
+        const token = sign({ id: grp.id }, ENV.JWT_SECRET, { expiresIn: '1h' })
+        return `https://${event.headers['x-forwarded-host']}/edit/${grp.id}/${token}`
+      })
     ),
     response$
   )

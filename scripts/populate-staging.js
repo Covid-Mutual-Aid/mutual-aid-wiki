@@ -9,13 +9,6 @@ const groupBy = (n, items) =>
 const groupsFile = path.join(__dirname, 'groups-table.json')
 const awsDynamodb = `aws --profile covid --region eu-west-2 dynamodb`
 
-child.execSync(`${awsDynamodb} scan --table-name dev-groups10 > ${groupsFile}`)
-const groups = require(groupsFile)
-
-const batches = groupBy(25, groups.Items).map((grps) => ({
-  'staging-groups10': grps.map((Item) => ({ PutRequest: { Item } })),
-}))
-
 const writeBatch = (batch, i) => {
   const fileP = path.join(__dirname, `batch-${i}.json`)
   return util
@@ -27,4 +20,12 @@ const writeBatch = (batch, i) => {
     .then(() => util.promisify(fs.unlink)(fileP))
 }
 
-Promise.all(batches.map(writeBatch))
+util
+  .promisify(child.exec)(`${awsDynamodb} scan --table-name dev-groups10 > ${groupsFile}`)
+  .then(() => require(groupsFile))
+  .then((groups) =>
+    groupBy(25, groups.Items).map((grps) => ({
+      'staging-groups10': grps.map((Item) => ({ PutRequest: { Item } })),
+    }))
+  )
+  .then((batches) => Promise.all(batches.map(writeBatch)))

@@ -24,8 +24,25 @@ const createNoDuplicates = (
 
 export const getGroups = lrx((req$) =>
   req$.pipe(
-    switchMap(() =>
-      db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails'])
+    params$,
+    switchMap((params) =>
+      params && params.id
+        ? db.groups.getById(params.id as string, [
+            'id',
+            'name',
+            'link_facebook',
+            'location_name',
+            'location_coord',
+            'emails',
+          ])
+        : db.groups.get([
+            'id',
+            'name',
+            'link_facebook',
+            'location_name',
+            'location_coord',
+            'emails',
+          ])
     ),
     response$
   )
