@@ -6,6 +6,9 @@ name: Deploy Production
 # events but only for the master branch
 on:
   push:
+    paths:
+      - .github/**
+      - lambdas/**
     branches:
       - master
 
