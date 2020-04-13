@@ -33,16 +33,8 @@ export const getGroups = lrx((req$) =>
             'link_facebook',
             'location_name',
             'location_coord',
-            'emails',
           ])
-        : db.groups.get([
-            'id',
-            'name',
-            'link_facebook',
-            'location_name',
-            'location_coord',
-            'emails',
-          ])
+        : db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord'])
     ),
     response$
   )
