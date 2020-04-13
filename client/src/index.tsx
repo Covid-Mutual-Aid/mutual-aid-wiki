@@ -18,10 +18,8 @@ import StateProvider from './contexts/StateContext'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
-const baseUrl = (window as any).endpoint || '/dev'
-
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
-  fetch(baseUrl + input, init).then((x) => x.json())
+  fetch((window as any).endpoint || '/dev' + input, init).then((x) => x.json())
 
 const Render = () => (
   <Router>
