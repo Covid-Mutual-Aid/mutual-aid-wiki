@@ -22,7 +22,7 @@ const SecondaryPage = ({ title, children }: { title: string; children: ReactChil
       <div className="wrapper">
         <div className="nav-contents">
           <Nav>
-            <Link to="/newlayout">{icons('chevronL')}</Link>
+            <Link to="/">{icons('chevronL')}</Link>
           </Nav>
           <h3>{title}</h3>
           <div className="section-list">

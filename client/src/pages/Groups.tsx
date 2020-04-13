@@ -94,7 +94,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     cursor: pointer;
     border-left: 1px solid rgba(0, 0, 0, 0.06);
     /* transform: translateX(${(p) => (p.sidebar ? '0rem' : '4rem')}); */
-    
+
     div {
       height: 1rem;
     }

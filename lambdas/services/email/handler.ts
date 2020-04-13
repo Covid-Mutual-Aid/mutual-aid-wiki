@@ -9,7 +9,7 @@ import { prove$ } from '../lib/proofs'
 import { switchMap } from 'rxjs/operators'
 import { sign } from '../lib/external/jwt'
 
-export const sendEditGoupLink = lrx((req$, event) =>
+export const requestGroupEdit = lrx((req$, event) =>
   req$.pipe(
     body$,
     prove$(P.shape({ email: P.string })),
@@ -32,37 +32,21 @@ export const sendEditGoupLink = lrx((req$, event) =>
   )
 )
 
-// lambda(
-//   useBody(P.shape({ email: P.string }))(async function (body) {
+// export const attachEmailToGroup = lambda(
+//   useBody(P.shape({ email: P.string, id: P.string }))(function (body) {
 //     return db.groups
-//       .get(['emails', 'id'])
-//       .then((grps) => grps.filter((x) => x.emails?.includes(body.email)))
-//       .then((grps) => (grps.length === 0 ? Promise.reject('No group with email exists') : grps))
-//       .then((grps) => signForGroups(grps.map((x) => x.id) as string[]))
-//       .then((token) =>
-//         sendEmail.editGroup(
-//           body.email,
-//           (this.event.headers.origin || '{NO ORIGIN}') + `/group/edit?token=${token}`
-//         )
+//       .getById(body.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
+//       .then((group) =>
+//         db.authkeys
+//           .create({ access_type: 'TABLE_ITEM', association: group.id as string })
+//           .then((auth) => ({ group, auth }))
+//       )
+//       .then(({ group, auth }) =>
+//         airtable.attachEmailRequest({
+//           confirmLink: `${this.event.headers.Host}/${ENV.STAGE}/group/addemail?id=${group.id}&email=${body.email}&token=${auth.id}`,
+//           email: body.email,
+//           group,
+//         })
 //       )
 //   })
 // )
-
-export const attachEmailToGroup = lambda(
-  useBody(P.shape({ email: P.string, id: P.string }))(function (body) {
-    return db.groups
-      .getById(body.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
-      .then((group) =>
-        db.authkeys
-          .create({ access_type: 'TABLE_ITEM', association: group.id as string })
-          .then((auth) => ({ group, auth }))
-      )
-      .then(({ group, auth }) =>
-        airtable.attachEmailRequest({
-          confirmLink: `${this.event.headers.Host}/${ENV.STAGE}/group/addemail?id=${group.id}&email=${body.email}&token=${auth.id}`,
-          email: body.email,
-          group,
-        })
-      )
-  })
-)

@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
 
 import InfoBox from './InfoBox'
 
-import { defaultState, useMap, useMapControls } from '../../contexts/MapProvider'
-import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
+import { defaultState, useMap } from '../../contexts/MapProvider'
+import { usePlaceMethod } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
 import { gtag } from '../../utils/gtag'
 

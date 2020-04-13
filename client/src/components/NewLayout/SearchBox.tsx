@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+
 import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
-import { useData } from '../../contexts/DataProvider'
 import icons from '../../utils/icons'
 
 const SearchBox = () => {
@@ -32,7 +32,7 @@ const SearchBox = () => {
         </SearchGroup>
       </form>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Link to="/create-group">
+        <Link to="/add-group">
           <p className="add-group">Or add a group</p>
         </Link>
       </div>

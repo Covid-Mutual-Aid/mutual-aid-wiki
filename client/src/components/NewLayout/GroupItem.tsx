@@ -1,8 +1,9 @@
 import React from 'react'
-import { Group } from '../../utils/types'
 import styled from 'styled-components'
-import tidyLink from '../../utils/tidyLink'
+
 import { iconFromUrl } from '../../utils/icons'
+import tidyLink from '../../utils/tidyLink'
+import { Group } from '../../utils/types'
 
 const GroupItem = ({
   group,

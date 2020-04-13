@@ -1,55 +1,31 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import React from 'react'
 
+import Groups from './pages/Groups'
+import About from './pages/About'
+import Help from './pages/Help'
+
+import EditGroup from './pages/EditGroup'
+import AddGroup from './pages/AddGroup'
 import Layout from './pages/Layout'
-import CreateGroupPage from './pages/CreateGroupPage'
-import GroupsMapPage from './pages/GroupsMapPage'
-import EditGroupPage from './pages/EditGroupPage'
-import SearchesPage from './pages/SearchesPage'
 
 import HeatMap from './components/HeatMap'
 
-import NewLayout from './pages/NewLayout'
-import HelpPage from './pages/HelpPage'
-import AboutPage from './pages/AboutPage'
+const withLayout = (Comp: React.FC) => <T extends any>(props: T) => (
+  <Layout>
+    <Comp {...props} />
+  </Layout>
+)
 
 function App() {
   return (
     <Switch>
-      <Route path="/newlayout">
-        <NewLayout />
-      </Route>
-      <Route path="/help">
-        <HelpPage />
-      </Route>
-      <Route path="/about">
-        <AboutPage />
-      </Route>
-      <Route path="/heatmap">
-        <Layout>
-          <HeatMap />
-        </Layout>
-      </Route>
-      <Route path="/create-group">
-        <Layout>
-          <CreateGroupPage />
-        </Layout>
-      </Route>
-      <Route path="/edit-group/:id">
-        <Layout>
-          <EditGroupPage />
-        </Layout>
-      </Route>
-      <Route path="/searches">
-        <Layout>
-          <SearchesPage />
-        </Layout>
-      </Route>
-      <Route path="/">
-        <Layout>
-          <GroupsMapPage />
-        </Layout>
-      </Route>
+      <Route path="/help" component={Help} />
+      <Route path="/about" component={About} />
+      <Route path="/heatmap" component={HeatMap} />
+      <Route path="/add-group" component={withLayout(AddGroup)} />
+      <Route path="/group/:groupId/edit" component={withLayout(EditGroup)} />
+      <Route path="/" component={Groups} />
     </Switch>
   )
 }

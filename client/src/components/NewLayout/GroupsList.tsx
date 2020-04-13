@@ -1,12 +1,10 @@
-import React, { useState, useLayoutEffect, useReducer } from 'react'
 import haversineDistance from 'haversine-distance'
+import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
 import { useData } from '../../contexts/DataProvider'
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 
-import { iconFromUrl } from '../../utils/icons'
-import tidyLink from '../../utils/tidyLink'
 import GroupItem from './GroupItem'
 
 const GroupsList = () => {
@@ -65,18 +63,5 @@ const Styles = styled.div`
     margin: 0 auto;
   }
 `
-
-const useElementBounds = <T extends HTMLElement>(ref: React.RefObject<T>, init = 100) => {
-  const [bounds, setBounds] = useState<{ width: number; height: number }>({
-    width: init,
-    height: init,
-  })
-  useLayoutEffect(() => {
-    if (!ref.current) return
-    setBounds({ height: ref.current.offsetHeight, width: ref.current.offsetWidth })
-  }, [ref])
-
-  return bounds
-}
 
 export default GroupsList

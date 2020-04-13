@@ -34,10 +34,10 @@ const HeatMap = () => {
   useEffect(() => {
     // request('/search/location/get').then(console.log)
     fetch('https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev/search/location/get')
-      .then(x => x.json())
+      .then((x) => x.json())
       // .then(x => x.map((y: any) => new window.google.maps.LatLng(y.coord) as any))
       // .then(setSearches)
-      .then(searches => {
+      .then((searches) => {
         const coords = searches.map((x: any) => x.coords) as {
           lat: number
           lng: number
@@ -45,7 +45,7 @@ const HeatMap = () => {
 
         const grouped = coords.reduce((all, next) => {
           let isModified = false
-          const modified = all.map(x => {
+          const modified = all.map((x) => {
             if (haversine(x.coord, next) > 10000) return x
             isModified = true
             return { ...x, weight: x.weight + 5 }
@@ -54,14 +54,16 @@ const HeatMap = () => {
           return [...all, { weight: 2, coord: next }]
         }, [] as { weight: number; coord: { lat: number; lng: number } }[])
 
-        setSearches(grouped.map(x => ({ ...x, location: new window.google.maps.LatLng(x.coord) })))
+        setSearches(
+          grouped.map((x) => ({ ...x, location: new window.google.maps.LatLng(x.coord) }))
+        )
       })
   }, [])
   console.log({ searches })
   if (!isLoaded) return null
   return (
     <GoogleMap
-      ref={ref => setMap(ref)}
+      ref={(ref) => setMap(ref)}
       zoom={6}
       center={{ lat: 55.3781, lng: -3.436 }}
       mapContainerStyle={{

@@ -1,9 +1,8 @@
 import React from 'react'
+import styled from 'styled-components'
+
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
-import styled from 'styled-components'
-import tidyLink from '../../utils/tidyLink'
-import { iconFromUrl } from '../../utils/icons'
 import GroupItem from './GroupItem'
 
 import { MOBILE_BREAKPOINT } from '../../utils/CONSTANTS'
