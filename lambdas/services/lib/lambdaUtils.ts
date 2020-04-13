@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from 'aws-lambda
 import { Proof, isProved, ProofType } from 'ts-prove'
 
 import { isOffline } from './environment'
-import { failedRequest } from './slack'
+import { failedRequest } from './external/slack'
 
 const promiseProof = <T extends any>(proof: Proof<T>, arg: any): Promise<T> =>
   new Promise((res, rej) => {

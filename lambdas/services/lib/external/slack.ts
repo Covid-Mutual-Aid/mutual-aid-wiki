@@ -1,6 +1,6 @@
 import { WebClient, ChatPostMessageArguments } from '@slack/web-api'
-import env from '../lib/environment'
-import { Group } from './types'
+import env from '../environment'
+import { Group } from '../types'
 
 const slackClient = new WebClient(env.SLACK_API_TOKEN)
 

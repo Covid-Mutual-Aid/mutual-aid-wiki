@@ -1,9 +1,9 @@
 import P from 'ts-prove'
 
 import lambda, { useBody } from '../lib/lambdaUtils'
-import { signForGroups } from '../lib/jwt'
-import airtable from '../lib/airtable'
-import sendEmail from '../lib/sendgrid'
+import { signForGroups } from '../lib/external/jwt'
+import airtable from '../lib/external/airtable'
+import sendEmail from '../lib/external/sendgrid'
 import ENV from '../lib/environment'
 import db from '../lib/database'
 

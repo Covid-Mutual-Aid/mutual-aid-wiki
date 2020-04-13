@@ -1,7 +1,7 @@
 import Airtable from 'airtable'
 
-import env from './environment'
-import { Group } from './types'
+import env from '../environment'
+import { Group } from '../types'
 
 const attachEmailBase = new Airtable({ apiKey: env.AIRTABLE_ATTACH_EMAIL_KEY }).base(
   env.AIRTABLE_ATTACH_EMAIL_BASE

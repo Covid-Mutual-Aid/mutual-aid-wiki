@@ -4,11 +4,13 @@ import P from 'ts-prove'
 import lambda, { useParams, useBody, useBoth } from '../lib/lambdaUtils'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
-import { groupCreated } from '../lib/slack'
+import { groupCreated } from '../lib/external/slack'
 import { isSameGroup } from '../lib/utils'
 import { Group } from '../lib/types'
-import { verify } from '../lib/jwt'
+import { verify } from '../lib/external/jwt'
 import db from '../lib/database'
+import l from '../lib/lrx'
+import { map, switchMap } from 'rxjs/operators'
 
 // Helper
 const createNoDuplicates = (
@@ -22,9 +24,13 @@ const createNoDuplicates = (
         : (db.groups.create(group) as any)
     )
 
-export const getGroups = lambda(
-  useParams()((x) =>
-    db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails'])
+export const getGroups = l((req$) =>
+  req$.pipe(
+    l.params,
+    switchMap((x) =>
+      db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails'])
+    ),
+    map((groups) => ({ statusCode: 200, body: JSON.stringify(groups) }))
   )
 )
 
