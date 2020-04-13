@@ -57,6 +57,7 @@ jobs:
           # other
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: 'Update client endpoint'
         run: 'node scripts/netlify-snippets.js'

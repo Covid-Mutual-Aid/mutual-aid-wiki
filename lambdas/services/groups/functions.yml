@@ -7,14 +7,6 @@ getGroups:
         cors: true
   timeout: 15
 
-updateGroup:
-  handler: services/groups/handler.updateGroup
-  events:
-    - http:
-        method: post
-        path: group/update
-        cors: true
-
 createGroup:
   handler: services/groups/handler.createGroup
   events:
@@ -23,23 +15,18 @@ createGroup:
         path: group/create
         cors: true
 
-deleteGroup:
-  handler: services/groups/handler.removeGroup
+updateGroup:
+  handler: services/groups/handler.updateGroup
   events:
     - http:
         method: post
-        path: group/delete
+        path: group/update
         cors: true
 
-createGroupsBatch:
-  handler: services/groups/handler.createGroupsBatch
-  timeout: 100
+associateEmail:
+  handler: services/groups/handler.associateEmail
   events:
     - http:
         method: post
-        path: group/createbatch
+        path: group/associate
         cors: true
-
-deleteAll:
-  handler: services/groups/handler.deleteAll
-  timeout: 100

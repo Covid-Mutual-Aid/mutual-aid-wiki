@@ -1,9 +1,10 @@
-export const isOffline = () => !!process.env.OFFLINE || !!process.env.IS_LOCAL
-
 const env = process.env
 
+export const isOffline = () => !!env.OFFLINE || !!env.IS_LOCAL
+
 export const other = {
-  STAGE: env.STAGE,
+  STAGE: env.STAGE as string,
+  JWT_SECRET: env.JWT_SECRET as string,
   SLACK_API_TOKEN: env.SLACK_API_TOKEN as string,
   SEND_GRID_API_KEY: env.SEND_GRID_API_KEY as string,
 }

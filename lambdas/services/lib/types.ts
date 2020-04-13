@@ -16,5 +16,7 @@ export type Search = {
 }
 
 export type AuthKey =
-  | { id: string; access_type: 'ANY'; association: null }
-  | { id: string; access_type: 'TABLE' | 'TABLE_ITEM'; association: string }
+  | { type: 'EXPIRE' }
+  | { type: 'ONCE' }
+  | { id: string; access_type: 'ANY' }
+  | { id: string; access_type: 'ITEM'; table: string; itemId: string }

@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from 'aws-lambda'
-import { Proof, ProofType, isProved } from 'ts-prove'
-import { of, Observable, throwError } from 'rxjs'
-import { map, mergeMap } from 'rxjs/operators'
-import { isOffline } from './environment'
+import { of, Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
+
 import { failedRequest } from './external/slack'
+import { isOffline } from './environment'
 
 export type LRXReq = { event: APIGatewayProxyEvent; context: Context }
 
@@ -41,12 +41,6 @@ export const response$ = map((groups) => ({
   headers: { 'Access-Control-Allow-Origin': '*' },
   body: JSON.stringify(groups),
 }))
-
-export const prove = <P extends Proof<any>>(proof: P) =>
-  mergeMap<unknown, Observable<ProofType<P>>>((x) => {
-    const result = proof(x)
-    return isProved(result) ? of(result[1] as ProofType<P>) : throwError(result[0])
-  })
 
 const lrx = lambda
 

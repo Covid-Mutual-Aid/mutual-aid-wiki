@@ -1,16 +1,14 @@
-import { APIGatewayProxyEvent } from 'aws-lambda'
+import { switchMap } from 'rxjs/operators'
 import P from 'ts-prove'
 
-import lambda, { useParams, useBody, useBoth } from '../lib/lambdaUtils'
+import lrx, { response$, body$, params$ } from '../lib/lrx'
+import { authorise$ } from '../lib/authenticate'
+import { proofs, prove$ } from '../lib/proofs'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
-import { groupCreated } from '../lib/external/slack'
 import { isSameGroup } from '../lib/utils'
 import { Group } from '../lib/types'
-import { verify } from '../lib/external/jwt'
 import db from '../lib/database'
-import lrx, { response$ } from '../lib/lrx'
-import { map, switchMap } from 'rxjs/operators'
 
 // Helper
 const createNoDuplicates = (
@@ -33,69 +31,45 @@ export const getGroups = lrx((req$) =>
   )
 )
 
-export const updateGroup = lambda(
-  useBoth(
-    P.shape({ id: P.string }),
-    P.shape({ token: P.string })
-  )((body, params) =>
-    verify(params.token).then((ids) =>
-      ids.includes(body.id)
-        ? db.groups.update(body)
-        : Promise.reject('You are not verified to edit this group')
-    )
+export const updateGroup = lrx((req$) =>
+  req$.pipe(
+    authorise$,
+    body$,
+    prove$(P.shape({ id: P.string })),
+    switchMap((grp) => db.groups.update(grp)),
+    response$
   )
 )
 
-export const createGroup = lambda(
-  useBody(
-    P.shape({
-      name: P.string,
-      emails: P.array(P.string),
-      link_facebook: P.string,
-      location_name: P.string,
-      location_coord: P.shape({
-        lat: P.number,
-        lng: P.number,
-      }),
-    })
-  )((group) =>
-    Promise.resolve()
-      .then(() =>
+export const createGroup = lrx((req$) =>
+  req$.pipe(
+    body$,
+    prove$(proofs.groupCreation),
+    switchMap((group) =>
+      createNoDuplicates(group).then((res) =>
         isOffline()
-          ? (createNoDuplicates(group) as any)
-          : (Promise.all([
-              createNoDuplicates(group),
-              addSheetRow(group).catch((err) => console.log('ERROR adding group to sheet')),
-            ]) as any)
+          ? res
+          : addSheetRow(group)
+              .catch((err) => console.log('ERROR adding group to sheet'))
+              .then(() => res)
       )
-      .then(() => groupCreated(group).then(() => group))
+    ),
+    response$
   )
 )
 
-export const attachEmail = lambda(
-  useParams(P.shape({ id: P.string, email: P.string, token: P.string }))((params) =>
-    db.authkeys
-      .getById(params.token, ['association', 'id'])
-      .then((auth) => db.groups.update({ id: params.id, emails: [params.email] }))
+export const associateEmail = lrx((req$) =>
+  req$.pipe(
+    authorise$,
+    params$,
+    prove$(P.shape({ email: P.string, id: P.string })),
+    switchMap((data) =>
+      db.groups
+        .getById(data.id, ['emails'])
+        .then((res) =>
+          db.groups.update({ id: data.id, emails: [...((res && res.emails) || []), data.email] })
+        )
+    ),
+    response$
   )
-)
-
-export const createGroupsBatch = (event: APIGatewayProxyEvent) => {
-  const groups = JSON.parse(event.body || '{}')
-  return db.groups
-    .createBatch(groups)
-    .then((x) => ({
-      statusCode: 200,
-      body: 'DONE',
-      headers: { 'Access-Control-Allow-Origin': '*' },
-    }))
-    .catch((err) => ({
-      statusCode: 200,
-      body: err.message || err,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-    }))
-}
-
-export const deleteAll = lambda(() =>
-  db.groups.get(['id']).then((x) => db.groups.deleteBatch(x.map((y) => y.id)))
 )

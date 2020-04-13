@@ -8,7 +8,6 @@ custom:
   tables:
     GROUPS_TABLE: ${self:provider.stage}-groups10
     LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-search
-    AUTHENTICATED_KEYS_TABLE: ${self:provider.stage}-authenticated-keys
   output:
     file: ../stack.json
   dynamodb:
@@ -51,7 +50,6 @@ provider:
     # Tables
     GROUPS_TABLE: ${self:custom.tables.GROUPS_TABLE}
     LOCATION_SEARCHES_TABLE: ${self:custom.tables.LOCATION_SEARCHES_TABLE}
-    AUTHENTICATED_KEYS_TABLE: ${self:custom.tables.AUTHENTICATED_KEYS_TABLE}
     # Google
     GOOGLE_API_KEY: ${env:GOOGLE_API_KEY, file(env.json):GOOGLE_API_KEY}
     SPREADSHEET_ID: ${env:SPREADSHEET_ID, file(env.json):SPREADSHEET_ID}
@@ -64,6 +62,7 @@ provider:
     # other
     SEND_GRID_API_KEY: ${env:SEND_GRID_API_KEY, file(env.json):SEND_GRID_API_KEY}
     SLACK_API_TOKEN: ${env:SLACK_API_TOKEN, file(env.json):SLACK_API_TOKEN}
+    JWT_SECRET: ${env:JWT_SECRET, file(env.json):JWT_SECRET}
 
   iamRoleStatements:
     - Effect: Allow
@@ -111,17 +110,3 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.tables.LOCATION_SEARCHES_TABLE}
-    DynamoDbAuthenticatedKeys:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:custom.tables.AUTHENTICATED_KEYS_TABLE}
