@@ -9,8 +9,6 @@ import EditGroup from './pages/EditGroup'
 import AddGroup from './pages/AddGroup'
 import Layout from './pages/Layout'
 
-import HeatMap from './components/HeatMap'
-
 const withLayout = (Comp: React.FC) => <T extends any>(props: T) => (
   <Layout>
     <Comp {...props} />
@@ -22,7 +20,6 @@ function App() {
     <Switch>
       <Route path="/help" component={Help} />
       <Route path="/about" component={About} />
-      <Route path="/heatmap" component={HeatMap} />
       <Route path="/add-group" component={withLayout(AddGroup)} />
       <Route path="/group/:groupId/edit" component={withLayout(EditGroup)} />
       <Route path="/" component={Groups} />

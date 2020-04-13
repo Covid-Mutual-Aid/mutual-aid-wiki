@@ -1,5 +1,4 @@
-import React, { createContext, useEffect, useContext, useCallback, useMemo, useState } from 'react'
-import { useRequest } from './RequestProvider'
+import React, { createContext, useContext, useCallback, useMemo, useState } from 'react'
 import useLocationSearch, { Place } from '../utils/useLocationSearchNew'
 import { useLocation, useHistory } from 'react-router-dom'
 
@@ -23,14 +22,16 @@ const StateProvider = ({ children }: { children: React.ReactNode }) => {
   const [selected, setSelected] = useState<null | string>(null)
   const { search } = useLocation()
   const history = useHistory()
-  const request = useRequest()
   const { error, place } = useLocationSearch(search.replace('?', ''))
 
-  const onSearch = useCallback((query?: string) => {
-    if (!query) return history.replace(`?`)
-    history.replace(`?${query}`)
-    return void null
-  }, [])
+  const onSearch = useCallback(
+    (query?: string) => {
+      if (!query) return history.replace(`?`)
+      history.replace(`?${query}`)
+      return void null
+    },
+    [history]
+  )
 
   const onSelect = useCallback((x?: string) => setSelected(x || null), [])
 

@@ -143,6 +143,4 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   }
 `
 
-const SideBarStyles = styled.div``
-
 export default NewLayout

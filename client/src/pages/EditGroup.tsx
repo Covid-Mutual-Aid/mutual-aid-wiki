@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { Group } from '../utils/types'
-import { Form } from 'react-bootstrap'
 
 import Location from '../components/Location'
 import EditGroup from '../components/EditGroup'
@@ -48,7 +47,7 @@ const EditGroupPage = ({}) => {
   if (!group) return null
   return (
     <div style={{ display: 'grid', grid: '20rem 1fr 1fr / 1fr', height: '100%', width: '100%' }}>
-      <Form
+      {/* <Form
         style={{ width: '100%', padding: '1.5rem' }}
         onSubmit={(e: any) => {
           e.preventDefault()
@@ -61,7 +60,7 @@ const EditGroupPage = ({}) => {
             <button type="submit">save</button>
           </div>
         </div>
-      </Form>
+      </Form> */}
     </div>
   )
 }

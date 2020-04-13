@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
 import copy from 'copy-to-clipboard'
 
 import { gtag } from '../utils/gtag'
@@ -17,10 +16,7 @@ title="Covid-19 Mutual Aid Groups" aria-label="United Kingdom local authority di
 </iframe>`
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [show, setShow] = useState(false)
   const [copiedToClipboard, setCopiedToClipboard] = useState(false)
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
 
   useEffect(() => {
     if (!inIframe()) {
@@ -34,35 +30,34 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={inIframe() ? 'App' : 'App-Standalone'}>
       <div className="embed-code">
-        {!inIframe() ? (
-          <>
-            <p className="primary" onClick={handleShow}>
-              embed this map into your website
-            </p>
-            <Modal show={show} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>Embed Code</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <code>{embedCode}</code>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </>
-        ) : (
-          ''
-        )}
+        {!inIframe()
+          ? null
+          : // <>
+            //   <p className="primary" onClick={handleShow}>
+            //     embed this map into your website
+            //   </p>
+            //   <Modal show={show} onHide={handleClose}>
+            //     <Modal.Header closeButton>
+            //       <Modal.Title>Embed Code</Modal.Title>
+            //     </Modal.Header>
+            //     <Modal.Body>
+            //       <code>{embedCode}</code>
+            //     </Modal.Body>
+            //     <Modal.Footer>
+            //       <Button variant="secondary" onClick={handleClose}>
+            //         Close
+            //       </Button>
+            //     </Modal.Footer>
+            //   </Modal>
+            // </>
+            ''}
       </div>
       {children}
       <div className="footer">
-        <a target="_blank" href="https://airtable.com/shrHitFm25IJ2bo10">
+        <a target="_blank" rel="noopener noreferrer" href="https://airtable.com/shrHitFm25IJ2bo10">
           edit your group
         </a>
-        <a target="_blank" href="https://covidmutualaid.cc/">
+        <a target="_blank" rel="noopener noreferrer" href="https://covidmutualaid.cc/">
           full site
         </a>
         <span
@@ -75,7 +70,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {!copiedToClipboard ? 'embed' : 'code copied!'}
         </span>
         <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
-        <a target="_blank" href="https://github.com/Covid-Mutual-Aid/search-by-postcode">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/Covid-Mutual-Aid/search-by-postcode"
+        >
           open source
         </a>
       </div>

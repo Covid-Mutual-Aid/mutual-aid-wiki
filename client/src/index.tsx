@@ -7,7 +7,6 @@ import 'promise-polyfill/src/polyfill'
 import 'whatwg-fetch'
 
 import './styles/index.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 
 import * as serviceWorker from './utils/serviceWorker'
 import RequestProvider from './contexts/RequestProvider'

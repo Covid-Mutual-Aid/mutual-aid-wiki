@@ -1,6 +1,5 @@
 import React from 'react'
 import SecondaryPage from './SecondaryPage'
-import { TextWrapper } from '../components/NewLayout/styles'
 
 const HelpPage = () => {
   return (

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
 import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import icons from '../../utils/icons'
+import { InputGroup } from '../../styles/styles'
 
 const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')
@@ -22,14 +22,14 @@ const SearchBox = () => {
           }
         }}
       >
-        <SearchGroup>
+        <InputGroup>
           <input
             value={searchInput}
             placeholder="Enter place"
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <button type="submit">{icons('search')}</button>
-        </SearchGroup>
+        </InputGroup>
       </form>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Link to="/add-group">
@@ -51,39 +51,6 @@ const SearchBox = () => {
     </Styles>
   )
 }
-
-const SearchGroup = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  overflow: hidden;
-
-  input:focus {
-    outline: none;
-  }
-
-  input,
-  button {
-    height: 100%;
-  }
-
-  input {
-    width: calc(100% - 4rem);
-    outline: none;
-    border: none;
-    background-color: transparent;
-    padding: 0.5rem 1rem;
-  }
-  button {
-    border: none;
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-    height: 2.8rem;
-    width: 4rem;
-    padding: 0;
-    outline: none;
-    background-color: transparent;
-    color: blue;
-  }
-`
 
 const Styles = styled.div`
   padding: 0 1rem;

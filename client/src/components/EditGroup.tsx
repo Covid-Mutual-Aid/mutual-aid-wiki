@@ -3,7 +3,6 @@ import { ReactMultiEmail, isEmail } from 'react-multi-email'
 import 'react-multi-email/style.css'
 
 import { GroupWithEmails } from '../utils/types'
-import { Form, Badge } from 'react-bootstrap'
 
 import Location from '../components/Location'
 import EditEmails from './EditEmails'
@@ -49,7 +48,7 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
   useEffect(() => {
     onChange(
       group,
-      (Object.keys(validation) as Array<keyof Validation>).filter(k => !validation[k])
+      (Object.keys(validation) as Array<keyof Validation>).filter((k) => !validation[k])
     )
     if (
       onComplete &&
@@ -75,7 +74,7 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
 
   return (
     <div>
-      <Form.Group>
+      {/* <Form.Group>
         <Form.Text className="text-muted">
           {validation.name ? `` : `You'll need a name...`}
         </Form.Text>
@@ -87,10 +86,10 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
           }}
         />
       </Form.Group>
-      {/* <EditEmails
+      <EditEmails
         initEmails={group.emails}
         onChange={emails => setGroup((g: GroupWithEmails) => ({ ...group, emails }))}
-      /> */}
+      />
 
       <Form.Group>
         {group.emails.length === 0 ? (
@@ -138,7 +137,7 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
           }}
           placeholder={validation.location_name ? group.location_name : 'e.g "SE14 4NW"'}
         />
-      </Form.Group>
+      </Form.Group> */}
     </div>
   )
 }

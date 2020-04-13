@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
+import { usePlaceState } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
 import GroupItem from './GroupItem'
 
@@ -9,11 +9,7 @@ import { MOBILE_BREAKPOINT } from '../../utils/CONSTANTS'
 
 const InfoBox = () => {
   const { groups } = useData()
-  const { onSearch } = usePlaceMethod()
-  const {
-    search: { place },
-    selected,
-  } = usePlaceState()
+  const { selected } = usePlaceState()
 
   const selectedGroup = groups.find((x) => x.id === selected)
   return (
