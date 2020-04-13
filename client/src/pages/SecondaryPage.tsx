@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import Nav from '../components/NewLayout/Nav'
 
-import '../styles/new-layout.css'
 import icons from '../utils/icons'
 
 const SecondaryPage = ({ title, children }: { title: string; children: ReactChild }) => {

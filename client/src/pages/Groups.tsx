@@ -7,7 +7,6 @@ import GroupsList from '../components/NewLayout/GroupsList'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
-import '../styles/new-layout.css'
 import icons from '../utils/icons'
 import Nav from '../components/NewLayout/Nav'
 
