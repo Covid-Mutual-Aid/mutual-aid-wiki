@@ -9,7 +9,7 @@ import { isSameGroup } from '../lib/utils'
 import { Group } from '../lib/types'
 import { verify } from '../lib/external/jwt'
 import db from '../lib/database'
-import l from '../lib/lrx'
+import lrx, { response$ } from '../lib/lrx'
 import { map, switchMap } from 'rxjs/operators'
 
 // Helper
@@ -24,13 +24,12 @@ const createNoDuplicates = (
         : (db.groups.create(group) as any)
     )
 
-export const getGroups = l((req$) =>
+export const getGroups = lrx((req$) =>
   req$.pipe(
-    l.params,
-    switchMap((x) =>
+    switchMap(() =>
       db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails'])
     ),
-    map((groups) => ({ statusCode: 200, body: JSON.stringify(groups) }))
+    response$
   )
 )
 
