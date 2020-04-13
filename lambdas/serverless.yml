@@ -71,7 +71,6 @@ provider:
       Resource:
         - { 'Fn::GetAtt': ['ExportDB', 'Arn'] } #you will also see the logical IDs below where they are provisioned
         - { 'Fn::GetAtt': ['DynamoDbLocationSearches', 'Arn'] }
-        - { 'Fn::GetAtt': ['DynamoDbAuthenticatedKeys', 'Arn'] }
 
 functions:
   - ${file(./services/groups/functions.yml)}
