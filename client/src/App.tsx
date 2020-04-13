@@ -21,6 +21,7 @@ function App() {
       <Route path="/help" component={Help} />
       <Route path="/about" component={About} />
       <Route path="/add-group" component={withLayout(AddGroup)} />
+      <Route path="/group/edit" component={withLayout(EditGroup)} />
       <Route path="/group/:groupId/edit" component={withLayout(EditGroup)} />
       <Route path="/" component={Groups} />
     </Switch>

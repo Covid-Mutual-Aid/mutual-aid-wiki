@@ -5,6 +5,14 @@ requestGroupEdit:
         method: post
         path: request/groupedit
         cors: true
+
+isAuthorised:
+  handler: services/email/handler.isAuthorised
+  events:
+    - http:
+        method: get
+        path: request/authorised
+        cors: true
 # attachEmailToGroup:
 #   handler: services/email/handler.attachEmailToGroup
 #   events:

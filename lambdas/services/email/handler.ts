@@ -8,6 +8,7 @@ import lrx, { response$, body$ } from '../lib/lrx'
 import { prove$ } from '../lib/proofs'
 import { switchMap } from 'rxjs/operators'
 import { sign } from '../lib/external/jwt'
+import { authorise$ } from '../lib/authenticate'
 
 export const requestGroupEdit = lrx((req$, event) =>
   req$.pipe(
@@ -31,6 +32,8 @@ export const requestGroupEdit = lrx((req$, event) =>
     response$
   )
 )
+
+export const isAuthorised = lrx((req$) => req$.pipe(authorise$, response$))
 
 // export const attachEmailToGroup = lambda(
 //   useBody(P.shape({ email: P.string, id: P.string }))(function (body) {
