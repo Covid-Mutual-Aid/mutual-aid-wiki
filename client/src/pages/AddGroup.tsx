@@ -1,12 +1,10 @@
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import React, { useState } from 'react'
+import styled from 'styled-components'
 
 import { useRequest } from '../contexts/RequestProvider'
-import EditGroup, { Validation } from '../components/EditGroup'
-import { Group, GroupWithEmails } from '../utils/types'
-import { gtag } from '../utils/gtag'
+import { GroupWithEmails } from '../utils/types'
 import { InputGroup } from '../styles/styles'
-import styled from 'styled-components'
 import Location from '../components/Location'
 
 const CreateGroup = () => {

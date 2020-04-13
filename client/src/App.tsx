@@ -7,14 +7,7 @@ import Help from './pages/Help'
 
 import EditGroup from './pages/EditGroup'
 import AddGroup from './pages/AddGroup'
-import Layout from './pages/Layout'
 import EmailAuth from './pages/EmailAuth'
-
-const withLayout = (Comp: React.FC) => <T extends any>(props: T) => (
-  <Layout>
-    <Comp {...props} />
-  </Layout>
-)
 
 function App() {
   return (

@@ -1,15 +1,14 @@
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import { Group, GroupWithEmails } from '../utils/types'
+import { GroupWithEmails } from '../utils/types'
 import { InputGroup } from '../styles/styles'
 import styled from 'styled-components'
 import Location from '../components/Location'
 
 const CreateGroup = () => {
   const request = useRequest()
-  const history = useHistory()
   const { id, token } = useParams<{ id: string; token: string }>()
 
   const [email, setEmail] = useState('')
@@ -23,7 +22,7 @@ const CreateGroup = () => {
       lng: 0,
     },
   })
-  const [sucessModal, setSuccessModal] = useState(false)
+  const [sucessModal] = useState(false)
 
   useEffect(() => {
     request(`/group/get?id=${id}`).then(setGroup)
