@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import icons from '../../utils/icons'
 import { InputGroup } from '../../styles/styles'
+import { MOON_BLUE } from '../../utils/CONSTANTS'
 
 const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')
@@ -57,11 +58,11 @@ const Styles = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
   .clear {
-    color: blue;
+    color: ${MOON_BLUE};
   }
   .add-group {
-    padding: 0.5rem 1rem;
-    color: blue;
+    padding: 0rem 1rem;
+    color: ${MOON_BLUE};
     cursor: pointer;
   }
   .search {

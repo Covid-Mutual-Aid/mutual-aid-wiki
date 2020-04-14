@@ -5,7 +5,7 @@ import Map from '../components/NewLayout/Map'
 import SearchBox from '../components/NewLayout/SearchBox'
 import GroupsList from '../components/NewLayout/GroupsList'
 
-import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import { MOBILE_BREAKPOINT, MOON_BLUE } from '../utils/CONSTANTS'
 
 import icons from '../utils/icons'
 import Nav from '../components/NewLayout/Nav'
@@ -47,7 +47,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   transition: grid 0.3s;
 
   .panel {
-    padding: 1rem;
+    padding: 0.6rem;
   }
 
   .map {
@@ -114,7 +114,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     transition: all 0.3s;
 
     h3 {
-      padding: 1rem;
+      margin: 0 0.6rem;
       font-size: 2.2rem;
       font-weight: 800;
     }

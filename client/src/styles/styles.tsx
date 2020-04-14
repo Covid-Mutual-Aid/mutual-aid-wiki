@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { MOON_BLUE } from '../utils/CONSTANTS'
 
 export const TextWrapper = styled.div`
   max-width: 30rem;
@@ -6,7 +7,7 @@ export const TextWrapper = styled.div`
 
 export const InputGroup = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
+  border-radius: 40px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -35,6 +36,6 @@ export const InputGroup = styled.div`
     padding: 0;
     outline: none;
     background-color: transparent;
-    color: blue;
+    color: ${MOON_BLUE};
   }
 `

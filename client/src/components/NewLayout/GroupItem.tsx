@@ -20,12 +20,12 @@ const GroupItem = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <h4 onClick={() => onSelect(group.id)}>{group.name}</h4>
         </div>
-        <p className="location-name">
+        <span className="location-name">
           {group.location_name}
           {group.distance && group.distance > 0 ? (
             <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
           ) : null}
-        </p>
+        </span>
       </div>
       <div className="visit">
         <a href={tidyLink(group.link_facebook)}>{iconFromUrl(group.link_facebook)}</a>
@@ -37,9 +37,8 @@ const GroupItem = ({
 const GroupWrapper = styled.div<{ selected: boolean }>`
   transition: background 0.3s;
   background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.11)' : 'rgba(0, 0, 255, 0);')};
-  padding: 0.8rem 1rem;
+  padding: 0.5rem 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
-  line-height: 0.8;
 
   display: flex;
   flex-direction: row;
@@ -71,17 +70,16 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
   & h4 {
     cursor: pointer;
     margin-top: 0;
-    font-size: 1.2rem;
+    font-size: 1.12rem;
+    font-weight: 400;
     color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0.28rem;
   }
   & h4:hover {
-    cursor: pointer;
-    margin-top: 0;
-    font-size: 1.2rem;
     color: rgba(0, 0, 0, 1);
   }
   & a,
-  p {
+  span {
     margin-bottom: 0;
     color: rgba(0, 0, 0, 0.6);
   }

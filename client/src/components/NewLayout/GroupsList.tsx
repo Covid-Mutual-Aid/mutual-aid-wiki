@@ -6,6 +6,7 @@ import { useData } from '../../contexts/DataProvider'
 import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 
 import GroupItem from './GroupItem'
+import { MOON_BLUE } from '../../utils/CONSTANTS'
 
 const GroupsList = () => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
@@ -59,7 +60,7 @@ const Styles = styled.div`
     background-color: transparent;
     border: none;
     outline: none;
-    color: blue;
+    color: ${MOON_BLUE};
     margin: 0 auto;
   }
 `
