@@ -26,10 +26,6 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - uses: actions/checkout@master
-      - name: 'Get barnch name'
-        run: |
-          echo ${GITHUB_REF##*/}
-          echo ${{ github.head_ref }}
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
