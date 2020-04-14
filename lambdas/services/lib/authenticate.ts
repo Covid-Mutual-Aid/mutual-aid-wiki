@@ -18,7 +18,16 @@ export const authorise$ = mergeMap((input: LRXReq) =>
   of(input).pipe(
     params$,
     map((params) => params.token as string),
-    jwt$,
-    map(() => input)
+    jwt$
   )
 )
+
+export const authorise = <A extends object, B extends any>(fn: (token: A) => B) =>
+  mergeMap((input: LRXReq) =>
+    of(input).pipe(
+      params$,
+      map((params) => params.token as string),
+      jwt$,
+      map((x) => fn(x as any))
+    )
+  )

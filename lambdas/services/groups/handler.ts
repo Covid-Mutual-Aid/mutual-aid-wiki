@@ -1,4 +1,4 @@
-import { switchMap } from 'rxjs/operators'
+import { switchMap, mergeMap } from 'rxjs/operators'
 import P from 'ts-prove'
 
 import lrx, { response$, body$, params$ } from '../lib/lrx'
@@ -9,6 +9,7 @@ import { addSheetRow } from '../google/sheets'
 import { isSameGroup } from '../lib/utils'
 import { Group } from '../lib/types'
 import db from '../lib/database'
+import { zip, of, throwError } from 'rxjs'
 
 // Helper
 const createNoDuplicates = (
@@ -43,9 +44,12 @@ export const getGroups = lrx((req$) =>
 // /group/update?token={ jwt }
 export const updateGroup = lrx((req$) =>
   req$.pipe(
-    authorise$,
-    body$,
-    prove$(P.shape({ id: P.string })),
+    mergeMap((input) =>
+      zip(of(input).pipe(body$, prove$(P.shape({ id: P.string }))), of(input).pipe(authorise$))
+    ),
+    mergeMap(([grp, auth]) =>
+      auth && (auth as any).id === grp.id ? of(grp) : throwError('Group id does not match token id')
+    ),
     switchMap((grp) => db.groups.update(grp)),
     response$
   )
@@ -72,10 +76,13 @@ export const createGroup = lrx((req$) =>
 // /group/associate?token={ jwt }&email=""&id=""
 export const associateEmail = lrx((req$) =>
   req$.pipe(
-    authorise$,
-    params$,
-    prove$(P.shape({ email: P.string, id: P.string })),
-    switchMap((data) =>
+    mergeMap((input) =>
+      zip(
+        of(input).pipe(params$, prove$(P.shape({ email: P.string, id: P.string }))),
+        of(input).pipe(authorise$)
+      )
+    ),
+    switchMap(([data]) =>
       db.groups
         .getById(data.id, ['emails'])
         .then((res) =>
