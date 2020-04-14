@@ -73,7 +73,6 @@ jobs:
         with:
           commit_message: Update redirects
           branch: ${{ github.head_ref }}
-          commit_options: '--no-verify --signoff'
           file_pattern: client/_redirects
           repository: .
           commit_user_name: My GitHub Actions Bot
