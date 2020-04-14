@@ -21,6 +21,12 @@ Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
   fetch((window as any).endpoint || '/dev' + input, init).then((x) => x.json())
 
+fetch('/group/get')
+  .then((res) => res.json())
+  .then((g) =>
+    console.log(g.length > 0 ? 'Netlify redirect working: ' : 'Netlify redirect NOT working: ', g)
+  )
+
 const Render = () => (
   <Router>
     <RequestProvider request={request}>
