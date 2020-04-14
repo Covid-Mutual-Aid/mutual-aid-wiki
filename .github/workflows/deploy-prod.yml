@@ -67,5 +67,17 @@ jobs:
         env:
           NETLIFY_ACCESS_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PROD_ID }}
+      - name: 'Update client redirects'
+        run: 'node ./scripts/update-redirects.js'
+      - uses: stefanzweifel/git-auto-commit-action@v4.1.2
+        with:
+          commit_message: Update redirects
+          branch: ${{ github.head_ref }}
+          commit_options: '--no-verify --signoff'
+          file_pattern: client/_redirects
+          repository: .
+          commit_user_name: My GitHub Actions Bot
+          commit_user_email: my-github-actions-bot@example.org
+          commit_author: Author <actions@github.com>
       # - name: Run tests
       #   run: yarn test:e2e
