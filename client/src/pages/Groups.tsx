@@ -5,7 +5,7 @@ import Map from '../components/NewLayout/Map'
 import SearchBox from '../components/NewLayout/SearchBox'
 import GroupsList from '../components/NewLayout/GroupsList'
 
-import { MOBILE_BREAKPOINT, MOON_BLUE } from '../utils/CONSTANTS'
+import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 import icons from '../utils/icons'
 import Nav from '../components/NewLayout/Nav'
