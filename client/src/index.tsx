@@ -24,12 +24,6 @@ const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 
     init
   ).then((x) => x.json())
 
-fetch('/api/group/get')
-  .then((res) => res.json())
-  .then((g) =>
-    console.log(g.length > 0 ? 'Netlify redirect working: ' : 'Netlify redirect NOT working: ', g)
-  )
-
 const Render = () => (
   <Router>
     <RequestProvider request={request}>
