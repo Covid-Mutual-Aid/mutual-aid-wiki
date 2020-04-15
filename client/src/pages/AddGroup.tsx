@@ -1,16 +1,20 @@
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { GroupWithEmails } from '../utils/types'
-import EditGroupForm from '../components/EditGroup'
+import EditGroupForm from '../components/EditGroupForm'
 import GroupItem from '../components/NewLayout/GroupItem'
+import { EditPage, CenterAlign } from '../styles/styles'
 
 const CreateGroup = () => {
   const request = useRequest()
   const history = useHistory()
   const [ready, setReady] = useState(false)
+  const [validation, setValidation] = useState<string[]>([])
+  const [submitted, setSubmitted] = useState(false)
+
   const [group, setGroup] = useState<GroupWithEmails>({
     name: '',
     emails: [],
@@ -25,10 +29,8 @@ const CreateGroup = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!ready) {
-      alert('Please complete the form')
-      return
-    }
+    setSubmitted(true)
+    if (!ready) return
     request('/group/create', { method: 'POST', body: JSON.stringify(group) })
       .then((x) => {
         setSuccessModal(true)
@@ -38,7 +40,7 @@ const CreateGroup = () => {
   }
 
   return (
-    <Page>
+    <EditPage>
       <div className="main">
         <CenterAlign>
           {sucessModal ? (
@@ -48,11 +50,36 @@ const CreateGroup = () => {
           ) : (
             <form onSubmit={handleSubmit}>
               <EditGroupForm
-                onChange={setGroup}
+                onChange={(group, validation) => {
+                  setValidation(validation)
+                  setGroup(group)
+                }}
                 onComplete={() => setReady(true)}
                 initGroup={group}
               />
-              <button type="submit">submit</button>
+
+              <div style={{ display: submitted ? 'block' : 'none' }} className="validation">
+                <label style={{ display: 'block', margin: '1.2rem 0 0.4rem 0' }}>
+                  Please complete
+                </label>
+                {submitted &&
+                  validation.map((key) => (
+                    <span style={{ color: 'rgba(255, 0, 0, 0.6)', margin: '0 0.2rem' }}>
+                      {key === 'link_facebook'
+                        ? 'link'
+                        : key === 'location_name'
+                        ? 'location'
+                        : key}
+                    </span>
+                  ))}
+              </div>
+
+              <FormButtons>
+                <Link to="/">
+                  <button type="button">cancel</button>
+                </Link>
+                <button type="submit">submit</button>
+              </FormButtons>
             </form>
           )}
         </CenterAlign>
@@ -68,35 +95,20 @@ const CreateGroup = () => {
           </div>
         </CenterAlign>
       </div>
-    </Page>
+    </EditPage>
   )
 }
 
-export default CreateGroup
-
-const Page = styled.div`
-  display: grid;
-  grid: 1fr / 4fr 3fr;
-
-  .main {
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .item {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 22px -9px #959595;
-    padding: 1rem;
-    border-radius: 8px;
-    width: 100%;
-    min-width: 12rem;
-    max-width: 22rem;
-    margin: 2rem;
-  }
-`
-
-const CenterAlign = styled.div`
+const FormButtons = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  justify-content: flex-end;
+  padding: 2rem 0;
+
+  button {
+    cursor: pointer;
+    padding: 0.2rem;
+    margin: 0.4rem;
+  }
 `
+
+export default CreateGroup

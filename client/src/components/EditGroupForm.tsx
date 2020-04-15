@@ -7,6 +7,7 @@ import { GroupWithEmails } from '../utils/types'
 import Location from './Location'
 import EditEmails from './EditEmails'
 import { InputGroup } from '../styles/styles'
+import styled from 'styled-components'
 
 // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
 function validURL(str: string) {
@@ -20,6 +21,12 @@ function validURL(str: string) {
     'i'
   ) // fragment locator
   return !!pattern.test(str)
+}
+
+// https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+function validEmail(email: string) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
 }
 
 type Props = {
@@ -76,8 +83,8 @@ const EditGroupForm = ({ initGroup, onChange, onComplete }: Props) => {
   )
 
   return (
-    <div>
-      <h4>Enter group information</h4>
+    <Wrapper>
+      <h4>Name</h4>
       <InputGroup>
         <input
           placeholder="Group name"
@@ -85,7 +92,8 @@ const EditGroupForm = ({ initGroup, onChange, onComplete }: Props) => {
           onChange={(e) => setGroup({ ...group, name: e.target.value })}
         />
       </InputGroup>
-      <h4>Enter any emails you want to associate with this group</h4>
+
+      <h4>Emails</h4>
       <InputGroup>
         <input
           placeholder="Enter an email"
@@ -94,7 +102,16 @@ const EditGroupForm = ({ initGroup, onChange, onComplete }: Props) => {
         />
         <button
           type="button"
+          style={{
+            backgroundColor:
+              email.length === 0
+                ? 'inherit'
+                : validEmail(email)
+                ? 'rgba(0, 255, 0, 0.1'
+                : 'rgba(255, 0, 0, 0.1',
+          }}
           onClick={() => {
+            if (!validEmail(email)) return
             setGroup((x) => ({ ...group, emails: [...x.emails, email] }))
             setEmail('')
           }}
@@ -116,24 +133,44 @@ const EditGroupForm = ({ initGroup, onChange, onComplete }: Props) => {
         </InputGroup>
       ))}
 
-      <h4>Enter link to the group</h4>
+      <h4>Link</h4>
       <InputGroup>
         <input
           placeholder="http..."
           value={group.link_facebook}
-          onChange={(e) => setGroup({ ...group, link_facebook: e.target.value })}
+          style={{
+            backgroundColor:
+              group.link_facebook.length === 0
+                ? 'inherit'
+                : validURL(group.link_facebook)
+                ? 'rgba(0, 255, 0, 0.1'
+                : 'rgba(255, 0, 0, 0.1',
+          }}
+          onChange={(e) => {
+            setGroup({ ...group, link_facebook: e.target.value })
+          }}
         />
       </InputGroup>
-      <h4>Enter location for the group</h4>
 
+      <h4>Location</h4>
       <Location
         onChange={({ name, lat, lng }) => {
           setGroup((x) => ({ ...group, location_name: name, location_coord: { lat, lng } }))
         }}
         placeholder={'e.g "SE14 4NW"'}
       />
-    </div>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  min-width: 22rem;
+
+  h4 {
+    margin: 1.4rem 0 0.4rem 0.6rem;
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.54);
+  }
+`
 
 export default EditGroupForm
