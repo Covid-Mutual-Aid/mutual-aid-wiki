@@ -1,9 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { iconFromUrl } from '../../utils/icons'
+import icons, { iconFromUrl } from '../../utils/icons'
 import tidyLink from '../../utils/tidyLink'
 import { Group } from '../../utils/types'
+import { Link } from 'react-router-dom'
+
+const useOutsideClose = (init: boolean) => {
+  const [isOpen, setIsOpen] = useState(init)
+
+  useEffect(() => {
+    document.body.addEventListener('click', (e) => setIsOpen(false))
+    return () => document.body.removeEventListener('click', (e) => setIsOpen(false))
+  }, [])
+
+  return { isOpen, setIsOpen }
+}
 
 const GroupItem = ({
   group,
@@ -14,20 +26,45 @@ const GroupItem = ({
   selected: boolean
   onSelect: (...args: any[]) => void
 }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) setTimeout(() => setIsOpen(false), 6000)
+  })
+
   return (
     <GroupWrapper key={group.id} selected={selected}>
       <div className="content">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <h4 onClick={() => onSelect(group.id)}>{group.name}</h4>
+          <h4 onClick={() => onSelect(group.id)}>
+            {group.name === '' ? 'Your group name...' : group.name}
+          </h4>
         </div>
         <span className="location-name">
-          {group.location_name}
+          {group.location_name === '' ? 'Your group location...' : group.location_name}
           {group.distance && group.distance > 0 ? (
             <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
           ) : null}
         </span>
       </div>
-      <div className="visit">
+      <div className="actions">
+        <div style={{ display: isOpen ? 'block' : 'none' }} className="menu">
+          <div
+            onMouseDown={(e) => {
+              ;(window as any).location = window.location.origin + '/edit'
+            }}
+          >
+            Edit group
+          </div>
+        </div>
+        <div
+          className="more"
+          tabIndex={1}
+          onClick={(e) => setIsOpen(!isOpen)}
+          onBlur={(e) => setIsOpen(false)}
+        >
+          {icons('more', 'rgba(0,0,0,0.2')}
+        </div>
         <a href={tidyLink(group.link_facebook)}>{iconFromUrl(group.link_facebook)}</a>
       </div>
     </GroupWrapper>
@@ -35,6 +72,7 @@ const GroupItem = ({
 }
 
 const GroupWrapper = styled.div<{ selected: boolean }>`
+  position: relative;
   transition: background 0.3s;
   background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.11)' : 'rgba(0, 0, 255, 0);')};
   padding: 0.5rem 1rem;
@@ -42,26 +80,61 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
 
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 
   .content {
     width: calc(100% - 2rem);
-  }
-
-  .visit {
     display: flex;
-    /* justify-content: end; */
-    flex-direction: row-reverse;
-    align-items: center;
-    width: 2rem;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
-  .visit a {
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .actions a {
     opacity: 0.6;
     transition: all 0.2s;
   }
 
-  .visit a:hover {
+  .actions a:hover {
     opacity: 1;
+  }
+
+  .menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    box-shadow: 0px 0px 22px -9px #959595;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 2;
+    background-color: white;
+    margin: 1.8rem 0.6rem;
+  }
+
+  .menu div {
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  .menu div:hover {
+    background-color: rgba(0, 0, 255, 0.06);
+  }
+
+  .more {
+    cursor: pointer;
+    height: 1rem;
+    margin-top: -0.5rem;
+  }
+
+  .more:focus {
+    outline: none;
   }
 
   &:first-child {

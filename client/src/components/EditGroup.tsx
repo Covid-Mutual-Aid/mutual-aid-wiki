@@ -4,8 +4,9 @@ import 'react-multi-email/style.css'
 
 import { GroupWithEmails } from '../utils/types'
 
-import Location from '../components/Location'
+import Location from './Location'
 import EditEmails from './EditEmails'
+import { InputGroup } from '../styles/styles'
 
 // https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
 function validURL(str: string) {
@@ -36,8 +37,10 @@ export type Validation = {
 
 const linkErrorMsg = 'A valid URL (the http bit is important)...'
 
-const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
-  const [group, setGroup] = useState(initGroup)
+const EditGroupForm = ({ initGroup, onChange, onComplete }: Props) => {
+  const [email, setEmail] = useState('')
+  const [group, setGroup] = useState<GroupWithEmails>(initGroup)
+
   const [validation, setValidation] = useState<Validation>({
     name: false,
     emails: false,
@@ -74,72 +77,63 @@ const EditGroup = ({ initGroup, onChange, onComplete }: Props) => {
 
   return (
     <div>
-      {/* <Form.Group>
-        <Form.Text className="text-muted">
-          {validation.name ? `` : `You'll need a name...`}
-        </Form.Text>
-        <Form.Control
+      <h4>Enter group information</h4>
+      <InputGroup>
+        <input
+          placeholder="Group name"
           value={group.name}
-          placeholder={`e.g "Mutual Aid Isolation Support Glasgow"`}
-          onChange={(e: any) => {
-            setGroup({ ...group, name: e.target.value })
-          }}
+          onChange={(e) => setGroup({ ...group, name: e.target.value })}
         />
-      </Form.Group>
-      <EditEmails
-        initEmails={group.emails}
-        onChange={emails => setGroup((g: GroupWithEmails) => ({ ...group, emails }))}
-      />
-
-      <Form.Group>
-        {group.emails.length === 0 ? (
-          <Form.Text className="text-muted">One or more contact emails...</Form.Text>
-        ) : (
-          ''
-        )}
-        <ReactMultiEmail
-          placeholder={`e.g "your_admin_email@gmail.com"`}
-          emails={group.emails}
-          onChange={(emails: string[]) => setGroup((g: GroupWithEmails) => ({ ...group, emails }))}
-          validateEmail={email => {
-            return isEmail(email)
-          }}
-          getLabel={(email: string, index: number, removeEmail: (index: number) => void) => {
-            return (
-              <div data-tag key={index}>
-                {email}
-                <span data-tag-handle onClick={() => removeEmail(index)}>
-                  ×
-                </span>
-              </div>
-            )
-          }}
+      </InputGroup>
+      <h4>Enter any emails you want to associate with this group</h4>
+      <InputGroup>
+        <input
+          placeholder="Enter an email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-      </Form.Group>
+        <button
+          type="button"
+          onClick={() => {
+            setGroup((x) => ({ ...group, emails: [...x.emails, email] }))
+            setEmail('')
+          }}
+        >
+          add
+        </button>
+      </InputGroup>
+      {group.emails.map((email, i) => (
+        <InputGroup style={{ margin: '1rem 0' }} key={email + i}>
+          <p style={{ padding: '0 .3rem', width: '100%' }}>{email}</p>
+          <button
+            type="button"
+            onClick={() =>
+              setGroup((x) => ({ ...group, emails: x.emails.filter((y) => y !== email) }))
+            }
+          >
+            remove
+          </button>
+        </InputGroup>
+      ))}
 
-      <Form.Group>
-        <Form.Text className="text-muted">{validation.link_facebook ? '' : linkErrorMsg}</Form.Text>
-        <Form.Control
+      <h4>Enter link to the group</h4>
+      <InputGroup>
+        <input
+          placeholder="http..."
           value={group.link_facebook}
-          placeholder={`e.g "https://www.facebook.com/groups/123456789"`}
-          onChange={(e: any) => {
-            setGroup({ ...group, link_facebook: e.target.value })
-          }}
+          onChange={(e) => setGroup({ ...group, link_facebook: e.target.value })}
         />
-      </Form.Group>
-      <Form.Text className="text-muted">
-        {validation.location_name ? '' : 'And a location.'}
-      </Form.Text>
-      <Form.Group>
-        <Location
-          onChange={({ name, lat, lng }) => {
-            setGroup({ ...group, location_name: name, location_coord: { lat, lng } })
-          }}
-          placeholder={validation.location_name ? group.location_name : 'e.g "SE14 4NW"'}
-        />
-      </Form.Group> */}
+      </InputGroup>
+      <h4>Enter location for the group</h4>
+
+      <Location
+        onChange={({ name, lat, lng }) => {
+          setGroup((x) => ({ ...group, location_name: name, location_coord: { lat, lng } }))
+        }}
+        placeholder={'e.g "SE14 4NW"'}
+      />
     </div>
   )
 }
 
-export default EditGroup
+export default EditGroupForm

@@ -3,7 +3,7 @@ import React from 'react'
 const width = '1.4rem'
 
 const icons = (
-  name: 'wa' | 'fb' | 'link' | 'search' | 'map' | 'chevronL' | 'chevronR',
+  name: 'wa' | 'fb' | 'link' | 'search' | 'map' | 'chevronL' | 'chevronR' | 'more',
   color?: string
 ) =>
   ({
@@ -116,6 +116,24 @@ const icons = (
         strokeLinejoin="round"
       >
         <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    ),
+    more: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ width, color }}
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="19" cy="12" r="1"></circle>
+        <circle cx="5" cy="12" r="1"></circle>
       </svg>
     ),
   }[name])

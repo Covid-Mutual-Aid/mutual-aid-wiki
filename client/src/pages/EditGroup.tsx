@@ -6,12 +6,12 @@ import { GroupWithEmails } from '../utils/types'
 import { InputGroup } from '../styles/styles'
 import styled from 'styled-components'
 import Location from '../components/Location'
+import EditGroupForm from '../components/EditGroup'
 
 const CreateGroup = () => {
   const request = useRequest()
   const { id, token } = useParams<{ id: string; token: string }>()
 
-  const [email, setEmail] = useState('')
   const [group, setGroup] = useState<GroupWithEmails>({
     name: '',
     emails: [],
@@ -22,6 +22,8 @@ const CreateGroup = () => {
       lng: 0,
     },
   })
+
+  const [ready, setReady] = useState(false)
   const [sucessModal] = useState(false)
 
   useEffect(() => {
@@ -30,6 +32,10 @@ const CreateGroup = () => {
   console.log(group)
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!ready) {
+      alert('Please complete the form')
+      return
+    }
     request(`/group/update?token=${token}`, {
       method: 'POST',
       body: JSON.stringify(group),
@@ -49,60 +55,10 @@ const CreateGroup = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <h4>Enter group information</h4>
-          <InputGroup>
-            <input
-              placeholder="Group name"
-              value={group.name}
-              onChange={(e) => setGroup({ ...group, name: e.target.value })}
-            />
-          </InputGroup>
-          <h4>Enter any emails you want to associate with this group</h4>
-          <InputGroup>
-            <input
-              placeholder="Enter an email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setGroup((x) => ({ ...group, emails: [...x.emails, email] }))
-                setEmail('')
-              }}
-            >
-              add
-            </button>
-          </InputGroup>
-          {group.emails.map((email, i) => (
-            <InputGroup style={{ margin: '1rem 0' }} key={email + i}>
-              <p style={{ padding: '0 .3rem', width: '100%' }}>{email}</p>
-              <button
-                type="button"
-                onClick={() =>
-                  setGroup((x) => ({ ...group, emails: x.emails.filter((y) => y !== email) }))
-                }
-              >
-                remove
-              </button>
-            </InputGroup>
-          ))}
-
-          <h4>Enter link to the group</h4>
-          <InputGroup>
-            <input
-              placeholder="http..."
-              value={group.link_facebook}
-              onChange={(e) => setGroup({ ...group, link_facebook: e.target.value })}
-            />
-          </InputGroup>
-          <h4>Enter location for the group</h4>
-
-          <Location
-            onChange={({ name, lat, lng }) => {
-              setGroup((x) => ({ ...group, location_name: name, location_coord: { lat, lng } }))
-            }}
-            placeholder={'e.g "SE14 4NW"'}
+          <EditGroupForm
+            onChange={() => setGroup}
+            onComplete={() => setReady(true)}
+            initGroup={group}
           />
           <button type="submit">submit</button>
         </form>
