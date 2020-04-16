@@ -2,7 +2,7 @@ import { switchMap, mergeMap } from 'rxjs/operators'
 import P from 'ts-prove'
 
 import lrx, { response$, body$, params$ } from '../lib/lrx'
-import { authorise$ } from '../lib/authenticate'
+import { authorise$ } from '../lib/observables'
 import { proofs, prove$ } from '../lib/proofs'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
@@ -82,7 +82,7 @@ export const associateEmail = lrx((req$) =>
         of(input).pipe(authorise$)
       )
     ),
-    switchMap(([data]) =>
+    switchMap(([data, fds]) =>
       db.groups
         .getById(data.id, ['emails'])
         .then((res) =>

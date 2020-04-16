@@ -1,50 +1,58 @@
-import { switchMap } from 'rxjs/operators'
-import { sign } from 'jsonwebtoken'
+import 'source-map-support/register'
+import { switchMap, map } from 'rxjs/operators'
 import P from 'ts-prove'
 
+import { authorise$, switchMergeKey } from '../lib/observables'
 import lrx, { response$, body$ } from '../lib/lrx'
-import { authorise$ } from '../lib/authenticate'
 import { prove$ } from '../lib/proofs'
-import ENV from '../lib/environment'
 import db from '../lib/database'
+import {
+  sendNoneAssosiated,
+  sendEditLink,
+  sendNotAssosiated,
+  sendSubmitedRequest,
+  addSupportRequestToTable,
+} from './templates'
+import { v4 } from 'uuid'
 
-export const requestGroupEdit = lrx((req$, event) =>
+// request/groupedit
+export const requestGroupEdit = lrx((req$) =>
   req$.pipe(
     body$,
-    prove$(P.shape({ email: P.string })),
-    switchMap((body) =>
+    prove$(P.shape({ email: P.string, id: P.string })),
+    switchMergeKey('group', (x) => db.groups.getById(x.id, ['emails', 'id']).catch(() => null)),
+    switchMap(({ email, group }) => {
+      if (!group) return Promise.reject("Group doesn't exist")
+      // Send email with link to submit support request
+      if (!group.emails) return sendNoneAssosiated(email, group.id)
+      // Send Email with link to edit group
+      if (group.emails.includes(email)) return sendEditLink(email, group.id)
+      // Send email explaining that the email is not assosiated to the group
+      return sendNotAssosiated(email)
+    }),
+    response$
+  )
+)
+
+// request/support?token={ email, id }
+export const submitSupportRequest = lrx((req$) =>
+  req$.pipe(
+    authorise$,
+    prove$(P.shape({ email: P.string, id: P.string })),
+    switchMergeKey('group', (x) =>
       db.groups
-        .get(['emails', 'id'])
-        .then((grps) => grps.filter((x) => x.emails?.includes(body.email)))
-        .then((grps) => (grps.length === 0 ? Promise.reject('No group with email exists') : grps))
+        .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
+        .catch(() => null)
     ),
-    switchMap((grps) =>
-      grps.map((grp) => {
-        const token = sign({ id: grp.id }, ENV.JWT_SECRET, { expiresIn: '1h' })
-        return `https://${event.headers['x-forwarded-host']}/edit/${grp.id}/${token}`
-      })
-    ),
+    switchMap((x) => {
+      const key = v4()
+      if (!x.group) return Promise.reject('No group')
+      return addSupportRequestToTable(x.email, key, x.group)
+        .then(() => sendSubmitedRequest(x.email, key))
+        .then(() => 'Successfully submited you should recieve an email with further instructions')
+    }),
     response$
   )
 )
 
 export const isAuthorised = lrx((req$) => req$.pipe(authorise$, response$))
-
-// export const attachEmailToGroup = lambda(
-//   useBody(P.shape({ email: P.string, id: P.string }))(function (body) {
-//     return db.groups
-//       .getById(body.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
-//       .then((group) =>
-//         db.authkeys
-//           .create({ access_type: 'TABLE_ITEM', association: group.id as string })
-//           .then((auth) => ({ group, auth }))
-//       )
-//       .then(({ group, auth }) =>
-//         airtable.attachEmailRequest({
-//           confirmLink: `${this.event.headers.Host}/${ENV.STAGE}/group/addemail?id=${group.id}&email=${body.email}&token=${auth.id}`,
-//           email: body.email,
-//           group,
-//         })
-//       )
-//   })
-// )

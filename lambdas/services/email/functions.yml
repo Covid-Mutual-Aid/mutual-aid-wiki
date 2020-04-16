@@ -6,6 +6,14 @@ requestGroupEdit:
         path: request/groupedit
         cors: true
 
+submitSupportRequest:
+  handler: services/email/handler.submitSupportRequest
+  events:
+    - http:
+        method: post
+        path: request/support
+        cors: true
+
 isAuthorised:
   handler: services/email/handler.isAuthorised
   events:

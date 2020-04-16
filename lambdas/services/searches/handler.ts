@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import P from 'ts-prove'
 import lambda, { useBody } from '../lib/lambdaUtils'
 

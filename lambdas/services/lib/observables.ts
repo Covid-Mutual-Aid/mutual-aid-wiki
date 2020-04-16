@@ -1,5 +1,5 @@
 import { mergeMap, map } from 'rxjs/operators'
-import { of, throwError } from 'rxjs'
+import { of, throwError, ObservableInput } from 'rxjs'
 import { verify } from 'jsonwebtoken'
 import { is } from 'ts-prove'
 
@@ -30,4 +30,12 @@ export const authorise = <A extends object, B extends any>(fn: (token: A) => B) 
       jwt$,
       map((x) => fn(x as any))
     )
+  )
+
+export const switchMergeKey = <A extends { [x: string]: any }, B extends any, K extends string>(
+  key: K,
+  cb: (x: A) => Promise<B>
+) =>
+  mergeMap<A, ObservableInput<A & { [Key in K]: B }>>((x) =>
+    cb(x).then((y) => ({ ...x, [key]: y }))
   )

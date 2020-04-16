@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import axios from 'axios'
 import P from 'ts-prove'
 
@@ -24,18 +25,21 @@ export const googleGeoLocate = (location: string) =>
     )
 
 // Lambdas
+// google/placeSuggest
 export const placeSuggest = lambda(
   useParams(P.shape({ place: P.string }))((params) =>
     googlePlaceSuggest(params.place).then((x) => x.data.predictions)
   )
 )
 
+// google/placeDetails
 export const placeDetails = lambda(
   useParams(P.shape({ place_id: P.string }))((params) =>
     googlePlaceDetails(params.place_id).then((x) => x.data.result)
   )
 )
 
+// google/geolocate
 export const geolocate = lambda(
   useParams(P.shape({ name: P.string }))((params) => googleGeoLocate(params.name))
 )

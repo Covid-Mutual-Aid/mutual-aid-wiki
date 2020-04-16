@@ -60,6 +60,8 @@ provider:
     AIRTABLE_ATTACH_EMAIL_KEY: ${env:AIRTABLE_ATTACH_EMAIL_KEY, file(env.json):AIRTABLE_ATTACH_EMAIL_KEY}
     AIRTABLE_ATTACH_EMAIL_BASE: ${env:AIRTABLE_ATTACH_EMAIL_BASE, file(env.json):AIRTABLE_ATTACH_EMAIL_BASE}
     # other
+    API_ENDPOINT: ${env:API_ENDPOINT, file(env.json):API_ENDPOINT}
+    CLIENT_ENDPOINT: ${env:CLIENT_ENDPOINT, file(env.json):CLIENT_ENDPOINT}
     SEND_GRID_API_KEY: ${env:SEND_GRID_API_KEY, file(env.json):SEND_GRID_API_KEY}
     SLACK_API_TOKEN: ${env:SLACK_API_TOKEN, file(env.json):SLACK_API_TOKEN}
     JWT_SECRET: ${env:JWT_SECRET, file(env.json):JWT_SECRET}
@@ -75,7 +77,6 @@ provider:
 functions:
   - ${file(./services/groups/functions.yml)}
   - ${file(./services/google/functions.yml)}
-  - ${file(./services/data/functions.yml)}
   - ${file(./services/searches/functions.yml)}
   - ${file(./services/email/functions.yml)}
 

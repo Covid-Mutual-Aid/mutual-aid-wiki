@@ -2,7 +2,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { Group, Search } from '../lib/types'
 import createTableAPI from './createTableAPI'
-import { isOffline, tables } from './environment'
+import ENV, { isOffline } from './environment'
 
 const offlineOptions = {
   region: 'localhost',
@@ -14,12 +14,12 @@ const offlineOptions = {
 export const dynamoClient = isOffline() ? new DocumentClient(offlineOptions) : new DocumentClient()
 
 export const groupsdb = createTableAPI<Group>({
-  table: tables.GROUPS_TABLE as string,
+  table: ENV.GROUPS_TABLE as string,
   client: dynamoClient,
 })
 
 export const searchesdb = createTableAPI<Search>({
-  table: tables.LOCATION_SEARCHES_TABLE as string,
+  table: ENV.LOCATION_SEARCHES_TABLE as string,
   client: dynamoClient,
 })
 

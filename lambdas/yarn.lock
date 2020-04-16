@@ -697,29 +697,29 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@sendgrid/client@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.0.0.tgz#c8bc5d4c77ce65a8a311bfc33f1fb80d76477d26"
-  integrity sha512-Wo3Cs8XJ6F2UFYgZJ3WmRVj7y/cTgyBfkwCOxJKml3DnsAbtc0RozkBOvvIAyBKNF1LE6hqQPgckspg59BO6Vg==
+"@sendgrid/client@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.0.1.tgz#b85389bb214f5dcfdf0fcbd3746713f57ea33250"
+  integrity sha512-HZhDD1bctv5rM0wqAz9LhJC1IL9YHn5jJvxPqiK/3f3WCQjRvraJ1AkqkFFNFd9lPBVLmcrORX04lojwl+5ZaA==
   dependencies:
-    "@sendgrid/helpers" "^7.0.0"
+    "@sendgrid/helpers" "^7.0.1"
     axios "^0.19.2"
 
-"@sendgrid/helpers@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.0.0.tgz#31d24206f7b717da9a456b178513ae2c3222423d"
-  integrity sha512-sAoZTH3WBURV5Gep6Y9AhsuLQ1KW4TEzn1MKKBhSGFnYTWBOc562f+ee1j9XI0/7pdI/I2hUWuiw0vhY3joBDA==
+"@sendgrid/helpers@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.0.1.tgz#b97debc793ed3f9f56102e12c2a6d2bbbf0ffb78"
+  integrity sha512-i/zsissq1upgdywtuJKysaplJJZC24GdtEKiJC1IRlXvBHzIjH4eU+rqUFO8h+hGji3UMURGgMFuLUXTUYvZ9w==
   dependencies:
     chalk "^2.0.1"
     deepmerge "^4.2.2"
 
-"@sendgrid/mail@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.0.0.tgz#e4aa07e6a7a8ec3c06be79f81df67c427e3cc56b"
-  integrity sha512-HlRath7i1imzvB87HvIPJDsv81MuoF4H4OgVMvQO4MTclHe6oJaORJlHFr0+82sCEdQqEOH33rBrEb4j2FfxMA==
+"@sendgrid/mail@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.0.1.tgz#058295972e45ad4d960d77a043cedc0ebe5f856d"
+  integrity sha512-yFkhjrYQvwpdy8eUiDxLLgPp9o5jHQzjJ5qUkgMr2fuPuYSKKqbpPir1PXIHx0ek2VKkTsvj/7Z5UQk6hPZcrQ==
   dependencies:
-    "@sendgrid/client" "^7.0.0"
-    "@sendgrid/helpers" "^7.0.0"
+    "@sendgrid/client" "^7.0.1"
+    "@sendgrid/helpers" "^7.0.1"
 
 "@serverless/cli@^1.4.0":
   version "1.4.0"

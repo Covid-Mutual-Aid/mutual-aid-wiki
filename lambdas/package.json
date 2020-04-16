@@ -10,7 +10,7 @@
     "sls": "serverless"
   },
   "dependencies": {
-    "@sendgrid/mail": "^7.0.0",
+    "@sendgrid/mail": "^7.0.1",
     "@slack/web-api": "^5.8.0",
     "airtable": "^0.8.1",
     "axios": "^0.19.2",
