@@ -16,7 +16,7 @@ function App() {
       <Route path="/about" component={About} />
       <Route path="/add-group" component={AddGroup} />
       <Route path="/edit/:id/:token" component={EditGroup} />
-      <Route path="/edit" component={EmailAuth} />
+      <Route path="/edit/:id" component={EmailAuth} />
       <Route path="/" component={Groups} />
     </Switch>
   )

@@ -1,8 +1,9 @@
 import sendGrid from '@sendgrid/mail'
+import { sign } from 'jsonwebtoken'
+
+import airtable from '../lib/external/airtable'
 import { Group } from '../lib/types'
 import ENV from '../lib/environment'
-import { sign } from 'jsonwebtoken'
-import airtable from '../lib/external/airtable'
 
 sendGrid.setApiKey(ENV.SEND_GRID_API_KEY)
 const sendMail = sendGrid.send

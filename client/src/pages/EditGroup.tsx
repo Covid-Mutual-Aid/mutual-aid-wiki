@@ -31,9 +31,10 @@ const CreateGroup = () => {
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
-    request(`/group/get?id=${id}`).then(setGroup)
+    request(`/group/get?id=${id}`).then((grp) => setGroup((x) => ({ ...x, ...grp })))
   }, [id, request])
   console.log(group)
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSubmitted(true)

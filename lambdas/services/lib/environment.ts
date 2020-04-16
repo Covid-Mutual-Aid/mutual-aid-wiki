@@ -4,7 +4,7 @@ export const isOffline = () => !!env.OFFLINE || !!env.IS_LOCAL
 
 const other = {
   STAGE: env.STAGE as string,
-  CLIENT_ENDPOINT: env.API_ENDPOINT as string,
+  CLIENT_ENDPOINT: env.CLIENT_ENDPOINT as string,
   API_ENDPOINT: env.API_ENDPOINT as string,
   JWT_SECRET: env.JWT_SECRET as string,
   SLACK_API_TOKEN: env.SLACK_API_TOKEN as string,

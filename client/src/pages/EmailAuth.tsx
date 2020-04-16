@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { InputGroup } from '../styles/styles'
 import { useRequest } from '../contexts/RequestProvider'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const EmailAuth = () => {
+  const { id } = useParams()
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const request = useRequest()
@@ -16,7 +17,7 @@ const EmailAuth = () => {
           e.preventDefault()
           request('/request/groupedit', {
             method: 'POST',
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ email, id }),
           }).then((x) => (x.error ? setError(x.error) : console.log(x)))
         }}
       >

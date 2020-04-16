@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import icons, { iconFromUrl } from '../../utils/icons'
 import tidyLink from '../../utils/tidyLink'
 import { Group } from '../../utils/types'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 const useOutsideClose = (init: boolean) => {
   const [isOpen, setIsOpen] = useState(init)
@@ -26,6 +26,7 @@ const GroupItem = ({
   selected: boolean
   onSelect: (...args: any[]) => void
 }) => {
+  const history = useHistory()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
@@ -49,13 +50,7 @@ const GroupItem = ({
       </div>
       <div className="actions">
         <div style={{ display: isOpen ? 'block' : 'none' }} className="menu">
-          <div
-            onMouseDown={(e) => {
-              ;(window as any).location = window.location.origin + '/edit'
-            }}
-          >
-            Edit group
-          </div>
+          <div onMouseDown={(e) => history.push(`/edit/${group.id}`)}>Edit group</div>
         </div>
         <div
           className="more"
