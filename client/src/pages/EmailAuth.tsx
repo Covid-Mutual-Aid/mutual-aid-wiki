@@ -75,8 +75,4 @@ const Wrapper = styled.div`
     padding: 1rem 0;
     justify-content: end;
   }
-
-  button {
-    padding: 0.4rem;
-  }
 `

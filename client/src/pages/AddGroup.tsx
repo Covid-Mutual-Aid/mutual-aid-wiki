@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { GroupWithEmails } from '../utils/types'
-import EditGroupForm from '../components/EditGroupForm'
+import EditGroupComponents, { Validation } from '../components/EditGroupComponents'
 import GroupItem from '../components/NewLayout/GroupItem'
 import { EditPage, CenterAlign } from '../styles/styles'
 
@@ -12,7 +12,13 @@ const CreateGroup = () => {
   const request = useRequest()
   const history = useHistory()
   const [ready, setReady] = useState(false)
-  const [validation, setValidation] = useState<string[]>([])
+  const [validation, setValidation] = useState<(keyof Validation)[]>([
+    'name',
+    'emails',
+    'link_facebook',
+    'location_name',
+  ])
+
   const [submitted, setSubmitted] = useState(false)
 
   const [group, setGroup] = useState<GroupWithEmails>({
@@ -49,29 +55,27 @@ const CreateGroup = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              <EditGroupForm
+              <EditGroupComponents
                 onChange={(group, validation) => {
                   setValidation(validation)
                   setGroup(group)
                 }}
                 onComplete={() => setReady(true)}
-                initGroup={group}
+                group={group}
               />
 
-              <div style={{ display: submitted ? 'block' : 'none' }} className="validation">
+              <div
+                style={{ display: submitted && validation.length > 0 ? 'block' : 'none' }}
+                className="validation"
+              >
                 <label style={{ display: 'block', margin: '1.2rem 0 0.4rem 0' }}>
                   Please complete
                 </label>
-                {submitted &&
-                  validation.map((key) => (
-                    <span style={{ color: 'rgba(255, 0, 0, 0.6)', margin: '0 0.2rem' }}>
-                      {key === 'link_facebook'
-                        ? 'link'
-                        : key === 'location_name'
-                        ? 'location'
-                        : key}
-                    </span>
-                  ))}
+                {validation.map((key) => (
+                  <span style={{ color: 'rgba(255, 0, 0, 0.6)', margin: '0 0.2rem' }}>
+                    {key === 'link_facebook' ? 'link' : key === 'location_name' ? 'location' : key}
+                  </span>
+                ))}
               </div>
 
               <FormButtons>
@@ -84,6 +88,7 @@ const CreateGroup = () => {
           )}
         </CenterAlign>
       </div>
+
       <div className="preview">
         <CenterAlign>
           <div className="item">

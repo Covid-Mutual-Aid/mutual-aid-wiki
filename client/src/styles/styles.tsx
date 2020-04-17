@@ -36,8 +36,8 @@ export const InputGroup = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 40px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid: 1fr / 1fr 0fr;
 
   input:focus {
     outline: none;
@@ -45,25 +45,24 @@ export const InputGroup = styled.div`
 
   input,
   button {
-    height: 100%;
+    height: 2.8rem;
     font-size: 1rem;
+    display: flex;
+    align-items: center;
   }
 
   input {
-    width: calc(100% - 4rem);
     outline: none;
     border: none;
     background-color: transparent;
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
   }
 
   button {
     cursor: pointer;
     border: none;
     border-left: 1px solid rgba(0, 0, 0, 0.2);
-    height: 2.8rem;
-    width: 4rem;
-    padding: 0;
+    padding: 1rem;
     outline: none;
     background-color: transparent;
     color: ${MOON_BLUE};
