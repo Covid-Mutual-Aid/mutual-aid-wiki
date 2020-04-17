@@ -7,18 +7,17 @@ type WithValidation = {
 
 export const Input = ({
   placeholder = '',
-  initValue = '',
+  value,
   onChange,
   validator,
   errorMsg = '',
 }: {
   placeholder?: string
-  initValue?: string
+  value: string
   onChange: (s: WithValidation) => void
   validator: (sn: string) => boolean
   errorMsg?: string
 }) => {
-  const [value, setValue] = useState(initValue)
   console.log(value, validator(value), value.length)
   return (
     <>
@@ -35,7 +34,6 @@ export const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={({ target }) => {
-          setValue(target.value)
           onChange({ value: target.value, validated: validator(target.value) })
         }}
       />

@@ -7,8 +7,8 @@ const Nav = ({ children }: { children?: ReactChild }) => {
   return (
     <NavWrapper>
       <div className="options">
-        <Link to="/about">INFORMATION</Link>
-        <Link to="/help">?</Link>
+        <Link to="/about">Information</Link>
+        <Link to="/help">Help</Link>
       </div>
       <div className="buttons-right">{children}</div>
     </NavWrapper>
@@ -32,12 +32,11 @@ const NavWrapper = styled.div`
 
     a {
       border-radius: 6px;
-      border: 1px solid ${MOON_BLUE};
-      padding: 0 0.8rem;
+      /* border: 1px solid ${MOON_BLUE}; */
+      padding: 0 0.8rem 0 0;
       margin: 0 0.2rem;
-      color: ${MOON_BLUE};
+      color: rgb(204, 39, 109);
 
-      text-decoration: none;
       line-height: 1.6;
     }
   }

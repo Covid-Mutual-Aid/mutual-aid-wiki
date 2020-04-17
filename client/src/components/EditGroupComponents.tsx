@@ -49,7 +49,7 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
           <InputGroup>
             <Input
               placeholder="Group name"
-              initValue={group.name}
+              value={group.name}
               onChange={({ value, validated }) => {
                 const v = { ...validation, name: validated }
                 onChange({ ...group, name: value }, groupValidated(v))
@@ -91,7 +91,7 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
           <InputGroup>
             <Input
               placeholder="http://www..."
-              initValue={group.link_facebook}
+              value={group.link_facebook}
               onChange={({ value, validated }) => {
                 const v = { ...validation, link_facebook: validated }
                 onChange({ ...group, link_facebook: value }, groupValidated(v))

@@ -7,6 +7,10 @@ export const EditPage = styled.div`
 
   .main {
     border-right: 1px solid rgba(0, 0, 0, 0.1);
+    form {
+      padding: 1rem;
+      max-width: 28rem;
+    }
   }
 
   .item {
