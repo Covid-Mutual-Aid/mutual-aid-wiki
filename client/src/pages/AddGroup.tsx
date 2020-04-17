@@ -60,7 +60,7 @@ const CreateGroup = () => {
                   setValidation(validation)
                   setGroup(group)
                 }}
-                onComplete={() => setReady(true)}
+                onReady={() => setReady(true)}
                 group={group}
               />
 

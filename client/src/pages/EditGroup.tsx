@@ -5,10 +5,8 @@ import { useRequest } from '../contexts/RequestProvider'
 import { GroupWithEmails } from '../utils/types'
 import { InputGroup, EditPage, CenterAlign } from '../styles/styles'
 import styled from 'styled-components'
-import Location from '../components/Location'
 import EditGroupComponents, { Validation } from '../components/EditGroupComponents'
 import GroupItem from '../components/NewLayout/GroupItem'
-import { spawn } from 'child_process'
 
 const CreateGroup = () => {
   const request = useRequest()
@@ -25,7 +23,7 @@ const CreateGroup = () => {
     },
   })
 
-  const [sucessModal] = useState(false)
+  const [sucessModal, setSuccessModal] = useState(false)
   const [ready, setReady] = useState(false)
   const [validation, setValidation] = useState<(keyof Validation)[]>([
     'name',
@@ -53,10 +51,8 @@ const CreateGroup = () => {
       body: JSON.stringify(group),
     }).then((x) => {
       console.log(x)
-      // setSuccessModal(true)
-      // return new Promise((res) => setTimeout(res, 1000))
+      setSuccessModal(true)
     })
-    // .then(() => history.replace('/'))
   }
 
   return (
@@ -75,7 +71,7 @@ const CreateGroup = () => {
                   setValidation(validation)
                   setGroup(group)
                 }}
-                onComplete={() => setReady(true)}
+                onReady={() => setReady(true)}
                 group={group}
               />
 

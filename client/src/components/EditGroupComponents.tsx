@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ReactMultiEmail, isEmail } from 'react-multi-email'
 import 'react-multi-email/style.css'
 
@@ -14,7 +14,7 @@ type Props = {
   group: GroupWithEmails
   omitKeys?: (keyof GroupWithEmails)[]
   onChange: (group: GroupWithEmails, validation: (keyof Validation)[]) => void
-  onComplete?: (group: GroupWithEmails) => void
+  onReady?: (group: GroupWithEmails) => void
 }
 
 export type Validation = {
@@ -24,7 +24,7 @@ export type Validation = {
   location_name: boolean
 }
 
-const EditGroupComponents = ({ group, omitKeys = [], onChange, onComplete }: Props) => {
+const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props) => {
   const [validation, setValidation] = useState<Validation>({
     name: false,
     emails: false,
@@ -36,8 +36,8 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onComplete }: Pro
     (Object.keys(v) as (keyof Validation)[]).filter((k) => !v[k])
 
   useEffect(() => {
-    if (onComplete && groupValidated(validation).length === Object.keys(group).length) {
-      onComplete(group)
+    if (onReady && groupValidated(validation).length === Object.keys(group).length) {
+      onReady(group)
     }
   }, [group])
 
@@ -82,53 +82,6 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onComplete }: Pro
               </div>
             )}
           />
-          {/* <InputGroup>
-            <Input
-              placeholder="Enter an email"
-              initValue={email.value}
-              onChange={({ value, validated }) => {
-                setEmail({ value, validated })
-              }}
-              validator={validEmail}
-            />
-            <button
-              type="button"
-              style={{
-                backgroundColor:
-                  email.value.length === 0
-                    ? 'inherit'
-                    : email.validated
-                    ? 'rgba(0, 255, 0, 0.1'
-                    : 'rgba(255, 0, 0, 0.1',
-              }}
-              onClick={() => {
-                if (!email.validated) return
-                const v = { ...validation, emails: group.emails.length > 0 }
-                onChange({ ...group, emails: [...group.emails, email.value] }, groupValidated(v))
-                setEmail({ value: '', validated: false })
-              }}
-            >
-              add
-            </button>
-          </InputGroup>
-
-          {group.emails.map((email, i) => (
-            <InputGroup style={{ margin: '1rem 0' }} key={email + i}>
-              <span style={{ padding: '0 .3rem', width: '100%' }}>{email}</span>
-              <button
-                type="button"
-                onClick={() => {
-                  const v = { ...validation, emails: group.emails.length > 0 }
-                  onChange(
-                    { ...group, emails: group.emails.filter((y) => y !== email) },
-                    groupValidated(v)
-                  )
-                }}
-              >
-                remove
-              </button>
-            </InputGroup>
-          ))} */}
         </>
       ) : null}
 
