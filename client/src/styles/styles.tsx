@@ -69,3 +69,15 @@ export const InputGroup = styled.div`
     color: ${MOON_BLUE};
   }
 `
+
+export const Button = styled.div<{ variant?: 'primary' | 'secondary' }>`
+  background-color: ${({ variant }) => (variant === 'primary' ? 'blue' : 'lightgrey')};
+  color: ${({ variant }) => (variant === 'primary' ? 'white' : 'grey')};
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+`
