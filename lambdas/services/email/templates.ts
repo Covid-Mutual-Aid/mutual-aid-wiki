@@ -6,7 +6,6 @@ import { Group } from '../lib/types'
 import ENV from '../lib/environment'
 
 sendGrid.setApiKey(ENV.SEND_GRID_API_KEY)
-const sendMail = sendGrid.send
 
 export const sendEditLink = (email: string, id: string) => {
   const link = `${ENV.CLIENT_ENDPOINT}/edit/${id}/${sign({ id, email }, ENV.JWT_SECRET, {
@@ -18,13 +17,14 @@ export const sendEditLink = (email: string, id: string) => {
       to: email,
       from: 'no-reply@covidmutualaid.cc',
       subject: 'Here is your edit link',
+      substitutionWrappers: ['{{', '}}'],
       html: `
         <p>Hi,</p>
         <p>Please follow this link to edit your site:</p>
         <p><a href="${link}">${link}</a></p>
         <p>
           This link will expire in 1 day, so if you need to edit your group again afterwards,
-          please request another one by clicking the edit button on the dropdown menu of your 
+          please request another one by clicking the edit button on the dropdown menu of your
           group (as you may have just done).
         </p>
         <p>
@@ -38,14 +38,15 @@ export const sendEditLink = (email: string, id: string) => {
 }
 
 export const sendNotAssosiated = (email: string) =>
-  sendMail({
+  sendGrid.send({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
     subject: 'Email not linked with this group',
+    substitutionWrappers: ['{{', '}}'],
     html: `
       <p>Hi,</p>
       <p>
-        This email address (${email}) is currently not one of the one(s) linked with this group. Please 
+        This email address (${email}) is currently not one of the one(s) linked with this group. Please
         speak with one of your co-organsiers who can request an edit link on your behalf.
       </p>
       <p>
@@ -60,10 +61,11 @@ export const sendNoneAssosiated = (email: string, id: string) => {
     expiresIn: '3d',
   })}`
 
-  return sendMail({
+  return sendGrid.send({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
     subject: 'Email not linked with this group',
+    substitutionWrappers: ['{{', '}}'],
     html: `
       <p>Hi,</p>
       <p>
@@ -76,7 +78,7 @@ export const sendNoneAssosiated = (email: string, id: string) => {
         - Wait a few days for one of our team to visit your group to check this code matches what we sent you \n
         - Delete this code from your group once you have recieved a confirmation email \n
       </p>
-      
+
       <p>If you would like to proceed, please click this link: <a href="${link}">${link}</a></p>
 
       <p>
@@ -87,15 +89,16 @@ export const sendNoneAssosiated = (email: string, id: string) => {
   })
 }
 
-export const sendSubmitedRequest = (email: string, key: string) =>
-  sendMail({
+export const sendSubmitedRequest = (email: string, key: string) => {
+  return sendGrid.send({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
     subject: 'Here is your verification code',
+    substitutionWrappers: ['{{', '}}'],
     html: `
       <p>Hi,</p>
       <p>
-        Here is your verification code: ${key} \n
+        Here is your verification code: ( <b>${key}</b> ) \n
         Please paste this into a publicly visible section of your group. Examples include:
       </p>
       <p>
@@ -104,7 +107,7 @@ export const sendSubmitedRequest = (email: string, key: string) =>
         Website: Anywhere on your home page (maybe in the footer?) \n
       </p>
       <p>
-        Sometime after tomorrow, a member of our team will visit your group to check for this code. If it matches 
+        Sometime after tomorrow, a member of our team will visit your group to check for this code. If it matches
         what we sent you, we will send you a confirmation email. You will then be able to edit your group from this email
         address.
       </p>
@@ -114,16 +117,18 @@ export const sendSubmitedRequest = (email: string, key: string) =>
       </p>
     `,
   })
+}
 
 export const sendSuccessfulVerification = (email: string) =>
-  sendMail({
+  sendGrid.send({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
     subject: 'You have sucessfuly verified!',
+    substitutionWrappers: ['{{', '}}'],
     html: `
       <p>Hi,</p>
       <p>
-        You have sucessfully verified your group! This means you can select the edit option on your group in the dropdown menu 
+        You have sucessfully verified your group! This means you can select the edit option on your group in the dropdown menu
          and use this email address (${email}) to recieve a link that will enable you to edit your group.
       </p>
       <p>
@@ -134,10 +139,11 @@ export const sendSuccessfulVerification = (email: string) =>
   })
 
 export const sendFailedVerification = (email: string) =>
-  sendMail({
+  sendGrid.send({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
     subject: 'Unsuccessful verification',
+    substitutionWrappers: ['{{', '}}'],
     html: `
       <p>Hi,</p>
       <p>
@@ -156,11 +162,11 @@ export const addSupportRequestToTable = (
   key: string,
   group: Pick<Group, 'id' | 'name' | 'link_facebook'>
 ) => {
-  const accept = `${ENV.API_ENDPOINT}/request/accept?token=${sign(
+  const confirm = `${ENV.API_ENDPOINT}/request/confirm?token=${sign(
     { email: email, id: group.id },
     ENV.JWT_SECRET
   )}`
-  const decline = `${ENV.API_ENDPOINT}/request/decline?token=${sign(
+  const reject = `${ENV.API_ENDPOINT}/request/reject?token=${sign(
     { email: email, id: group.id },
     ENV.JWT_SECRET
   )}`
@@ -172,8 +178,8 @@ export const addSupportRequestToTable = (
         url: group.link_facebook,
         email: email,
         key,
-        accept,
-        decline,
+        confirm,
+        reject,
       },
     },
   ])

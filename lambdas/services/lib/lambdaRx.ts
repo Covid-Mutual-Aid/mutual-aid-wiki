@@ -20,13 +20,15 @@ const lambdaRx = (req$: (payload: Observable<Input>) => Observable<APIGatewayPro
 ) =>
   req$(of({ _event, _context }))
     .toPromise()
-    .catch((err) =>
-      requestFailed(JSON.stringify(err), _event).then(() => ({
+    .catch((err) => {
+      console.log(err)
+      const error = err.message || err
+      return requestFailed(JSON.stringify({ message: error }), _event).then(() => ({
         statusCode: 500,
         headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify(err),
+        body: JSON.stringify({ message: error }),
       }))
-    )
+    })
 
 // Selectors
 export const body = <P extends Proof<any>>(proof?: P) =>
