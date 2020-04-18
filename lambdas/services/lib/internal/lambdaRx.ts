@@ -4,7 +4,7 @@ import { Proof, ProofType, isProved } from 'ts-prove'
 import { of, Observable, throwError, OperatorFunction, ObservableInput, forkJoin } from 'rxjs'
 import { map, mergeMap } from 'rxjs/operators'
 
-import { requestFailed } from './logging'
+import { requestFailed } from '../logging'
 
 export type LambdaInput = {
   _event: APIGatewayProxyEvent

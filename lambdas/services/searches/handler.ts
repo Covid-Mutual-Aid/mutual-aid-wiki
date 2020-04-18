@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 import P from 'ts-prove'
-import lambda, { body, responseJson$ } from '../lib/lambdaRx'
+import lambda, { body, responseJson$ } from '../lib/internal/lambdaRx'
 
 const proveLocationSearch = P.shape({
   query: P.string,

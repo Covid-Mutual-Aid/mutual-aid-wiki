@@ -3,8 +3,8 @@ import { switchMap } from 'rxjs/operators'
 import { v4 } from 'uuid'
 import P from 'ts-prove'
 
+import lambda, { body, responseJson$ } from '../lib/internal/lambdaRx'
 import { createRow, transferToDone } from '../lib/external/airtable'
-import lambda, { body, responseJson$ } from '../lib/lambdaRx'
 import { switchMergeKey, authorise } from '../lib/observables'
 import db from '../lib/database'
 import {

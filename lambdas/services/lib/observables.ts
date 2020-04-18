@@ -2,7 +2,7 @@ import { mergeMap } from 'rxjs/operators'
 import { ObservableInput, throwError } from 'rxjs'
 
 import tokens, { Tokens } from './tokens'
-import { LambdaInput } from './lambdaRx'
+import { LambdaInput } from './internal/lambdaRx'
 
 export const authorise = <K extends keyof Tokens>(key: K) =>
   mergeMap((input: LambdaInput) => {

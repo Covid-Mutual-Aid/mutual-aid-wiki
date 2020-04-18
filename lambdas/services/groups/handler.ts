@@ -2,7 +2,7 @@ import { switchMap, mergeMap } from 'rxjs/operators'
 import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
-import lambda, { params, body, select, responseJson$ } from '../lib/lambdaRx'
+import lambda, { params, body, select, responseJson$ } from '../lib/internal/lambdaRx'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
 import { authorise } from '../lib/observables'

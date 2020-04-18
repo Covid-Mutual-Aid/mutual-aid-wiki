@@ -4,7 +4,7 @@ import { switchMap } from 'rxjs/operators'
 import axios from 'axios'
 import P from 'ts-prove'
 
-import lambda, { params, responseJson$ } from '../lib/lambdaRx'
+import lambda, { params, responseJson$ } from '../lib/internal/lambdaRx'
 import ENV from '../lib/environment'
 
 const geocodeEndpoint = `https://maps.googleapis.com/maps/api/geocode`
