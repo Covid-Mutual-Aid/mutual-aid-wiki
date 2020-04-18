@@ -9,6 +9,7 @@ on:
     paths:
       - .github/**
       - lambdas/**
+      - scripts/**
     branches:
       - staging
 
