@@ -7,6 +7,7 @@ import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 
 import GroupItem from './GroupItem'
 import { MOON_BLUE } from '../../utils/CONSTANTS'
+import isIosSafari from '../../utils/isIosSafari'
 
 const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
@@ -44,7 +45,7 @@ const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          margin: '4rem 0 6rem 0',
+          margin: isIosSafari() ? '4rem 0 10rem 0' : '4rem 0 6rem 0',
         }}
       >
         {groups.length > 0 && limit < groups.length && (

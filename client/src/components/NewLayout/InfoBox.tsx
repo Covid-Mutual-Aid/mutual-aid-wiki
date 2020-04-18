@@ -6,14 +6,7 @@ import { useData } from '../../contexts/DataProvider'
 import GroupItem from './GroupItem'
 
 import { MOBILE_BREAKPOINT } from '../../utils/CONSTANTS'
-
-// https://stackoverflow.com/questions/3007480/determine-if-user-navigated-from-mobile-safari/29696509#29696509
-const isIosSafari = () => {
-  let ua = window.navigator.userAgent
-  let iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i)
-  let webkit = !!ua.match(/WebKit/i)
-  return iOS && webkit && !ua.match(/CriOS/i)
-}
+import isIosSafari from '../../utils/isIosSafari'
 
 const InfoBox = () => {
   const { groups } = useData()
