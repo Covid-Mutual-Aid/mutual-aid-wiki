@@ -30,17 +30,17 @@ const tokens = {
     verify: verifyToken<{ id: string; email: string }>('SUPPORT_REQUEST'),
   },
   confirm: {
-    sign: ({ id, email }: { id: string; email: string }) =>
+    sign: ({ id, email, key }: { id: string; email: string; key: string }) =>
       `${ENV.API_ENDPOINT}/request/confirm?token=${sign(
-        { email, id, type: 'CONFIRM_REQUEST' },
+        { email, id, key, type: 'CONFIRM' },
         ENV.JWT_SECRET
       )}`,
-    verify: verifyToken<{ id: string; email: string }>('CONFIRM_REQUEST'),
+    verify: verifyToken<{ id: string; email: string }>('CONFIRM'),
   },
   reject: {
-    sign: ({ id, email }: { id: string; email: string }) =>
-      `${ENV.API_ENDPOINT}/request/confirm?token=${sign(
-        { email, id, type: 'REJECT' },
+    sign: ({ id, email, key }: { id: string; email: string; key: string }) =>
+      `${ENV.API_ENDPOINT}/request/reject?token=${sign(
+        { email, id, key, type: 'REJECT' },
         ENV.JWT_SECRET
       )}`,
     verify: verifyToken<{ id: string; email: string }>('REJECT'),
