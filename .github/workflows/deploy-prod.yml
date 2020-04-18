@@ -63,22 +63,8 @@ jobs:
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-      - name: 'Update client endpoint'
-        run: 'node scripts/netlify-snippets.js'
-        env:
-          NETLIFY_ACCESS_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PROD_ID }}
       - name: 'Update client redirects'
         run: 'node ./scripts/update-redirects.js'
-      - uses: stefanzweifel/git-auto-commit-action@v4.1.2
-        with:
-          commit_message: Update redirects
-          branch: ${{ github.head_ref }}
-          file_pattern: client/_redirects
-          repository: .
-          commit_user_name: My GitHub Actions Bot
-          commit_user_email: my-github-actions-bot@example.org
-          commit_author: Author <actions@github.com>
-      # - name: Run tests
-      #   run: yarn test:e2e
+        env:
+          BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
