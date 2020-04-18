@@ -61,6 +61,7 @@ jobs:
         working-directory: lambdas
         env:
           STAGE: staging
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
       - name: 'Update client endpoint'
         run: 'node scripts/netlify-snippets.js'
         env:

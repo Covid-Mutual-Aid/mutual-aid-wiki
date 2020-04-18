@@ -1,5 +1,6 @@
+import { sign, verify, SignOptions } from 'jsonwebtoken'
 import { is } from 'ts-prove'
-import { sign, verify } from 'jsonwebtoken'
+
 import ENV from './environment'
 
 const verifyToken = <T extends any>(type: string) => (token: string) => {
@@ -10,41 +11,40 @@ const verifyToken = <T extends any>(type: string) => (token: string) => {
   return Promise.resolve(result as T)
 }
 
+const createToken = <T extends string>(type: T) => <P extends Record<string, string>>(
+  opt?: SignOptions,
+  url?: (x: string, data: P) => string
+) => ({
+  type,
+  sign: (data: P) => sign(data, ENV.JWT_SECRET, opt),
+  signUrl: (data: P) => {
+    if (!url) throw new Error('No url method provided')
+    return url(sign(data, ENV.JWT_SECRET, opt), data)
+  },
+  verify: verifyToken<P>(type),
+})
+
 const tokens = {
-  edit: {
-    sign: ({ id, email }: { id: string; email: string }) =>
-      `${ENV.CLIENT_ENDPOINT}/edit/${id}/${sign({ id, email, type: 'EDIT_GROUP' }, ENV.JWT_SECRET, {
-        expiresIn: '1d',
-      })}`,
-    verify: verifyToken<{ id: string; email: string }>('EDIT_GROUP'),
-  },
-  support: {
-    sign: ({ id, email }: { id: string; email: string }) =>
-      `${ENV.API_ENDPOINT}/request/support?token=${sign(
-        { id, email, type: 'SUPPORT_REQUEST' },
-        ENV.JWT_SECRET,
-        {
-          expiresIn: '3d',
-        }
-      )}`,
-    verify: verifyToken<{ id: string; email: string }>('SUPPORT_REQUEST'),
-  },
-  confirm: {
-    sign: ({ id, email, key }: { id: string; email: string; key: string }) =>
-      `${ENV.API_ENDPOINT}/request/confirm?token=${sign(
-        { email, id, key, type: 'CONFIRM' },
-        ENV.JWT_SECRET
-      )}`,
-    verify: verifyToken<{ id: string; email: string; key: string }>('CONFIRM'),
-  },
-  reject: {
-    sign: ({ id, email, key }: { id: string; email: string; key: string }) =>
-      `${ENV.API_ENDPOINT}/request/reject?token=${sign(
-        { email, id, key, type: 'REJECT' },
-        ENV.JWT_SECRET
-      )}`,
-    verify: verifyToken<{ id: string; email: string; key: string }>('REJECT'),
-  },
+  edit: createToken('EDIT_GROUP')<{ id: string; email: string }>(
+    {
+      expiresIn: '1d',
+    },
+    (token, d) => `${ENV.CLIENT_ENDPOINT}/edit/${d.id}/${token}`
+  ),
+  support: createToken('SUPPORT_REQUEST')<{ id: string; email: string }>(
+    {
+      expiresIn: '1d',
+    },
+    (token, d) => `${ENV.API_ENDPOINT}/request/support?token=${token}`
+  ),
+  confirm: createToken('CONFIRM')<{ id: string; email: string; key: string }>(
+    {},
+    (token) => `${ENV.API_ENDPOINT}/request/confirm?token=${token}`
+  ),
+  reject: createToken('REJECT')<{ id: string; email: string; key: string }>(
+    {},
+    (token) => `${ENV.API_ENDPOINT}/request/reject?token=${token}`
+  ),
 }
 
 export type Tokens = typeof tokens

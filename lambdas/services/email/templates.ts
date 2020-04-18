@@ -7,7 +7,7 @@ sendGrid.setApiKey(ENV.SEND_GRID_API_KEY)
 const from = 'no-reply@mutualaid.wiki'
 
 export const sendEditLink = (email: string, id: string) => {
-  const link = tokens.edit.sign({ id, email })
+  const link = tokens.edit.signUrl({ id, email })
   return sendGrid
     .send({
       to: email,
@@ -53,7 +53,7 @@ export const sendNotAssosiated = (email: string) =>
   })
 
 export const sendNoneAssosiated = (email: string, id: string) => {
-  const link = tokens.support.sign({ email, id })
+  const link = tokens.support.signUrl({ email, id })
   return sendGrid.send({
     to: email,
     from,

@@ -85,8 +85,8 @@ export const addSupportRequestToTable = (
   key: string,
   group: Pick<Group, 'id' | 'name' | 'link_facebook'>
 ) => {
-  const confirm = tokens.confirm.sign({ id: group.id, email, key })
-  const reject = tokens.reject.sign({ id: group.id, email, key })
+  const confirm = tokens.confirm.signUrl({ id: group.id, email, key })
+  const reject = tokens.reject.signUrl({ id: group.id, email, key })
   return createRow('Waiting', {
     date: new Date().toISOString(),
     name: group.name,
