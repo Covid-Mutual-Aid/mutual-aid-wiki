@@ -40,7 +40,7 @@ export const useMapControls = () => {
   const { map } = useContext(MapContext)
 
   const panTo = (coord: { lat: number; lng: number }) => {
-    if (!map.current) return
+    if (!map.current || !window.google) return
     map.current.panTo(new window.google.maps.LatLng(coord))
   }
 
