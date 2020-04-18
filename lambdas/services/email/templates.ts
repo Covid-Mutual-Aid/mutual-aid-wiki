@@ -1,17 +1,14 @@
 import sendGrid from '@sendgrid/mail'
-import { sign } from 'jsonwebtoken'
 
 import airtable from '../lib/external/airtable'
 import { Group } from '../lib/types'
 import ENV from '../lib/environment'
+import tokens from '../lib/tokens'
 
 sendGrid.setApiKey(ENV.SEND_GRID_API_KEY)
 
 export const sendEditLink = (email: string, id: string) => {
-  const link = `${ENV.CLIENT_ENDPOINT}/edit/${id}/${sign({ id, email }, ENV.JWT_SECRET, {
-    expiresIn: '1d',
-  })}`
-
+  const link = tokens.edit.sign({ id, email })
   return sendGrid
     .send({
       to: email,
@@ -57,10 +54,7 @@ export const sendNotAssosiated = (email: string) =>
   })
 
 export const sendNoneAssosiated = (email: string, id: string) => {
-  const link = `${ENV.API_ENDPOINT}/request/support?token=${sign({ id, email }, ENV.JWT_SECRET, {
-    expiresIn: '3d',
-  })}`
-
+  const link = tokens.support.sign({ email, id })
   return sendGrid.send({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
@@ -162,15 +156,8 @@ export const addSupportRequestToTable = (
   key: string,
   group: Pick<Group, 'id' | 'name' | 'link_facebook'>
 ) => {
-  const confirm = `${ENV.API_ENDPOINT}/request/confirm?token=${sign(
-    { email: email, id: group.id },
-    ENV.JWT_SECRET
-  )}`
-  const reject = `${ENV.API_ENDPOINT}/request/reject?token=${sign(
-    { email: email, id: group.id },
-    ENV.JWT_SECRET
-  )}`
-
+  const confirm = tokens.confirm.sign({ id: group.id, email })
+  const reject = tokens.reject.sign({ id: group.id, email })
   return airtable.attachEmailBase.create([
     {
       fields: {

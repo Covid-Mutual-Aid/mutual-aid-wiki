@@ -3,8 +3,8 @@ import { switchMap } from 'rxjs/operators'
 import { v4 } from 'uuid'
 import P from 'ts-prove'
 
-import lambda, { body, authorise, response$ } from '../lib/lambdaRx'
-import { switchMergeKey } from '../lib/observables'
+import lambda, { body, response$ } from '../lib/lambdaRx'
+import { switchMergeKey, authorise } from '../lib/observables'
 import db from '../lib/database'
 import {
   sendNoneAssosiated,
@@ -38,7 +38,7 @@ export const requestGroupEdit = lambda((req$) =>
 // request/support?token={ email, id }
 export const submitSupportRequest = lambda((req$) =>
   req$.pipe(
-    authorise(P.shape({ email: P.string, id: P.string })),
+    authorise('support'),
     switchMergeKey('group', (x) =>
       db.groups
         .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
@@ -58,7 +58,7 @@ export const submitSupportRequest = lambda((req$) =>
 // request/confirm
 export const confirmSupportRequest = lambda((req$) =>
   req$.pipe(
-    authorise(P.shape({ email: P.string, id: P.string })),
+    authorise('confirm'),
     switchMap((x) =>
       db.groups
         .update({ id: x.id, emails: [x.email] })
@@ -71,7 +71,7 @@ export const confirmSupportRequest = lambda((req$) =>
 // request/reject
 export const rejectSupportRequest = lambda((req$) =>
   req$.pipe(
-    authorise(P.shape({ email: P.string, id: P.string })),
+    authorise('reject'),
     switchMap((x) => sendFailedVerification(x.email)),
     response$
   )

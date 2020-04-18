@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken'
 import { of } from 'rxjs'
 import P from 'ts-prove'
 
-import lrx, { Input, body, params, authorise, select, response$ } from './lambdaRx'
+import lrx, { LambdaInput, body, params, authorise, select, response$ } from './lambdaRx'
 
 jest.mock('./environment', () => ({
   default: { JWT_SECRET: 'SECRET' },
@@ -15,14 +15,14 @@ it('Correctly returns an aws lambda callback that resolves an observable to a pr
 })
 
 it('Correctly selects and parses event body', async () => {
-  const res = await of({ _event: { body: JSON.stringify({ foo: 'bar' }) } } as Input)
+  const res = await of({ _event: { body: JSON.stringify({ foo: 'bar' }) } } as LambdaInput)
     .pipe(body())
     .toPromise()
   expect(res).toEqual({ foo: 'bar' })
 })
 
 it('Correctly selects and parses event params', async () => {
-  const res = await of({ _event: { queryStringParameters: { foo: 'bar' } as any } } as Input)
+  const res = await of({ _event: { queryStringParameters: { foo: 'bar' } as any } } as LambdaInput)
     .pipe(params())
     .toPromise()
   expect(res).toEqual({ foo: 'bar' })
@@ -31,7 +31,7 @@ it('Correctly selects and parses event params', async () => {
 it('Correctly selects and parses jwt token', async () => {
   const res = await of({
     _event: { queryStringParameters: { token: sign({ id: 'ID' }, 'SECRET') } as any },
-  } as Input)
+  } as LambdaInput)
     .pipe(authorise())
     .toPromise()
   expect(res.id).toEqual('ID')

@@ -1,5 +1,15 @@
 import { mergeMap } from 'rxjs/operators'
-import { ObservableInput } from 'rxjs'
+import { ObservableInput, throwError } from 'rxjs'
+
+import tokens, { Tokens } from './tokens'
+import { LambdaInput } from './lambdaRx'
+
+export const authorise = <T extends Tokens>(key: T) =>
+  mergeMap((input: LambdaInput) => {
+    const params = input._event.queryStringParameters
+    if (!params || !params.token) return throwError('No auth token')
+    return tokens[key].verify(params.token)
+  })
 
 export const switchMergeKey = <A extends { [x: string]: any }, B extends any, K extends string>(
   key: K,

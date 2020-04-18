@@ -1,23 +1,20 @@
 import { APIGatewayProxyEvent, Context, APIGatewayProxyResult } from 'aws-lambda'
-import { is, Proof, ProofType, isProved } from 'ts-prove'
-import { verify } from 'jsonwebtoken'
+import { Proof, ProofType, isProved } from 'ts-prove'
 
 import { of, Observable, throwError, OperatorFunction, ObservableInput, forkJoin } from 'rxjs'
 import { map, mergeMap } from 'rxjs/operators'
 
 import { requestFailed } from './logging'
-import ENV from './environment'
 
-export type Input = {
+export type LambdaInput = {
   _event: APIGatewayProxyEvent
   _context: Context
 }
 type OpR<O> = O extends OperatorFunction<any, infer D> ? D : never
 
-const lambdaRx = (req$: (payload: Observable<Input>) => Observable<APIGatewayProxyResult>) => (
-  _event: APIGatewayProxyEvent,
-  _context: Context
-) =>
+const lambdaRx = (
+  req$: (payload: Observable<LambdaInput>) => Observable<APIGatewayProxyResult>
+) => (_event: APIGatewayProxyEvent, _context: Context) =>
   req$(of({ _event, _context }))
     .toPromise()
     .catch((err) => {
@@ -32,33 +29,22 @@ const lambdaRx = (req$: (payload: Observable<Input>) => Observable<APIGatewayPro
 
 // Selectors
 export const body = <P extends Proof<any>>(proof?: P) =>
-  mergeMap((input: Input) => {
+  mergeMap((input: LambdaInput) => {
     const body = JSON.parse(input._event.body || '{}') as ProofType<P>
     if (proof) return prove(proof)(body)
     return of(body)
   })
 
 export const params = <P extends Proof<any>>(proof?: P) =>
-  mergeMap((input: Input) => {
+  mergeMap((input: LambdaInput) => {
     const params = input._event.queryStringParameters as ProofType<P>
     if (proof) return prove(proof)(params)
     return of(params)
   })
 
-export const authorise = <P extends Proof<any>>(proof?: P) =>
-  mergeMap((input: Input) => {
-    const params = input._event.queryStringParameters
-    if (!params || !params.token) return throwError('No auth token')
-    const result = verify(params.token, ENV.JWT_SECRET) as ProofType<P>
-    if (is.string(result)) return throwError(result)
-    if ((result as any).error) return throwError((result as any).error)
-    if (proof) return prove(proof)(result)
-    return of(result)
-  })
-
 // Helpers
 export const select = <T extends { [key: string]: OperatorFunction<any, any> }>(selects: T) =>
-  mergeMap((input: Input) => {
+  mergeMap((input: LambdaInput) => {
     return forkJoin<{ [Key in keyof T]: ObservableInput<OpR<T[Key]>> }, keyof T>(
       Object.keys(selects).reduce(
         (all, key) => ({ ...all, [key]: of(input).pipe(selects[key] as any) }),

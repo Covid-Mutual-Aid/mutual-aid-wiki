@@ -2,9 +2,10 @@ import { switchMap, mergeMap } from 'rxjs/operators'
 import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
-import lambda, { params, body, select, authorise, response$ } from '../lib/lambdaRx'
+import lambda, { params, body, select, response$ } from '../lib/lambdaRx'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
+import { authorise } from '../lib/observables'
 import { isSameGroup } from '../lib/utils'
 import { proofs } from '../lib/proofs'
 import { Group } from '../lib/types'
@@ -45,7 +46,7 @@ export const updateGroup = lambda((req$) =>
   req$.pipe(
     select({
       group: body(P.shape({ id: P.string })),
-      auth: authorise(),
+      auth: authorise('edit'),
     }),
     mergeMap(({ group, auth }) =>
       auth && (auth as any).id === group.id
@@ -69,24 +70,6 @@ export const createGroup = lambda((req$) =>
               .catch((err) => console.log('ERROR adding group to sheet'))
               .then(() => res)
       )
-    ),
-    response$
-  )
-)
-
-// /group/associate?token={ jwt }&email=""&id=""
-export const addEmailToGroup = lambda((req$) =>
-  req$.pipe(
-    select({
-      data: params(P.shape({ email: P.string, id: P.string })),
-      auth: authorise(),
-    }),
-    switchMap(({ data, auth }) =>
-      db.groups
-        .getById(data.id, ['emails'])
-        .then((res) =>
-          db.groups.update({ id: data.id, emails: [...((res && res.emails) || []), data.email] })
-        )
     ),
     response$
   )
