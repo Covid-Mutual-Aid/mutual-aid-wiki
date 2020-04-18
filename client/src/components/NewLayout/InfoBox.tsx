@@ -52,7 +52,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
     top: 0;
   }
 
-  @media (max-width: ${MOBILE_BREAKPOINT}) {
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     top: initial;
     bottom: ${(p) => (p.isOpen ? '0' : '-20rem')};
     margin-bottom: 4rem;

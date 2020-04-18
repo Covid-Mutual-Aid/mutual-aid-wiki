@@ -66,8 +66,8 @@ export const sendNoneAssosiated = (email: string, id: string) => {
         this email address, you will first need to complete a short verification process. The steps for this are as follows:
       </p>
       <p>
-        - Click the link below to recieve a second email with a unique code \n
-        - Promptly paste this code into a publicly visible section of your group (further instructions in the next email) \n
+        - Click the link below to recieve an email with a unique code \n
+        - Promptly paste this code into a publicly visible section of your group (further instructions in the email) \n
         - Wait a few days for one of our team to visit your group to check this code matches what we sent you \n
         - Delete this code from your group once you have recieved a confirmation email \n
       </p>
@@ -89,16 +89,16 @@ export const sendSubmitedRequest = (email: string, key: string) =>
       <p>Hi,</p>
       <p>
         Here is your verification code: ${key} \n
-        Please paste this into a publicly visible section of your group. Some examples of suggested places:
+        Please paste this into a publicly visible section of your group. Examples include:
       </p>
       <p>
         Facebook: In the about section \n
         WhatsApp: In the group description section \n
-        Website: Anywhere on the page that loads when your group is clicked on \n
+        Website: Anywhere on your home page (maybe in the footer?) \n
       </p>
       <p>
         Sometime after tomorrow, a member of our team will visit your group to check for this code. If it matches 
-        what we sent you, we will send you a confirmation email. You will be able to edit your group from this email
+        what we sent you, we will send you a confirmation email. You will then be able to edit your group from this email
         address.
       </p>
       <p>Best wishes,</p>
@@ -126,13 +126,12 @@ export const sendFailedVerification = (email: string) =>
   sendMail({
     to: email,
     from: 'no-reply@covidmutualaid.cc',
-    subject: 'Failed verification',
+    subject: 'Unsuccessful verification',
     html: `
       <p>Hi,</p>
       <p>
-        Unfortunately the verification process has failed. This is either because our team couldn't find the verification
-        code on your group or the code didn't match. Sorry about this, you are welcome to try again if you think it was a
-        mistake.
+        Unfortunately the verification process did not succeeed. This is either because our team couldn't find the verification
+        code on your group or the code didn't match. Sorry about this, you are welcome to try again if this was a mistake.
       </p>
       <p>Best wishes,</p>
       <p>The Mutual Aid Wiki team</p>

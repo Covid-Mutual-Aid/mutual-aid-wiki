@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import styled from 'styled-components'
 
 import Map from '../components/NewLayout/Map'
@@ -11,17 +11,17 @@ import icons from '../utils/icons'
 import Nav from '../components/NewLayout/Nav'
 
 const NewLayout = () => {
-  const [open, toggleSidebar] = useReducer((x) => !x, true)
+  const [open, setOpen] = useState(true)
   return (
     <LayoutStyles className="new-layout" sidebar={open}>
       <div className="side-bar">
         <div className="panel">
-          <div onClick={toggleSidebar} className="toggle">
+          <div onClick={(e) => setOpen(!open)} className="toggle">
             {open ? icons('chevronL') : icons('chevronR')}
           </div>
           <Nav>
             <div className="map">
-              <div onClick={toggleSidebar}>{icons('map', 'white')}</div>
+              <div onClick={(e) => setOpen(!open)}>{icons('map', 'white')}</div>
             </div>
           </Nav>
           <div
@@ -38,7 +38,9 @@ const NewLayout = () => {
           </div>
         </div>
         <SearchBox />
-        <GroupsList />
+        <GroupsList
+          closeSidebar={() => (window.innerWidth < MOBILE_BREAKPOINT ? setOpen(false) : null)}
+        />
       </div>
       <Map />
     </LayoutStyles>
@@ -124,7 +126,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     }
   }
 
-  @media (max-width: ${MOBILE_BREAKPOINT}) {
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     grid: 100% / ${(p) => (p.sidebar ? '100vw' : '1rem')} 1fr;
 
     .map div {

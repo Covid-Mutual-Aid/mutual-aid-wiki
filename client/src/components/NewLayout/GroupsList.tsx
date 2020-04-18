@@ -8,7 +8,7 @@ import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 import GroupItem from './GroupItem'
 import { MOON_BLUE } from '../../utils/CONSTANTS'
 
-const GroupsList = () => {
+const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
   const { groups } = useData()
   const { onSelect } = usePlaceMethod()
@@ -33,7 +33,10 @@ const GroupsList = () => {
           selected={group.id === selected}
           group={group}
           key={i}
-          onSelect={() => onSelect(group.id)}
+          onSelect={() => {
+            onSelect(group.id)
+            closeSidebar()
+          }}
         />
       ))}
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
