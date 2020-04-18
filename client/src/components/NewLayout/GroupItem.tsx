@@ -140,6 +140,8 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
     margin-top: 0;
     font-size: 1.12rem;
     font-weight: 400;
+    word-wrap: break-word;
+    word-break: break-word;
     color: rgba(0, 0, 0, 0.8);
     margin-bottom: 0.28rem;
   }
