@@ -69,6 +69,7 @@ export const InputGroup = styled.div`
     font-size: 1rem;
     display: flex;
     align-items: center;
+    border-radius: 0;
   }
 
   input {

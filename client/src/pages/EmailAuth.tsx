@@ -44,9 +44,9 @@ const EmailAuth = () => {
             <button type="submit">submit</button>
           </InputGroup>
           <div className="cancel">
-            <Button>
-              <Link to="/">Cancel </Link>
-            </Button>
+            <Link to="/">
+              <button className="btn-secondary">Cancel</button>
+            </Link>
           </div>
           <p style={{ color: 'red' }}>{error}</p>
         </form>
@@ -63,8 +63,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
+
   form {
-    width: 30rem;
+    max-width: 30rem;
   }
 
   h4 {

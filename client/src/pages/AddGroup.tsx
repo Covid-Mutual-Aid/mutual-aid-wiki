@@ -41,7 +41,7 @@ const CreateGroup = () => {
     request('/group/create', { method: 'POST', body: JSON.stringify(group) })
       .then((x) => {
         setSuccessModal(true)
-        return new Promise((res) => setTimeout(res, 1000))
+        return new Promise((res) => setTimeout(res, 6000))
       })
       .then(() => history.replace('/'))
   }
