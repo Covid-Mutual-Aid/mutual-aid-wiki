@@ -18,6 +18,8 @@ import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
 import App from './App'
 
+import I18nProvider from './contexts/I18nProvider'
+
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
 if (!inIframe()) {
@@ -43,9 +45,11 @@ const Render = () => (
     <RequestProvider request={request}>
       <DataProvider>
         <StateProvider>
-          <MapProvider>
-            <App />
-          </MapProvider>
+          <I18nProvider>
+            <MapProvider>
+              <App />
+            </MapProvider>
+          </I18nProvider>
         </StateProvider>
       </DataProvider>
     </RequestProvider>

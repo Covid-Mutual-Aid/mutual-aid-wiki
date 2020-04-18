@@ -1,0 +1,26 @@
+{
+  "translation": {
+    "pages": {
+      "groups": {
+        "cta": {
+          "line1": "Find local",
+          "line2": "mutual aid groups"
+        }
+      }
+    },
+    "components": {
+      "nav": {
+        "information_link": "INFORMATION",
+        "help_link": "?"
+      },
+      "search_box": {
+        "search_prompt": "Enter place",
+        "add_prompt": "Or add a group",
+        "place_name_label": "Showing groups for"
+      },
+      "groups_list": {
+        "load_more_prompt": "load more"
+      }
+    }
+  }
+}
