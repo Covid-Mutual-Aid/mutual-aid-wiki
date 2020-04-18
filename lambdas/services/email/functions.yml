@@ -29,5 +29,3 @@ rejectSupportRequest:
         method: get
         path: request/reject
         cors: true
-airfun:
-  handler: services/email/handler.airfun

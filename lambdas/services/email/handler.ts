@@ -88,7 +88,6 @@ export const addSupportRequestToTable = (
   const confirm = tokens.confirm.signUrl({ id: group.id, email, key })
   const reject = tokens.reject.signUrl({ id: group.id, email, key })
   return createRow('Waiting', {
-    date: new Date().toISOString(),
     name: group.name,
     url: group.link_facebook,
     email: email,

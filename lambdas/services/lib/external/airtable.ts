@@ -8,7 +8,7 @@ export const airtable = new Airtable({ apiKey: env.AIRTABLE_ATTACH_EMAIL_KEY }).
 
 export type WaitingTable = {
   confirm: string
-  date: string
+  date?: string
   email: string
   key: string
   name: string
@@ -30,12 +30,12 @@ export const removeRowByField = <T extends keyof Tables, K extends keyof Tables[
   field: K,
   value: Tables[T][K]
 ) =>
-  (airtable('Waiting').select().all() as Promise<Airtable.Records<WaitingTable>>)
+  (airtable(table).select().all() as Promise<Airtable.Records<WaitingTable>>)
     .then((x) => x.filter((y) => (y.fields as any)[field] === value))
     .then((rows) => Promise.all(rows.map((x) => airtable('Waiting').destroy(x.id))))
 
 export const createRow = <T extends keyof Tables>(table: T, fields: Tables[T]) =>
-  airtable('Waiting').create([{ fields }])
+  airtable(table).create([{ fields }])
 
 export const transferToDone = (key: string, status: DoneTable['status']) =>
   getAll('Waiting')
@@ -45,7 +45,6 @@ export const transferToDone = (key: string, status: DoneTable['status']) =>
         rows.map((row) =>
           createRow('Done', {
             status,
-            date: new Date().toISOString(),
             ...omit(['confirm', 'reject', 'date'], row.fields),
           }).then(() => removeRowByField('Waiting', 'key', key))
         )
