@@ -33,7 +33,7 @@ const InfoBox = () => {
 
 const Wrapper = styled.div<{ isOpen: boolean }>`
   position: absolute;
-  left: calc(50% - (18rem * 0.5));
+  left: calc(50% - (22rem * 0.5));
   width: 18rem;
   box-shadow: 0px 0px 22px -9px #959595;
   margin: 1rem;

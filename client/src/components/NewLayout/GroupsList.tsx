@@ -39,9 +39,20 @@ const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
           }}
         />
       ))}
-      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '4rem 0 6rem 0',
+        }}
+      >
         {groups.length > 0 && limit < groups.length && (
-          <button onClick={toggleMore} type="button">
+          <button
+            style={{ fontSize: '1rem', cursor: 'pointer' }}
+            onClick={toggleMore}
+            type="button"
+          >
             load more
           </button>
         )}
