@@ -45,7 +45,7 @@ const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
-          margin: isIosSafari() ? '4rem 0 10rem 0' : '4rem 0 6rem 0',
+          margin: isIosSafari() ? '4rem 0 12rem 0' : '4rem 0 6rem 0',
         }}
       >
         {groups.length > 0 && limit < groups.length && (

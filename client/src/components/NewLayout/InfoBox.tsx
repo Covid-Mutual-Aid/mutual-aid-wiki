@@ -56,7 +56,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     top: initial;
     bottom: ${(p) => (p.isOpen ? '0' : '-20rem')};
-    margin-bottom: ${(p) => (isIosSafari() ? '8rem' : '4rem')};
+    margin-bottom: ${(p) => (isIosSafari() ? '8rem' : '2rem')};
     transition: bottom 0.3s;
 
     & .open {
