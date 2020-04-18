@@ -70,10 +70,12 @@ jobs:
       - name: 'Update client redirects'
         id: 'redirects'
         run: 'node ./scripts/update-redirects.js'
+      - name: Redirect was updated
+        run: echo "##[set-output name=diff;]$(git status)"
       - name: 'OUT'
         run: node ./scripts/test.js
         env:
-          TESTT: ${{ toJson(steps) }}
+          TESTT: ${{ steps.build_package.outputs.diff }}
       - uses: stefanzweifel/git-auto-commit-action@v4.1.2
         with:
           commit_message: Update redirects

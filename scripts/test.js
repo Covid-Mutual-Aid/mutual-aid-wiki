@@ -1,1 +1,1 @@
-console.log('ENV', JSON.stringify(process.env))
+console.log('ENV', JSON.stringify(process.env.TESTT))

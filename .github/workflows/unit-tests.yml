@@ -39,3 +39,6 @@ jobs:
       - name: Run lambda tests
         run: yarn test
         working-directory: lambdas
+      - name: Run client tests
+        run: yarn test
+        working-directory: client
