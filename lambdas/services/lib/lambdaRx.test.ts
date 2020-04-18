@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken'
 import { of } from 'rxjs'
 import P from 'ts-prove'
 
-import lrx, { LambdaInput, body, params, authorise, select, response$ } from './lambdaRx'
+import lrx, { LambdaInput, body, params, select, response$ } from './lambdaRx'
 
 jest.mock('./environment', () => ({
   default: { JWT_SECRET: 'SECRET' },
@@ -28,15 +28,6 @@ it('Correctly selects and parses event params', async () => {
   expect(res).toEqual({ foo: 'bar' })
 })
 
-it('Correctly selects and parses jwt token', async () => {
-  const res = await of({
-    _event: { queryStringParameters: { token: sign({ id: 'ID' }, 'SECRET') } as any },
-  } as LambdaInput)
-    .pipe(authorise())
-    .toPromise()
-  expect(res.id).toEqual('ID')
-})
-
 it('correctly combines pipelin', async () => {
   const token = sign({ id: 'ID' }, 'SECRET')
   const res = await lrx((req) =>
@@ -44,7 +35,6 @@ it('correctly combines pipelin', async () => {
       select({
         body: body(P.shape({ foo: P.string })),
         params: params(P.shape({ token: P.string })),
-        auth: authorise(),
       }),
       map((x) => x),
       response$
@@ -60,5 +50,4 @@ it('correctly combines pipelin', async () => {
   const result = JSON.parse(res.body)
   expect(result.body).toEqual({ foo: 'bar' })
   expect(result.params).toEqual({ token })
-  expect(result.auth.id).toEqual('ID')
 })

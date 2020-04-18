@@ -1,11 +1,11 @@
 import 'source-map-support/register'
+
+import { switchMap } from 'rxjs/operators'
 import axios from 'axios'
 import P from 'ts-prove'
 
 import lambda, { params, response$ } from '../lib/lambdaRx'
-
 import ENV from '../lib/environment'
-import { switchMap } from 'rxjs/operators'
 
 const geocodeEndpoint = `https://maps.googleapis.com/maps/api/geocode`
 const googlePlaceEnpoint = 'https://maps.googleapis.com/maps/api/place'
