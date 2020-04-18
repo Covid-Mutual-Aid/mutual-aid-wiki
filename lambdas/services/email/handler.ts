@@ -1,5 +1,6 @@
 import 'source-map-support/register'
-import { switchMap, map } from 'rxjs/operators'
+import { switchMap } from 'rxjs/operators'
+import { v4 } from 'uuid'
 import P from 'ts-prove'
 
 import lambda, { body, authorise, response$ } from '../lib/lambdaRx'
@@ -14,7 +15,6 @@ import {
   sendSuccessfulVerification,
   sendFailedVerification,
 } from './templates'
-import { v4 } from 'uuid'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
