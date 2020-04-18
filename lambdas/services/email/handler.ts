@@ -17,6 +17,7 @@ import {
 } from './templates'
 import tokens from '../lib/tokens'
 import { Group } from '../lib/types'
+import ENV from '../lib/environment'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
@@ -80,19 +81,20 @@ export const rejectSupportRequest = lambda((req$) =>
   )
 )
 
-export const addSupportRequestToTable = (
+export const addSupportRequestToTable = async (
   email: string,
   key: string,
   group: Pick<Group, 'id' | 'name' | 'link_facebook'>
 ) => {
-  const confirm = tokens.confirm.signUrl({ id: group.id, email, key })
-  const reject = tokens.reject.signUrl({ id: group.id, email, key })
+  const confirm = await tokens.confirm.sign({ id: group.id, email, key })
+  const reject = await tokens.reject.sign({ id: group.id, email, key })
+
   return createRow('Waiting', {
     name: group.name,
     url: group.link_facebook,
     email: email,
     key,
-    confirm,
-    reject,
+    confirm: `${ENV.API_ENDPOINT}/request/confirm?token=${confirm}`,
+    reject: `${ENV.API_ENDPOINT}/request/reject?token=${reject}`,
   })
 }

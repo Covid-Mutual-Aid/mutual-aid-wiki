@@ -46,6 +46,20 @@ export default function createTableAPI<T extends { id: string }>({
         .promise()
         .then((x) => x.Item as Pick<T, A[number]>),
 
+    scanByKey: <Key extends keyof T>(key: Key, value: T[Key]) => {
+      const params = {
+        TableName,
+        ScanIndexForward: true,
+        FilterExpression: `#${key} = :${key}`,
+        ExpressionAttributeNames: { [`#${key}`]: key as string },
+        ExpressionAttributeValues: { [`:${key}`]: value },
+      }
+      return client
+        .scan(params)
+        .promise()
+        .then((x) => x.Items)
+    },
+
     create: (item: Omit<T, 'id'>) => {
       const Item = create(item)
       return client

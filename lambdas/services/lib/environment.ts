@@ -27,6 +27,7 @@ const google = {
 const tables = {
   GROUPS_TABLE: env.GROUPS_TABLE as string,
   LOCATION_SEARCHES_TABLE: env.LOCATION_SEARCHES_TABLE as string,
+  ACTIVE_TOKENS: env.ACTIVE_TOKENS as string,
 }
 
 const ENV = { ...other, ...airtable, ...google, ...tables }

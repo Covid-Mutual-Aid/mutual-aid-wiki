@@ -14,3 +14,8 @@ export type Search = {
   address: string
   coords: { lat: number; lng: number }
 }
+
+export type Token = {
+  id: string
+  type: 'JWT_TOKEN'
+}

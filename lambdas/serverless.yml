@@ -8,6 +8,7 @@ custom:
   tables:
     GROUPS_TABLE: ${self:provider.stage}-groups10
     LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-search
+    ACTIVE_TOKENS: ${self:provider.stage}-active-tokens
   output:
     file: ../stack.json
   dynamodb:
@@ -50,6 +51,7 @@ provider:
     # Tables
     GROUPS_TABLE: ${self:custom.tables.GROUPS_TABLE}
     LOCATION_SEARCHES_TABLE: ${self:custom.tables.LOCATION_SEARCHES_TABLE}
+    ACTIVE_TOKENS: ${self:custom.tables.ACTIVE_TOKENS}
     # Google
     GOOGLE_API_KEY: ${env:GOOGLE_API_KEY, file(env.json):GOOGLE_API_KEY}
     SPREADSHEET_ID: ${env:SPREADSHEET_ID, file(env.json):SPREADSHEET_ID}
@@ -73,6 +75,7 @@ provider:
       Resource:
         - { 'Fn::GetAtt': ['ExportDB', 'Arn'] } #you will also see the logical IDs below where they are provisioned
         - { 'Fn::GetAtt': ['DynamoDbLocationSearches', 'Arn'] }
+        - { 'Fn::GetAtt': ['DynamoDbActiveTokens', 'Arn'] }
 
 functions:
   - ${file(./services/groups/functions.yml)}
@@ -110,3 +113,17 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.tables.LOCATION_SEARCHES_TABLE}
+    DynamoDbActiveTokens:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tables.ACTIVE_TOKENS}
