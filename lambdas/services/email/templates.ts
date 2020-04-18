@@ -1,7 +1,5 @@
 import sendGrid from '@sendgrid/mail'
 
-import { createRow } from '../lib/external/airtable'
-import { Group } from '../lib/types'
 import ENV from '../lib/environment'
 import tokens from '../lib/tokens'
 

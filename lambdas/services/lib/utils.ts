@@ -1,20 +1,6 @@
 import { Group } from './types'
 import { parse } from 'url'
 
-// Url {
-//   protocol: 'http:',
-//   slashes: true,
-//   auth: null,
-//   host: 'facebook.com',
-//   port: null,
-//   hostname: 'facebook.com',
-//   hash: null,
-//   search: null,
-//   query: null,
-//   pathname: '/groups/123456789',
-//   path: '/groups/123456789',
-//   href: 'http://facebook.com/groups/123456789'
-// }
 const norm = (x: string) => x.toLowerCase().trim()
 export const normLink = (s: string) => {
   const { host, pathname } = parse(s)
