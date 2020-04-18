@@ -54,7 +54,7 @@ const CreateGroup = () => {
       .then((x) => {
         console.log(x)
         setSuccessModal(true)
-        return new Promise((res) => setTimeout(res, 1000))
+        return new Promise((res) => setTimeout(res, 6000))
       })
       .then(() => history.replace('/'))
   }

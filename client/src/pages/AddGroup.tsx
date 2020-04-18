@@ -36,6 +36,7 @@ const CreateGroup = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSubmitted(true)
+    console.log('called')
     if (!ready) return
     request('/group/create', { method: 'POST', body: JSON.stringify(group) })
       .then((x) => {

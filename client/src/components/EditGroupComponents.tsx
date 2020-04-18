@@ -38,7 +38,8 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
       .filter((k) => !omitKeys.includes(k))
 
   useEffect(() => {
-    if (onReady && groupValidated(validation).length === Object.keys(group).length) {
+    console.log(validation, groupValidated(validation))
+    if (onReady && groupValidated(validation).length === 0) {
       onReady(group)
     }
   }, [group])
