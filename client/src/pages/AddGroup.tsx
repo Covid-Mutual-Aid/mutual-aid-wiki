@@ -60,9 +60,10 @@ const CreateGroup = () => {
                 onChange={(group, validation) => {
                   setValidation(validation)
                   setGroup(group)
+                  validation.length === 0 ? setReady(true) : setReady(false)
                 }}
-                onReady={() => setReady(true)}
                 group={group}
+                validation={validation}
               />
 
               <div

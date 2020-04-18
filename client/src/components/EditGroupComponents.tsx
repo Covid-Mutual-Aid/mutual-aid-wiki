@@ -12,9 +12,9 @@ import { Input, validURL, validEmail } from './NewLayout/FormElements'
 
 type Props = {
   group: GroupWithEmails
+  validation: (keyof Validation)[]
   omitKeys?: (keyof GroupWithEmails)[]
   onChange: (group: GroupWithEmails, validation: (keyof Validation)[]) => void
-  onReady?: (group: GroupWithEmails) => void
 }
 
 export type Validation = {
@@ -24,26 +24,7 @@ export type Validation = {
   location_name: boolean
 }
 
-const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props) => {
-  const [validation, setValidation] = useState<Validation>({
-    name: false,
-    emails: false,
-    link_facebook: false,
-    location_name: false,
-  })
-
-  const groupValidated = (val: Validation) =>
-    (Object.keys(val) as (keyof Validation)[])
-      .filter((k) => !val[k])
-      .filter((k) => !omitKeys.includes(k))
-
-  useEffect(() => {
-    console.log(validation, groupValidated(validation))
-    if (onReady && groupValidated(validation).length === 0) {
-      onReady(group)
-    }
-  }, [group])
-
+const EditGroupComponents = ({ group, validation, omitKeys = [], onChange }: Props) => {
   return (
     <Wrapper>
       {!omitKeys.includes('name') ? (
@@ -54,9 +35,10 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
               placeholder="Group name"
               value={group.name}
               onChange={({ value, validated }) => {
-                const v = { ...validation, name: validated }
-                onChange({ ...group, name: value }, groupValidated(v))
-                setValidation(v)
+                onChange(
+                  { ...group, name: value },
+                  validated ? validation.filter((k) => k !== 'name') : validation
+                )
               }}
               validator={(s) => s.length > 0}
             />
@@ -71,9 +53,10 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
             placeholder="yourname@mail.com..."
             emails={group.emails}
             onChange={(_emails: string[]) => {
-              const v = { ...validation, emails: _emails.length > 0 }
-              onChange({ ...group, emails: _emails }, groupValidated(v))
-              setValidation(v)
+              onChange(
+                { ...group, emails: _emails },
+                _emails.length > 0 ? validation.filter((k) => k !== 'emails') : validation
+              )
             }}
             validateEmail={isEmail}
             getLabel={(email: string, index: number, removeEmail: (index: number) => void) => (
@@ -93,12 +76,13 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
           <h4>Link</h4>
           <InputGroup>
             <Input
-              placeholder="http://www..."
+              placeholder={group.location_name.length > 0 ? group.location_name : 'http://www...'}
               value={group.link_facebook}
               onChange={({ value, validated }) => {
-                const v = { ...validation, link_facebook: validated }
-                onChange({ ...group, link_facebook: value }, groupValidated(v))
-                setValidation(v)
+                onChange(
+                  { ...group, link_facebook: value },
+                  validated ? validation.filter((k) => k !== 'link_facebook') : validation
+                )
               }}
               validator={validURL}
             />
@@ -111,12 +95,10 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
           <h4>Location</h4>
           <Location
             onChange={({ name, lat, lng }) => {
-              const v = { ...validation, location_name: name.length > 0 }
               onChange(
                 { ...group, location_name: name, location_coord: { lat, lng } },
-                groupValidated(v)
+                name.length > 0 ? validation.filter((k) => k !== 'location_name') : validation
               )
-              setValidation(v)
             }}
             placeholder={group.location_name.length > 0 ? group.location_name : 'e.g "SE14 4NW"'}
           />
