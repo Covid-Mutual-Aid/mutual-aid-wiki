@@ -7,4 +7,4 @@ const redirects = fs.readFileSync(path.join(__dirname, '../client/_redirects'), 
 const modified = redirects.replace(/http.*?:splat/gim, `${endpoint}/:splat`)
 fs.writeFileSync(path.join(__dirname, '../client/_redirects'), modified)
 
-child.spawnSync(`##[set-output name=modified;]"${modified === redirects ? 'FALSE' : 'TRUE'}"`)
+child.execSync(`##[set-output name=modified;]"${modified === redirects ? 'FALSE' : 'TRUE'}"`)
