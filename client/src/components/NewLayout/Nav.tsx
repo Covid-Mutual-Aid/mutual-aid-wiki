@@ -8,7 +8,7 @@ const Nav = ({ children }: { children?: ReactChild }) => {
     <NavWrapper>
       <div className="options">
         <Link to="/about">Information</Link>
-        <Link to="/help">Help</Link>
+        {/* <Link to="/help">Help</Link> */}
       </div>
       <div className="buttons-right">{children}</div>
     </NavWrapper>

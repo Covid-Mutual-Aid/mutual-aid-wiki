@@ -72,7 +72,7 @@ const useControlMap = () => {
       if (map.current && map.current.getZoom() < 15) zoomTo(15)
     } else if (place) {
       panTo(place.coords)
-      zoomTo(12)
+      zoomTo(15)
     } else {
       panTo(defaultState.center)
       zoomTo(defaultState.zoom)

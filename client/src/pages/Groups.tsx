@@ -25,10 +25,15 @@ const NewLayout = () => {
             </div>
           </Nav>
           <div
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginTop: '-1rem',
+            }}
           >
             <h3>
-              Find local <br /> mutal aid groups
+              Find local <br className="break" /> mutal aid groups
             </h3>
           </div>
         </div>
@@ -74,7 +79,6 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
   }
 
   .map:hover {
-    /* box-shadow: 0px 0px 22px -9px #959595; */
     box-shadow: 0px 0px 22px -4px rgba(111, 111, 111, 0.69);
   }
 
@@ -92,7 +96,6 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     transition: transform 0.3s;
     cursor: pointer;
     border-left: 1px solid rgba(0, 0, 0, 0.06);
-    /* transform: translateX(${(p) => (p.sidebar ? '0rem' : '4rem')}); */
 
     div {
       height: 1rem;
@@ -117,6 +120,7 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
       margin: 0 0.6rem;
       font-size: 2.2rem;
       font-weight: 800;
+      /* width: 16rem; */
     }
   }
 
@@ -136,9 +140,18 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     }
 
     .side-bar {
-        width: 100vw;
-        transform: translateX(${(p) => (p.sidebar ? '0rem' : 'calc(1rem - 100vw)')});
+      width: 100vw;
+      transform: translateX(${(p) => (p.sidebar ? '0rem' : 'calc(1rem - 100vw)')});
+
+      .break {
+        display: none;
       }
+
+      h3 {
+        font-size: 1.6rem;
+        width: 100%;
+      }
+    }
   }
 `
 
