@@ -16,7 +16,7 @@ const createToken = <T extends string>(type: T) => <P extends Record<string, str
   url?: (x: string, data: P) => string
 ) => ({
   type,
-  sign: (data: P) => sign(data, ENV.JWT_SECRET, opt),
+  sign: (data: P) => sign({ ...data, type }, ENV.JWT_SECRET, opt),
   signUrl: (data: P) => {
     if (!url) throw new Error('No url method provided')
     return url(sign(data, ENV.JWT_SECRET, opt), data)
