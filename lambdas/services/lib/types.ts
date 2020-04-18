@@ -14,9 +14,3 @@ export type Search = {
   address: string
   coords: { lat: number; lng: number }
 }
-
-export type AuthKey =
-  | { type: 'EXPIRE' }
-  | { type: 'ONCE' }
-  | { id: string; access_type: 'ANY' }
-  | { id: string; access_type: 'ITEM'; table: string; itemId: string }

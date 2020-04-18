@@ -1,15 +1,14 @@
 import { switchMap, mergeMap } from 'rxjs/operators'
+import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
-import lrx, { response$, body$, params$ } from '../lib/lrx'
-import { authorise$ } from '../lib/observables'
-import { proofs, prove$ } from '../lib/proofs'
+import lambda, { params, body, select, authorise, response$ } from '../lib/lambdaRx'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
 import { isSameGroup } from '../lib/utils'
+import { proofs } from '../lib/proofs'
 import { Group } from '../lib/types'
 import db from '../lib/database'
-import { zip, of, throwError } from 'rxjs'
 
 // Helper
 const createNoDuplicates = (
@@ -23,9 +22,9 @@ const createNoDuplicates = (
         : (db.groups.create(group) as any)
     )
 
-export const getGroups = lrx((req$) =>
+export const getGroups = lambda((req$) =>
   req$.pipe(
-    params$,
+    params(),
     switchMap((params) =>
       params && params.id
         ? db.groups.getById(params.id as string, [
@@ -42,13 +41,16 @@ export const getGroups = lrx((req$) =>
 )
 
 // /group/update?token={ jwt }
-export const updateGroup = lrx((req$) =>
+export const updateGroup = lambda((req$) =>
   req$.pipe(
-    mergeMap((input) =>
-      zip(of(input).pipe(body$, prove$(P.shape({ id: P.string }))), of(input).pipe(authorise$))
-    ),
-    mergeMap(([grp, auth]) =>
-      auth && (auth as any).id === grp.id ? of(grp) : throwError('Group id does not match token id')
+    select({
+      group: body(P.shape({ id: P.string })),
+      auth: authorise(),
+    }),
+    mergeMap(({ group, auth }) =>
+      auth && (auth as any).id === group.id
+        ? of(group)
+        : throwError('Group id does not match token id')
     ),
     switchMap((grp) => db.groups.update(grp)),
     response$
@@ -56,10 +58,9 @@ export const updateGroup = lrx((req$) =>
 )
 
 // /group/create
-export const createGroup = lrx((req$) =>
+export const createGroup = lambda((req$) =>
   req$.pipe(
-    body$,
-    prove$(proofs.groupCreation),
+    body(proofs.groupCreation),
     switchMap((group) =>
       createNoDuplicates(group).then((res) =>
         isOffline()
@@ -74,15 +75,13 @@ export const createGroup = lrx((req$) =>
 )
 
 // /group/associate?token={ jwt }&email=""&id=""
-export const associateEmail = lrx((req$) =>
+export const addEmailToGroup = lambda((req$) =>
   req$.pipe(
-    mergeMap((input) =>
-      zip(
-        of(input).pipe(params$, prove$(P.shape({ email: P.string, id: P.string }))),
-        of(input).pipe(authorise$)
-      )
-    ),
-    switchMap(([data, fds]) =>
+    select({
+      data: params(P.shape({ email: P.string, id: P.string })),
+      auth: authorise(),
+    }),
+    switchMap(({ data, auth }) =>
       db.groups
         .getById(data.id, ['emails'])
         .then((res) =>

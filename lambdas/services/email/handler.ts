@@ -2,8 +2,8 @@ import 'source-map-support/register'
 import { switchMap, map } from 'rxjs/operators'
 import P from 'ts-prove'
 
-import { authorise$, switchMergeKey } from '../lib/observables'
-import lrx, { response$, body$ } from '../lib/lrx'
+import lambda, { body, params, authorise, response$ } from '../lib/lambdaRx'
+import { switchMergeKey } from '../lib/observables'
 import { prove$ } from '../lib/proofs'
 import db from '../lib/database'
 import {
@@ -16,10 +16,9 @@ import {
 import { v4 } from 'uuid'
 
 // request/groupedit
-export const requestGroupEdit = lrx((req$) =>
+export const requestGroupEdit = lambda((req$) =>
   req$.pipe(
-    body$,
-    prove$(P.shape({ email: P.string, id: P.string })),
+    body(P.shape({ email: P.string, id: P.string })),
     switchMergeKey('group', (x) => db.groups.getById(x.id, ['emails', 'id']).catch(() => null)),
     switchMap(({ email, group }) => {
       if (!group) return Promise.reject("Group doesn't exist")
@@ -35,24 +34,24 @@ export const requestGroupEdit = lrx((req$) =>
 )
 
 // request/support?token={ email, id }
-export const submitSupportRequest = lrx((req$) =>
-  req$.pipe(
-    authorise$,
-    prove$(P.shape({ email: P.string, id: P.string })),
-    switchMergeKey('group', (x) =>
-      db.groups
-        .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
-        .catch(() => null)
-    ),
-    switchMap((x) => {
-      const key = v4()
-      if (!x.group) return Promise.reject('No group')
-      return addSupportRequestToTable(x.email, key, x.group)
-        .then(() => sendSubmitedRequest(x.email, key))
-        .then(() => 'Successfully submited you should recieve an email with further instructions')
-    }),
-    response$
-  )
-)
+// export const submitSupportRequest = lrx((req$) =>
+//   req$.pipe(
+//     authorise$,
+//     prove$(P.shape({ email: P.string, id: P.string })),
+//     switchMergeKey('group', (x) =>
+//       db.groups
+//         .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
+//         .catch(() => null)
+//     ),
+//     switchMap((x) => {
+//       const key = v4()
+//       if (!x.group) return Promise.reject('No group')
+//       return addSupportRequestToTable(x.email, key, x.group)
+//         .then(() => sendSubmitedRequest(x.email, key))
+//         .then(() => 'Successfully submited you should recieve an email with further instructions')
+//     }),
+//     response$
+//   )
+// )
 
-export const isAuthorised = lrx((req$) => req$.pipe(authorise$, response$))
+// export const isAuthorised = lrx((req$) => req$.pipe(authorise$, response$))

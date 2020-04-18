@@ -4,42 +4,29 @@ import { Group } from '../types'
 
 const slackClient = new WebClient(env.SLACK_API_TOKEN)
 
-export const messageSlack = (text: string, blocks: ChatPostMessageArguments['blocks'] = []) =>
+const messageSlack = (text: string, blocks: ChatPostMessageArguments['blocks'] = []) =>
   slackClient.chat.postMessage({
     channel: '#lambdas-covidmutualaid',
     text,
     blocks,
   })
 
-export const failedRequest = (data: Record<string, any>) =>
-  messageSlack('Failed request', [
+export const sendData = (title: string, data: Record<string, any>) =>
+  messageSlack(title, [
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: 'Failed request',
+        text: title,
       },
     },
     {
       type: 'divider',
     },
-    createFieldsSection(data),
+    createFields(data),
   ])
 
-export const groupCreated = (group: Partial<Group>) =>
-  messageSlack('Group created', [
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: 'Group created',
-      },
-    },
-    { type: 'divider' },
-    createFieldsSection(group),
-  ])
-
-const createFieldsSection = (x: Record<string, any>) => ({
+export const createFields = (x: Record<string, any>) => ({
   type: 'section',
   fields: (Object.keys(x) as (keyof Group)[]).map((key) => ({
     type: 'plain_text',
