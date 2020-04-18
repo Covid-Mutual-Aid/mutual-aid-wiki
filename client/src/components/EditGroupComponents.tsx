@@ -32,8 +32,10 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
     location_name: false,
   })
 
-  const groupValidated = (v: Validation) =>
-    (Object.keys(v) as (keyof Validation)[]).filter((k) => !v[k])
+  const groupValidated = (val: Validation) =>
+    (Object.keys(val) as (keyof Validation)[])
+      .filter((k) => !val[k])
+      .filter((k) => !omitKeys.includes(k))
 
   useEffect(() => {
     if (onReady && groupValidated(validation).length === Object.keys(group).length) {
@@ -115,7 +117,7 @@ const EditGroupComponents = ({ group, omitKeys = [], onChange, onReady }: Props)
               )
               setValidation(v)
             }}
-            placeholder={'e.g "SE14 4NW"'}
+            placeholder={group.location_name.length > 0 ? group.location_name : 'e.g "SE14 4NW"'}
           />
         </>
       ) : null}

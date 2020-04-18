@@ -21,10 +21,12 @@ const GroupItem = ({
   group,
   selected,
   onSelect,
+  disableDropdown = false,
 }: {
   group: Group & { distance?: number }
   selected: boolean
   onSelect: (...args: any[]) => void
+  disableDropdown?: boolean
 }) => {
   const history = useHistory()
   const [isOpen, setIsOpen] = useState(false)
@@ -49,7 +51,7 @@ const GroupItem = ({
         </span>
       </div>
       <div className="actions">
-        <div style={{ display: isOpen ? 'block' : 'none' }} className="menu">
+        <div style={{ display: !disableDropdown && isOpen ? 'block' : 'none' }} className="menu">
           <div onMouseDown={(e) => history.push(`/edit/${group.id}`)}>Edit group</div>
         </div>
         <div

@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useHistory } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
@@ -23,6 +23,7 @@ const CreateGroup = () => {
     },
   })
 
+  const history = useHistory()
   const [sucessModal, setSuccessModal] = useState(false)
   const [ready, setReady] = useState(false)
   const [validation, setValidation] = useState<(keyof Validation)[]>([
@@ -49,10 +50,13 @@ const CreateGroup = () => {
     request(`/group/update?token=${token}`, {
       method: 'POST',
       body: JSON.stringify(group),
-    }).then((x) => {
-      console.log(x)
-      setSuccessModal(true)
     })
+      .then((x) => {
+        console.log(x)
+        setSuccessModal(true)
+        return new Promise((res) => setTimeout(res, 1000))
+      })
+      .then(() => history.replace('/'))
   }
 
   return (
@@ -89,10 +93,14 @@ const CreateGroup = () => {
                 ))}
               </div>
 
-              <Link to="/">
-                <button type="button">cancel</button>
-              </Link>
-              <button type="submit">submit</button>
+              <FormButtons>
+                <Link to="/">
+                  <button className="btn-secondary" type="button">
+                    cancel
+                  </button>
+                </Link>
+                <button type="submit">submit</button>
+              </FormButtons>
             </form>
           )}
         </CenterAlign>
@@ -104,6 +112,7 @@ const CreateGroup = () => {
               onSelect={() => null}
               selected={false}
               group={{ ...group, id: '1234567890' }}
+              disableDropdown={true}
             />
           </div>
         </CenterAlign>
@@ -113,3 +122,13 @@ const CreateGroup = () => {
 }
 
 export default CreateGroup
+
+const FormButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 0;
+
+  button {
+    margin: 0 0.4rem;
+  }
+`

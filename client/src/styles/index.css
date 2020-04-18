@@ -15,3 +15,32 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+button {
+  cursor: pointer;
+  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  outline: none;
+  font-size: 0.8rem;
+
+  background-color: rgba(0, 0, 255, 0.1);
+  color: grey;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s;
+}
+
+button:hover {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 255, 0.2);
+  color: grey;
+}
+
+.btn-secondary {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}

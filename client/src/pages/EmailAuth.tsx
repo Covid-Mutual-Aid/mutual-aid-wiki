@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { InputGroup, Button } from '../styles/styles'
 import { useRequest } from '../contexts/RequestProvider'
 import styled from 'styled-components'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 
 const EmailAuth = () => {
   const { id } = useParams()
+  const history = useHistory()
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [sucessModal, setSucessModal] = useState(false)
@@ -15,7 +16,7 @@ const EmailAuth = () => {
     <Wrapper>
       {sucessModal ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: '#28a745' }}>
-          <h3>Please check you email for further instructions :-)</h3>
+          <h3>Thank you for your request. Please check you email for further instructions</h3>
         </div>
       ) : (
         <form
@@ -24,14 +25,17 @@ const EmailAuth = () => {
             request('/request/groupedit', {
               method: 'POST',
               body: JSON.stringify({ email, id }),
-            }).then((x) => {
-              if (x.error) {
-                setError(x.error)
-                console.log(x)
-                return
-              }
-              setSucessModal(true)
             })
+              .then((x) => {
+                if (x.error) {
+                  setError(x.error)
+                  console.log(x)
+                  return
+                }
+                setSucessModal(true)
+                return new Promise((res) => setTimeout(res, 1000))
+              })
+              .then(() => history.replace('/'))
           }}
         >
           <h4>Please enter your email</h4>

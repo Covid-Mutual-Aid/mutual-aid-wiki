@@ -20,14 +20,17 @@ export const sendEditLink = (email: string, id: string) => {
       subject: 'Here is your edit link',
       html: `
         <p>Hi,</p>
-        <p>Please follow this link to edit your site: <a href="${link}">${link}</a></p>
+        <p>Please follow this link to edit your site:</p>
+        <p><a href="${link}">${link}</a></p>
         <p>
           This link will expire in 1 day, so if you need to edit your group again afterwards,
           please request another one by clicking the edit button on the dropdown menu of your 
           group (as you may have just done).
         </p>
-        <p>Very best wishes,</p>
-        <p>The Mutual Aid Wiki team</p>
+        <p>
+          Very best wishes, \n
+          The Mutual Aid Wiki team
+        </p>
       `,
     })
     .then((x) => 'Sent emails')
@@ -45,8 +48,10 @@ export const sendNotAssosiated = (email: string) =>
         This email address (${email}) is currently not one of the one(s) linked with this group. Please 
         speak with one of your co-organsiers who can request an edit link on your behalf.
       </p>
-      <p>Many thanks,</p>
-      <p>The Mutual Aid Wiki team</p>
+      <p>
+        Many thanks, \n
+        The Mutual Aid Wiki team
+      </p>
     `,
   })
 
@@ -74,8 +79,10 @@ export const sendNoneAssosiated = (email: string, id: string) => {
       
       <p>If you would like to proceed, please click this link: <a href="${link}">${link}</a></p>
 
-      <p>Best wishes,</p>
-      <p>The Mutual Aid Wiki team</p>
+      <p>
+        Best wishes, \n
+        The Mutual Aid Wiki team
+      </p>
     `,
   })
 }
@@ -101,8 +108,10 @@ export const sendSubmitedRequest = (email: string, key: string) =>
         what we sent you, we will send you a confirmation email. You will then be able to edit your group from this email
         address.
       </p>
-      <p>Best wishes,</p>
-      <p>The Mutual Aid Wiki team</p>
+      <p>
+        Best wishes, \n
+        The Mutual Aid Wiki team
+      </p>
     `,
   })
 
@@ -117,8 +126,10 @@ export const sendSuccessfulVerification = (email: string) =>
         You have sucessfully verified your group! This means you can select the edit option on your group in the dropdown menu 
          and use this email address (${email}) to recieve a link that will enable you to edit your group.
       </p>
-      <p>Best wishes,</p>
-      <p>The Mutual Aid Wiki team</p>
+      <p>
+        Best wishes, \n
+        The Mutual Aid Wiki team
+      </p>
     `,
   })
 
@@ -133,8 +144,10 @@ export const sendFailedVerification = (email: string) =>
         Unfortunately the verification process did not succeeed. This is either because our team couldn't find the verification
         code on your group or the code didn't match. Sorry about this, you are welcome to try again if this was a mistake.
       </p>
-      <p>Best wishes,</p>
-      <p>The Mutual Aid Wiki team</p>
+      <p>
+        Best wishes, \n
+        The Mutual Aid Wiki team
+      </p>
     `,
   })
 

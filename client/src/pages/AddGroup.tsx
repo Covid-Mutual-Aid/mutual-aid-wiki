@@ -80,7 +80,9 @@ const CreateGroup = () => {
 
               <FormButtons>
                 <Link to="/">
-                  <button type="button">cancel</button>
+                  <button className="btn-secondary" type="button">
+                    cancel
+                  </button>
                 </Link>
                 <button type="submit">submit</button>
               </FormButtons>
@@ -96,6 +98,7 @@ const CreateGroup = () => {
               onSelect={() => null}
               selected={false}
               group={{ ...group, id: '1234567890' }}
+              disableDropdown={true}
             />
           </div>
         </CenterAlign>
@@ -107,12 +110,10 @@ const CreateGroup = () => {
 const FormButtons = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 2rem 0;
+  padding: 1rem 0;
 
   button {
-    cursor: pointer;
-    padding: 0.2rem;
-    margin: 0.4rem;
+    margin: 0 0.4rem;
   }
 `
 
