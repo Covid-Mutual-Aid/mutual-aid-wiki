@@ -4,7 +4,7 @@ import { v4 } from 'uuid'
 import P from 'ts-prove'
 
 import { createRow, transferToDone } from '../lib/external/airtable'
-import lambda, { body, response$ } from '../lib/lambdaRx'
+import lambda, { body, responseJson$ } from '../lib/lambdaRx'
 import { switchMergeKey, authorise } from '../lib/observables'
 import db from '../lib/database'
 import {
@@ -34,7 +34,7 @@ export const requestGroupEdit = lambda((req$) =>
       // Send email explaining that the email is not assosiated to the group
       return sendNotAssosiated(email)
     }),
-    response$
+    responseJson$
   )
 )
 
@@ -54,7 +54,7 @@ export const submitSupportRequest = lambda((req$) =>
         .then(() => sendSubmitedRequest(x.email, key))
         .then(() => 'Successfully submited you should recieve an email with further instructions')
     }),
-    response$
+    responseJson$
   )
 )
 
@@ -68,7 +68,7 @@ export const confirmSupportRequest = lambda((req$) =>
         .then(() => sendSuccessfulVerification(x.email))
         .then(() => transferToDone(x.key, 'confirmed'))
     ),
-    response$
+    responseJson$
   )
 )
 
@@ -77,7 +77,7 @@ export const rejectSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('reject'),
     switchMap((x) => sendFailedVerification(x.email).then(() => transferToDone(x.key, 'rejected'))),
-    response$
+    responseJson$
   )
 )
 

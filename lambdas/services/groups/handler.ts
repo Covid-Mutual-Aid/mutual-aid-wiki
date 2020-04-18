@@ -2,7 +2,7 @@ import { switchMap, mergeMap } from 'rxjs/operators'
 import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
-import lambda, { params, body, select, response$ } from '../lib/lambdaRx'
+import lambda, { params, body, select, responseJson$ } from '../lib/lambdaRx'
 import { isOffline } from '../lib/environment'
 import { addSheetRow } from '../google/sheets'
 import { authorise } from '../lib/observables'
@@ -37,7 +37,7 @@ export const getGroups = lambda((req$) =>
           ])
         : db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord'])
     ),
-    response$
+    responseJson$
   )
 )
 
@@ -54,7 +54,7 @@ export const updateGroup = lambda((req$) =>
         : throwError('Group id does not match token id')
     ),
     switchMap((grp) => db.groups.update(grp)),
-    response$
+    responseJson$
   )
 )
 
@@ -71,6 +71,6 @@ export const createGroup = lambda((req$) =>
               .then(() => res)
       )
     ),
-    response$
+    responseJson$
   )
 )

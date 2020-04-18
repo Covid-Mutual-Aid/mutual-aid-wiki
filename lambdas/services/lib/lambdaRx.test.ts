@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken'
 import { of } from 'rxjs'
 import P from 'ts-prove'
 
-import lrx, { LambdaInput, body, params, select, response$ } from './lambdaRx'
+import lrx, { LambdaInput, body, params, select, responseJson$ } from './lambdaRx'
 
 jest.mock('./environment', () => ({
   default: { JWT_SECRET: 'SECRET' },
@@ -37,7 +37,7 @@ it('correctly combines pipelin', async () => {
         params: params(P.shape({ token: P.string })),
       }),
       map((x) => x),
-      response$
+      responseJson$
     )
   )(
     {

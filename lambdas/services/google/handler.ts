@@ -4,7 +4,7 @@ import { switchMap } from 'rxjs/operators'
 import axios from 'axios'
 import P from 'ts-prove'
 
-import lambda, { params, response$ } from '../lib/lambdaRx'
+import lambda, { params, responseJson$ } from '../lib/lambdaRx'
 import ENV from '../lib/environment'
 
 const geocodeEndpoint = `https://maps.googleapis.com/maps/api/geocode`
@@ -32,7 +32,7 @@ export const placeSuggest = lambda((req) =>
   req.pipe(
     params(P.shape({ place: P.string })),
     switchMap((x) => googlePlaceSuggest(x.place).then((x) => x.data.predictions)),
-    response$
+    responseJson$
   )
 )
 
@@ -41,7 +41,7 @@ export const placeDetails = lambda((req) =>
   req.pipe(
     params(P.shape({ place_id: P.string })),
     switchMap((x) => googlePlaceDetails(x.place_id).then((x) => x.data.result)),
-    response$
+    responseJson$
   )
 )
 
@@ -50,6 +50,6 @@ export const geolocate = lambda((req) =>
   req.pipe(
     params(P.shape({ name: P.string })),
     switchMap((x) => googleGeoLocate(x.name)),
-    response$
+    responseJson$
   )
 )
