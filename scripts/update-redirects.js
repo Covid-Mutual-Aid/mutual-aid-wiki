@@ -7,7 +7,4 @@ const redirects = fs.readFileSync(path.join(__dirname, '../client/_redirects'), 
 const modified = redirects.replace(/http.*?:splat/gim, `${endpoint}/:splat`)
 fs.writeFileSync(path.join(__dirname, '../client/_redirects'), modified)
 
-console.log('ARE EQUAL: ', modified === redirects)
-console.log({ equal: modified === redirects })
-
-child.spawnSync(`git status`, { stdio: 'inherit' })
+child.spawnSync(`##[set-output name=modified;]"${modified === redirects ? 'FALSE' : 'TRUE'}"`)

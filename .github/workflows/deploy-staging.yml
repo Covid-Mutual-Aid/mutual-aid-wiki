@@ -37,7 +37,6 @@ jobs:
           yarn sls deploy --verbose --stage staging
         env:
           # AWS
-          ENDPOINT: https://staging.covidmutualaid.cc/api
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:
             ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -70,12 +69,10 @@ jobs:
       - name: 'Update client redirects'
         id: 'redirects'
         run: 'node ./scripts/update-redirects.js'
-      - name: Redirect was updated
-        run: echo "##[set-output name=diff;]$(git status)"
       - name: 'OUT'
         run: node ./scripts/test.js
         env:
-          TESTT: ${{ steps.build_package.outputs.diff }}
+          TESTT: ${{ steps.redirects.outputs }}
       - uses: stefanzweifel/git-auto-commit-action@v4.1.2
         with:
           commit_message: Update redirects
