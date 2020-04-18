@@ -6,13 +6,14 @@ import ENV from '../lib/environment'
 import tokens from '../lib/tokens'
 
 sendGrid.setApiKey(ENV.SEND_GRID_API_KEY)
+const from = 'no-reply@mutualaid.wiki'
 
 export const sendEditLink = (email: string, id: string) => {
   const link = tokens.edit.sign({ id, email })
   return sendGrid
     .send({
       to: email,
-      from: 'no-reply@covidmutualaid.cc',
+      from,
       subject: 'Here is your edit link',
       substitutionWrappers: ['{{', '}}'],
       html: `
@@ -37,7 +38,7 @@ export const sendEditLink = (email: string, id: string) => {
 export const sendNotAssosiated = (email: string) =>
   sendGrid.send({
     to: email,
-    from: 'no-reply@covidmutualaid.cc',
+    from,
     subject: 'Email not linked with this group',
     substitutionWrappers: ['{{', '}}'],
     html: `
@@ -57,7 +58,7 @@ export const sendNoneAssosiated = (email: string, id: string) => {
   const link = tokens.support.sign({ email, id })
   return sendGrid.send({
     to: email,
-    from: 'no-reply@covidmutualaid.cc',
+    from,
     subject: 'Email not linked with this group',
     substitutionWrappers: ['{{', '}}'],
     html: `
@@ -86,7 +87,7 @@ export const sendNoneAssosiated = (email: string, id: string) => {
 export const sendSubmitedRequest = (email: string, key: string) => {
   return sendGrid.send({
     to: email,
-    from: 'no-reply@covidmutualaid.cc',
+    from,
     subject: 'Here is your verification code',
     substitutionWrappers: ['{{', '}}'],
     html: `
@@ -116,7 +117,7 @@ export const sendSubmitedRequest = (email: string, key: string) => {
 export const sendSuccessfulVerification = (email: string) =>
   sendGrid.send({
     to: email,
-    from: 'no-reply@covidmutualaid.cc',
+    from,
     subject: 'You have sucessfuly verified!',
     substitutionWrappers: ['{{', '}}'],
     html: `
@@ -135,7 +136,7 @@ export const sendSuccessfulVerification = (email: string) =>
 export const sendFailedVerification = (email: string) =>
   sendGrid.send({
     to: email,
-    from: 'no-reply@covidmutualaid.cc',
+    from,
     subject: 'Unsuccessful verification',
     substitutionWrappers: ['{{', '}}'],
     html: `
