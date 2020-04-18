@@ -26,13 +26,7 @@ const CreateGroup = () => {
   const history = useHistory()
   const [sucessModal, setSuccessModal] = useState(false)
   const [ready, setReady] = useState(false)
-  const [validation, setValidation] = useState<(keyof Validation)[]>([
-    'name',
-    'emails',
-    'link_facebook',
-    'location_name',
-  ])
-
+  const [validation, setValidation] = useState<(keyof Validation)[]>([])
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
@@ -43,10 +37,8 @@ const CreateGroup = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSubmitted(true)
-    if (!ready) {
-      alert('Please complete the form')
-      return
-    }
+    if (!ready) return
+
     request(`/group/update?token=${token}`, {
       method: 'POST',
       body: JSON.stringify(group),

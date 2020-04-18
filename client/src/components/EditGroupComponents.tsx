@@ -37,7 +37,7 @@ const EditGroupComponents = ({ group, validation, omitKeys = [], onChange }: Pro
               onChange={({ value, validated }) => {
                 onChange(
                   { ...group, name: value },
-                  validated ? validation.filter((k) => k !== 'name') : validation
+                  validated ? validation.filter((k) => k !== 'name') : [...validation, 'name']
                 )
               }}
               validator={(s) => s.length > 0}
@@ -55,7 +55,9 @@ const EditGroupComponents = ({ group, validation, omitKeys = [], onChange }: Pro
             onChange={(_emails: string[]) => {
               onChange(
                 { ...group, emails: _emails },
-                _emails.length > 0 ? validation.filter((k) => k !== 'emails') : validation
+                _emails.length > 0
+                  ? validation.filter((k) => k !== 'emails')
+                  : [...validation, 'emails']
               )
             }}
             validateEmail={isEmail}
@@ -81,7 +83,9 @@ const EditGroupComponents = ({ group, validation, omitKeys = [], onChange }: Pro
               onChange={({ value, validated }) => {
                 onChange(
                   { ...group, link_facebook: value },
-                  validated ? validation.filter((k) => k !== 'link_facebook') : validation
+                  validated
+                    ? validation.filter((k) => k !== 'link_facebook')
+                    : [...validation, 'link_facebook']
                 )
               }}
               validator={validURL}
@@ -97,7 +101,9 @@ const EditGroupComponents = ({ group, validation, omitKeys = [], onChange }: Pro
             onChange={({ name, lat, lng }) => {
               onChange(
                 { ...group, location_name: name, location_coord: { lat, lng } },
-                name.length > 0 ? validation.filter((k) => k !== 'location_name') : validation
+                name.length > 0
+                  ? validation.filter((k) => k !== 'location_name')
+                  : [...validation, 'location_name']
               )
             }}
             placeholder={group.location_name.length > 0 ? group.location_name : 'e.g "SE14 4NW"'}
