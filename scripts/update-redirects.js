@@ -18,7 +18,7 @@ if (redirects !== modified) {
   child.spawnSync('git', ['commit', '-m', '"Update redirects"'], { stdio: 'inherit' })
   child.spawnSync(
     'git',
-    ['push', '--quiet', `"https://${ghToken}@github.com/Covid-Mutual-Aid/groups-map.git"`, branch],
+    ['push', '--quiet', `https://${ghToken}@github.com/Covid-Mutual-Aid/groups-map.git`, branch],
     { stdio: 'inherit' }
   )
 }
