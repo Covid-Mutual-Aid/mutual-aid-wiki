@@ -4,10 +4,10 @@ const fs = require('fs')
 const endpoint = require('../stack.json').ServiceEndpoint
 
 const redirects = fs.readFileSync(path.join(__dirname, '../client/_redirects'), 'utf8')
+const modified = redirects.replace(/http.*?:splat/gim, `${endpoint}/:splat`)
+fs.writeFileSync(path.join(__dirname, '../client/_redirects'), modified)
 
-fs.writeFileSync(
-  path.join(__dirname, '../client/_redirects'),
-  redirects.replace(/http.*?:splat/gim, `${endpoint}/:splat`)
-)
+console.log('ARE EQUAL: ', modified === redirect)
+console.log({ equal: modified === redirects })
 
 child.spawnSync(`git status`, { stdio: 'inherit' })
