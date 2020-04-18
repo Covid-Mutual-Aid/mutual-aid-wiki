@@ -76,7 +76,10 @@ jobs:
           NETLIFY_ACCESS_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAG_ID }}
       - name: 'Update client redirects'
+        id: 'redirects'
         run: 'node ./scripts/update-redirects.js'
+      - name: 'OUT'
+        run: echo ${{ steps.redirects.outputs }}
       - uses: stefanzweifel/git-auto-commit-action@v4.1.2
         with:
           commit_message: Update redirects

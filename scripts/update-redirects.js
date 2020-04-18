@@ -1,3 +1,4 @@
+const child = require('child_process')
 const path = require('path')
 const fs = require('fs')
 const endpoint = require('../stack.json').ServiceEndpoint
@@ -8,3 +9,5 @@ fs.writeFileSync(
   path.join(__dirname, '../client/_redirects'),
   redirects.replace(/http.*?:splat/gim, `${endpoint}/:splat`)
 )
+
+child.spawnSync(`git status`, { stdio: 'inherit' })
