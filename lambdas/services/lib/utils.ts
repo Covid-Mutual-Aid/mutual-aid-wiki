@@ -63,18 +63,21 @@ export const uniqueBy = <T>(fn: (a: T, b: T) => boolean) => (arr: T[]) =>
 export const allSeq = <T>(x: (() => Promise<T>)[]) =>
   x.reduce((a, b) => a.then((all) => b().then((n) => [...all, n])), Promise.resolve([] as T[]))
 
-export const omit = <T extends Record<any, any>, K extends keyof T>(k: K) => (x: T): Omit<T, K> =>
-  Object.keys(x).reduce<Omit<T, K>>(
-    (all, key) => (key === k ? all : { ...all, [key]: x[key] }),
-    {} as any
+export const omit = <T extends Record<any, any>, K extends (keyof T)[]>(
+  keys: K,
+  x: T
+): Omit<T, K[number]> =>
+  Object.keys(x).reduce<Omit<T, K[number]>>(
+    (all, key) => (keys.includes(key) ? all : { ...all, [key]: x[key] }),
+    {} as Omit<T, K[number]>
   )
 
 export const renameKey = <O extends Record<any, any>, F extends keyof O, T extends string>(
   from: F,
   to: T
 ) => (x: O): Omit<O, F> & { [Key in T]: O[F] } => {
-  let n = omit(from)(x)
-  return { ...n, [to]: x[to] }
+  let n = omit([from], x)
+  return { ...n, [to]: x[to] } as any
 }
 
 export const comp2 = <A extends any, B extends any, C extends any>(

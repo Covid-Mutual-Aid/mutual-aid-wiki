@@ -1,6 +1,6 @@
 import sendGrid from '@sendgrid/mail'
 
-import airtable from '../lib/external/airtable'
+import { createRow } from '../lib/external/airtable'
 import { Group } from '../lib/types'
 import ENV from '../lib/environment'
 import tokens from '../lib/tokens'
@@ -151,24 +151,3 @@ export const sendFailedVerification = (email: string) =>
       </p>
     `,
   })
-
-export const addSupportRequestToTable = (
-  email: string,
-  key: string,
-  group: Pick<Group, 'id' | 'name' | 'link_facebook'>
-) => {
-  const confirm = tokens.confirm.sign({ id: group.id, email })
-  const reject = tokens.reject.sign({ id: group.id, email })
-  return airtable.attachEmailBase.create([
-    {
-      fields: {
-        name: group.name,
-        url: group.link_facebook,
-        email: email,
-        key,
-        confirm,
-        reject,
-      },
-    },
-  ])
-}

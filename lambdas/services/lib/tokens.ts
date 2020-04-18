@@ -35,7 +35,7 @@ const tokens = {
         { email, id, key, type: 'CONFIRM' },
         ENV.JWT_SECRET
       )}`,
-    verify: verifyToken<{ id: string; email: string }>('CONFIRM'),
+    verify: verifyToken<{ id: string; email: string; key: string }>('CONFIRM'),
   },
   reject: {
     sign: ({ id, email, key }: { id: string; email: string; key: string }) =>
@@ -43,12 +43,12 @@ const tokens = {
         { email, id, key, type: 'REJECT' },
         ENV.JWT_SECRET
       )}`,
-    verify: verifyToken<{ id: string; email: string }>('REJECT'),
+    verify: verifyToken<{ id: string; email: string; key: string }>('REJECT'),
   },
 }
 
-export type TypeOfTokens = typeof tokens
-export type Tokens = keyof TypeOfTokens
-export type Token = TypeOfTokens[keyof TypeOfTokens]
+export type Tokens = typeof tokens
+export type TokensNames = keyof Tokens
+export type TokenValues = Tokens[keyof Tokens]
 
 export default tokens

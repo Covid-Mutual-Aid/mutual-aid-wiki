@@ -3,6 +3,7 @@ import { switchMap } from 'rxjs/operators'
 import { v4 } from 'uuid'
 import P from 'ts-prove'
 
+import { createRow, transferToDone } from '../lib/external/airtable'
 import lambda, { body, response$ } from '../lib/lambdaRx'
 import { switchMergeKey, authorise } from '../lib/observables'
 import db from '../lib/database'
@@ -11,10 +12,11 @@ import {
   sendEditLink,
   sendNotAssosiated,
   sendSubmitedRequest,
-  addSupportRequestToTable,
   sendSuccessfulVerification,
   sendFailedVerification,
 } from './templates'
+import tokens from '../lib/tokens'
+import { Group } from '../lib/types'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
@@ -63,6 +65,7 @@ export const confirmSupportRequest = lambda((req$) =>
       db.groups
         .update({ id: x.id, emails: [x.email] })
         .then(() => sendSuccessfulVerification(x.email))
+        .then(() => transferToDone(x.key, 'confirmed'))
     ),
     response$
   )
@@ -72,7 +75,25 @@ export const confirmSupportRequest = lambda((req$) =>
 export const rejectSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('reject'),
-    switchMap((x) => sendFailedVerification(x.email)),
+    switchMap((x) => sendFailedVerification(x.email).then(() => transferToDone(x.key, 'rejected'))),
     response$
   )
 )
+
+export const addSupportRequestToTable = (
+  email: string,
+  key: string,
+  group: Pick<Group, 'id' | 'name' | 'link_facebook'>
+) => {
+  const confirm = tokens.confirm.sign({ id: group.id, email, key })
+  const reject = tokens.reject.sign({ id: group.id, email, key })
+  return createRow('Waiting', {
+    date: new Date().toISOString(),
+    name: group.name,
+    url: group.link_facebook,
+    email: email,
+    key,
+    confirm,
+    reject,
+  })
+}
