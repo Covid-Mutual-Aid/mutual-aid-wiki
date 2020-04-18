@@ -2,13 +2,13 @@
   {
     "id": "c57ae8da-jdfs-424a-ba9f-4f117d5f84e4",
     "name": "Test group",
-    "location_name": "Ripon, North Yorkshire",
+    "location_name": "Forest Row",
     "link_facebook": "http://www.testing.com",
     "created_at": 1586637587868,
     "emails": ["dm.beaven@gmail.com"],
     "location_coord": {
-      "lat": "54.1361346",
-      "lng": "-1.5237756"
+      "lat": "51.09739099999999",
+      "lng": "0.033222"
     }
   },
   {
