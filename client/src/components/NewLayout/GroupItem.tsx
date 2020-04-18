@@ -69,7 +69,7 @@ const GroupItem = ({
 const GroupWrapper = styled.div<{ selected: boolean }>`
   position: relative;
   transition: background 0.3s;
-  background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.11)' : 'rgba(0, 0, 255, 0);')};
+  background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.11)' : 'inherit;')};
   padding: 0.5rem 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 

@@ -23,6 +23,14 @@ export const EditPage = styled.div`
     max-width: 22rem;
     margin: 2rem;
   }
+
+  .preview {
+    background-color: rgba(0, 0, 0, 0.04);
+
+    .item {
+      background-color: rgba(255, 255, 255, 1);
+    }
+  }
 `
 
 export const TextWrapper = styled.div`
