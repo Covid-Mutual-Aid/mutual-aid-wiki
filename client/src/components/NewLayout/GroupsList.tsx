@@ -64,6 +64,7 @@ const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
 const Styles = styled.div`
   height: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
   transition: box-shadow 0.3s;
   box-shadow: inset 0px 0px 11px -11px #959595;
   &:hover {

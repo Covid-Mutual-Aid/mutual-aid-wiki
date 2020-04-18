@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { MOON_BLUE } from '../utils/CONSTANTS'
+import { MOON_BLUE, MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 export const EditPage = styled.div`
   display: grid;
@@ -29,6 +29,14 @@ export const EditPage = styled.div`
 
     .item {
       background-color: rgba(255, 255, 255, 1);
+    }
+  }
+
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+    grid: 1fr / 1fr;
+
+    .preview {
+      display: hidden;
     }
   }
 `
