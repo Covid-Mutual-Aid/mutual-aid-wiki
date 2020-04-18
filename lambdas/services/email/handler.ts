@@ -3,10 +3,10 @@ import { switchMap } from 'rxjs/operators'
 import { v4 } from 'uuid'
 import P from 'ts-prove'
 
-import lambda, { body, responseJson$ } from '../lib/internal/lambdaRx'
-import { createRow, transferToDone } from '../lib/external/airtable'
-import { switchMergeKey, authorise } from '../lib/observables'
-import db from '../lib/database'
+import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
+import { createRow, transferToDone } from '../_utility_/dep/airtable'
+import { switchMergeKey, authorise } from '../_utility_/observables'
+import db from '../_utility_/database'
 import {
   sendNoneAssosiated,
   sendEditLink,
@@ -15,9 +15,9 @@ import {
   sendSuccessfulVerification,
   sendFailedVerification,
 } from './templates'
-import tokens from '../lib/tokens'
-import { Group } from '../lib/types'
-import ENV from '../lib/environment'
+import tokens from '../_utility_/tokens'
+import { Group } from '../_utility_/types'
+import ENV from '../_utility_/environment'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>

@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
-import { sendData } from './external/slack'
+import { sendData } from './dep/slack'
 import { Group } from './types'
 
 export const requestFailed = (message: string, event: APIGatewayProxyEvent) =>

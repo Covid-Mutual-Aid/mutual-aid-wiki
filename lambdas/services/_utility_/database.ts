@@ -1,7 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
-import { Group, Search, Token } from '../lib/types'
-import createTableAPI from './internal/createTableAPI'
+import { Group, Search, Token } from './types'
+import createTableAPI from './lib/createTableAPI'
 import ENV, { isOffline } from './environment'
 
 const offlineOptions = {

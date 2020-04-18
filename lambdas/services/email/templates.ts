@@ -1,7 +1,7 @@
 import sendGrid from '@sendgrid/mail'
 
-import ENV from '../lib/environment'
-import tokens from '../lib/tokens'
+import ENV from '../_utility_/environment'
+import tokens from '../_utility_/tokens'
 
 sendGrid.setApiKey(ENV.SEND_GRID_API_KEY)
 const from = 'no-reply@mutualaid.wiki'
