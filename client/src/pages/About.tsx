@@ -32,8 +32,11 @@ const AboutPage = () => {
           </p>
           <li>Can I report a group?</li>
           <p>
-            Yes, find your group in the sidebar, click the {icons('more')} icon on the top right
-            corner and select report group from the dropdown and fill out the form.
+            Yes, click the {icons('more')} icon on the top right corner and select report group from
+            the dropdown. Once you have completed the form, we will review your report and remove
+            the group if we deem it appropriate. We will usually remove the group if it is a link to
+            an individual, spam or promotional, no longer accesible or spreading hate
+            speech/misinformation.
           </p>
           <li>Is my personal data safe?</li>
           <p>
