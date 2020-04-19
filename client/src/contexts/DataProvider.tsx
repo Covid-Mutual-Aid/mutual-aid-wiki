@@ -36,7 +36,8 @@ const useUserLocation = () => {
         lng: position.coords.longitude,
         zoom: position.coords.altitudeAccuracy || 3,
       })
-    const locateIp = () => request('/info/locate').then((x) => setLocation({ ...x, zoom: 4 }))
+    const locateIp = () =>
+      request('/info/locate').then((x) => setLocation({ lat: x.lat, lng: x.lon, zoom: 4 }))
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(locate, locateIp, { timeout: 300 })
     } else {
