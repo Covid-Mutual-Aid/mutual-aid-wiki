@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { ReactMultiEmail, isEmail } from 'react-multi-email'
 import 'react-multi-email/style.css'
 
-import { GroupWithEmails } from '../utils/types'
+import { Group } from '../utils/types'
 
 import Location from './Location'
 import EditEmails from './EditEmails'
@@ -11,10 +11,10 @@ import styled from 'styled-components'
 import { Input, validURL, validEmail } from './NewLayout/FormElements'
 
 type Props = {
-  group: GroupWithEmails
+  group: Omit<Group, 'id'>
   validation: (keyof Validation)[]
-  omitKeys?: (keyof GroupWithEmails)[]
-  onChange: (group: GroupWithEmails, validation: (keyof Validation)[]) => void
+  omitKeys?: (keyof Omit<Group, 'id'>)[]
+  onChange: (group: Omit<Group, 'id'>, validation: (keyof Validation)[]) => void
 }
 
 export type Validation = {

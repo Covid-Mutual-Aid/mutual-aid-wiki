@@ -2,7 +2,7 @@ import { useParams, Link, useHistory } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import { GroupWithEmails } from '../utils/types'
+import { GroupWithEmails, Group } from '../utils/types'
 import { InputGroup, EditPage, CenterAlign } from '../styles/styles'
 import styled from 'styled-components'
 import EditGroupComponents, { Validation } from '../components/EditGroupComponents'
@@ -12,9 +12,8 @@ const CreateGroup = () => {
   const request = useRequest()
   const { id, token } = useParams<{ id: string; token: string }>()
 
-  const [group, setGroup] = useState<GroupWithEmails>({
+  const [group, setGroup] = useState<Omit<Group, 'id'>>({
     name: '',
-    emails: [],
     location_name: '',
     link_facebook: '',
     location_coord: {
