@@ -15,7 +15,7 @@ const MapContext = createContext<{
   setMapState: React.Dispatch<React.SetStateAction<MapState>>
 }>({ map: { current: null }, setMapState: () => null })
 
-export const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 5 }
+export const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 3 }
 const MapStateContext = createContext<[MapState, MapState]>([defaultState, defaultState])
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
@@ -58,7 +58,7 @@ export const useMapControls = () => {
 const useControlMap = () => {
   const { map } = useContext(MapContext)
   const { panTo, zoomTo } = useMapControls()
-  const { groups } = useData()
+  const { groups, location } = useData()
   const {
     search: { place },
     selected,
@@ -73,6 +73,9 @@ const useControlMap = () => {
     } else if (place) {
       panTo(place.coords)
       zoomTo(15)
+    } else if (location?.lat && location.lng) {
+      panTo({ lat: location.lat, lng: location.lng })
+      zoomTo(defaultState.zoom)
     } else {
       panTo(defaultState.center)
       zoomTo(defaultState.zoom)

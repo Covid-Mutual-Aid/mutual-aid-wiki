@@ -5,28 +5,42 @@ import { useLocation } from 'react-router-dom'
 
 const DataContext = createContext<{
   groups: Group[]
+  location?: { lat: number; lng: number }
 }>({
   groups: [],
 })
 
+const DataProvider = ({ children }: { children: React.ReactNode }) => {
+  const location = useUserLocation()
+  const groups = useGroups()
+
+  return (
+    <DataContext.Provider value={useMemo(() => ({ groups, location }), [groups, location])}>
+      {children}
+    </DataContext.Provider>
+  )
+}
+
+export const useData = () => useContext(DataContext)
+
+export default DataProvider
+
 const useUserLocation = () => {
-  const [location, setLocation] = useState()
+  const [location, setLocation] = useState<{ lat: number; lng: number }>()
+  const request = useRequest()
 
   useEffect(() => {
-    fetch(`http://ip-api.com/json`)
-      .then((x) => x.json())
-      .then(console.log)
-  }, [])
+    request('/info/locate').then(setLocation)
+  }, [request])
+
   return location
 }
 
-const DataProvider = ({ children }: { children: React.ReactNode }) => {
-  const [groups, setGroups] = useState<Group[]>([])
-  const { pathname } = useLocation()
+const useGroups = () => {
   const request = useRequest()
+  const { pathname } = useLocation()
   const isHome = pathname === '/'
-  const userLocation = useUserLocation()
-  console.log(userLocation)
+  const [groups, setGroups] = useState<Group[]>([])
 
   useEffect(() => {
     request('/group/get').then((grps: Group[]) =>
@@ -46,13 +60,5 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
     )
   }, [request, isHome])
 
-  return (
-    <DataContext.Provider value={useMemo(() => ({ groups }), [groups])}>
-      {children}
-    </DataContext.Provider>
-  )
+  return groups
 }
-
-export const useData = () => useContext(DataContext)
-
-export default DataProvider
