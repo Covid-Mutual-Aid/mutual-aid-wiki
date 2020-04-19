@@ -5,11 +5,13 @@ import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import icons from '../../utils/icons'
 import { InputGroup } from '../../styles/styles'
 import { MOON_BLUE } from '../../utils/CONSTANTS'
+import { useData } from '../../contexts/DataProvider'
 
 const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')
   const { onSearch, onSelect } = usePlaceMethod()
   const { search } = usePlaceState()
+  const { geolocateUser } = useData()
   return (
     <Styles>
       <form
@@ -30,7 +32,7 @@ const SearchBox = () => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <div className="button-group">
-            <button onClick={() => {}}>{icons('nav')}</button>
+            <button onClick={() => geolocateUser()}>{icons('nav')}</button>
             <button type="submit">{icons('search')}</button>
           </div>
         </InputGroup>
