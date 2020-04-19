@@ -1,6 +1,4 @@
 import React from 'react'
-import SecondaryPage from './SecondaryPage'
-import { CenterAlign } from '../styles/styles'
 import styled from 'styled-components'
 import icons from '../utils/icons'
 import { Link } from 'react-router-dom'
@@ -67,7 +65,13 @@ const AboutPage = () => {
         <br />
         <br />
 
-        <p>With ❤️,</p>
+        <p>
+          With{' '}
+          <span aria-label="heart emoji" role="img">
+            ❤️
+          </span>
+          ,
+        </p>
         <p>Mutual Aid Wiki team</p>
         <br />
         <br />

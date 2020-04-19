@@ -4,18 +4,7 @@ import styled from 'styled-components'
 import icons, { iconFromUrl } from '../../utils/icons'
 import tidyLink from '../../utils/tidyLink'
 import { Group } from '../../utils/types'
-import { Link, useHistory } from 'react-router-dom'
-
-const useOutsideClose = (init: boolean) => {
-  const [isOpen, setIsOpen] = useState(init)
-
-  useEffect(() => {
-    document.body.addEventListener('click', (e) => setIsOpen(false))
-    return () => document.body.removeEventListener('click', (e) => setIsOpen(false))
-  }, [])
-
-  return { isOpen, setIsOpen }
-}
+import { useHistory } from 'react-router-dom'
 
 const GroupItem = ({
   group,

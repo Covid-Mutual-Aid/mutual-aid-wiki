@@ -5,10 +5,9 @@ import 'react-multi-email/style.css'
 import { Group } from '../utils/types'
 
 import Location from './Location'
-import EditEmails from './EditEmails'
 import { InputGroup } from '../styles/styles'
 import styled from 'styled-components'
-import { Input, validURL, validEmail } from './NewLayout/FormElements'
+import { Input, validURL } from './NewLayout/FormElements'
 
 type Props = {
   group: Omit<Group, 'id'>

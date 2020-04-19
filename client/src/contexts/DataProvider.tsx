@@ -13,6 +13,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [groups, setGroups] = useState<Group[]>([])
   const { pathname } = useLocation()
   const request = useRequest()
+  const isHome = pathname === '/'
 
   useEffect(() => {
     request('/group/get').then((grps: Group[]) =>
@@ -30,7 +31,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
         )
       )
     )
-  }, [request, pathname === '/'])
+  }, [request, isHome])
 
   return (
     <DataContext.Provider value={useMemo(() => ({ groups }), [groups])}>

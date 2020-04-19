@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { InputGroup, Button } from '../styles/styles'
+import { InputGroup } from '../styles/styles'
 import { useRequest } from '../contexts/RequestProvider'
 import styled from 'styled-components'
 import { Link, useParams, useHistory } from 'react-router-dom'
