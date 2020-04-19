@@ -29,7 +29,10 @@ const SearchBox = () => {
             placeholder="Enter place"
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button type="submit">{icons('search')}</button>
+          <div className="button-group">
+            <button onClick={() => {}}>{icons('nav')}</button>
+            <button type="submit">{icons('search')}</button>
+          </div>
         </InputGroup>
       </form>
       {search.place ? (
@@ -72,6 +75,10 @@ const Styles = styled.div`
     padding: 0.5rem 1rem;
     background-color: #8a8686;
     color: white;
+  }
+  .button-group {
+    display: flex;
+    flex-direction: row;
   }
 `
 
