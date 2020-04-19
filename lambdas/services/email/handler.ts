@@ -28,7 +28,7 @@ export const requestGroupEdit = lambda((req$) =>
       console.log({ email, group })
       if (!group) return Promise.reject("Group doesn't exist")
       // Send email with link to submit support request
-      if (!group.emails) return sendNoneAssosiated(email, group.id)
+      if (!group.emails || group.emails.length === 0) return sendNoneAssosiated(email, group.id)
       // Send Email with link to edit group
       if (group.emails.includes(email)) return sendEditLink(email, group.id)
       // Send email explaining that the email is not assosiated to the group
