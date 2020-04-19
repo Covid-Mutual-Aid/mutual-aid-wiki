@@ -1,3 +1,9 @@
 /api/*  https://sn29v7uuxi.execute-api.eu-west-2.amazonaws.com/dev/:splat  200
 
 /* /index.html 200
+
+http://covidmutualaid.cc/* https://mutualaid.wiki/:splat 301!
+https://covidmutualaid.cc/* https://mutualaid.wiki/:splat 301!
+
+http://staging.covidmutualaid.cc/* https://staging.mutualaid.wiki/:splat 301!
+https://staging.covidmutualaid.cc/* https://staging.mutualaid.wiki/:splat 301!
