@@ -59,6 +59,7 @@
     "@types/react-select": "^3.0.11",
     "@types/react-virtualized": "^9.21.8",
     "@types/styled-components": "^5.0.1",
+    "babel-loader": "^8.1.0",
     "levenary": "^1.1.1"
   }
 }
