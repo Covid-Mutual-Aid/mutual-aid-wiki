@@ -10,7 +10,7 @@ const useLocationSearch = (query?: string) => {
   const [error, setError] = useState<null | string>(null)
 
   useEffect(() => {
-    if (!query) {
+    if (!query || query.length == 0) {
       setPlace(null)
       setError(null)
       return

@@ -11,6 +11,7 @@ const useLocationSearch = () => {
 
   const locate = useCallback(
     (name: string) => {
+      if (name.length === 0) return
       request(`/google/geolocate?name=${name}`)
         .then((res) => (!res[0] ? Promise.reject() : res[0]))
         .then((place) => {
