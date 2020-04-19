@@ -9,6 +9,7 @@ import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 import icons from '../utils/icons'
 import Nav from '../components/NewLayout/Nav'
+import inIframe from '../utils/inIframe'
 
 const NewLayout = () => {
   const [open, setOpen] = useState(true)
@@ -32,9 +33,11 @@ const NewLayout = () => {
               marginTop: '-1rem',
             }}
           >
-            <h3>
-              Find local <br className="break" /> mutal aid groups
-            </h3>
+            {!inIframe() && (
+              <h3>
+                Find local <br className="break" /> mutal aid groups
+              </h3>
+            )}
           </div>
         </div>
         <SearchBox />

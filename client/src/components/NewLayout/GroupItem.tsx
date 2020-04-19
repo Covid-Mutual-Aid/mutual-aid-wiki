@@ -51,7 +51,9 @@ const GroupItem = ({
         >
           {icons('more', 'rgba(0,0,0,0.2')}
         </div>
-        <a href={tidyLink(group.link_facebook)}>{iconFromUrl(group.link_facebook)}</a>
+        <a target="_blank" href={tidyLink(group.link_facebook)}>
+          {iconFromUrl(group.link_facebook)}
+        </a>
       </div>
     </GroupWrapper>
   )

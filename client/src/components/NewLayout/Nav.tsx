@@ -2,13 +2,19 @@ import React, { ReactChild } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { MOON_BLUE } from '../../utils/CONSTANTS'
+import inIframe from '../../utils/inIframe'
 
 const Nav = ({ children }: { children?: ReactChild }) => {
   return (
     <NavWrapper>
       <div className="options">
-        <Link to="/about">Whats going on?</Link>
-        {/* <Link to="/help">Help</Link> */}
+        {inIframe() ? (
+          <a target="_blank" href="https://mutualaid.wiki">
+            View full site!
+          </a>
+        ) : (
+          <Link to="/about">Whats going on?</Link>
+        )}
       </div>
       <div className="buttons-right">{children}</div>
     </NavWrapper>

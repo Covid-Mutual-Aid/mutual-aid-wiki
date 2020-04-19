@@ -15,8 +15,17 @@ import App from './App'
 import MapProvider from './contexts/MapProvider'
 import DataProvider from './contexts/DataProvider'
 import StateProvider from './contexts/StateContext'
+import inIframe from './utils/inIframe'
+import { gtag } from './utils/gtag'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
+
+if (!inIframe()) {
+  gtag('event', 'Viewed on covidmutualaid.cc', {
+    event_category: 'Iframe',
+    event_label: 'Viewed without iframe',
+  })
+}
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
   fetch(
