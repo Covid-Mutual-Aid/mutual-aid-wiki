@@ -1,7 +1,7 @@
 import { google, sheets_v4 } from 'googleapis'
-import { uniqueBy, isSameGroup } from '../lib/utils'
-import { Group } from '../lib/types'
-import ENV from '../lib/environment'
+import { uniqueBy, isSameGroup } from '../_utility_/utils'
+import { Group } from '../_utility_/types'
+import ENV from '../_utility_/environment'
 
 export const sheets = google.sheets('v4')
 
