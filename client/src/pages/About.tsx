@@ -7,9 +7,9 @@ const AboutPage = () => {
   return (
     <Center>
       <Content>
-        <div className="back">
-          <Link to="/">{icons('map', 'white')}</Link>
-        </div>
+        <Link to="/">
+          <div className="back">{icons('map', 'white')}</div>
+        </Link>
         <br />
         <br />
         <br />
