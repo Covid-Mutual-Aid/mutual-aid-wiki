@@ -46,7 +46,7 @@ export default function createTableAPI<T extends { id: string }>({
         .promise()
         .then((x) => x.Item as Pick<T, A[number]>),
 
-    scanByKey: <Key extends keyof T>(key: Key, value: T[Key]) => {
+    getByKeyEqualTo: <Key extends keyof T>(key: Key, value: T[Key]) => {
       const params = {
         TableName,
         ScanIndexForward: true,
