@@ -6,6 +6,9 @@ import P from 'ts-prove'
 import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
 import { createRow, transferToDone } from '../_utility_/dep/airtable'
 import { switchMergeKey, authorise } from '../_utility_/observables'
+import { Group } from '../_utility_/types'
+import ENV from '../_utility_/environment'
+import tokens from '../_utility_/tokens'
 import db from '../_utility_/database'
 import {
   sendNoneAssosiated,
@@ -15,9 +18,6 @@ import {
   sendSuccessfulVerification,
   sendFailedVerification,
 } from './templates'
-import tokens from '../_utility_/tokens'
-import { Group } from '../_utility_/types'
-import ENV from '../_utility_/environment'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
