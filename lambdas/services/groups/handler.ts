@@ -35,7 +35,15 @@ export const getGroups = lambda((req$) =>
             'location_name',
             'location_coord',
           ])
-        : db.groups.get(['id', 'name', 'link_facebook', 'location_name', 'location_coord'])
+        : db.groups
+            .get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'updated_at'])
+            .then((grps) =>
+              grps.sort(
+                (a, b) =>
+                  new Date(b.updated_at || '01 Jan 2020').valueOf() -
+                  new Date(a.updated_at || '01 Jan 2020').valueOf()
+              )
+            )
     ),
     responseJson$
   )

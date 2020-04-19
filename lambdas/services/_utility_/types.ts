@@ -5,6 +5,8 @@ export type Group = {
   link_facebook: string
   location_name: string
   location_coord: { lat: number; lng: number }
+  created_at?: string
+  updated_at?: string
 }
 
 export type Search = {

@@ -10,13 +10,9 @@ const toExp = (x: any): any => {
     return { M: Object.keys(x).reduce((all, key) => ({ ...all, [key]: toExp(x[key]) }), {}) }
 }
 
-export default function createTableAPI<T extends { id: string }>({
-  table,
-  client,
-}: {
-  table: string
-  client: DocumentClient
-}) {
+export default function createTableAPI<
+  T extends { id: string; created_at?: string; updated_at?: string }
+>({ table, client }: { table: string; client: DocumentClient }) {
   const TableName = table
   const create = (x: Omit<T, 'id'>) => ({
     ...x,
