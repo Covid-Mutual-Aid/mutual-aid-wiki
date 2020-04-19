@@ -15,7 +15,7 @@ const AboutPage = () => {
         <br />
         <br />
         <br />
-        <h2>A global map of Mutual Aid groups</h2>
+        <h2>A global map of COVID-19 Mutual Aid groups</h2>
         <p>
           Yes! Find your group in the sidebar, click the {icons('more')} icon on the top right
           corner and select edit group from the dropdown. Submit your email and check your inbox for
@@ -45,11 +45,14 @@ const AboutPage = () => {
           <p>
             We are working on these things and more. If there is a feature you would really like,
             please email us or create an issue on{' '}
-            <a href="https://github.com/Covid-Mutual-Aid/groups-map">github</a>
+            <a href="https://github.com/Covid-Mutual-Aid/groups-map/issues">github</a>
           </p>
           <li>Something is broken...</li>
           <p>
-            <a href="https://github.com/Covid-Mutual-Aid/groups-map">github</a>
+            Oops, sorry about this. The project is quite young and this does happen from time to
+            time. Would you kindly send us an <a href="mailto:info@mutualaid.wiki">email</a> to let
+            us know or{' '}
+            <a href="https://github.com/Covid-Mutual-Aid/groups-map/issues">create an issue</a>?
           </p>
           <li>Who are you?</li>
           <p>

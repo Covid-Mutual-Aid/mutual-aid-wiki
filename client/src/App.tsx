@@ -7,6 +7,7 @@ import About from './pages/About'
 import EditGroup from './pages/EditGroup'
 import AddGroup from './pages/AddGroup'
 import EmailAuth from './pages/EmailAuth'
+import Report from './pages/Report'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/add-group" component={AddGroup} />
       <Route path="/edit/:id/:token" component={EditGroup} />
       <Route path="/edit/:id" component={EmailAuth} />
+      <Route path="/report/:id" component={Report} />
       <Route path="/" component={Groups} />
     </Switch>
   )
