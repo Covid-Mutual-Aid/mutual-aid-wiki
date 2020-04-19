@@ -101,3 +101,13 @@ export const Button = styled.div<{ variant?: 'primary' | 'secondary' }>`
     color: inherit;
   }
 `
+
+export const FormButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 0;
+
+  button {
+    margin: 0 0.4rem;
+  }
+`

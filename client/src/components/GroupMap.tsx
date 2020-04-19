@@ -15,7 +15,6 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
   const onLoad = React.useCallback((mapInstance) => {
     setGoogleMapInstance(mapInstance)
     // do something with map Instance
-    console.log(mapInstance.getCenter())
   }, [])
 
   // const options = {

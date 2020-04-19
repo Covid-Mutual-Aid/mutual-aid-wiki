@@ -1,5 +1,5 @@
 requestGroupEdit:
-  handler: services/email/handler.requestGroupEdit
+  handler: services/support/handler.requestGroupEdit
   events:
     - http:
         method: post
@@ -7,7 +7,7 @@ requestGroupEdit:
         cors: true
 
 submitSupportRequest:
-  handler: services/email/handler.submitSupportRequest
+  handler: services/support/handler.submitSupportRequest
   events:
     - http:
         method: get
@@ -15,7 +15,7 @@ submitSupportRequest:
         cors: true
 
 confirmSupportRequest:
-  handler: services/email/handler.confirmSupportRequest
+  handler: services/support/handler.confirmSupportRequest
   events:
     - http:
         method: get
@@ -23,9 +23,17 @@ confirmSupportRequest:
         cors: true
 
 rejectSupportRequest:
-  handler: services/email/handler.rejectSupportRequest
+  handler: services/support/handler.rejectSupportRequest
   events:
     - http:
         method: get
         path: request/reject
+        cors: true
+
+reportGroup:
+  handler: services/support/handler.reportGroup
+  events:
+    - http:
+        method: post
+        path: request/report
         cors: true

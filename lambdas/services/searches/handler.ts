@@ -1,16 +1,9 @@
 import 'source-map-support/register'
-import P from 'ts-prove'
-import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
-
-const proveLocationSearch = P.shape({
-  query: P.string,
-  place_id: P.string,
-  address: P.string,
-  coords: P.shape({ lat: P.number, lng: P.number }),
-})
-
-import db from '../_utility_/database'
 import { switchMap } from 'rxjs/operators'
+import P from 'ts-prove'
+
+import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
+import db from '../_utility_/database'
 
 export const getLocationSearches = lambda((req$) =>
   req$.pipe(
@@ -20,5 +13,16 @@ export const getLocationSearches = lambda((req$) =>
 )
 
 export const addLocationSearch = lambda((req$) =>
-  req$.pipe(body(proveLocationSearch), switchMap(db.search.create), responseJson$)
+  req$.pipe(
+    body(
+      P.shape({
+        query: P.string,
+        place_id: P.string,
+        address: P.string,
+        coords: P.shape({ lat: P.number, lng: P.number }),
+      })
+    ),
+    switchMap(db.search.create),
+    responseJson$
+  )
 )

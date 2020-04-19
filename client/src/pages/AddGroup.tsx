@@ -6,7 +6,7 @@ import { useRequest } from '../contexts/RequestProvider'
 import { GroupWithEmails } from '../utils/types'
 import EditGroupComponents, { Validation } from '../components/EditGroupComponents'
 import GroupItem from '../components/NewLayout/GroupItem'
-import { EditPage, CenterAlign } from '../styles/styles'
+import { EditPage, CenterAlign, FormButtons } from '../styles/styles'
 
 const CreateGroup = () => {
   const request = useRequest()
@@ -36,7 +36,6 @@ const CreateGroup = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSubmitted(true)
-    console.log('called')
     if (!ready) return
     request('/group/create', { method: 'POST', body: JSON.stringify(group) })
       .then((x) => {
@@ -108,15 +107,5 @@ const CreateGroup = () => {
     </EditPage>
   )
 }
-
-const FormButtons = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 1rem 0;
-
-  button {
-    margin: 0 0.4rem;
-  }
-`
 
 export default CreateGroup

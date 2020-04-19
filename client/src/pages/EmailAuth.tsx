@@ -29,7 +29,6 @@ const EmailAuth = () => {
               .then((x) => {
                 if (x.error) {
                   setError(x.error)
-                  console.log(x)
                   return
                 }
                 setSucessModal(true)

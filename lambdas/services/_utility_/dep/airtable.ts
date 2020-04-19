@@ -6,6 +6,13 @@ export const airtable = new Airtable({ apiKey: env.AIRTABLE_ATTACH_EMAIL_KEY }).
   env.AIRTABLE_ATTACH_EMAIL_BASE
 )
 
+export type ReportsTable = {
+  name: string
+  message: string
+  url: string
+  id: string
+}
+
 export type WaitingTable = {
   confirm: string
   date?: string
@@ -20,7 +27,7 @@ export type DoneTable = Omit<WaitingTable, 'reject' | 'confirm'> & {
   status: 'confirmed' | 'rejected'
 }
 
-export type Tables = { Waiting: WaitingTable; Done: DoneTable }
+export type Tables = { Waiting: WaitingTable; Done: DoneTable; Reports: ReportsTable }
 
 const getAll = <T extends keyof Tables>(table: T) =>
   airtable(table).select().all() as Promise<Airtable.Records<Tables[T]>>

@@ -81,7 +81,8 @@ functions:
   - ${file(./services/groups/functions.yml)}
   - ${file(./services/google/functions.yml)}
   - ${file(./services/searches/functions.yml)}
-  - ${file(./services/email/functions.yml)}
+  - ${file(./services/support/functions.yml)}
+  - ${file(./services/info/functions.yml)}
 
 resources:
   Resources:

@@ -5,11 +5,13 @@ import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
 import icons from '../../utils/icons'
 import { InputGroup } from '../../styles/styles'
 import { MOON_BLUE } from '../../utils/CONSTANTS'
+import { useData } from '../../contexts/DataProvider'
 
 const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')
   const { onSearch, onSelect } = usePlaceMethod()
   const { search } = usePlaceState()
+  const { geolocateUser } = useData()
   return (
     <Styles>
       <form
@@ -29,7 +31,10 @@ const SearchBox = () => {
             placeholder="Enter place"
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button type="submit">{icons('search')}</button>
+          <div className="button-group">
+            <button onClick={() => geolocateUser()}>{icons('nav')}</button>
+            <button type="submit">{icons('search')}</button>
+          </div>
         </InputGroup>
       </form>
       {search.place ? (
@@ -72,6 +77,10 @@ const Styles = styled.div`
     padding: 0.5rem 1rem;
     background-color: #8a8686;
     color: white;
+  }
+  .button-group {
+    display: flex;
+    flex-direction: row;
   }
 `
 

@@ -43,7 +43,6 @@ const GroupMap = () => {
       width: 45,
     },
   ]
-  console.log(groups)
   return (
     <MapStyles>
       <InfoBox />
