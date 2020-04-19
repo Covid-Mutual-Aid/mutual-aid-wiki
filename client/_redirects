@@ -4,7 +4,7 @@ https://covidmutualaid.cc/* https://mutualaid.wiki/:splat 301!
 http://staging.covidmutualaid.cc/* https://staging.mutualaid.wiki/:splat 301!
 https://staging.covidmutualaid.cc/* https://staging.mutualaid.wiki/:splat 301!
 
-/api/*  https://1w4p6i8hwg.execute-api.eu-west-2.amazonaws.com/staging/:splat  200
+/api/*  https://vlxcvrkif2.execute-api.eu-west-2.amazonaws.com/staging/:splat  200
 
 /* /index.html 200
 
