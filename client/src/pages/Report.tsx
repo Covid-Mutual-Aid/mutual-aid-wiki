@@ -30,7 +30,6 @@ const Report = () => {
               body: JSON.stringify({ id, message }),
             })
               .then((x) => {
-                console.log('sucess')
                 setSuccessModal(true)
                 return new Promise((res) => setTimeout(res, 6000))
               })

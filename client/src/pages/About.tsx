@@ -30,6 +30,11 @@ const AboutPage = () => {
             corner and select edit group from the dropdown. Submit your email and check your inbox
             for further instructions 🙂.
           </p>
+          <li>Can I report a group?</li>
+          <p>
+            Yes, find your group in the sidebar, click the {icons('more')} icon on the top right
+            corner and select report group from the dropdown and fill out the form.
+          </p>
           <li>Is my personal data safe?</li>
           <p>
             While your group information is public, the email addresses you provide are not. We care
@@ -40,10 +45,10 @@ const AboutPage = () => {
             If you send us an email we will do our best to help, but we hope you find this easier
             after the recent redesign!
           </p>
-          <li>Why can't I add more information to my group or report a group?</li>
+          <li>Why can't I add more information to my group?</li>
           <p>
-            We are working on these things and more. If there is a feature you would really like,
-            please email us or create an issue on{' '}
+            We are working on this and more. If there is a feature you would really like, please
+            email us or create an issue on{' '}
             <a href="https://github.com/Covid-Mutual-Aid/groups-map/issues">github</a>
           </p>
           <li>Something is broken...</li>

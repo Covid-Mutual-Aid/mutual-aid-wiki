@@ -31,7 +31,6 @@ const CreateGroup = () => {
   useEffect(() => {
     request(`/group/get?id=${id}`).then((grp) => setGroup((x) => ({ ...x, ...grp })))
   }, [id, request])
-  console.log(group)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -43,7 +42,6 @@ const CreateGroup = () => {
       body: JSON.stringify(group),
     })
       .then((x) => {
-        console.log(x)
         setSuccessModal(true)
         return new Promise((res) => setTimeout(res, 6000))
       })
@@ -65,7 +63,6 @@ const CreateGroup = () => {
                 onChange={(group, validation) => {
                   setValidation(validation)
                   setGroup(group)
-                  console.log(group, validation)
                   validation.length === 0 ? setReady(true) : setReady(false)
                 }}
                 group={group}

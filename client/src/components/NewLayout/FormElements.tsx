@@ -18,7 +18,6 @@ export const Input = ({
   validator: (sn: string) => boolean
   errorMsg?: string
 }) => {
-  console.log(value, validator(value), value.length)
   return (
     <>
       {errorMsg.length > 0 ? <label>errorMsg</label> : null}
