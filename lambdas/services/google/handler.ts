@@ -1,8 +1,11 @@
+import 'source-map-support/register'
+
+import { switchMap } from 'rxjs/operators'
 import axios from 'axios'
 import P from 'ts-prove'
 
-import lambda, { useParams } from '../lib/lambdaUtils'
-import { GOOGLE_API_KEY } from '../lib/utils'
+import lambda, { params, responseJson$ } from '../_utility_/lib/lambdaRx'
+import ENV from '../_utility_/environment'
 
 const geocodeEndpoint = `https://maps.googleapis.com/maps/api/geocode`
 const googlePlaceEnpoint = 'https://maps.googleapis.com/maps/api/place'
@@ -10,32 +13,43 @@ const googlePlaceEnpoint = 'https://maps.googleapis.com/maps/api/place'
 // Helpers
 export const googlePlaceSuggest = (place: string) =>
   axios.get(
-    `${googlePlaceEnpoint}/autocomplete/json?input=${place}&types=geocode&key=${GOOGLE_API_KEY}`
+    `${googlePlaceEnpoint}/autocomplete/json?input=${place}&types=geocode&key=${ENV.GOOGLE_API_KEY}`
   )
 
 export const googlePlaceDetails = (place_id: string) =>
-  axios.get(`${googlePlaceEnpoint}/details/json?place_id=${place_id}&key=${GOOGLE_API_KEY}`)
+  axios.get(`${googlePlaceEnpoint}/details/json?place_id=${place_id}&key=${ENV.GOOGLE_API_KEY}`)
 
 export const googleGeoLocate = (location: string) =>
   axios
-    .get(`${geocodeEndpoint}/json?address=${location}&region=uk&key=${GOOGLE_API_KEY}`)
+    .get(`${geocodeEndpoint}/json?address=${location}&region=uk&key=${ENV.GOOGLE_API_KEY}`)
     .then((x) =>
       x.data.error_message ? Promise.reject(new Error(x.data.error_message)) : x.data.results
     )
 
 // Lambdas
-export const placeSuggest = lambda(
-  useParams(P.shape({ place: P.string }))((params) =>
-    googlePlaceSuggest(params.place).then((x) => x.data.predictions)
+// google/placeSuggest
+export const placeSuggest = lambda((req) =>
+  req.pipe(
+    params(P.shape({ place: P.string })),
+    switchMap((x) => googlePlaceSuggest(x.place).then((x) => x.data.predictions)),
+    responseJson$
   )
 )
 
-export const placeDetails = lambda(
-  useParams(P.shape({ place_id: P.string }))((params) =>
-    googlePlaceDetails(params.place_id).then((x) => x.data.result)
+// google/placeDetails
+export const placeDetails = lambda((req) =>
+  req.pipe(
+    params(P.shape({ place_id: P.string })),
+    switchMap((x) => googlePlaceDetails(x.place_id).then((x) => x.data.result)),
+    responseJson$
   )
 )
 
-export const geolocate = lambda(
-  useParams(P.shape({ name: P.string }))((params) => googleGeoLocate(params.name))
+// google/geolocate
+export const geolocate = lambda((req) =>
+  req.pipe(
+    params(P.shape({ name: P.string })),
+    switchMap((x) => googleGeoLocate(x.name)),
+    responseJson$
+  )
 )

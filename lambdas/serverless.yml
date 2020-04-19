@@ -5,8 +5,10 @@ service:
 #org: your-org-name
 
 custom:
-  GROUPS_TABLE: ${self:provider.stage}-groups10
-  LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-search
+  tables:
+    GROUPS_TABLE: ${self:provider.stage}-groups10
+    LOCATION_SEARCHES_TABLE: ${self:provider.stage}-location-search
+    ACTIVE_TOKENS: ${self:provider.stage}-active-tokens
   output:
     file: ../stack.json
   dynamodb:
@@ -20,7 +22,7 @@ custom:
     seed:
       domain:
         sources:
-          - table: ${self:custom.GROUPS_TABLE}
+          - table: ${self:custom.tables.GROUPS_TABLE}
             sources: [./migrations/groups-seed.json]
   serverless-offline:
     httpPort: 4000
@@ -44,35 +46,42 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
+    STAGE: ${self:provider.stage}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-    GROUPS_TABLE: ${self:custom.GROUPS_TABLE, file(env.json):GROUPS_TABLE}
-    LOCATION_SEARCHES_TABLE: ${self:custom.LOCATION_SEARCHES_TABLE, file(env.json):LOCATION_SEARCHES_TABLE}
+    # Tables
+    GROUPS_TABLE: ${self:custom.tables.GROUPS_TABLE}
+    LOCATION_SEARCHES_TABLE: ${self:custom.tables.LOCATION_SEARCHES_TABLE}
+    ACTIVE_TOKENS: ${self:custom.tables.ACTIVE_TOKENS}
+    # Google
     GOOGLE_API_KEY: ${env:GOOGLE_API_KEY, file(env.json):GOOGLE_API_KEY}
     SPREADSHEET_ID: ${env:SPREADSHEET_ID, file(env.json):SPREADSHEET_ID}
     SHEET_ID: ${env:SHEET_ID, file(env.json):SHEET_ID}
     GOOGLE_PRIVATE_KEY: ${env:GOOGLE_PRIVATE_KEY, file(env.json):GOOGLE_PRIVATE_KEY}
     GOOGLE_CLIENT_EMAIL: ${env:GOOGLE_CLIENT_EMAIL, file(env.json):GOOGLE_CLIENT_EMAIL}
-    PUSHER_KEY: ${env:PUSHER_KEY, file(env.json):PUSHER_KEY}
-    PUSHER_SECRET: ${env:PUSHER_SECRET, file(env.json):PUSHER_SECRET}
+    # Airtable
+    AIRTABLE_ATTACH_EMAIL_KEY: ${env:AIRTABLE_ATTACH_EMAIL_KEY, file(env.json):AIRTABLE_ATTACH_EMAIL_KEY}
+    AIRTABLE_ATTACH_EMAIL_BASE: ${env:AIRTABLE_ATTACH_EMAIL_BASE, file(env.json):AIRTABLE_ATTACH_EMAIL_BASE}
+    # other
+    API_ENDPOINT: ${env:API_ENDPOINT, file(env.json):API_ENDPOINT}
+    CLIENT_ENDPOINT: ${env:CLIENT_ENDPOINT, file(env.json):CLIENT_ENDPOINT}
+    SEND_GRID_API_KEY: ${env:SEND_GRID_API_KEY, file(env.json):SEND_GRID_API_KEY}
     SLACK_API_TOKEN: ${env:SLACK_API_TOKEN, file(env.json):SLACK_API_TOKEN}
+    JWT_SECRET: ${env:JWT_SECRET, file(env.json):JWT_SECRET}
+
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
+        - dynamodb:*
       Resource:
         - { 'Fn::GetAtt': ['ExportDB', 'Arn'] } #you will also see the logical IDs below where they are provisioned
         - { 'Fn::GetAtt': ['DynamoDbLocationSearches', 'Arn'] }
+        - { 'Fn::GetAtt': ['DynamoDbActiveTokens', 'Arn'] }
 
 functions:
-  - ${file(./services/database/functions.yml)}
+  - ${file(./services/groups/functions.yml)}
   - ${file(./services/google/functions.yml)}
-  - ${file(./services/data/functions.yml)}
   - ${file(./services/searches/functions.yml)}
+  - ${file(./services/email/functions.yml)}
 
 resources:
   Resources:
@@ -89,7 +98,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.GROUPS_TABLE}
+        TableName: ${self:custom.tables.GROUPS_TABLE}
     DynamoDbLocationSearches:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
@@ -103,4 +112,18 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.LOCATION_SEARCHES_TABLE}
+        TableName: ${self:custom.tables.LOCATION_SEARCHES_TABLE}
+    DynamoDbActiveTokens:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tables.ACTIVE_TOKENS}

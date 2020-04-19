@@ -4,6 +4,7 @@ export type Coord = {
 }
 
 export type Group = {
+  id: string
   name: string
   emails?: string[]
   link_facebook: string
@@ -13,4 +14,4 @@ export type Group = {
 
 export type Emails = string[]
 
-export type GroupWithEmails = Group & { emails: Emails }
+export type GroupWithEmails = Omit<Group, 'id'> & { emails: Emails }

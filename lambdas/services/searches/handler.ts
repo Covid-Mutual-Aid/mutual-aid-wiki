@@ -1,9 +1,6 @@
-import P, { ProofType } from 'ts-prove'
-
-import { triggorLocationSearch } from '../lib/pusher'
-import createDynamoApi from '../lib/dynamodb'
-import lambda, { useBody } from '../lib/lambdaUtils'
-import { v4 as uuid } from 'uuid'
+import 'source-map-support/register'
+import P from 'ts-prove'
+import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
 
 const proveLocationSearch = P.shape({
   query: P.string,
@@ -12,16 +9,16 @@ const proveLocationSearch = P.shape({
   coords: P.shape({ lat: P.number, lng: P.number }),
 })
 
-const TableName = process.env.LOCATION_SEARCHES_TABLE as string
-const { create, readAll } = createDynamoApi<ProofType<typeof proveLocationSearch> & { id: string }>(
-  TableName
+import db from '../_utility_/database'
+import { switchMap } from 'rxjs/operators'
+
+export const getLocationSearches = lambda((req$) =>
+  req$.pipe(
+    switchMap(() => db.search.get(['id', 'address', 'coords', 'place_id', 'query'])),
+    responseJson$
+  )
 )
 
-export const getLocationSearches = lambda(readAll)
-export const addLocationSearch = lambda(
-  useBody(proveLocationSearch)((data) =>
-    create({ ...data, id: uuid(), createdAt: Date.now() }).then(() =>
-      triggorLocationSearch(data.coords)
-    )
-  )
+export const addLocationSearch = lambda((req$) =>
+  req$.pipe(body(proveLocationSearch), switchMap(db.search.create), responseJson$)
 )

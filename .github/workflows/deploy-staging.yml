@@ -6,23 +6,28 @@ name: Deploy Staging
 # events but only for the master branch
 on:
   push:
+    paths:
+      - .github/**
+      - lambdas/**
+      - scripts/**
     branches:
       - staging
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a set of commands using the runners shell
-      - uses: actions/checkout@master
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('js/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Install dependancies
         run: yarn install
       - name: Deploy lambdas
@@ -31,20 +36,39 @@ jobs:
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
           yarn sls deploy --verbose --stage staging
         env:
-          AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-          GOOGLE_API_KEY: '${{ secrets.GOOGLE_API_KEY }}'
-          SPREADSHEET_ID: '${{ secrets.SPREADSHEET_ID }}'
-          SHEET_ID: '${{ secrets.SHEET_ID }}'
-          GOOGLE_PRIVATE_KEY: '${{ secrets.GOOGLE_PRIVATE_KEY }}'
-          GOOGLE_CLIENT_EMAIL: '${{ secrets.GOOGLE_CLIENT_EMAIL }}'
-          PUSHER_KEY: '${{ secrets.PUSHER_KEY }}'
-          PUSHER_SECRET: '${{ secrets.PUSHER_SECRET }}'
+          # AWS
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:
+            ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            # Google
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          # Airtable
+          AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
+          AIRTABLE_ATTACH_EMAIL_BASE: ${{ secrets.AIRTABLE_ATTACH_EMAIL_BASE }}
+          # other
+          API_ENDPOINT: https://staging.mutualaid.wiki/api
+          CLIENT_ENDPOINT: https://staging.mutualaid.wiki
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: 'Run intergration tests'
+        run: 'yarn test:e2e'
+        working-directory: lambdas
+        env:
+          STAGE: staging
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
       - name: 'Update client endpoint'
         run: 'node scripts/netlify-snippets.js'
         env:
           NETLIFY_ACCESS_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAG_ID }}
-      # - name: Run tests
-      #   run: yarn test:e2e
+      - name: 'Update client redirects'
+        run: 'node ./scripts/update-redirects.js'
+        env:
+          BRANCH: staging
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

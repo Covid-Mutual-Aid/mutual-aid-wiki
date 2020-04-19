@@ -1,0 +1,32 @@
+getGroups:
+  handler: services/groups/handler.getGroups
+  events:
+    - http:
+        method: get
+        path: group/get
+        cors: true
+  timeout: 15
+
+createGroup:
+  handler: services/groups/handler.createGroup
+  events:
+    - http:
+        method: post
+        path: group/create
+        cors: true
+
+updateGroup:
+  handler: services/groups/handler.updateGroup
+  events:
+    - http:
+        method: post
+        path: group/update
+        cors: true
+
+associateEmail:
+  handler: services/groups/handler.associateEmail
+  events:
+    - http:
+        method: post
+        path: group/associate
+        cors: true

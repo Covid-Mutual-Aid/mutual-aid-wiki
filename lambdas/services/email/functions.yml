@@ -1,0 +1,31 @@
+requestGroupEdit:
+  handler: services/email/handler.requestGroupEdit
+  events:
+    - http:
+        method: post
+        path: request/groupedit
+        cors: true
+
+submitSupportRequest:
+  handler: services/email/handler.submitSupportRequest
+  events:
+    - http:
+        method: get
+        path: request/support
+        cors: true
+
+confirmSupportRequest:
+  handler: services/email/handler.confirmSupportRequest
+  events:
+    - http:
+        method: get
+        path: request/confirm
+        cors: true
+
+rejectSupportRequest:
+  handler: services/email/handler.rejectSupportRequest
+  events:
+    - http:
+        method: get
+        path: request/reject
+        cors: true

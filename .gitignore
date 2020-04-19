@@ -8,6 +8,8 @@ env.json
 # Serverless directories
 .serverless
 stack.json
+live_groups.json
+*.json
 
 # Webpack directories
 .webpack

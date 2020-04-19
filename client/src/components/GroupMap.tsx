@@ -18,6 +18,13 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
     console.log(mapInstance.getCenter())
   }, [])
 
+  // const options = {
+  //   minimumClusterSize: 6,
+  //   clusterClass: 'map-cluster-icon',
+  //   imagePath:
+  //     'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+  // }
+
   const clustererOptions = {
     minimumClusterSize: 6,
     clusterClass: 'map-cluster-icon',
@@ -61,7 +68,7 @@ const GroupMap = ({ groups }: { groups: Group[] }) => {
             }
           }}
         >
-          <MarkerClusterer options={clustererOptions} styles={clustererStyles}>
+          <MarkerClusterer options={clustererOptions}>
             {(clusterer) =>
               groups.map((group, i) => (
                 <Marker
