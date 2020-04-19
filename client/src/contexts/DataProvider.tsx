@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useMemo } from 'react'
+import React, { createContext, useState, useEffect, useContext, useMemo, useCallback } from 'react'
 import { Group } from '../utils/types'
 import { useRequest } from './RequestProvider'
 import { useLocation } from 'react-router-dom'
@@ -6,16 +6,24 @@ import { useLocation } from 'react-router-dom'
 const DataContext = createContext<{
   groups: Group[]
   location?: { lat: number; lng: number; zoom: number }
+  geolocateUser: () => void
 }>({
   groups: [],
+  geolocateUser: () => null,
 })
 
 const DataProvider = ({ children }: { children: React.ReactNode }) => {
-  const location = useUserLocation()
+  const { location, geolocateUser } = useUserLocation()
   const groups = useGroups()
 
   return (
-    <DataContext.Provider value={useMemo(() => ({ groups, location }), [groups, location])}>
+    <DataContext.Provider
+      value={useMemo(() => ({ groups, location, geolocateUser }), [
+        groups,
+        location,
+        geolocateUser,
+      ])}
+    >
       {children}
     </DataContext.Provider>
   )
@@ -30,22 +38,26 @@ const useUserLocation = () => {
   const request = useRequest()
 
   useEffect(() => {
-    const locate: PositionCallback = (position) =>
-      setLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-        zoom: position.coords.altitudeAccuracy || 3,
-      })
-    const locateIp = () =>
-      request('/info/locate').then((x) => setLocation({ lat: x.lat, lng: x.lon, zoom: 4 }))
-    if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(locate, locateIp, { timeout: 300 })
-    } else {
-      locateIp()
-    }
+    request('/info/locate').then((x) => setLocation({ lat: x.lat, lng: x.lon, zoom: 4 }))
   }, [request])
 
-  return location
+  const geolocateUser = useCallback(() => {
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) =>
+          setLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            zoom: position.coords.altitudeAccuracy || 7,
+          }),
+        console.error
+      )
+    } else {
+      alert("Your browser doesn't support this feature")
+    }
+  }, [])
+
+  return useMemo(() => ({ location, geolocateUser }), [location, geolocateUser])
 }
 
 const useGroups = () => {
