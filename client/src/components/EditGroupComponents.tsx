@@ -54,7 +54,18 @@ const EditGroupComponents = ({ group, validation, omitKeys = [], onChange }: Pro
             emails={group.emails}
             onChange={(_emails: string[]) => {
               onChange(
-                { ...group, emails: _emails },
+                {
+                  ...group,
+                  emails: group.emails
+                    .concat(_emails)
+                    .reduce(
+                      ({ uniqs, dups }, email) =>
+                        uniqs.includes(email)
+                          ? { uniqs, dups: [...dups, email] }
+                          : { dups: [...dups, email], uniqs },
+                      { uniqs: [''], dups: [''] }
+                    ).uniqs,
+                },
                 _emails.length > 0
                   ? validation.filter((k) => k !== 'emails')
                   : [...validation, 'emails']
