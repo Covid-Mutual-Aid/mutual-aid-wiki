@@ -81,6 +81,24 @@ export const rejectSupportRequest = lambda((req$) =>
   )
 )
 
+// request/report
+export const reportGroup = lambda((req$) =>
+  req$.pipe(
+    body(P.shape({ id: P.string, message: P.string })),
+    switchMap((x) =>
+      db.groups.getById(x.id, ['link_facebook', 'name', 'id']).then((grp) =>
+        createRow('Reports', {
+          message: x.message,
+          url: grp.link_facebook,
+          name: grp.name,
+          id: grp.id,
+        })
+      )
+    ),
+    responseJson$
+  )
+)
+
 export const addSupportRequestToTable = async (
   email: string,
   key: string,
