@@ -6,8 +6,10 @@ import icons from '../utils/icons'
 import { InputGroup } from '../styles/styles'
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import { useData } from '../contexts/DataProvider'
+import { useI18n } from '../contexts/I18nProvider'
 
 const SearchBox = () => {
+  const t = useI18n().translation.components.search_box
   const [searchInput, setSearchInput] = useState('')
   const { onSearch, onSelect } = usePlaceMethod()
   const { search } = usePlaceState()
@@ -28,7 +30,7 @@ const SearchBox = () => {
         <InputGroup>
           <input
             value={searchInput}
-            placeholder="Enter place"
+            placeholder={t.search_prompt}
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <div className="button-group">
@@ -40,7 +42,7 @@ const SearchBox = () => {
       {search.place ? (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <p style={{ padding: '0 1rem' }}>
-            Showing groups for: <b>{search.place.name}</b>{' '}
+            {t.place_name_label}: <b>{search.place.name}</b>{' '}
             <span
               style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
               onClick={() => onSearch()}
@@ -52,7 +54,7 @@ const SearchBox = () => {
       ) : (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/add-group">
-            <p className="add-group">Or add a group</p>
+            <p className="add-group">{t.add_prompt}</p>
           </Link>
         </div>
       )}

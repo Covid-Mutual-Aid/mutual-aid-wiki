@@ -10,8 +10,8 @@
     },
     "components": {
       "nav": {
-        "information_link": "INFORMATION",
-        "help_link": "?"
+        "information_link": "What's going on?",
+        "view_full_site_link": "View full site!"
       },
       "search_box": {
         "search_prompt": "Enter place",

@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import inIframe from '../utils/inIframe'
+import {useI18n} from '../contexts/I18nProvider'
 
 const Nav = ({ children }: { children?: ReactChild }) => {
+  const t = useI18n().translation.components.nav
   return (
     <NavWrapper>
       <div className="options">
         {inIframe() ? (
           <a target="_blank" rel="noopener noreferrer" href="https://mutualaid.wiki">
-            View full site!
+            {t.view_full_site_link}
           </a>
         ) : (
-          <Link to="/about">What is this?</Link>
+          <Link to="/about">{t.information_link}</Link>
         )}
       </div>
       <div className="buttons-right">{children}</div>
