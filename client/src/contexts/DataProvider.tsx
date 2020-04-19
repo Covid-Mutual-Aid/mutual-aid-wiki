@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 
 const DataContext = createContext<{
   groups: Group[]
-  location?: { lat: number; lng: number }
+  location?: { lat: number; lng: number; zoom: number }
 }>({
   groups: [],
 })
@@ -26,14 +26,17 @@ export const useData = () => useContext(DataContext)
 export default DataProvider
 
 const useUserLocation = () => {
-  const [location, setLocation] = useState<{ lat: number; lng: number }>()
+  const [location, setLocation] = useState<{ lat: number; lng: number; zoom: number }>()
   const request = useRequest()
 
   useEffect(() => {
-    const locate: PositionCallback = (position) => {
-      console.log('POS', position)
-    }
-    const locateIp = () => request('/info/locate').then(setLocation)
+    const locate: PositionCallback = (position) =>
+      setLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        zoom: position.coords.altitudeAccuracy || 3,
+      })
+    const locateIp = () => request('/info/locate').then((x) => setLocation({ ...x, zoom: 4 }))
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(locate, locateIp, { timeout: 300 })
     } else {
