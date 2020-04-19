@@ -65,17 +65,17 @@ const useControlMap = () => {
   } = usePlaceState()
 
   useEffect(() => {
-    if (selected) {
-      const group = groups.find((x) => x.id === selected)
-      if (!group) return
+    const group = selected && groups.find((x) => x.id === selected)
+    if (group) {
       panTo(group.location_coord)
       if (map.current && map.current.getZoom() < 15) zoomTo(15)
     } else if (place) {
       panTo(place.coords)
       zoomTo(15)
-    } else if (location?.lat && location.lng) {
+    } else if (location) {
+      console.log(location)
       panTo({ lat: location.lat, lng: location.lng })
-      zoomTo(defaultState.zoom)
+      zoomTo(location.zoom)
     } else {
       panTo(defaultState.center)
       zoomTo(defaultState.zoom)
