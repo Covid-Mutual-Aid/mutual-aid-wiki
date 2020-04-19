@@ -16,11 +16,7 @@ const AboutPage = () => {
         <br />
         <br />
         <h2>A global map of COVID-19 Mutual Aid groups</h2>
-        <p>
-          Yes! Find your group in the sidebar, click the {icons('more')} icon on the top right
-          corner and select edit group from the dropdown. Submit your email and check your inbox for
-          further instructions 🙂.{' '}
-        </p>
+        <p>We are looking</p>
         <br />
 
         <p>FAQ:</p>
@@ -54,10 +50,9 @@ const AboutPage = () => {
             us know or{' '}
             <a href="https://github.com/Covid-Mutual-Aid/groups-map/issues">create an issue</a>?
           </p>
-          <li>Who are you?</li>
+          <li>Who is behind this?</li>
           <p>
-            We are an open source, volunteer run initiative creating tools for mutual aid groups. We
-            also part of the technical team at{' '}
+            We are an open source, volunteer run group of. We also part of the technical team at{' '}
             <a href="https://covidmutualaid.org">covidmutualaid.org</a>
           </p>
         </ul>
