@@ -73,7 +73,6 @@ const useControlMap = () => {
       panTo(place.coords)
       zoomTo(15)
     } else if (location) {
-      console.log(location)
       panTo({ lat: location.lat, lng: location.lng })
       zoomTo(location.zoom)
     } else {
