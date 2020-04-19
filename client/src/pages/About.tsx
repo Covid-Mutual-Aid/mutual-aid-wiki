@@ -25,7 +25,7 @@ const AboutPage = () => {
         <ul>
           <li>Can I edit my group info?</li>
           <p>
-            Yes! Find your group in the sidebar and click the {icons('more')} icon on the top right
+            Yes! Find your group in the sidebar, click the {icons('more')} icon on the top right
             corner and select edit group from the dropdown. Submit your email and check your inbox
             for further instructions 🙂.
           </p>
@@ -58,7 +58,7 @@ const AboutPage = () => {
         </ul>
         <br />
         <p>Embed us on your site!</p>
-        <code>{`<iframe></iframe>`}</code>
+        <code>{`<iframe src="https://mutualaid.wiki/"></iframe>`}</code>
         <br />
         <br />
         <br />
