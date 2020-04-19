@@ -3,11 +3,15 @@ import SecondaryPage from './SecondaryPage'
 import { CenterAlign } from '../styles/styles'
 import styled from 'styled-components'
 import icons from '../utils/icons'
+import { Link } from 'react-router-dom'
 
 const AboutPage = () => {
   return (
     <Center>
       <Content>
+        <div className="back">
+          <Link to="/">{icons('map', 'white')}</Link>
+        </div>
         <br />
         <br />
         <br />
@@ -77,6 +81,31 @@ const Content = styled.div`
   max-width: 32rem;
   padding: 1.4rem;
   height: auto;
+
+  .back {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    border-radius: 10rem;
+    width: 2rem;
+    height: 2rem;
+    background-color: lightgreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6rem;
+    margin: 1rem;
+    transition: all 0.2s;
+
+    &:hover {
+      box-shadow: 0px 0px 22px -4px rgba(111, 111, 111, 0.69);
+    }
+
+    a {
+      line-height: 0;
+    }
+  }
 `
 
 const Center = styled.div`
