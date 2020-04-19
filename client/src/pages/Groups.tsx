@@ -33,7 +33,9 @@ const NewLayout = () => {
               marginTop: '-1rem',
             }}
           >
-            {!inIframe() && (
+            {inIframe() ? (
+              <div style={{ height: '1rem' }}></div>
+            ) : (
               <h3>
                 Find local <br className="break" /> mutal aid groups
               </h3>
