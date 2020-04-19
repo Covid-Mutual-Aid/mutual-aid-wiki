@@ -59,7 +59,7 @@ const CreateGroup = () => {
               <EditGroupComponents
                 onChange={(group, validation) => {
                   setValidation(validation)
-                  setGroup(group)
+                  setGroup(group as any)
                   validation.length === 0 ? setReady(true) : setReady(false)
                 }}
                 group={group}
