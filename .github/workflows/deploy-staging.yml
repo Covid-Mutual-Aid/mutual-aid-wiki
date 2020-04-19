@@ -48,7 +48,7 @@ jobs:
           GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
           # Airtable
           AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
-          AIRTABLE_ATTACH_EMAIL_BASE: ${{ secrets.AIRTABLE_ATTACH_EMAIL_BASE }}
+          AIRTABLE_ATTACH_EMAIL_BASE: appkctIgrzQ69ap4e
           # other
           API_ENDPOINT: https://staging.mutualaid.wiki/api
           CLIENT_ENDPOINT: https://staging.mutualaid.wiki
