@@ -2,11 +2,6 @@ import lambda, { responseJson$ } from '../_utility_/lib/lambdaRx'
 import { switchMap } from 'rxjs/operators'
 import axios from 'axios'
 
-const getIp = (headers: any) => {
-  const value = headers['X-Forwarded-For'] || headers['x-forwarded-for']
-  return value.split(',')[0]
-}
-
 export const locate = lambda((req) =>
   req.pipe(
     switchMap((input) => {
@@ -22,3 +17,8 @@ export const locate = lambda((req) =>
     responseJson$
   )
 )
+
+const getIp = (headers: any) => {
+  const value = headers['X-Forwarded-For'] || headers['x-forwarded-for']
+  return value.split(',')[0]
+}
