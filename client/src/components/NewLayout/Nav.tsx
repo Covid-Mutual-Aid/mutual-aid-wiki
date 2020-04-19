@@ -13,7 +13,7 @@ const Nav = ({ children }: { children?: ReactChild }) => {
             View full site!
           </a>
         ) : (
-          <Link to="/about">Whats going on?</Link>
+          <Link to="/about">What is this?</Link>
         )}
       </div>
       <div className="buttons-right">{children}</div>

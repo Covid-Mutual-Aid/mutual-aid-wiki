@@ -15,11 +15,11 @@ const AboutPage = () => {
         <br />
         <br />
         <br />
-        <h2>Everything!</h2>
+        <h2>A global map of Mutual Aid groups</h2>
         <p>
-          Thanks for visiting our project. We are an open source, volunteer run initiative creating
-          tools for mutual aid groups. We also form part of the technical team at{' '}
-          <a href="https://covidmutualaid.org">covidmutualaid.org</a>.
+          Yes! Find your group in the sidebar, click the {icons('more')} icon on the top right
+          corner and select edit group from the dropdown. Submit your email and check your inbox for
+          further instructions 🙂.{' '}
         </p>
         <br />
 
@@ -43,8 +43,19 @@ const AboutPage = () => {
           </p>
           <li>Why can't I add more information to my group or report a group?</li>
           <p>
-            We are working on these things and more. Check back in a week to see where we have got
-            to...
+            We are working on these things and more. If there is a feature you would really like,
+            please email us or create an issue on{' '}
+            <a href="https://github.com/Covid-Mutual-Aid/groups-map">github</a>
+          </p>
+          <li>Something is broken...</li>
+          <p>
+            <a href="https://github.com/Covid-Mutual-Aid/groups-map">github</a>
+          </p>
+          <li>Who are you?</li>
+          <p>
+            We are an open source, volunteer run initiative creating tools for mutual aid groups. We
+            also part of the technical team at{' '}
+            <a href="https://covidmutualaid.org">covidmutualaid.org</a>
           </p>
         </ul>
         <br />
