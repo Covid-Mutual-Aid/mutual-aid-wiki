@@ -11,7 +11,7 @@ function inIframe() {
   }
 }
 
-const embedCode = `<iframe src="https://covidmutualaid.cc/" frameborder="0" width="1200" height="1400"
+const embedCode = `<iframe src="https://mutualaid.wiki/" frameborder="0" width="1200" height="1400"
 title="Covid-19 Mutual Aid Groups" aria-label="United Kingdom local authority districts (2018) Symbol map" scrolling="no" style="border: none;" frameborder="0">
 </iframe>`
 
@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!inIframe()) {
-      gtag('event', 'Viewed on covidmutualaid.cc', {
+      gtag('event', 'Viewed on mutualaid.wiki', {
         event_category: 'Iframe',
         event_label: 'Viewed without iframe',
       })
@@ -57,7 +57,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <a target="_blank" rel="noopener noreferrer" href="https://airtable.com/shrHitFm25IJ2bo10">
           edit your group
         </a>
-        <a target="_blank" rel="noopener noreferrer" href="https://covidmutualaid.cc/">
+        <a target="_blank" rel="noopener noreferrer" href="https://mutualaid.wiki/">
           full site
         </a>
         <span
@@ -69,7 +69,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         >
           {!copiedToClipboard ? 'embed' : 'code copied!'}
         </span>
-        <a href="mailto:covidmutualaid.cc@gmail.com">covidmutualaid.cc@gmail.com</a>
+        <a href="mailto:mutualaid.wiki@gmail.com">mutualaid.wiki@gmail.com</a>
         <a
           target="_blank"
           rel="noopener noreferrer"

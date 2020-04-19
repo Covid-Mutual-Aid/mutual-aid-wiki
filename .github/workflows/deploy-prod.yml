@@ -58,8 +58,8 @@ jobs:
           AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
           AIRTABLE_ATTACH_EMAIL_BASE: ${{ secrets.AIRTABLE_ATTACH_EMAIL_BASE }}
           # other
-          API_ENDPOINT: https://www.covidmutualaid.cc/api
-          CLIENT_ENDPOINT: https://www.covidmutualaid.cc
+          API_ENDPOINT: https://www.mutualaid.wiki/api
+          CLIENT_ENDPOINT: https://www.mutualaid.wiki
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
