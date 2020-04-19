@@ -30,7 +30,15 @@ const useUserLocation = () => {
   const request = useRequest()
 
   useEffect(() => {
-    request('/info/locate').then(setLocation)
+    const locate: PositionCallback = (position) => {
+      console.log('POS', position)
+    }
+    const locateIp = () => request('/info/locate').then(setLocation)
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(locate, locateIp, { timeout: 300 })
+    } else {
+      locateIp()
+    }
   }, [request])
 
   return location
