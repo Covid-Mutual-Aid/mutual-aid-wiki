@@ -9,11 +9,24 @@ const DataContext = createContext<{
   groups: [],
 })
 
+const useUserLocation = () => {
+  const [location, setLocation] = useState()
+
+  useEffect(() => {
+    fetch(`http://ip-api.com/json`)
+      .then((x) => x.json())
+      .then(console.log)
+  }, [])
+  return location
+}
+
 const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [groups, setGroups] = useState<Group[]>([])
   const { pathname } = useLocation()
   const request = useRequest()
   const isHome = pathname === '/'
+  const userLocation = useUserLocation()
+  console.log(userLocation)
 
   useEffect(() => {
     request('/group/get').then((grps: Group[]) =>

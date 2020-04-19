@@ -1,0 +1,7 @@
+locate:
+  handler: services/info/handler.locate
+  events:
+    - http:
+        method: get
+        path: info/locate
+        cors: true
