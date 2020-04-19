@@ -6,10 +6,12 @@ export const locate = lambda((req) =>
   req.pipe(
     switchMap((input) =>
       axios
-        .get(`http://ip-api.com/json/${input._event.requestContext.identity.sourceIp}`)
+        .get(`http://ip-api.com/json/${input._event.headers['X-Forwarded-For'].split(',')[0]}`)
         .then((x) =>
           x.data.status === 'fail'
-            ? Promise.reject(`Failed to locate ip ${input._event.requestContext.identity.sourceIp}`)
+            ? Promise.reject(
+                `Failed to locate ip ${input._event.headers['X-Forwarded-For'].split(',')[0]}`
+              )
             : x.data
         )
     ),
