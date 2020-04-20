@@ -1,7 +1,8 @@
 import React, { createContext, useState, useEffect, useContext, useMemo, useCallback } from 'react'
-import { Group } from '../utils/types'
-import { useRequest } from './RequestProvider'
 import { useLocation } from 'react-router-dom'
+
+import { useRequest } from './RequestProvider'
+import { Group } from '../utils/types'
 
 const DataContext = createContext<{
   groups: Group[]

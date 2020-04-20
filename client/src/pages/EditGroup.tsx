@@ -1,109 +1,84 @@
 import { useParams, Link, useHistory } from 'react-router-dom'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { Group } from '../utils/types'
-import { EditPage, CenterAlign } from '../styles/styles'
+import { EditPage, CenterAlign, InputGroup } from '../styles/styles'
 import styled from 'styled-components'
+
 import EditGroupComponents, { Validation } from '../components/EditGroupComponents'
 import GroupItem from '../components/NewLayout/GroupItem'
+import { useFetch } from '../utils/useAsync'
+import Form from '../components/FormControl/Form'
+import useControl from '../components/FormControl/useControl'
+import Control from '../components/FormControl/Control'
+import Location from '../components/Location'
+import EditGroupForm from '../components/EditGoupForm'
 
 const CreateGroup = () => {
-  const request = useRequest()
+  const [done, setDone] = useState(false)
   const { id, token } = useParams<{ id: string; token: string }>()
+  const [group, setGroup] = useState<Omit<Group, 'id'>>()
+  const { data } = useFetch<Omit<Group, 'id'>>(useCallback((req) => req(`/group/get?id=${id}`), []))
+  useEffect(() => setGroup(data), [data])
 
-  const [group, setGroup] = useState<Omit<Group, 'id'>>({
-    name: '',
-    location_name: '',
-    link_facebook: '',
-    location_coord: {
-      lat: 0,
-      lng: 0,
-    },
-  })
+  const { retry: submitGroup, isLoading: submiting, error } = useFetch<any>(
+    useCallback(
+      (req) =>
+        req(`/group/update?token=${token}`, {
+          method: 'POST',
+          body: JSON.stringify(group),
+        }),
+      [group]
+    ),
+    true
+  )
 
-  const history = useHistory()
   const [sucessModal, setSuccessModal] = useState(false)
   const [ready, setReady] = useState(false)
   const [validation, setValidation] = useState<(keyof Validation)[]>([])
   const [submitted, setSubmitted] = useState(false)
 
-  useEffect(() => {
-    request(`/group/get?id=${id}`).then((grp) => setGroup((x) => ({ ...x, ...grp })))
-  }, [id, request])
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSubmitted(true)
     if (!ready) return
-
-    request(`/group/update?token=${token}`, {
-      method: 'POST',
-      body: JSON.stringify(group),
-    })
-      .then((x) => {
-        setSuccessModal(true)
-        return new Promise((res) => setTimeout(res, 6000))
-      })
-      .then(() => history.replace('/'))
+    submitGroup()
   }
 
   return (
     <EditPage>
       <div className="main">
         <CenterAlign>
-          {sucessModal ? (
-            <div style={{ textAlign: 'center', padding: '4rem', color: '#28a745' }}>
-              <h3>Thanks for submitting your group</h3>
+          {done ? (
+            <div>
+              got back to <Link to="/">map</Link> or continue{' '}
+              <button type="button" onClick={() => setDone(false)}>
+                editing
+              </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit}>
-              <EditGroupComponents
-                omitKeys={['emails']}
-                onChange={(group, validation) => {
-                  setValidation(validation)
-                  setGroup(group)
-                  validation.length === 0 ? setReady(true) : setReady(false)
-                }}
-                group={group}
-                validation={validation}
-              />
-
-              <div
-                style={{ display: submitted && validation.length > 0 ? 'block' : 'none' }}
-                className="validation"
-              >
-                <label style={{ display: 'block', margin: '1.2rem 0 0.4rem 0' }}>
-                  Please complete
-                </label>
-                {validation.map((key) => (
-                  <span style={{ color: 'rgba(255, 0, 0, 0.6)', margin: '0 0.2rem' }}>
-                    {key === 'link_facebook' ? 'link' : key === 'location_name' ? 'location' : key}
-                  </span>
-                ))}
-              </div>
-
-              <FormButtons>
-                <Link to="/">
-                  <button className="btn-secondary" type="button">
-                    cancel
-                  </button>
-                </Link>
-                <button type="submit">submit</button>
-              </FormButtons>
-            </form>
+            <EditGroupForm
+              group={group || {}}
+              setGroup={(x: any) => {
+                setGroup((y) => ({ ...y, ...x }))
+                setDone(true)
+              }}
+            />
           )}
         </CenterAlign>
       </div>
       <div className="preview">
         <CenterAlign>
           <div className="item">
-            <GroupItem
-              onSelect={() => null}
-              selected={false}
-              group={{ ...group, id: '1234567890' }}
-              disableDropdown={true}
-            />
+            {group && (
+              <GroupItem
+                onSelect={() => null}
+                selected={false}
+                group={{ ...group, id: '1234567890' }}
+                disableDropdown={true}
+              />
+            )}
           </div>
         </CenterAlign>
       </div>
@@ -112,6 +87,31 @@ const CreateGroup = () => {
 }
 
 export default CreateGroup
+
+const Input = <T extends any>({
+  name,
+  init,
+  valid,
+  ...inputProps
+}: { name: string; init: T; valid?: (x: T) => string | true } & React.InputHTMLAttributes<
+  HTMLInputElement
+>) => {
+  const { error, props } = useControl(name, init, valid)
+  return (
+    <div style={{ margin: '1rem 0' }}>
+      <span style={{ width: '100%', paddingLeft: '.5rem', height: '.5rem' }}>{error}</span>
+      <InputGroup>
+        <input
+          style={{
+            backgroundColor: error ? 'rgba(255, 0, 0, 0.1)' : 'inherit',
+          }}
+          {...inputProps}
+          {...props}
+        />
+      </InputGroup>
+    </div>
+  )
+}
 
 const FormButtons = styled.div`
   display: flex;
@@ -122,3 +122,16 @@ const FormButtons = styled.div`
     margin: 0 0.4rem;
   }
 `
+export function validURL(str: string) {
+  var pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
+  ) // fragment locator
+
+  return !!pattern.test(str) || 'Invalid URL'
+}
