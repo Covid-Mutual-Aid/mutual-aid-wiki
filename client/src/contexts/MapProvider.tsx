@@ -79,7 +79,7 @@ const useControlMap = () => {
       panTo(defaultState.center)
       zoomTo(defaultState.zoom)
     }
-  }, [place, panTo, groups, map, selected, zoomTo])
+  }, [place, panTo, groups, map, selected, zoomTo, location])
 }
 const MapControls = () => {
   useControlMap()

@@ -37,7 +37,7 @@ const NewLayout = () => {
               <div style={{ height: '1rem' }}></div>
             ) : (
               <h3>
-                Find local <br className="break" /> mutal aid groups
+                Find local COVID-19 <br className="break" /> mutual aid groups
               </h3>
             )}
           </div>

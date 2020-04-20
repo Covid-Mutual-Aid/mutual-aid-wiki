@@ -1,6 +1,5 @@
 import { useHistory, Link } from 'react-router-dom'
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { GroupWithEmails } from '../utils/types'

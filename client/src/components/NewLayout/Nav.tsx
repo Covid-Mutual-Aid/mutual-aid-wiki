@@ -9,7 +9,7 @@ const Nav = ({ children }: { children?: ReactChild }) => {
     <NavWrapper>
       <div className="options">
         {inIframe() ? (
-          <a target="_blank" href="https://mutualaid.wiki">
+          <a target="_blank" rel="noopener noreferrer" href="https://mutualaid.wiki">
             View full site!
           </a>
         ) : (
