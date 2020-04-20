@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 import { switchMap } from 'rxjs/operators'
-import { v4 } from 'uuid'
+import shortid from 'shortid'
 import P from 'ts-prove'
 
 import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
@@ -48,7 +48,7 @@ export const submitSupportRequest = lambda((req$) =>
         .catch(() => null)
     ),
     switchMap((x) => {
-      const key = v4()
+      const key = shortid.generate()
       if (!x.group) return Promise.reject('No group')
       return addSupportRequestToTable(x.email, key, x.group)
         .then(() => sendSubmitedRequest(x.email, key))
