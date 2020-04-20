@@ -27,17 +27,17 @@ const useLocationSearch = (query?: string) => {
         if (!mounted) return
         setError('Invalid location, please try again')
       })
-    // .then((place) =>
-    //   request('/search/location/add', {
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //       query,
-    //       place_id: place.place_id,
-    //       coords: place.geometry.location,
-    //       address: place.formatted_address,
-    //     }),
-    //   }).catch((err) => console.error('Failed to add search', err))
-    // )
+      .then((place) =>
+        request('/search/location/add', {
+          method: 'POST',
+          body: JSON.stringify({
+            query,
+            place_id: place.place_id,
+            coords: place.geometry.location,
+            address: place.formatted_address,
+          }),
+        }).catch((err) => console.error('Failed to add search', err))
+      )
     return () => {
       mounted = false
     }
