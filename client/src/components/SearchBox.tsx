@@ -9,7 +9,7 @@ import { useData } from '../contexts/DataProvider'
 import { useI18n } from '../contexts/I18nProvider'
 
 const SearchBox = () => {
-  const t = useI18n().translation.components.search_box
+  const t = useI18n(locale => locale.translation.components.search_box)
   const [searchInput, setSearchInput] = useState('')
   const { onSearch, onSelect } = usePlaceMethod()
   const { search } = usePlaceState()

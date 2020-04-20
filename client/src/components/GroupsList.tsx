@@ -11,7 +11,7 @@ import isIosSafari from '../utils/isIosSafari'
 import GroupItem from './GroupItem'
 
 const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
-  const  t = useI18n().translation.components.groups_list
+  const  t = useI18n(locale => locale.translation.components.groups_list)
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
   const { groups } = useData()
   const { onSelect } = usePlaceMethod()

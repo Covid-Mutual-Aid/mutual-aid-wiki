@@ -15,5 +15,9 @@ const I18nProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export const useI18n = () => useContext(I18nContext)
+type LocaleTransformer<T> = (v : Locale) => T
+export function useI18n<T>(f : LocaleTransformer<T>) : T {
+    return f(useContext(I18nContext))
+}
+
 export default I18nProvider

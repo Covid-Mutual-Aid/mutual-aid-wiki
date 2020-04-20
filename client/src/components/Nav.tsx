@@ -6,7 +6,7 @@ import inIframe from '../utils/inIframe'
 import {useI18n} from '../contexts/I18nProvider'
 
 const Nav = ({ children }: { children?: ReactChild }) => {
-  const t = useI18n().translation.components.nav
+  const t = useI18n(locale => locale.translation.components.nav)
   return (
     <NavWrapper>
       <div className="options">

@@ -20,6 +20,10 @@
       },
       "groups_list": {
         "load_more_prompt": "load more"
+      },
+      "group_item": {
+        "group_name_prompt": "Your group name...",
+        "group_location_prompt": "Your group location..."
       }
     }
   }

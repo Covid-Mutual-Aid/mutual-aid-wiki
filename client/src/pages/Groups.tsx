@@ -15,7 +15,7 @@ import { useI18n } from '../contexts/I18nProvider'
 
 const NewLayout = () => {
   const [open, setOpen] = useState(true)
-  const t = useI18n().translation.pages.groups
+  const t = useI18n(locale => locale.translation.pages.groups)
   return (
     <LayoutStyles className="new-layout" sidebar={open}>
       <div className="side-bar">

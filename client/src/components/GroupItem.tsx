@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import icons, { iconFromUrl } from '../utils/icons'
 import tidyLink from '../utils/tidyLink'
 import { Group } from '../utils/types'
+import {useI18n} from '../contexts/I18nProvider'
 import { useHistory } from 'react-router-dom'
 
 const GroupItem = ({
@@ -17,6 +18,7 @@ const GroupItem = ({
   onSelect: (...args: any[]) => void
   disableDropdown?: boolean
 }) => {
+  const t = useI18n(locale => locale.translation.components.group_item)
   const history = useHistory()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -29,11 +31,11 @@ const GroupItem = ({
       <div className="content">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <h4 onClick={() => onSelect(group.id)}>
-            {group.name === '' ? 'Your group name...' : group.name}
+            {group.name === '' ? t.group_name_prompt : group.name}
           </h4>
         </div>
         <span className="location-name">
-          {group.location_name === '' ? 'Your group location...' : group.location_name}
+          {group.location_name === '' ? t.group_location_prompt : group.location_name}
           {group.distance && group.distance > 0 ? (
             <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
           ) : null}
