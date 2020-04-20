@@ -86,12 +86,20 @@ export const reportGroup = lambda((req$) =>
   req$.pipe(
     body(P.shape({ id: P.string, message: P.string })),
     switchMap((x) =>
+      Promise.all([
+        tokens.edit.sign({ id: x.id, email: 'NONE' }),
+        tokens.delete.sign({ id: x.id }),
+      ]).then(([editToken, deleteToken]) => ({ ...x, editToken, deleteToken }))
+    ),
+    switchMap((x) =>
       db.groups.getById(x.id, ['link_facebook', 'name', 'id']).then((grp) =>
         createRow('Reports', {
           message: x.message,
           url: grp.link_facebook,
           name: grp.name,
           id: grp.id,
+          edit: `${ENV.CLIENT_ENDPOINT}/edit/${x.id}/${x.editToken}`,
+          delete: `${ENV.API_ENDPOINT}/group/delete?token=${x.deleteToken}`,
         })
       )
     ),

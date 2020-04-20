@@ -11,6 +11,8 @@ export type ReportsTable = {
   message: string
   url: string
   id: string
+  edit: string
+  delete: string
 }
 
 export type WaitingTable = {

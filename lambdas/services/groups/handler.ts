@@ -83,3 +83,12 @@ export const createGroup = lambda((req$) =>
     responseJson$
   )
 )
+
+// /group/delete
+export const deleteGroup = lambda((req$) =>
+  req$.pipe(
+    authorise('delete'),
+    switchMap((val) => db.groups.delete(val.id)),
+    responseJson$
+  )
+)
