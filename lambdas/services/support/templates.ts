@@ -116,10 +116,9 @@ export const sendSubmitedRequest = (email: string, key: string) => {
   })
 }
 
-export const sendSuccessfulVerification = (email: string) => {
-  // const token = await tokens.edit.sign({ id, email })
-  // const link = `${ENV.CLIENT_ENDPOINT}/edit/${id}/${token}`
-  const link = ''
+export const sendSuccessfulVerification = async (email: string, id: string) => {
+  const token = await tokens.edit.sign({ id, email })
+  const link = `${ENV.CLIENT_ENDPOINT}/edit/${id}/${token}`
 
   return sendGrid.send({
     to: email,
@@ -132,8 +131,8 @@ export const sendSuccessfulVerification = (email: string) => {
         You have sucessfully verified your group! You can edit it now with this link: <a href="${link}">${link}</a>.
       </p>
       <p>
-        This link will expire after a day so if you want to edit your group again, please find your group in the 
-        sidebar and select the edit option in the dropdown menu (click the ... icon). Enter this email address (${email}) 
+        This link will expire after a day so if you want to edit your group again, please find your group in the
+        sidebar and select the edit option in the dropdown menu (click the ... icon). Enter this email address (${email})
         to recieve a link that will enable you to edit your group.
       </p>
       <p>

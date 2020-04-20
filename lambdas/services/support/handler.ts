@@ -65,7 +65,7 @@ export const confirmSupportRequest = lambda((req$) =>
     switchMap((x) =>
       db.groups
         .update({ id: x.id, emails: [x.email] })
-        .then(() => sendSuccessfulVerification(x.email))
+        .then(() => sendSuccessfulVerification(x.email, x.id))
         .then(() => transferToDone(x.key, 'confirmed'))
     ),
     responseJson$
