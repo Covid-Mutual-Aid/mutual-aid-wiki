@@ -4,7 +4,6 @@ getGroups:
     - http:
         method: get
         path: group/get
-        cors: true
   timeout: 15
 
 createGroup:
@@ -13,7 +12,6 @@ createGroup:
     - http:
         method: post
         path: group/create
-        cors: true
 
 updateGroup:
   handler: services/groups/handler.updateGroup
@@ -21,7 +19,13 @@ updateGroup:
     - http:
         method: post
         path: group/update
-        cors: true
+
+deleteGroup:
+  handler: services/groups/handler.deleteGroup
+  events:
+    - http:
+        method: get
+        path: group/delete
 
 associateEmail:
   handler: services/groups/handler.associateEmail
@@ -29,4 +33,3 @@ associateEmail:
     - http:
         method: post
         path: group/associate
-        cors: true

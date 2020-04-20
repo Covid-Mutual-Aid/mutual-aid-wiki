@@ -53,6 +53,12 @@ export const select = <T extends { [key: string]: OperatorFunction<any, any> }>(
     )
   })
 
+export const passThrough = <T extends any>(fn: (x: T) => void) =>
+  map<T, T>((x) => {
+    fn(x)
+    return x
+  })
+
 export const prove = <P extends Proof<any>>(proof: P) => <T extends Record<string, any>>(
   input: T
 ) => {

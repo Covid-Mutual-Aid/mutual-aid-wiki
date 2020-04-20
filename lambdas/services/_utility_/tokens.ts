@@ -34,6 +34,7 @@ const createToken = <T extends string>(type: T) => <P extends Record<string, str
 
 const tokens = {
   edit: createToken('EDIT_GROUP')<{ id: string; email: string }>({ expiresIn: '1d' }),
+  delete: createToken('DELETE_GROUP')<{ id: string }>(),
   support: createToken('SUPPORT_REQUEST')<{ id: string; email: string }>({ expiresIn: '1d' }),
   confirm: createToken('CONFIRM')<{ id: string; email: string; key: string }>(),
   reject: createToken('REJECT')<{ id: string; email: string; key: string }>(),
