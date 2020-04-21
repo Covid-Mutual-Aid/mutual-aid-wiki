@@ -5,7 +5,7 @@ import { useRequest } from '../contexts/RequestProvider'
 let last = ''
 const debounce = (value: string) => {
   last = value
-  return new Promise(res => setTimeout(res, 300)).then(() =>
+  return new Promise((res) => setTimeout(res, 300)).then(() =>
     last !== value ? Promise.reject() : value
   )
 }
@@ -22,24 +22,25 @@ const Location = ({
   return (
     <AsyncCreatableSelect
       styles={{
-        placeholder: styles => ({ ...styles, color: 'rgba(0, 0, 0, 0.3) !important;' }),
+        placeholder: (styles) => ({ ...styles, color: 'rgba(0, 0, 0, 0.3) !important;' }),
+        control: (x) => ({ ...x, borderRadius: '20px', padding: '.2rem .4rem' }),
       }}
       multi={false}
       onChange={(x: any) =>
-        request<any>(`/google/placeDetails?place_id=${x.value}`).then(y =>
+        request<any>(`/google/placeDetails?place_id=${x.value}`).then((y) =>
           onChange({ ...y.geometry.location, name: x.label })
         )
       }
       placeholder={placeholder}
-      loadOptions={value =>
+      loadOptions={(value) =>
         debounce(value)
-          .then(val =>
+          .then((val) =>
             request<{ description: string; place_id: string }[]>(
               `/google/placeSuggest?place=${val}`
             )
           )
-          .then(x => x.map(place => ({ value: place.place_id, label: place.description })))
-          .catch(err => {
+          .then((x) => x.map((place) => ({ value: place.place_id, label: place.description })))
+          .catch((err) => {
             return []
           })
       }

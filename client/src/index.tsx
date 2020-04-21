@@ -27,11 +27,22 @@ if (!inIframe()) {
   })
 }
 
+let current = { endpoint: '/api' }
+if ((window as any).location.host.includes('localhost')) {
+  current.endpoint = 'https://vlxcvrkif2.execute-api.eu-west-2.amazonaws.com/staging'
+  fetch('/dev/group/get')
+    .then((x) => {
+      if (!x.ok) return
+      current.endpoint = '/dev'
+    })
+    .catch(() => {})
+}
+
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
-  fetch(
-    ((window as any).location.host.includes('localhost') ? '/dev' : '/api') + input,
-    init
-  ).then((x) => x.json())
+  fetch(current.endpoint + input, init).then((x) => {
+    if (!x.ok) return Promise.reject(x.statusText)
+    return (x.json && x.json()) || x
+  })
 
 const Render = () => (
   <Router>

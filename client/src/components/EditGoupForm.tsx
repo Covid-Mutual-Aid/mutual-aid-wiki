@@ -6,36 +6,78 @@ import Form, { Control, useControl } from './FormControl'
 import { InputGroup } from '../styles/styles'
 import { Group } from '../utils/types'
 import Location from './Location'
+import { isTruthy } from '../utils/fp'
+import EmailsInput from './EmailsInput'
 
 const EditGroupForm = ({
   group,
-  setGroup,
+  onSave,
+  isLoading = false,
 }: {
   group: Partial<Omit<Group, 'id'>>
-  setGroup: (x: Partial<Omit<Group, 'id'>>) => void
+  onSave: (x: Partial<Omit<Group, 'id'>>) => void
+  isLoading?: boolean
 }) => {
+  const initialValues = {
+    ...group,
+    location: { location_name: group?.location_name, location_coord: group.location_coord },
+  }
   return (
     <Form
+      style={{ width: '100%' }}
       onSubmit={(values) =>
-        setGroup({
+        !isLoading &&
+        onSave({
           name: values.name,
           link_facebook: values.link_facebook,
           ...values.location,
         })
       }
-      initialValues={
-        {
-          ...group,
-          location: { location_name: group?.location_name, location_coord: group.location_coord },
-        } || {}
-      }
+      initialValues={initialValues || {}}
     >
-      {group.name && <Input name="name" init="" valid={(x) => x.length > 0 || ' '} />}
-      {group.link_facebook && <Input name="link_facebook" init="" valid={validURL} />}
-      {group.location_name && (
+      {isTruthy(group.name) && (
+        <Input
+          disabled={isLoading}
+          name="name"
+          init=""
+          valid={(x) => x.length > 0 || ' '}
+          placeholder="Group title"
+        />
+      )}
+
+      {isTruthy(group.link_facebook) && (
+        <Input
+          disabled={isLoading}
+          name="link_facebook"
+          init=""
+          valid={validURL}
+          placeholder="https://www.f..."
+        />
+      )}
+
+      {isTruthy(group.emails) && (
+        <Control
+          name="emails"
+          init={[] as string[]}
+          valid={(x) => (x.length > 0 ? true : 'Must provide at least one email')}
+        >
+          {({ props, error }) => (
+            <div>
+              <Description>
+                Enter any emails for people you want to give access to edit this group{' '}
+                <small style={{ color: 'grey' }}>(These will not be public)</small>
+              </Description>
+              <Error>{error}</Error>
+              <EmailsInput emails={props.value} onChange={props.onChange} />
+            </div>
+          )}
+        </Control>
+      )}
+
+      {isTruthy(group.location_name) && (
         <Control name="location" init={{ location_name: '' }}>
           {({ props: { value, onChange } }) => (
-            <div style={{ marginTop: '2rem' }}>
+            <div style={{ marginTop: '2rem', opacity: isLoading ? '.8' : 1 }}>
               <Location
                 onChange={(x) =>
                   onChange({ location_name: x.name, location_coord: { lat: x.lat, lng: x.lng } })
@@ -46,13 +88,16 @@ const EditGroupForm = ({
           )}
         </Control>
       )}
+
       <FormButtons>
         <Link to="/">
-          <button className="btn-secondary" type="button">
+          <button className="btn-secondary" type="button" disabled={isLoading}>
             cancel
           </button>
         </Link>
-        <button type="submit">submit</button>
+        <button type="submit" disabled={isLoading}>
+          submit
+        </button>
       </FormButtons>
     </Form>
   )
@@ -64,18 +109,23 @@ const Input = <T extends any>({
   name,
   init,
   valid,
+  description,
   ...inputProps
-}: { name: string; init: T; valid?: (x: T) => string | true } & React.InputHTMLAttributes<
-  HTMLInputElement
->) => {
+}: {
+  name: string
+  init: T
+  description?: string
+  valid?: (x: T) => string | true
+} & React.InputHTMLAttributes<HTMLInputElement>) => {
   const { error, props } = useControl(name, init, valid)
   return (
     <div style={{ margin: '1rem 0' }}>
-      <span style={{ width: '100%', paddingLeft: '.5rem', height: '.5rem' }}>{error}</span>
+      {description && <Description>{description}</Description>}
+      <Error>{error}</Error>
       <InputGroup>
         <input
           style={{
-            backgroundColor: error ? 'rgba(255, 0, 0, 0.1)' : 'inherit',
+            backgroundColor: error ? 'inherit' : 'rgba(0, 255, 0, 0.05)',
           }}
           {...inputProps}
           {...props}
@@ -95,6 +145,15 @@ const FormButtons = styled.div`
   }
 `
 
+const Description = styled.p`
+  padding: 0 1rem;
+  margin: 0.5rem 0rem 0.5rem 0rem;
+`
+
+const Error = styled(Description)`
+  color: gray;
+`
+
 export function validURL(str: string) {
   var pattern = new RegExp(
     '^(https?:\\/\\/)?' + // protocol
@@ -106,5 +165,5 @@ export function validURL(str: string) {
     'i'
   ) // fragment locator
 
-  return !!pattern.test(str) || 'Invalid URL'
+  return !!pattern.test(str) || 'Must be a valid link to the main group page'
 }

@@ -12,18 +12,22 @@ export type FormFields = { [x: string]: Field<any> }
 
 const Form = <
   T extends Record<string, any>,
-  V extends Record<keyof T, (x: T[keyof T]) => string | true>
+  V extends { [Key in keyof T]: (x: T[Key]) => string | true }
 >({
   children,
   onSubmit,
   initialValues,
   validators,
+  ...props
 }: {
   children: React.ReactNode
   onSubmit: (values: T, errors?: [string, string][]) => void
   initialValues?: T
   validators?: V
-}) => {
+} & Omit<
+  React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
+  'onSubmit'
+>) => {
   const pubsub = useRef(createPubSub<FormFields>())
 
   useEffect(() => {
@@ -56,7 +60,9 @@ const Form = <
   }
   return (
     <FormContext.Provider value={pubsub.current}>
-      <form onSubmit={handleSubmit}>{children}</form>
+      <form {...props} onSubmit={handleSubmit}>
+        {children}
+      </form>
     </FormContext.Provider>
   )
 }

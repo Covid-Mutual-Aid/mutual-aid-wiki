@@ -1,10 +1,10 @@
-import React from 'react'
 import useControl from './useControl'
 
 const Control = <T extends any>({
   children,
   name,
   init,
+  valid,
 }: {
   children: ({
     error,
@@ -15,8 +15,9 @@ const Control = <T extends any>({
   }) => JSX.Element
   name: string
   init: T
+  valid?: (x: T) => string | true
 }) => {
-  const { error, props } = useControl(name, init)
+  const { error, props } = useControl(name, init, valid)
   return children({ error, props })
 }
 

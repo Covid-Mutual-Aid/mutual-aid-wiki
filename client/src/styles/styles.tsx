@@ -49,6 +49,7 @@ export const CenterAlign = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-flow: column;
   height: 100vh;
 `
 
