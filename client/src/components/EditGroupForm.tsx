@@ -1,12 +1,13 @@
+import React, { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import React, { useState } from 'react'
 
 import Form, { Control, useControl } from './FormControl'
+import ValuesListener from './FormControl/ValuesListener'
 import { InputGroup } from '../styles/styles'
+import { isTruthy, head } from '../utils/fp'
 import EmailsInput from './EmailsInput'
 import { Group } from '../utils/types'
-import { isTruthy, head } from '../utils/fp'
 import Location from './Location'
 
 const EditGroupForm = ({
@@ -21,15 +22,20 @@ const EditGroupForm = ({
   children?: React.ReactNode
 }) => {
   const [error, setError] = useState<string>()
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     ...group,
     location: { location_name: group?.location_name, location_coord: group.location_coord },
-  }
+  })
+
+  const clearError = useCallback(() => setError(undefined), [])
   return (
     <Form
       style={{ width: '100%' }}
       onSubmit={(values, errors) => {
-        if (errors && errors.length > 0) return setError(head(errors)[1])
+        if (errors && errors.length > 0) {
+          setError(head(errors)[1])
+          setInitialValues(values)
+        }
         return (
           !isLoading &&
           onSave({
@@ -41,6 +47,7 @@ const EditGroupForm = ({
       }}
       initialValues={initialValues || {}}
     >
+      <ValuesListener onChange={(x) => (error ? clearError() : null)} />
       {isTruthy(group.name) && (
         <Input
           disabled={isLoading}
