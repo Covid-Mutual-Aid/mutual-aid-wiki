@@ -10,11 +10,11 @@ const useControl = <T extends any>(name: string, init: T, validate?: (x: T) => t
 
   useEffect(() => {
     const field = store.get((x) => x[name])
-    if (!field || !field.value || (!field.validate && validate)) {
-      store.set((x) => ({ ...x, [name]: { value: (field && field.value) || init, validate } }))
-    }
+    store.set((x) => ({
+      ...x,
+      [name]: { value: (field && field.value) || init, validate },
+    }))
     return store.subscribe((x) => {
-      if (x[name] === undefined) return
       const err = validate ? validate(x[name].value) : true
       setValue(x[name].value)
       setError(err === true ? null : err)
@@ -24,12 +24,12 @@ const useControl = <T extends any>(name: string, init: T, validate?: (x: T) => t
   const onChange = useCallback(
     (e: any) => {
       const value = e && e.target ? e.target.value : e
-      store.set((x) => ({ ...x, [name]: { ...x[name], value } }))
+      store.set((x) => ({ ...x, [name]: { ...x[name], value, validate } }))
     },
-    [name, store]
+    [name, store, validate]
   )
 
-  return useMemo(() => ({ props: { value, onChange }, error }), [value, error])
+  return useMemo(() => ({ props: { value, onChange }, error }), [value, error, onChange])
 }
 
 export default useControl

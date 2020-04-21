@@ -1,23 +1,26 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Form, { Control, useControl } from './FormControl'
 import { InputGroup } from '../styles/styles'
-import { Group } from '../utils/types'
-import Location from './Location'
-import { isTruthy } from '../utils/fp'
 import EmailsInput from './EmailsInput'
+import { Group } from '../utils/types'
+import { isTruthy, head } from '../utils/fp'
+import Location from './Location'
 
 const EditGroupForm = ({
   group,
   onSave,
   isLoading = false,
+  children,
 }: {
   group: Partial<Omit<Group, 'id'>>
   onSave: (x: Partial<Omit<Group, 'id'>>) => void
   isLoading?: boolean
+  children?: React.ReactNode
 }) => {
+  const [error, setError] = useState<string>()
   const initialValues = {
     ...group,
     location: { location_name: group?.location_name, location_coord: group.location_coord },
@@ -25,14 +28,17 @@ const EditGroupForm = ({
   return (
     <Form
       style={{ width: '100%' }}
-      onSubmit={(values) =>
-        !isLoading &&
-        onSave({
-          name: values.name,
-          link_facebook: values.link_facebook,
-          ...values.location,
-        })
-      }
+      onSubmit={(values, errors) => {
+        if (errors && errors.length > 0) return setError(head(errors)[1])
+        return (
+          !isLoading &&
+          onSave({
+            name: values.name,
+            link_facebook: values.link_facebook,
+            ...values.location,
+          })
+        )
+      }}
       initialValues={initialValues || {}}
     >
       {isTruthy(group.name) && (
@@ -40,8 +46,8 @@ const EditGroupForm = ({
           disabled={isLoading}
           name="name"
           init=""
-          valid={(x) => x.length > 0 || ' '}
-          placeholder="Group title"
+          valid={(x) => x.length > 0 || 'Must provide a group name'}
+          placeholder="Group name"
         />
       )}
 
@@ -50,7 +56,7 @@ const EditGroupForm = ({
           disabled={isLoading}
           name="link_facebook"
           init=""
-          valid={validURL}
+          valid={(x) => validURL(x) || 'Must provide valid Group URL'}
           placeholder="https://www.f..."
         />
       )}
@@ -67,7 +73,6 @@ const EditGroupForm = ({
                 Enter any emails for people you want to give access to edit this group{' '}
                 <small style={{ color: 'grey' }}>(These will not be public)</small>
               </Description>
-              <Error>{error}</Error>
               <EmailsInput emails={props.value} onChange={props.onChange} />
             </div>
           )}
@@ -88,7 +93,6 @@ const EditGroupForm = ({
           )}
         </Control>
       )}
-
       <FormButtons>
         <Link to="/">
           <button className="btn-secondary" type="button" disabled={isLoading}>
@@ -99,6 +103,8 @@ const EditGroupForm = ({
           submit
         </button>
       </FormButtons>
+      {error && <Error>{error}</Error>}
+      {children}
     </Form>
   )
 }
@@ -121,7 +127,7 @@ const Input = <T extends any>({
   return (
     <div style={{ margin: '1rem 0' }}>
       {description && <Description>{description}</Description>}
-      <Error>{error}</Error>
+      {/* <Error>{error}</Error> */}
       <InputGroup>
         <input
           style={{
@@ -165,5 +171,5 @@ export function validURL(str: string) {
     'i'
   ) // fragment locator
 
-  return !!pattern.test(str) || 'Must be a valid link to the main group page'
+  return !!pattern.test(str)
 }

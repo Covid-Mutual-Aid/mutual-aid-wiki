@@ -5,7 +5,7 @@ import { EditPage, CenterAlign } from '../styles/styles'
 import { Group } from '../utils/types'
 
 import GroupItem from '../components/NewLayout/GroupItem'
-import EditGroupForm from '../components/EditGoupForm'
+import EditGroupForm from '../components/EditGroupForm'
 import { useFetch } from '../utils/useAsync'
 import { pick } from '../utils/fp'
 

@@ -32,16 +32,20 @@ const Form = <
 
   useEffect(() => {
     if (!initialValues) return
-    pubsub.current.set(() =>
-      Object.keys(initialValues).reduce(
+    pubsub.current.set((x) => ({
+      ...x,
+      ...Object.keys(initialValues).reduce(
         (all, key) => ({
           ...all,
-          [key]: { value: initialValues[key], validate: validators && validators[key] },
+          [key]: {
+            value: initialValues[key],
+            validate: (validators && validators[key]) || (x[key] && x[key].validate),
+          },
         }),
         {} as any
-      )
-    )
-  }, [initialValues])
+      ),
+    }))
+  }, [initialValues, validators])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -58,6 +62,7 @@ const Form = <
     )
     onSubmit(vals, errors as [string, string][])
   }
+
   return (
     <FormContext.Provider value={pubsub.current}>
       <form {...props} onSubmit={handleSubmit}>

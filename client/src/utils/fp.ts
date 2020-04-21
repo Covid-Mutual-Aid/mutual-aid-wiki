@@ -9,3 +9,7 @@ export const omit = <T extends { [x: string]: any }, K extends (keyof T)[]>(k: K
 
 export const isTruthy = <T extends any>(x: T | undefined | null): x is T =>
   x !== undefined && x !== null
+
+export const head = <T extends any>(arr: T[]) => arr && arr[0]
+export const last = <T extends any>(arr: T[]) => arr && arr[arr.length - 1]
+export const prop = <T extends any, K extends keyof T>(key: K) => (x: T) => x && x[key]

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useRequest } from '../contexts/RequestProvider'
 import GroupItem from '../components/NewLayout/GroupItem'
 import { EditPage, CenterAlign } from '../styles/styles'
-import EditGroupForm from '../components/EditGoupForm'
+import EditGroupForm from '../components/EditGroupForm'
 import { GroupWithEmails } from '../utils/types'
 
 const CreateGroup = () => {
