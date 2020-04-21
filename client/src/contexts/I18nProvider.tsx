@@ -1,9 +1,19 @@
 import React, { createContext, useContext } from 'react'
 import en from '../locales/en.json'
+import AboutEN from '../components/internationalized/AboutEN'
 
-type Locale = typeof en
+type Translation = typeof en
 
-const defaultState : Locale = en
+class Locale {
+    translation: Translation
+    components: { about: JSX.Element }
+    constructor(translation: Translation, components: { about: JSX.Element }) {
+        this.translation = translation;
+        this.components = components;
+    }
+}
+
+const defaultState : Locale = new Locale(en, { about: <AboutEN /> })
 
 const I18nContext = createContext<Locale>(defaultState)
 
