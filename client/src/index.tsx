@@ -1,22 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import * as Sentry from '@sentry/browser'
 import { BrowserRouter as Router } from 'react-router-dom'
+import * as Sentry from '@sentry/browser'
+import ReactDOM from 'react-dom'
+import React from 'react'
 
 import 'promise-polyfill/src/polyfill'
 import 'whatwg-fetch'
 
 import './styles/index.css'
 
-import * as serviceWorker from './utils/serviceWorker'
 import RequestProvider from './contexts/RequestProvider'
+import * as serviceWorker from './utils/serviceWorker'
 
-import App from './App'
-import MapProvider from './contexts/MapProvider'
-import DataProvider from './contexts/DataProvider'
 import StateProvider from './contexts/StateContext'
+import DataProvider from './contexts/DataProvider'
+import MapProvider from './contexts/MapProvider'
 import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
+import App from './App'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
@@ -27,11 +27,22 @@ if (!inIframe()) {
   })
 }
 
+let current = { endpoint: '/api' }
+if ((window as any).location.host.includes('localhost')) {
+  current.endpoint = '/dev'
+  fetch('/dev/group/get')
+    .then((x) => {
+      if (!x.ok) return
+      current.endpoint = '/dev'
+    })
+    .catch(() => {})
+}
+
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
-  fetch(
-    ((window as any).location.host.includes('localhost') ? '/dev' : '/api') + input,
-    init
-  ).then((x) => x.json())
+  fetch(current.endpoint + input, init).then((x) => {
+    if (!x.ok) return Promise.reject(x.statusText)
+    return (x.json && x.json()) || x
+  })
 
 const Render = () => (
   <Router>

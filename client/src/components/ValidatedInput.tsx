@@ -5,7 +5,7 @@ type WithValidation = {
   validated: boolean
 }
 
-export const Input = ({
+export const ValidatedInput = ({
   placeholder = '',
   value,
   onChange,

@@ -2,12 +2,12 @@ import haversineDistance from 'haversine-distance'
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
-import { useData } from '../../contexts/DataProvider'
-import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
+import { usePlaceState, usePlaceMethod } from '../contexts/StateContext'
+import { useData } from '../contexts/DataProvider'
 
+import { MOON_BLUE } from '../utils/CONSTANTS'
+import isIosSafari from '../utils/isIosSafari'
 import GroupItem from './GroupItem'
-import { MOON_BLUE } from '../../utils/CONSTANTS'
-import isIosSafari from '../../utils/isIosSafari'
 
 const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)

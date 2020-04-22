@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { CenterAlign, FormButtons, InputGroup } from '../styles/styles'
 import { Link, useParams, useHistory } from 'react-router-dom'
 
-import { Input } from '../components/NewLayout/FormElements'
+import { ValidatedInput } from '../components/ValidatedInput'
 import { useRequest } from '../contexts/RequestProvider'
 
 const Report = () => {
@@ -38,7 +38,7 @@ const Report = () => {
         >
           <p>Why are you reporting this group?</p>
           <InputGroup>
-            <Input
+            <ValidatedInput
               placeholder="E.g, it no longer exists..."
               value={message}
               onChange={({ value, validated }) => {
