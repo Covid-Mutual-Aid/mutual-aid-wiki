@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import { useControl } from './FormControl'
+import React, { useState } from 'react'
 
 const EmailsInput = () => {
   const { props } = useControl(
@@ -13,8 +13,11 @@ const EmailsInput = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (!value) return
     setError('')
+    console.log(event, event.key)
     switch (event.key) {
       case 'Enter':
+      case ' ':
+      case ',':
       case 'Tab':
         if (!validEmail(value)) {
           setError('Must be a valid email address')
