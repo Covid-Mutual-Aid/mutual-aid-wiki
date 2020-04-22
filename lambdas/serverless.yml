@@ -79,6 +79,7 @@ provider:
         - { 'Fn::GetAtt': ['DynamoDbActiveTokens', 'Arn'] }
 
 functions:
+  - ${file(./services/external-data/functions.yml)}
   - ${file(./services/groups/functions.yml)}
   - ${file(./services/google/functions.yml)}
   - ${file(./services/searches/functions.yml)}

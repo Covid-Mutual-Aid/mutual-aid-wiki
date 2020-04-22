@@ -1,0 +1,8 @@
+getExternalData:
+  handler: services/external-data/handler.getExternalData
+  timeout: 15
+  events:
+    - http:
+        method: get
+        path: external/get
+        cors: true
