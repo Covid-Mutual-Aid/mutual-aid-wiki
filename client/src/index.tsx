@@ -30,12 +30,6 @@ if (!inIframe()) {
 let current = { endpoint: '/api' }
 if ((window as any).location.host.includes('localhost')) {
   current.endpoint = '/dev'
-  fetch('/dev/group/get')
-    .then((x) => {
-      if (!x.ok) return
-      current.endpoint = '/dev'
-    })
-    .catch(() => {})
 }
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
