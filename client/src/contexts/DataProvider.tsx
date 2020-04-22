@@ -39,10 +39,12 @@ const useUserLocation = () => {
   const request = useRequest()
 
   useEffect(() => {
-    request('/info/locate').then((x) => {
-      if (x.message) return console.error(x.message)
-      return setLocation({ lat: x.lat, lng: x.lon, zoom: 4 })
-    })
+    request('/info/locate')
+      .then((x) => {
+        if (x.message) return console.error(x.message)
+        return setLocation({ lat: x.lat, lng: x.lon, zoom: 4 })
+      })
+      .catch((err) => console.error(err))
   }, [request])
 
   const geolocateUser = useCallback(() => {

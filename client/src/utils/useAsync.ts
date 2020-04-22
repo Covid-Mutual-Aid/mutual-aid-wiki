@@ -1,23 +1,24 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { Request } from './api'
 
-export const useFetch = <T extends any>(
+export const useFetch = <T extends any, R extends any = T>(
   fn?: (req: Request, args?: any) => Promise<T>,
-  immediate?: boolean
+  configeration?: { immediate?: boolean; transform?: (x: T) => R }
 ) => {
   const request = useRequest()
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string>()
   const [data, setData] = useState<T>()
   const isMounted = useRef(true)
+  const config = useRef(configeration || {})
 
-  const retry = useCallback(
+  const trigger = useCallback(
     (args?: any) => {
       if (!fn) return
       setIsLoading(true)
-      setError(null)
+      setError(undefined)
       fn(request, args)
         .then((x) => {
           if (!isMounted.current) return
@@ -25,7 +26,7 @@ export const useFetch = <T extends any>(
           if (!x) return
           else if (x.error) return setError(x.error)
           else if (x.message) return setError(x.message)
-          return setData(x)
+          return setData(config.current.transform ? config.current.transform(x) : x)
         })
         .catch((err) => {
           console.log(err)
@@ -39,9 +40,9 @@ export const useFetch = <T extends any>(
 
   useEffect(() => {
     isMounted.current = true
-    if (fn && immediate) retry()
+    if (fn && config.current.immediate) trigger()
     return () => void (isMounted.current = false)
-  }, [fn, immediate, retry])
+  }, [fn, trigger])
 
-  return useMemo(() => ({ data, isLoading, error, retry }), [data, isLoading, error])
+  return { data, isLoading, error, trigger }
 }

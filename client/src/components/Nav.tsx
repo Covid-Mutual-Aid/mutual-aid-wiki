@@ -1,8 +1,8 @@
 import React, { ReactChild } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { MOON_BLUE } from '../../utils/CONSTANTS'
-import inIframe from '../../utils/inIframe'
+import { MOON_BLUE } from '../utils/CONSTANTS'
+import inIframe from '../utils/inIframe'
 
 const Nav = ({ children }: { children?: ReactChild }) => {
   return (

@@ -25,26 +25,26 @@ const createNoDuplicates = (
 
 export const getGroups = lambda((req$) =>
   req$.pipe(
-    params(),
-    switchMap((params) =>
-      params && params.id
-        ? db.groups.getById(params.id as string, [
-            'id',
-            'name',
-            'link_facebook',
-            'location_name',
-            'location_coord',
-          ])
-        : db.groups
-            .get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'updated_at'])
-            .then((grps) =>
-              grps.sort(
-                (a, b) =>
-                  new Date(b.updated_at || '01 Jan 2020').valueOf() -
-                  new Date(a.updated_at || '01 Jan 2020').valueOf()
-              )
-            )
-    ),
+    select({
+      params: params(),
+      auth: authorise('edit', true),
+    }),
+    switchMap(({ params, auth }) => {
+      const attributes: (keyof Group)[] = auth
+        ? ['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails']
+        : ['id', 'name', 'link_facebook', 'location_name', 'location_coord']
+
+      if (params && params.id) return db.groups.getById(params.id, attributes)
+      return db.groups
+        .get(attributes)
+        .then((grps) =>
+          grps.sort(
+            (a, b) =>
+              new Date(b.updated_at || '01 Jan 2020').valueOf() -
+              new Date(a.updated_at || '01 Jan 2020').valueOf()
+          )
+        )
+    }),
     responseJson$
   )
 )

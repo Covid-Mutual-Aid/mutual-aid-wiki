@@ -13,3 +13,13 @@ export const isTruthy = <T extends any>(x: T | undefined | null): x is T =>
 export const head = <T extends any>(arr: T[]) => arr && arr[0]
 export const last = <T extends any>(arr: T[]) => arr && arr[arr.length - 1]
 export const prop = <T extends any, K extends keyof T>(key: K) => (x: T) => x && x[key]
+
+type RM<T extends any> = { [Key in keyof T]: T[Key] }
+
+export const updateProp = <T extends any, K extends keyof T, R extends any>(
+  key: K,
+  fn: (x: T[K]) => R
+) => (x: T): RM<Omit<T, K> & { [Key in K]: R }> => ({
+  ...x,
+  [key]: fn(x[key]),
+})

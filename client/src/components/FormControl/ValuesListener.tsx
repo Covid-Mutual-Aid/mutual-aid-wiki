@@ -12,10 +12,9 @@ const ValuesListener = <T extends any>({ onChange }: { onChange: (x: T) => void 
     }, 0)
 
     return () => {
-      console.log('unsund')
-      unsub()
+      if (unsub) unsub()
     }
-  }, [onChange])
+  }, [onChange, pubsub])
 
   return null
 }

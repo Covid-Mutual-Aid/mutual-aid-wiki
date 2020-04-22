@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
+import { useControl } from './FormControl'
 
-const EmailsInput = ({
-  emails,
-  onChange,
-}: {
-  emails: string[]
-  onChange: (x: string[]) => void
-}) => {
+const EmailsInput = () => {
+  const { props } = useControl(
+    'emails',
+    [],
+    (x) => x.length > 0 || 'Must provide at least one email'
+  )
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
@@ -19,10 +19,10 @@ const EmailsInput = ({
         if (!validEmail(value)) {
           setError('Must be a valid email address')
         } else {
-          onChange([...emails, value])
+          props.onChange([...props.value, value])
           setValue('')
         }
-        event.preventDefault()
+        if (event.preventDefault) event.preventDefault()
     }
   }
   return (
@@ -36,11 +36,12 @@ const EmailsInput = ({
         isClearable
         isMulti
         menuIsOpen={false}
-        onChange={(x) => onChange(Array.isArray(x) ? x.map((y) => y.value) : [])}
+        onChange={(x) => props.onChange(Array.isArray(x) ? x.map((y) => y.value) : [])}
+        onBlur={() => handleKeyDown({ key: 'Tab' } as any)}
         onInputChange={setValue}
         onKeyDown={handleKeyDown}
         placeholder="Enter any emails..."
-        value={emails.map((x) => ({ label: x, value: x }))}
+        value={props.value.map((x) => ({ label: x, value: x }))}
       />
       <p style={{ paddingLeft: '1rem', margin: '.4rem 0rem 0rem 0rem', color: 'red' }}>{error}</p>
     </div>

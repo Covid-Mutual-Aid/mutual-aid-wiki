@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import Map from '../components/NewLayout/Map'
-import SearchBox from '../components/NewLayout/SearchBox'
-import GroupsList from '../components/NewLayout/GroupsList'
+import Map from '../components/Maps/AllGroups'
+import SearchBox from '../components/SearchBox'
+import GroupsList from '../components/GroupsList'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 import icons from '../utils/icons'
-import Nav from '../components/NewLayout/Nav'
+import Nav from '../components/Nav'
 import inIframe from '../utils/inIframe'
 
 const NewLayout = () => {

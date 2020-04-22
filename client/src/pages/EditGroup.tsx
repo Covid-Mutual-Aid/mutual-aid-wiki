@@ -1,88 +1,60 @@
 import { useParams, Link } from 'react-router-dom'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { EditPage, CenterAlign } from '../styles/styles'
+import GroupForm from '../components/GroupForm'
+import { useFetch } from '../utils/useAsync'
+import { updateProp } from '../utils/fp'
 import { Group } from '../utils/types'
 
-import GroupItem from '../components/NewLayout/GroupItem'
-import EditGroupForm from '../components/EditGroupForm'
-import { useFetch } from '../utils/useAsync'
-import { pick } from '../utils/fp'
-
-const getEditableProps = pick(['name', 'location_name', 'link_facebook', 'location_coord'])
-
-const CreateGroup = () => {
+const EditGroup = () => {
   const [done, setDone] = useState(false)
   const { id, token } = useParams<{ id: string; token: string }>()
-  const [group, setGroup] = useState<Omit<Group, 'id'>>()
 
-  const { data, isLoading } = useFetch<Omit<Group, 'id'>>(
-    useCallback((req) => req(`/group/get?id=${id}`), []),
-    true
+  const { data: group, isLoading, trigger: refetch } = useFetch<Omit<Group, 'id'>>(
+    useCallback((req) => req(`/group/get?id=${id}&token=${token}`), [id, token]),
+    {
+      immediate: true,
+      transform: (x) =>
+        updateProp('location_coord', (x) => ({ lat: parseFloat(x.lat), lng: parseFloat(x.lng) }))(
+          x
+        ) as Group,
+    }
   )
-  useEffect(() => data && setGroup(getEditableProps(data)), [data])
 
-  const { data: submitResponse, retry: submitGroup, isLoading: isSubmiting, error } = useFetch<any>(
+  const { data: savedGroup, trigger: saveGroup, isLoading: isSubmiting, error } = useFetch<any>(
     useCallback(
       (req, grp) =>
         req(`/group/update?token=${token}`, {
           method: 'POST',
           body: JSON.stringify(grp),
         }),
-      []
+      [token]
     )
   )
   useEffect(() => {
-    if (data && submitResponse) {
-      setGroup(getEditableProps(submitResponse))
-      setDone(true)
-    }
-  }, [submitResponse])
+    refetch()
+    return void (savedGroup ? setDone(true) : null)
+  }, [savedGroup]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSubmit = (grp: any) => {
-    if (isSubmiting) return
-    submitGroup({ ...grp, id })
-  }
-
+  if (done)
+    return (
+      <div>
+        <p>
+          Your changes have been save got back to <Link to="/">map</Link> or continue{' '}
+          <button type="button" onClick={() => setDone(false)}>
+            editing
+          </button>
+        </p>
+      </div>
+    )
   return (
-    <EditPage>
-      <div className="main">
-        <CenterAlign>
-          {done ? (
-            <div>
-              got back to <Link to="/">map</Link> or continue{' '}
-              <button type="button" onClick={() => setDone(false)}>
-                editing
-              </button>
-            </div>
-          ) : (
-            <EditGroupForm
-              group={group || {}}
-              onSave={handleSubmit}
-              isLoading={isSubmiting || isLoading}
-            />
-          )}
-          <span style={{ color: 'red', height: '1rem' }}>{error}</span>
-        </CenterAlign>
-      </div>
-      <div className="preview">
-        {!isSubmiting && (
-          <CenterAlign>
-            <div className="item">
-              {group && (
-                <GroupItem
-                  onSelect={() => null}
-                  selected={false}
-                  group={{ ...group, id: '1234567890' }}
-                  disableDropdown={true}
-                />
-              )}
-            </div>
-          </CenterAlign>
-        )}
-      </div>
-    </EditPage>
+    <GroupForm
+      group={group}
+      saveGroup={saveGroup}
+      disable={isLoading || isSubmiting}
+      error={error}
+    />
   )
 }
 
-export default CreateGroup
+export default EditGroup

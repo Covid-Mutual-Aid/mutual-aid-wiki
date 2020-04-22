@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { usePlaceState } from '../../contexts/StateContext'
-import { useData } from '../../contexts/DataProvider'
+import { usePlaceState } from '../contexts/StateContext'
+import { useData } from '../contexts/DataProvider'
 import GroupItem from './GroupItem'
 
-import { MOBILE_BREAKPOINT } from '../../utils/CONSTANTS'
-import isIosSafari from '../../utils/isIosSafari'
+import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import isIosSafari from '../utils/isIosSafari'
 
 const InfoBox = () => {
   const { groups } = useData()

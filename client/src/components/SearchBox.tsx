@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { usePlaceMethod, usePlaceState } from '../../contexts/StateContext'
-import icons from '../../utils/icons'
-import { InputGroup } from '../../styles/styles'
-import { MOON_BLUE } from '../../utils/CONSTANTS'
-import { useData } from '../../contexts/DataProvider'
+import { usePlaceMethod, usePlaceState } from '../contexts/StateContext'
+import icons from '../utils/icons'
+import { InputGroup } from '../styles/styles'
+import { MOON_BLUE } from '../utils/CONSTANTS'
+import { useData } from '../contexts/DataProvider'
 
 const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')

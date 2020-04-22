@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import icons, { iconFromUrl } from '../../utils/icons'
-import tidyLink from '../../utils/tidyLink'
-import { Group } from '../../utils/types'
+import icons, { iconFromUrl } from '../utils/icons'
+import tidyLink from '../utils/tidyLink'
+import { Group } from '../utils/types'
 import { useHistory } from 'react-router-dom'
 
 const GroupItem = ({
