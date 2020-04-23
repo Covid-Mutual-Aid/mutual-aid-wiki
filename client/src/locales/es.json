@@ -2,8 +2,8 @@
   "pages": {
     "groups": {
       "cta": {
-        "line1": "Encontrar grupos",
-        "line2": "de Apoyo Mutuo"
+        "line1": "Encuentra grupos",
+        "line2": "de apoyo mutuo"
       }
     },
     "group_form": {
@@ -32,8 +32,8 @@
       "view_full_site_link": "¡Ver el sitio completo!"
     },
     "search_box": {
-      "search_prompt": "Buscar un lugar",
-      "add_prompt": "O añadir un grupo",
+      "search_prompt": "Busca un lugar",
+      "add_prompt": "...o añade un grupo",
       "place_name_label": "Mostrando grupos en"
     },
     "groups_list": {
