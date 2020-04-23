@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useMemo } from 'react'
 import enTranslation from '../locales/en.json'
-import esTranslation from '../locales/es.json'
 import AboutEN from '../components/internationalized/AboutEN'
 //import { useParams } from 'react-router-dom'
 
@@ -19,13 +18,11 @@ class Locale {
 
 
 const en : Locale = new Locale(enTranslation, { about: <AboutEN /> })
-const es : Locale = new Locale(esTranslation, { about: <AboutEN /> })
 
 
 
 const locales : { [index: string] : Locale } = {
     "en": en,
-    "es": es
 }
 
 

@@ -43,15 +43,41 @@
       "group_name_prompt": "Your group name...",
       "group_location_prompt": "Your group location..."
     },
-    "edit_group_components": {
-      "group_name_label": "Name",
-      "group_name_example": "Group name",
-      "emails_label": "Emails",
-      "email_example": "yourname@mail.com...",
-      "link_label": "Link",
-      "link_example": "http://www...",
-      "location_label": "Location",
-      "location_example": "e.g \"SE14 4NW\""
+    "emails_input": {
+      "errors": {
+        "none_provided": "Must provide at least one email",
+        "wrong_format": "Must be a valid email address"
+      },
+      "placeholder": "Enter any emails..."
+    },
+    "group_form_elements": {
+      "name" : {
+        "placeholder": "Group name",
+        "errors": {
+          "none_provided": "Must provide a group name"
+        }
+      },
+      "url" : {
+        "placeholder": "https://www.f...",
+        "errors": {
+          "none_provided": "Must provide a valid Group URL"
+        }
+      },
+      "emails": {
+        "description": "Enter any emails for people you want to give access to edit this group",
+        "note": "These will not be public"
+      },
+      "buttons": {
+        "cancel": "cancel",
+        "submit": "submit"
+      }
+    },
+    "location": {
+      "placeholder": "e.g. \"SE14 4NW\"",
+      "create_prompt_prefix": "Location:",
+      "errors": {
+        "none_provided": "You must set a location for your group"
+      }
     }
   }
 }

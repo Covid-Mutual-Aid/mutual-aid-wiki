@@ -9,7 +9,7 @@ env.json
 .serverless
 stack.json
 live_groups.json
-*.json
+package-lock.json
 
 # Webpack directories
 .webpack
