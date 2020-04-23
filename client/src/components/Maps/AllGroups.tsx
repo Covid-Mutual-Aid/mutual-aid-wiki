@@ -1,4 +1,4 @@
-import { GoogleMap, LoadScript, Marker, MarkerClusterer } from '@react-google-maps/api'
+import { GoogleMap, Marker, MarkerClusterer } from '@react-google-maps/api'
 import styled from 'styled-components'
 import React, { useEffect } from 'react'
 
@@ -8,6 +8,7 @@ import { defaultState, useMap } from '../../contexts/MapProvider'
 import { usePlaceMethod } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
 import { gtag } from '../../utils/gtag'
+import withGoogleScript from '../../utils/withGoogleScript'
 
 const gaTags = {
   mapMoved: () =>
@@ -49,34 +50,32 @@ const GroupMap = () => {
   return (
     <MapStyles>
       <InfoBox />
-      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg">
-        <GoogleMap
-          onLoad={(x) => void ((map as any).current = x)}
-          options={{ streetViewControl: false }}
-          mapContainerStyle={{ height: '100%', width: 'auto' }}
-          zoom={defaultState.zoom}
-          center={defaultState.center}
-          onDragEnd={gaTags.mapMoved}
-        >
-          <MarkerClusterer options={clustererOptions} styles={clustererStyles}>
-            {(clusterer) =>
-              groups.map((group) => (
-                <Marker
-                  opacity={0.7}
-                  position={group.location_coord}
-                  clusterer={clusterer}
-                  key={group.id}
-                  icon={process.env.PUBLIC_URL + '/marker.png'}
-                  onClick={() => {
-                    onSelect(group.id)
-                    gaTags.groupClicked()
-                  }}
-                />
-              ))
-            }
-          </MarkerClusterer>
-        </GoogleMap>
-      </LoadScript>
+      <GoogleMap
+        onLoad={(x) => void ((map as any).current = x)}
+        options={{ streetViewControl: false }}
+        mapContainerStyle={{ height: '100%', width: 'auto' }}
+        zoom={defaultState.zoom}
+        center={defaultState.center}
+        onDragEnd={gaTags.mapMoved}
+      >
+        <MarkerClusterer options={clustererOptions} styles={clustererStyles}>
+          {(clusterer) =>
+            groups.map((group) => (
+              <Marker
+                opacity={0.7}
+                position={group.location_coord}
+                clusterer={clusterer}
+                key={group.id}
+                icon={process.env.PUBLIC_URL + '/marker.png'}
+                onClick={() => {
+                  onSelect(group.id)
+                  gaTags.groupClicked()
+                }}
+              />
+            ))
+          }
+        </MarkerClusterer>
+      </GoogleMap>
     </MapStyles>
   )
 }
@@ -87,4 +86,4 @@ const MapStyles = styled.div`
   height: 100%;
 `
 
-export default React.memo(GroupMap)
+export default React.memo(withGoogleScript(GroupMap))

@@ -3,6 +3,7 @@ import { Coord, Group } from '../utils/types'
 import { animate } from '../utils/animate'
 import { usePlaceState } from './StateContext'
 import { useData } from './DataProvider'
+import { useLoadScript } from '../components/Maps/hooks'
 
 export type MapState = {
   center: Coord
@@ -13,16 +14,20 @@ export type MapState = {
 const MapContext = createContext<{
   map: React.RefObject<google.maps.Map>
   setMapState: React.Dispatch<React.SetStateAction<MapState>>
-}>({ map: { current: null }, setMapState: () => null })
+  loaded: boolean
+}>({ map: { current: null }, setMapState: () => null, loaded: false })
 
 export const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 3 }
 const MapStateContext = createContext<[MapState, MapState]>([defaultState, defaultState])
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
+  const loaded = useLoadScript()
   const [mapState, setMapState] = useState<MapState>(defaultState)
   const map = useRef<google.maps.Map>(null)
   return (
-    <MapContext.Provider value={useMemo(() => ({ map, setMapState }), [map, setMapState])}>
+    <MapContext.Provider
+      value={useMemo(() => ({ loaded, map, setMapState }), [loaded, map, setMapState])}
+    >
       <MapStateContext.Provider value={[mapState, defaultState]}>
         <MapControls />
         {children}

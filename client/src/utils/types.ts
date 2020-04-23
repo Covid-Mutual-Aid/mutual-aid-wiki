@@ -10,6 +10,7 @@ export type Group = {
   link_facebook: string
   location_name: string
   location_coord: Coord
+  location_poly?: Coord[]
 }
 
 export type Emails = string[]

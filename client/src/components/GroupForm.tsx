@@ -4,9 +4,9 @@ import GroupFormElements from '../components/GroupFormElements'
 import ValuesListener from './FormControl/ValuesListener'
 import { EditPage, CenterAlign } from '../styles/styles'
 import Form from '../components/FormControl'
-import SingleGroup from './Maps/SingleGroup'
 import { Group } from '../utils/types'
 import { head } from '../utils/fp'
+import PolygonMap from './Maps/PolygonMap'
 
 const GroupForm = <T extends Partial<Group>>({
   group: initialGroup,
@@ -48,7 +48,7 @@ const GroupForm = <T extends Partial<Group>>({
           </CenterAlign>
         </div>
         <div className="preview">
-          <SingleGroup />
+          <PolygonMap />
         </div>
       </EditPage>
     </Form>
