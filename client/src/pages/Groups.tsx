@@ -36,9 +36,9 @@ const NewLayout = () => {
             {inIframe() ? (
               <div style={{ height: '1rem' }}></div>
             ) : (
-              <h3>
+              <h1>
                 Find local COVID-19 <br className="break" /> mutual aid groups
-              </h3>
+              </h1>
             )}
           </div>
         </div>
@@ -123,11 +123,11 @@ const LayoutStyles = styled.div<{ sidebar: boolean }>`
     flex-flow: column;
     transition: all 0.3s;
 
-    h3 {
+    h1 {
       margin: 0 0.6rem;
       font-size: 2.2rem;
       font-weight: 800;
-      /* width: 16rem; */
+      padding-top: 0.8rem;
     }
   }
 

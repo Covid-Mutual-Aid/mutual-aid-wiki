@@ -15,7 +15,15 @@ const AboutPage = () => {
         <br />
         <br />
         <br />
-        <h2>A global map of COVID-19 Mutual Aid groups</h2>
+        <h1>A global map of COVID-19 Mutual Aid groups</h1>
+        <div className="pinned">
+          <h4>We are looking for people who can help us with outreach!</h4>
+          <p>
+            We would love our work to benefit more mutual aid communities and are looking for people
+            who can help us connect. If this is your thing, we would love to hear from you at{' '}
+            <a href="mailto:info@mutualaid.wiki">info@mutualaid.wiki</a>
+          </p>
+        </div>
         <p>
           Have a list of groups or want to translate this app? Send us an{' '}
           <a href="mailto:info@mutualaid.wiki">email</a>, we would love to hear from you.
@@ -50,26 +58,27 @@ const AboutPage = () => {
           </p>
           <li>Why can't I add more information to my group?</li>
           <p>
-            We are working on this and more. If there is a feature you would really like, please
-            email us or create an issue on{' '}
+            We are working on this and more. If there is a feature you would really like,{' '}
+            <a href="mailto:info@mutualaid.wiki">please email us</a> or create an issue on{' '}
             <a href="https://github.com/Covid-Mutual-Aid/groups-map/issues">github</a>
           </p>
           <li>Something is broken...</li>
           <p>
-            Oops, sorry about this. The project is quite young and this does happen from time to
-            time. Would you kindly send us an <a href="mailto:info@mutualaid.wiki">email</a> to let
-            us know or{' '}
+            Oops, sorry about this. Despite our best efforts, this does happen from time to time.
+            Would you kindly send us an <a href="mailto:info@mutualaid.wiki">email</a> to let us
+            know or{' '}
             <a href="https://github.com/Covid-Mutual-Aid/groups-map/issues">create an issue</a>?
           </p>
           <li>Who is behind this?</li>
           <p>
-            We are an open source, volunteer run group of. We also part of the technical team at{' '}
+            We are a small team of volunteers from mutual aid communities around the world who
+            believe in open source collaboration. We are also part of the technical team at{' '}
             <a href="https://covidmutualaid.org">covidmutualaid.org</a>
           </p>
         </ul>
         <br />
 
-        <p>Here is some information you may find useful:</p>
+        <p>Some further information:</p>
         <ul>
           <li>
             Our email <a href="mailto:info@mutualaid.wiki">info@mutualaid.wiki</a>
@@ -105,6 +114,17 @@ const Content = styled.div`
   max-width: 32rem;
   padding: 1.4rem;
   height: auto;
+
+  .pinned {
+    border: solid 1px rgba(0, 255, 0, 0.8);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 2rem 0;
+  }
+
+  h1 {
+    font-size: 1.68rem;
+  }
 
   .back {
     position: absolute;
