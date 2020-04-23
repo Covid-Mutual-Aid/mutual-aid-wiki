@@ -7,76 +7,76 @@
       }
     },
     "group_form": {
-      "after_submit_message": "Thanks for submitting your group",
-      "complete_cta": "Please complete",
-      "cancel_button": "cancel",
-      "submit_button": "submit"
+      "after_submit_message": "¡Gracias por añadir tu grupo!",
+      "complete_cta": "Por favor completa",
+      "cancel_button": "borrar",
+      "submit_button": "enviar"
     },
     "email_auth": {
-      "after_submit_message": "Thank you for your request. Please check you email for further instructions",
-      "enter_email_prompt": "Please enter your email",
-      "cancel_button": "Cancel",
-      "submit_button": "submit"
+      "after_submit_message": "Gracias por tu petición, por favor revisar tu email para más instrucciones",
+      "enter_email_prompt": "Por favor introduce tu dirección de email",
+      "cancel_button": "borrar",
+      "submit_button": "enviar"
     },
     "report": {
-      "after_submit_message": "Thanks for your report",
-      "report_reason_prompt": "Why are you reporting this group?",
-      "report_reason_placeholder": "E.g, it no longer exists...",
-      "cancel_button": "Cancel",
-      "submit_button": "submit"
+      "after_submit_message": "¡Gracias por ponerte en contacto con nosotros!",
+      "report_reason_prompt": "¿Por qué quieres registrar este grupo?",
+      "report_reason_placeholder": "p. ej. ya no existe",
+      "cancel_button": "borrar",
+      "submit_button": "enviar"
     }
   },
   "components": {
     "nav": {
-      "information_link": "What's going on?",
-      "view_full_site_link": "View full site!"
+      "information_link": "¿Que está pasando?",
+      "view_full_site_link": "¡Ver el sitio completo!"
     },
     "search_box": {
-      "search_prompt": "Enter place",
-      "add_prompt": "Or add a group",
-      "place_name_label": "Showing groups for"
+      "search_prompt": "Buscar un lugar",
+      "add_prompt": "O añadir un grupo",
+      "place_name_label": "Mostrando grupos en"
     },
     "groups_list": {
-      "load_more_prompt": "load more"
+      "load_more_prompt": "mostrar mas"
     },
     "group_item": {
-      "group_name_prompt": "Your group name...",
-      "group_location_prompt": "Your group location..."
+      "group_name_prompt": "Nombre de tu grupo...",
+      "group_location_prompt": "Ubicación de tu grupo..."
     },
     "emails_input": {
       "errors": {
-        "none_provided": "Must provide at least one email",
-        "wrong_format": "Must be a valid email address"
+        "none_provided": "Debes agregar al menos una dirección de correo electrónico",
+        "wrong_format": "Debes agregar una dirección de correo electrónico válida"
       },
-      "placeholder": "Enter any emails..."
+      "placeholder": "Agrega cualquiera dirección de correo electrónico"
     },
     "group_form_elements": {
       "name" : {
-        "placeholder": "Group name",
+        "placeholder": "Nombre de grupo",
         "errors": {
-          "none_provided": "Must provide a group name"
+          "none_provided": "Debes agregar un nombre de grupo"
         }
       },
       "url" : {
         "placeholder": "https://www.f...",
         "errors": {
-          "none_provided": "Must provide a valid Group URL"
+          "none_provided": "Debes agregar una dirección de web válida"
         }
       },
       "emails": {
-        "description": "Enter any emails for people you want to give access to edit this group",
-        "note": "These will not be public"
+        "description": "Agregar todas las direcciones de correo electrónico para las que se quiera dar acceso para editar este grupo",
+        "note": "No van a ser públicas"
       },
       "buttons": {
-        "cancel": "cancel",
-        "submit": "submit"
+        "cancel": "borrar",
+        "submit": "enviar"
       }
     },
     "location": {
-      "placeholder": "e.g. \"SE14 4NW\"",
-      "create_prompt_prefix": "Location:",
+      "placeholder": "p.ej. \"Barcelona 08001\"",
+      "create_prompt_prefix": "Ubicación:",
       "errors": {
-        "none_provided": "You must set a location for your group"
+        "none_provided": "Debes agregar un ubicación para tu grupo"
       }
     }
   }
