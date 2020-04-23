@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import inIframe from '../utils/inIframe'
 import {useI18n} from '../contexts/I18nProvider'
+import LocaleSwitcher from './LocaleSwitcher'
 
 const Nav = ({ children }: { children?: ReactChild }) => {
   const t = useI18n(locale => locale.translation.components.nav)
@@ -19,6 +20,7 @@ const Nav = ({ children }: { children?: ReactChild }) => {
         )}
       </div>
       <div className="buttons-right">{children}</div>
+      <LocaleSwitcher />
     </NavWrapper>
   )
 }
