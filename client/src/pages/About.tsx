@@ -25,8 +25,8 @@ const AboutPage = () => {
           </p>
         </div>
         <p>
-          Have a list of groups or want to translate this app? Send us an{' '}
-          <a href="mailto:info@mutualaid.wiki">email</a>, we would love to hear from you.
+          Have a list of groups or want to translate this app? Please also send us an{' '}
+          <a href="mailto:info@mutualaid.wiki">email</a>, we would love to hear from you too.
         </p>
         <br />
 
