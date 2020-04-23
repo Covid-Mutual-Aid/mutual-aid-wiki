@@ -30,9 +30,15 @@ export const getGroups = lambda((req$) =>
       auth: authorise('edit', true),
     }),
     switchMap(({ params, auth }) => {
-      const attributes: (keyof Group)[] = auth
-        ? ['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'emails']
-        : ['id', 'name', 'link_facebook', 'location_name', 'location_coord']
+      const base: (keyof Group)[] = [
+        'id',
+        'name',
+        'link_facebook',
+        'location_name',
+        'location_coord',
+        'location_poly',
+      ]
+      const attributes: (keyof Group)[] = auth ? [...base, 'emails'] : base
 
       if (params && params.id) return db.groups.getById(params.id, attributes)
       return db.groups
