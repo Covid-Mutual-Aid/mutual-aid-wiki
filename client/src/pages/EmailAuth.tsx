@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { InputGroup } from '../styles/styles'
 import { useRequest } from '../contexts/RequestProvider'
+import { useI18n } from '../contexts/I18nProvider'
 import styled from 'styled-components'
 import { Link, useParams, useHistory } from 'react-router-dom'
 
@@ -11,12 +12,13 @@ const EmailAuth = () => {
   const [error, setError] = useState<string | null>(null)
   const [sucessModal, setSucessModal] = useState(false)
   const request = useRequest()
+  const t = useI18n(locale => locale.translation.pages.email_auth)
 
   return (
     <Wrapper>
       {sucessModal ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: '#28a745' }}>
-          <h3>Thank you for your request. Please check you email for further instructions</h3>
+          <h3>{ t.after_submit_message }</h3>
         </div>
       ) : (
         <form
@@ -37,14 +39,14 @@ const EmailAuth = () => {
               .then(() => history.replace('/'))
           }}
         >
-          <h4>Please enter your email</h4>
+          <h4>{ t.enter_email_prompt }</h4>
           <InputGroup>
             <input value={email} onChange={(e) => setEmail(e.target.value)} />
-            <button type="submit">submit</button>
+            <button type="submit">{ t.submit_button }</button>
           </InputGroup>
           <div className="cancel">
             <Link to="/">
-              <button className="btn-secondary">Cancel</button>
+              <button className="btn-secondary">{ t.cancel_button }</button>
             </Link>
           </div>
           <p style={{ color: 'red' }}>{error}</p>

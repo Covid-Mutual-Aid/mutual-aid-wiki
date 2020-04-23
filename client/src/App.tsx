@@ -1,6 +1,9 @@
 import { Switch, Route } from 'react-router-dom'
 import React from 'react'
 
+
+import LocaleSwitcher from './components/LocaleSwitcher'
+
 import Groups from './pages/Groups'
 import About from './pages/About'
 

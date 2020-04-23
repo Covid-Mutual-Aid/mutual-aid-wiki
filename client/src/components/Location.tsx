@@ -1,6 +1,7 @@
 import React from 'react'
 import AsyncCreatableSelect from 'react-select/async-creatable'
 import { useRequest } from '../contexts/RequestProvider'
+import { useI18n } from '../contexts/I18nProvider'
 import { useControl } from './FormControl'
 
 let last = ''
@@ -12,13 +13,14 @@ const debounce = (value: string) => {
 }
 
 const Location = () => {
+  const t = useI18n(locale => locale.translation.components.location)
   const request = useRequest()
   const {
     props: { value, onChange: onValue },
   } = useControl(
     'location_name',
     '',
-    (x) => x.length > 0 || 'You must set a location for your group'
+    (x) => x.length > 0 || t.errors.none_provided
   )
   const {
     props: { onChange: onCoords },
@@ -37,7 +39,7 @@ const Location = () => {
           onValue(x.label)
         })
       }
-      placeholder={value || 'e.g "SE14 4NW"'}
+      placeholder={value || t.placeholder }
       loadOptions={(value) =>
         debounce(value)
           .then((val) =>
@@ -51,7 +53,7 @@ const Location = () => {
           })
       }
       backspaceRemoves={true}
-      promptTextCreator={(name: string) => `Location: ${name}`}
+      promptTextCreator={(name: string) => `${t.create_prompt_prefix} ${name}`}
     />
   )
 }

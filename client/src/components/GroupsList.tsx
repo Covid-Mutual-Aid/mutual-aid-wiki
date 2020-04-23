@@ -4,12 +4,14 @@ import styled from 'styled-components'
 
 import { usePlaceState, usePlaceMethod } from '../contexts/StateContext'
 import { useData } from '../contexts/DataProvider'
+import { useI18n } from '../contexts/I18nProvider'
 
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
 import GroupItem from './GroupItem'
 
 const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
+  const  t = useI18n(locale => locale.translation.components.groups_list)
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
   const { groups } = useData()
   const { onSelect } = usePlaceMethod()
@@ -54,7 +56,7 @@ const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
             onClick={toggleMore}
             type="button"
           >
-            load more
+            {t.load_more_prompt}
           </button>
         )}
       </div>

@@ -6,30 +6,32 @@ import { InputGroup } from '../styles/styles'
 import { useControl } from './FormControl'
 import EmailsInput from './EmailsInput'
 import Location from './Location'
+import { useI18n } from '../contexts/I18nProvider'
 
 const EditGroupForm = ({ disabled }: { disabled?: boolean }) => {
+    const t = useI18n(locale => locale.translation.components.group_form_elements)
   return (
     <div style={{ width: '100%', maxWidth: '30rem' }}>
       <Input
         disabled={disabled}
         name="name"
         init=""
-        valid={(x) => x.length > 0 || 'Must provide a group name'}
-        placeholder="Group name"
+        valid={(x) => x.length > 0 || t.name.errors.none_provided}
+        placeholder={t.name.placeholder}
       />
 
       <Input
         disabled={disabled}
         name="link_facebook"
         init=""
-        valid={(x) => validURL(x) || 'Must provide valid Group URL'}
-        placeholder="https://www.f..."
+        valid={(x) => validURL(x) || t.url.errors.none_provided}
+        placeholder={t.url.placeholder}
       />
 
       <div>
         <Description>
-          Enter any emails for people you want to give access to edit this group{' '}
-          <small style={{ color: 'grey' }}>(These will not be public)</small>
+          {t.emails.description}{' '}
+          <small style={{ color: 'grey' }}>({t.emails.note})</small>
         </Description>
         <EmailsInput />
       </div>
@@ -41,11 +43,11 @@ const EditGroupForm = ({ disabled }: { disabled?: boolean }) => {
       <FormButtons>
         <Link to="/">
           <button className="btn-secondary" type="button" disabled={disabled}>
-            cancel
+              {t.buttons.cancel}
           </button>
         </Link>
         <button type="submit" disabled={disabled}>
-          submit
+            {t.buttons.submit}
         </button>
       </FormButtons>
     </div>

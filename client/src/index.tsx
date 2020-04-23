@@ -18,6 +18,8 @@ import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
 import App from './App'
 
+import I18nProvider from './contexts/I18nProvider'
+
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
 if (!inIframe()) {
@@ -29,7 +31,7 @@ if (!inIframe()) {
 
 let current = { endpoint: '/api' }
 if ((window as any).location.host.includes('localhost')) {
-  current.endpoint = '/dev'
+  current.endpoint = 'http://mutualaid.wiki/api'
 }
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
@@ -43,9 +45,11 @@ const Render = () => (
     <RequestProvider request={request}>
       <DataProvider>
         <StateProvider>
-          <MapProvider>
-            <App />
-          </MapProvider>
+          <I18nProvider>
+            <MapProvider>
+              <App />
+            </MapProvider>
+          </I18nProvider>
         </StateProvider>
       </DataProvider>
     </RequestProvider>

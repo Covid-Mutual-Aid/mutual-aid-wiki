@@ -4,6 +4,7 @@ import { Link, useParams, useHistory } from 'react-router-dom'
 
 import { ValidatedInput } from '../components/ValidatedInput'
 import { useRequest } from '../contexts/RequestProvider'
+import { useI18n } from '../contexts/I18nProvider'
 
 const Report = () => {
   const [successModal, setSuccessModal] = useState(false)
@@ -13,12 +14,12 @@ const Report = () => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
   const request = useRequest()
-
+  const t = useI18n(locale => locale.translation.pages.report)
   return (
     <CenterAlign>
       {successModal ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: '#28a745' }}>
-          <h3>Thanks for your report</h3>
+          <h3>{ t.after_submit_message }</h3>
         </div>
       ) : (
         <form
@@ -36,10 +37,10 @@ const Report = () => {
               .then(() => history.replace('/'))
           }}
         >
-          <p>Why are you reporting this group?</p>
+          <p>{ t.report_reason_prompt }</p>
           <InputGroup>
             <ValidatedInput
-              placeholder="E.g, it no longer exists..."
+              placeholder={t.report_reason_placeholder}
               value={message}
               onChange={({ value, validated }) => {
                 setMessage(value)
@@ -51,10 +52,10 @@ const Report = () => {
           <FormButtons>
             <Link to="/">
               <button className="btn-secondary" type="button">
-                cancel
+                { t.cancel_button }
               </button>
             </Link>
-            <button type="submit">submit</button>
+            <button type="submit">{ t.submit_button }</button>
           </FormButtons>
         </form>
       )}

@@ -11,8 +11,11 @@ import icons from '../utils/icons'
 import Nav from '../components/Nav'
 import inIframe from '../utils/inIframe'
 
+import { useI18n } from '../contexts/I18nProvider'
+
 const NewLayout = () => {
   const [open, setOpen] = useState(true)
+  const t = useI18n(locale => locale.translation.pages.groups)
   return (
     <LayoutStyles className="new-layout" sidebar={open}>
       <div className="side-bar">
@@ -37,7 +40,7 @@ const NewLayout = () => {
               <div style={{ height: '1rem' }}></div>
             ) : (
               <h3>
-                Find local COVID-19 <br className="break" /> mutual aid groups
+                { t.cta.line1 } <br className="break" /> { t.cta.line2 }
               </h3>
             )}
           </div>
