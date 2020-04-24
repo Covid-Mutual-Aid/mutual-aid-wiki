@@ -31,7 +31,7 @@ if (!inIframe()) {
 
 let current = { endpoint: '/api' }
 if ((window as any).location.host.includes('localhost')) {
-  current.endpoint = 'http://mutualaid.wiki/api'
+  current.endpoint = 'http://staging.mutualaid.wiki/api'
 }
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>

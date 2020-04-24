@@ -3,8 +3,6 @@ import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
 import lambda, { params, body, select, responseJson$, passThrough } from '../_utility_/lib/lambdaRx'
-import { isOffline } from '../_utility_/environment'
-import { addSheetRow } from '../google/sheets'
 import { authorise } from '../_utility_/observables'
 import { isSameGroup } from '../_utility_/utils'
 import { proofs } from '../_utility_/proofs'
@@ -38,6 +36,7 @@ export const getGroups = lambda((req$) =>
         'location_coord',
         'location_poly',
       ]
+      console.log(auth)
       const attributes: (keyof Group)[] = auth ? [...base, 'emails'] : base
 
       if (params && params.id) return db.groups.getById(params.id, attributes)
@@ -75,26 +74,14 @@ export const updateGroup = lambda((req$) =>
 
 // /group/create
 export const createGroup = lambda((req$) =>
-  req$.pipe(
-    body(proofs.groupCreation),
-    switchMap((group) =>
-      createNoDuplicates(group).then((res) =>
-        isOffline()
-          ? res
-          : addSheetRow(group)
-              .catch((err) => console.log('ERROR adding group to sheet'))
-              .then(() => res)
-      )
-    ),
-    responseJson$
-  )
+  req$.pipe(body(proofs.groupCreation), switchMap(createNoDuplicates), responseJson$)
 )
 
 // /group/delete
 export const deleteGroup = lambda((req$) =>
   req$.pipe(
     authorise('delete'),
-    switchMap((val) => db.groups.delete(val.id)),
+    switchMap((val) => (val ? db.groups.delete(val.id) : throwError('No id provided'))),
     responseJson$
   )
 )
