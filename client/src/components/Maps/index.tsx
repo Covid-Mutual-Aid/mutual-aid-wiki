@@ -6,6 +6,7 @@ import { useGroupClusters } from './useGroupClusters'
 import withGoogleScript from './withGoogleScript'
 import useZoom from './hooks/useZoom'
 import { useMap } from './hooks'
+import InfoBox from '../InfoBox'
 
 const Map = () => {
   const { selected } = usePlaceState()
@@ -26,6 +27,7 @@ const Map = () => {
 
   return (
     <MapStyles>
+      <InfoBox />
       <div id="map" ref={elem} style={{ width: '100%', flex: '1 1 100%' }} />
     </MapStyles>
   )

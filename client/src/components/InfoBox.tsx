@@ -2,19 +2,15 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { usePlaceState } from '../contexts/StateContext'
-import { useData } from '../contexts/DataProvider'
 import GroupItem from './GroupItem'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
 
 const InfoBox = () => {
-  const { groups } = useData()
   const { selected } = usePlaceState()
-
-  const selectedGroup = groups.find((x) => x.id === selected?.id)
   return (
-    <Wrapper isOpen={!!selectedGroup}>
+    <Wrapper isOpen={!!selected}>
       {/* {place && (
         <div className={place ? 'open' : ''}>
           show results nearest: <span style={{ fontWeight: 'bold' }}>{place.name}</span>
@@ -23,9 +19,9 @@ const InfoBox = () => {
           </button>
         </div>
       )} */}
-      {selectedGroup && (
+      {selected && (
         <>
-          <GroupItem selected={false} group={selectedGroup} onSelect={() => null} />
+          <GroupItem selected={false} group={selected} onSelect={() => null} />
         </>
       )}
     </Wrapper>
