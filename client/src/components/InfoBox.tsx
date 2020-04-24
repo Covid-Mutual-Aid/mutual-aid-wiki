@@ -12,7 +12,7 @@ const InfoBox = () => {
   const { groups } = useData()
   const { selected } = usePlaceState()
 
-  const selectedGroup = groups.find((x) => x.id === selected)
+  const selectedGroup = groups.find((x) => x.id === selected?.id)
   return (
     <Wrapper isOpen={!!selectedGroup}>
       {/* {place && (

@@ -13,13 +13,25 @@ export const createSquare = (coord: Coord, radius: number) => {
 export const useLoadScript = () => {
   const [loaded, setLoaded] = useState(false)
   useEffect(() => {
-    const onLoad = () => setLoaded(true)
+    let acc = 0
+    const onLoad = () => {
+      if (acc === 0) return void (acc = 1)
+      return setLoaded(true)
+    }
     if (!window.google) {
       const script = document.createElement(`script`)
+      const clusterScript = document.createElement(`script`)
+      clusterScript.src = `https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js`
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg`
+
       document.head.append(script)
+      document.head.append(clusterScript)
       script.addEventListener(`load`, onLoad)
-      return () => script.removeEventListener(`load`, onLoad)
+      clusterScript.addEventListener(`load`, onLoad)
+      return () => {
+        script.removeEventListener(`load`, onLoad)
+        clusterScript.removeEventListener(`load`, onLoad)
+      }
     }
     return onLoad()
   }, [])
@@ -61,7 +73,7 @@ export const usePoly = (map: MapRef, { path, onChange, disable }: PolyOptions) =
           let pths = [] as Coord[][]
           poly.current?.getPaths().forEach((x) => {
             let pth = [] as Coord[]
-            console.log(x.forEach((y) => void (pth = [...pth, getCoord(y)])))
+            // console.log(x.forEach((y) => void (pth = [...pth, getCoord(y)])))
             pths = [...pths, pth]
           })
           onChange(pths[0])

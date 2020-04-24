@@ -5,6 +5,7 @@
   "proxy": "http://localhost:4000",
   "dependencies": {
     "@babel/helper-call-delegate": "^7.8.7",
+    "@google/markerclustererplus": "^5.0.3",
     "@react-google-maps/api": "^1.8.6",
     "@sentry/browser": "^5.15.0",
     "copy-to-clipboard": "^3.3.1",
@@ -12,7 +13,6 @@
     "promise-polyfill": "^8.1.3",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-multi-email": "^0.5.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-select": "^3.0.8",

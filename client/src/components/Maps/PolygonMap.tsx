@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import withGoogleScript from '../../utils/withGoogleScript'
+import withGoogleScript from './withGoogleScript'
 import { useControl } from '../FormControl'
 import { useMap, useMarker, usePoly, createSquare } from './hooks'
 

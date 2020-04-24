@@ -40,13 +40,13 @@ export default MapProvider
 
 export const useMap = () => useContext(MapContext)
 export const useMapState = () => useContext(MapStateContext)
+export const useScriptLoaded = () => useContext(MapContext)
 
 export const useMapControls = () => {
   const { map } = useContext(MapContext)
 
   const panTo = (coord: { lat: number; lng: number }) => {
     if (!map.current || !window.google || !window.google.maps.LatLng) return
-    console.log({ coord })
     map.current.panTo(new window.google.maps.LatLng(coord))
   }
 
@@ -71,8 +71,7 @@ const useControlMap = () => {
   } = usePlaceState()
 
   useEffect(() => {
-    const group = selected && groups.find((x) => x.id === selected)
-    console.log({ group, place, location })
+    const group = selected && groups.find((x) => x.id === selected.id)
     if (group) {
       panTo(group.location_coord)
       if (map.current && map.current.getZoom() < 15) zoomTo(15)

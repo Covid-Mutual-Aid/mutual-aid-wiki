@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useCallback, useMemo, useState } from 'react'
 import useLocationSearch, { Place } from '../utils/useLocationSearchNew'
 import { useLocation, useHistory } from 'react-router-dom'
+import { Group } from '../utils/types'
 
 const StateMethodContext = createContext<{
   onSearch: (x?: string) => void
-  onSelect: (x?: string) => void
+  onSelect: (x?: Group) => void
 }>({
   onSearch: () => null,
   onSelect: () => null,
@@ -12,14 +13,13 @@ const StateMethodContext = createContext<{
 
 const StateContext = createContext<{
   search: { place: null | Place; error: null | string }
-  selected: string | null
+  selected?: Group
 }>({
   search: { place: null, error: null },
-  selected: null,
 })
 
 const StateProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selected, setSelected] = useState<null | string>(null)
+  const [selected, setSelected] = useState<Group>()
   const { search } = useLocation()
   const history = useHistory()
   const { error, place } = useLocationSearch(search.replace('?', ''))
@@ -33,7 +33,7 @@ const StateProvider = ({ children }: { children: React.ReactNode }) => {
     [history]
   )
 
-  const onSelect = useCallback((x?: string) => setSelected(x || null), [])
+  const onSelect = useCallback((x?: Group) => setSelected(x), [])
 
   return (
     <StateMethodContext.Provider

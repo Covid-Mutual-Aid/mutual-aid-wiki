@@ -8,7 +8,7 @@ import { defaultState, useMap } from '../../contexts/MapProvider'
 import { usePlaceMethod } from '../../contexts/StateContext'
 import { useData } from '../../contexts/DataProvider'
 import { gtag } from '../../utils/gtag'
-import withGoogleScript from '../../utils/withGoogleScript'
+import withGoogleScript from './withGoogleScript'
 
 const gaTags = {
   mapMoved: () =>
@@ -68,7 +68,7 @@ const GroupMap = () => {
                 key={group.id}
                 icon={process.env.PUBLIC_URL + '/marker.png'}
                 onClick={() => {
-                  onSelect(group.id)
+                  onSelect(group)
                   gaTags.groupClicked()
                 }}
               />

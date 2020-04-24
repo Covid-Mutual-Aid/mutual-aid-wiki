@@ -51,13 +51,13 @@
       "placeholder": "Enter any emails..."
     },
     "group_form_elements": {
-      "name" : {
+      "name": {
         "placeholder": "Group name",
         "errors": {
           "none_provided": "Must provide a group name"
         }
       },
-      "url" : {
+      "url": {
         "placeholder": "https://www.f...",
         "errors": {
           "none_provided": "Must provide a valid Group URL"

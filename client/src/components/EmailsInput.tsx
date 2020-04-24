@@ -4,18 +4,13 @@ import React, { useState } from 'react'
 import { useI18n } from '../contexts/I18nProvider'
 
 const EmailsInput = () => {
-  const t = useI18n(locale => locale.translation.components.emails_input)
-  const { props } = useControl(
-    'emails',
-    [],
-    (x) => x.length > 0 || t.errors.none_provided
-  )
+  const t = useI18n((locale) => locale.translation.components.emails_input)
+  const { props } = useControl('emails', [], (x) => x.length > 0 || t.errors.none_provided)
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (!value) return
     setError('')
-    console.log(event, event.key)
     switch (event.key) {
       case 'Enter':
       case ' ':
