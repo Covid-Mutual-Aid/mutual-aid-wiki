@@ -20,7 +20,7 @@
     },
     "report": {
       "after_submit_message": "¡Gracias por ponerte en contacto con nosotros!",
-      "report_reason_prompt": "¿Por qué quieres registrar este grupo?",
+      "report_reason_prompt": "¿Por qué quieres denunciar este grupo?",
       "report_reason_placeholder": "p. ej. ya no existe",
       "cancel_button": "borrar",
       "submit_button": "enviar"
@@ -41,7 +41,9 @@
     },
     "group_item": {
       "group_name_prompt": "Nombre de tu grupo...",
-      "group_location_prompt": "Ubicación de tu grupo..."
+      "group_location_prompt": "Ubicación de tu grupo...",
+      "edit_link": "Edita grupo",
+      "report_link": "Denuncia grupo"
     },
     "emails_input": {
       "errors": {

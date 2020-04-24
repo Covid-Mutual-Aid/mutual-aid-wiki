@@ -6,6 +6,7 @@ import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'
 
 import esTranslation from '../locales/es.json'
+import AboutES from '../components/internationalized/AboutES'
 
 type Translation = typeof enTranslation
 
@@ -26,8 +27,8 @@ class Locale {
 const en : Locale = new Locale("en", "English", enTranslation,
                                { about: <AboutEN /> })
 
-const es : Locale = new Locale("es", "Español", esTranslation,
-                               { about: <AboutEN /> })
+const es : Locale = new Locale("es", "Español (Castellano)", esTranslation,
+                               { about: <AboutES /> })
 
 const defaultLocaleCode = "en"
 
