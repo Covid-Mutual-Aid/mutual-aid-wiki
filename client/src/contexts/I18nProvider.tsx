@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useData } from "./DataProvider"
+import useLocallyStoredState from "../utils/useLocallyStoredState"
 
 import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'
@@ -28,6 +29,7 @@ const en : Locale = new Locale("en", "English", enTranslation,
 const es : Locale = new Locale("es", "Español", esTranslation,
                                { about: <AboutEN /> })
 
+const defaultLocaleCode = "en"
 
 const locales : { [index: string] : Locale } = {
   "en": en,
@@ -41,12 +43,14 @@ const I18nMethodsContext = createContext<(x : string) => void>((_x) => null)
 
 const I18nProvider = ({ children }: { children: React.ReactNode }) => {
   const { location } = useData();
-  const [localeString, setLocale] = useState<string>("en")
+  const [localeString, setLocale] = useLocallyStoredState<string | undefined>("locale", undefined)
   useEffect(() => {
-    const localeCode = location && location.countryCode && location.countryCode.toLowerCase() || "en"
-    return setLocale(localeCode)
+    const localeCode = location && location.countryCode && location.countryCode.toLowerCase()
+    if(localeString === undefined) {
+      return setLocale(localeCode)
+    }
   }, [location])
-  const locale = locales[localeString]
+  const locale = locales[localeString || defaultLocaleCode]
   const localeCallback = (x : string) => {
     setLocale(x)
   }
