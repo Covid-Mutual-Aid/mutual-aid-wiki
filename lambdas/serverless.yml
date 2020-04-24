@@ -23,7 +23,7 @@ custom:
       domain:
         sources:
           - table: ${self:custom.tables.GROUPS_TABLE}
-            sources: [./migrations/groups-seed.json]
+            sources: ./migrations/${self:provider.stage}-seed.json
   serverless-offline:
     httpPort: 4000
   webpack:
@@ -41,7 +41,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: ${opt:region, 'eu-west-2'}
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'local'}
   profile: covid
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB

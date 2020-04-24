@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy Staging
+name: Run Integration Suit
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -9,7 +9,6 @@ on:
     paths:
       - .github/**
       - lambdas/**
-      - scripts/**
     branches:
       - staging
 
@@ -34,7 +33,7 @@ jobs:
         working-directory: lambdas
         run: |
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          yarn sls deploy --verbose --stage staging
+          yarn sls deploy --verbose --stage test
         env:
           # AWS
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -55,13 +54,36 @@ jobs:
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      - name: 'Update client endpoint'
-        run: 'node scripts/netlify-snippets.js'
+
+      - name: 'Run intergration tests'
+        run: 'yarn test:e2e'
+        working-directory: lambdas
         env:
-          NETLIFY_ACCESS_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAG_ID }}
-      - name: 'Update client redirects'
-        run: 'node ./scripts/update-redirects.js'
+          STAGE: test
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Tear down lambdas
+        working-directory: lambdas
+        run: |
+          yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          yarn sls remove --verbose --stage test
         env:
-          BRANCH: staging
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # AWS
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:
+            ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            # Google
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          # Airtable
+          AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
+          AIRTABLE_ATTACH_EMAIL_BASE: appkctIgrzQ69ap4e
+          # other
+          API_ENDPOINT: https://staging.mutualaid.wiki/api
+          CLIENT_ENDPOINT: https://staging.mutualaid.wiki
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
