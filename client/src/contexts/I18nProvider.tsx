@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useMemo } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { useData } from "./DataProvider"
 
 import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'
-
 
 import esTranslation from '../locales/es.json'
 
@@ -40,8 +40,13 @@ const I18nContext = createContext<Locale>(en)
 const I18nMethodsContext = createContext<(x : string) => void>((_x) => null)
 
 const I18nProvider = ({ children }: { children: React.ReactNode }) => {
+  const { location } = useData();
   const [localeString, setLocale] = useState<string>("en")
-  const locale = locales[localeString] || en
+  useEffect(() => {
+    const localeCode = location && location.countryCode && location.countryCode.toLowerCase() || "en"
+    return setLocale(localeCode)
+  }, [location])
+  const locale = locales[localeString]
   const localeCallback = (x : string) => {
     setLocale(x)
   }

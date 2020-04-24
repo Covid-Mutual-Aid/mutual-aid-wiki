@@ -6,7 +6,7 @@ import { Group } from '../utils/types'
 
 const DataContext = createContext<{
   groups: Group[]
-  location?: { lat: number; lng: number; zoom: number }
+  location?: { lat: number; lng: number; zoom: number, countryCode? : string }
   geolocateUser: () => void
 }>({
   groups: [],
@@ -35,14 +35,14 @@ export const useData = () => useContext(DataContext)
 export default DataProvider
 
 const useUserLocation = () => {
-  const [location, setLocation] = useState<{ lat: number; lng: number; zoom: number }>()
+  const [location, setLocation] = useState<{ lat: number; lng: number; zoom: number, countryCode?: string  }>()
   const request = useRequest()
 
   useEffect(() => {
     request('/info/locate')
       .then((x) => {
         if (x.message) return console.error(x.message)
-        return setLocation({ lat: x.lat, lng: x.lon, zoom: 4 })
+        return setLocation({ lat: x.lat, lng: x.lon, zoom: 4, countryCode: x.countryCode })
       })
       .catch((err) => console.error(err))
   }, [request])
@@ -55,6 +55,7 @@ const useUserLocation = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
             zoom: position.coords.altitudeAccuracy || 7,
+            countryCode: location && location.countryCode
           }),
         console.error
       )
