@@ -24,7 +24,7 @@ const routes = {
 
 jest.setTimeout(1000 * 60 * 5)
 test('Adding groups', async () => {
-  if (process.env.STAGE !== 'staging') return
+  if (process.env.STAGE !== 'test') return
   const mocGroup = createTestGroup()
 
   // Test adding a group
