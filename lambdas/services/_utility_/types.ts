@@ -16,6 +16,8 @@ export type Group = {
   updated_at?: string
 }
 
+export type ExternalGroup = Pick<Group, 'name' | 'link_facebook' | 'location_name' | 'emails'>
+
 export type Search = {
   id: string
   query: string
