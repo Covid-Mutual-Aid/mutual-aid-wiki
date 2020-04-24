@@ -87,3 +87,12 @@ jobs:
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Remove dynamodb tables
+        run: |
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          export AWS_DEFAULT_REGION=us-west-2
+
+          aws --region eu-west-2 dynamodb delete-table --table-name test-active-tokens
+          aws --region eu-west-2 dynamodb delete-table --table-name test-groups10
+          aws --region eu-west-2 dynamodb delete-table --table-name test-location-search
