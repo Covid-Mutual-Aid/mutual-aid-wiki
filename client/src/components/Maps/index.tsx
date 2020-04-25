@@ -1,13 +1,13 @@
 import React, { useRef, useMemo, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
+import { useSelectedGroup } from '../../state/selectors'
+import { selectGroup } from '../../state/reducers/groups'
 import { useGroupClusters } from './useGroupClusters'
 import withGoogleScript from './withGoogleScript'
-import { useMap } from './hooks'
+import useMap from './hooks/useMap'
 import InfoBox from '../InfoBox'
-import { useSelectedGroup } from '../../state/selectors'
-import { useDispatch } from 'react-redux'
-import { selectGroup } from '../../state/reducers/groups'
 
 const Map = () => {
   const dispatch = useDispatch()

@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import withGoogleScript from './withGoogleScript'
 import { useControl } from '../FormControl'
-import { useMap, useMarker, usePoly, createSquare } from './hooks'
+import useMap from './hooks/useMap'
+import { useMarker } from './hooks/useMarker'
+import usePolygon from './hooks/usePolygon'
+import { createSquare } from './hooks/utils'
 
 const PolygonMap = () => {
   const [type, setType] = useState<'point' | 'shape'>('point')
@@ -15,7 +18,7 @@ const PolygonMap = () => {
   const [map] = useMap(mapRef)
 
   useMarker(map, { disable: type === 'shape', coord, onDrag })
-  usePoly(map, { disable: type === 'point', path, onChange })
+  usePolygon(map, { disable: type === 'point', path, onChange })
 
   useEffect(() => {
     if (!coord || !map.current) return

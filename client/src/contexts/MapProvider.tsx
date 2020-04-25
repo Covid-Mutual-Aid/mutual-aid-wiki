@@ -1,5 +1,6 @@
 import React, { createContext, useRef, useContext } from 'react'
-import { useLoadScript } from '../components/Maps/hooks'
+
+import { useLoadScript } from '../components/Maps/hooks/useLoadScripts'
 import { Coord, Group } from '../utils/types'
 
 export type MapState = {
