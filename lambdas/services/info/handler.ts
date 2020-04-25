@@ -10,10 +10,10 @@ export const locate = lambda((req) =>
       const ip = forward ? forward.split(',')[0] : null
       if (!ip) return Promise.reject('Bad IP')
       return axios
-        .get(`http://ip-api.com/json/${getIp(input._event.headers)}`)
+        .get(`http://ip-api.com/json/${getIp(input._event)}`)
         .then((x) =>
           x.data.status === 'fail'
-            ? Promise.reject(`Failed to locate ip ${getIp(input._event.headers)}`)
+            ? Promise.reject(`Failed to locate ip ${getIp(input._event)}`)
             : x.data
         )
     }),
@@ -21,8 +21,8 @@ export const locate = lambda((req) =>
   )
 )
 
-const getIp = (headers: any) => {
-  const value = headers['X-Forwarded-For'] || headers['x-forwarded-for']
+const getIp = (event: any) => {
+  const value = event.headers['X-Forwarded-For'] || event.headers['x-forwarded-for'] || event.requestContext.identity.sourceIp
   return value.split(',')[0]
 }
 
