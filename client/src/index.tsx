@@ -2,7 +2,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import * as Sentry from '@sentry/browser'
 import ReactDOM from 'react-dom'
 import React from 'react'
-
 import 'promise-polyfill/src/polyfill'
 import 'whatwg-fetch'
 
@@ -11,12 +10,12 @@ import './styles/index.css'
 import RequestProvider from './contexts/RequestProvider'
 import * as serviceWorker from './utils/serviceWorker'
 
-import StateProvider from './contexts/StateContext'
+import StateProviderOld from './contexts/StateContext'
+import StateProvider from './state/StateProvider'
 import DataProvider from './contexts/DataProvider'
 import MapProvider from './contexts/MapProvider'
 import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
-import App from './App'
 
 import I18nProvider from './contexts/I18nProvider'
 
@@ -40,24 +39,32 @@ const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 
     return (x.json && x.json()) || x
   })
 
-const Render = () => (
-  <Router>
-    <RequestProvider request={request}>
-      <DataProvider>
+const render = () => {
+  const App = require('./App').default
+  ReactDOM.render(
+    <Router>
+      <RequestProvider request={request}>
         <StateProvider>
-          <I18nProvider>
-            <MapProvider>
-              <App />
-            </MapProvider>
-          </I18nProvider>
+          <DataProvider>
+            <StateProviderOld>
+              <I18nProvider>
+                <MapProvider>
+                  <App />
+                </MapProvider>
+              </I18nProvider>
+            </StateProviderOld>
+          </DataProvider>
         </StateProvider>
-      </DataProvider>
-    </RequestProvider>
-  </Router>
-)
+      </RequestProvider>
+    </Router>,
+    document.getElementById('root')
+  )
+}
+render()
 
-ReactDOM.render(<Render />, document.getElementById('root'))
-
+if (process.env.NODE_ENV === 'development' && (module as any).hot) {
+  ;(module as any).hot.accept('./App', render)
+}
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA

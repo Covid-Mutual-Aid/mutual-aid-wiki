@@ -3,7 +3,6 @@ import React from 'react'
 
 // import LocaleSwitcher from './components/LocaleSwitcher'
 
-import Groups from './pages/Groups'
 import About from './pages/About'
 
 import CreateGroup from './pages/CreateGroup'
@@ -11,6 +10,7 @@ import EditGroup from './pages/EditGroup'
 import EmailAuth from './pages/EmailAuth'
 import Report from './pages/Report'
 import PolygonMap from './components/Maps/PolygonMap'
+import MapLayout from './pages/MapLayout'
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
       <Route path="/edit/:id/:token" component={EditGroup} />
       <Route path="/edit/:id" component={EmailAuth} />
       <Route path="/report/:id" component={Report} />
-      <Route path="/" component={Groups} />
+      <Route path="/" component={MapLayout} />
     </Switch>
   )
 }

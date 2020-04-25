@@ -1,12 +1,13 @@
 import React, { ReactChild } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+
+import { useI18n } from '../contexts/I18nProvider'
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import inIframe from '../utils/inIframe'
-import {useI18n} from '../contexts/I18nProvider'
 
 const Nav = ({ children }: { children?: ReactChild }) => {
-  const t = useI18n(locale => locale.translation.components.nav)
+  const t = useI18n((locale) => locale.translation.components.nav)
   return (
     <NavWrapper>
       <div className="options">

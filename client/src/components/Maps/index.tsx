@@ -13,15 +13,15 @@ const Map = () => {
   const { onSelect } = usePlaceMethod()
   const elem = useRef<HTMLDivElement>(null)
   const map = useMap(elem)
+  const setZoom = useZoom(map)
   useGroupClusters(
     map,
     useMemo(() => ({ selected, disable: false, onSelect }), [selected, onSelect])
   )
-  const setZoom = useZoom(map)
 
   useEffect(() => {
     if (!map.current || !selected) return
-    if (selected && map.current.getZoom() < 10) setZoom(10)
+    if (selected && map.current.getZoom() < 12) setZoom(12)
     map.current.panTo(selected.location_coord)
   }, [selected, setZoom, map])
 
