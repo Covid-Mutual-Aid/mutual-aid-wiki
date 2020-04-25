@@ -12,7 +12,7 @@ const PolygonMap = () => {
     props: { value: path, onChange },
   } = useControl('location_poly', undefined as { lat: number; lng: number }[] | undefined)
   const mapRef = useRef<HTMLDivElement>(null)
-  const map = useMap(mapRef)
+  const [map] = useMap(mapRef)
 
   useMarker(map, { disable: type === 'shape', coord, onDrag })
   usePoly(map, { disable: type === 'point', path, onChange })

@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
+import { tuple } from './fp'
 
 export type Place = { name: string; coords: { lat: number; lng: number } }
 
@@ -43,7 +44,7 @@ const useLocationSearch = (query?: string) => {
     }
   }, [query, request])
 
-  return useMemo(() => ({ error, place }), [error, place])
+  return tuple(place, error)
 }
 
 export default useLocationSearch

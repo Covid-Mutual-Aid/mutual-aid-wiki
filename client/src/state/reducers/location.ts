@@ -5,6 +5,7 @@ type GroupsState = {
   language: Languages
   location: {
     coord?: { lat: number; lng: number }
+    zoom?: number
   }
 }
 

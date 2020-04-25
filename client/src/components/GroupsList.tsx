@@ -2,45 +2,23 @@ import haversineDistance from 'haversine-distance'
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
-import { usePlaceState, usePlaceMethod } from '../contexts/StateContext'
-import { useData } from '../contexts/DataProvider'
+import { useGroupsList } from '../state/selectors'
 import { useI18n } from '../contexts/I18nProvider'
-
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
+
 import GroupItem from './GroupItem'
 
 const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
-  const t = useI18n((locale) => locale.translation.components.groups_list)
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
-  const { groups } = useData()
-  const { onSelect } = usePlaceMethod()
-  const {
-    search: { place },
-    selected,
-  } = usePlaceState()
-
-  // const selectedGroup = groups.find((x) => x.id === selected)
-  const visibleGroups = groups
-    .map((g) => ({
-      ...g,
-      distance: place ? haversineDistance(place.coords, g.location_coord) : 0,
-    }))
-    .sort((a, b) => (a.distance > b.distance ? 1 : -1))
-    .slice(0, limit)
+  const t = useI18n((locale) => locale.translation.components.groups_list)
+  const groups = useGroupsList()
+  const visibleGroups = groups.slice(0, limit)
 
   return (
     <Styles>
-      {visibleGroups.map((group, i) => (
-        <GroupItem
-          selected={group.id === selected?.id}
-          group={group}
-          key={i}
-          onSelect={() => {
-            onSelect(group)
-            closeSidebar()
-          }}
-        />
+      {visibleGroups.map((group) => (
+        <GroupItem group={group} highlight={true} key={group.id} />
       ))}
       <div
         style={{

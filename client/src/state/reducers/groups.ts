@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Group } from '../utils/types'
+import { Group } from '../../utils/types'
 
 type GroupsState = {
   all: Group[]

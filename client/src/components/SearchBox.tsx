@@ -1,19 +1,24 @@
+import { useDispatch } from 'react-redux'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { usePlaceMethod, usePlaceState } from '../contexts/StateContext'
-import icons from '../utils/icons'
-import { InputGroup } from '../styles/styles'
-import { MOON_BLUE } from '../utils/CONSTANTS'
-import { useData } from '../contexts/DataProvider'
+
+import { useSearch } from '../contexts/SearchProvider'
 import { useI18n } from '../contexts/I18nProvider'
+import { selectGroup } from '../state/reducers/groups'
+
+import useBrowserGeolocate from '../hooks/useBrowserGeolocate'
+import { MOON_BLUE } from '../utils/CONSTANTS'
+import { InputGroup } from '../styles/styles'
+import icons from '../utils/icons'
 
 const SearchBox = () => {
-  const t = useI18n(locale => locale.translation.components.search_box)
+  const dispatch = useDispatch()
+  const t = useI18n((locale) => locale.translation.components.search_box)
   const [searchInput, setSearchInput] = useState('')
-  const { onSearch, onSelect } = usePlaceMethod()
-  const { search } = usePlaceState()
-  const { geolocateUser } = useData()
+  const geolocateUser = useBrowserGeolocate()
+  const [onSearch, place] = useSearch()
+
   return (
     <Styles>
       <form
@@ -23,7 +28,7 @@ const SearchBox = () => {
           if (searchInput.length > 1) {
             setSearchInput('')
             onSearch(searchInput)
-            onSelect()
+            dispatch(selectGroup())
           }
         }}
       >
@@ -39,10 +44,10 @@ const SearchBox = () => {
           </div>
         </InputGroup>
       </form>
-      {search.place ? (
+      {place ? (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <p style={{ padding: '0 1rem' }}>
-            {t.place_name_label}: <b>{search.place.name}</b>{' '}
+            {t.place_name_label}: <b>{place.name}</b>{' '}
             <span
               style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
               onClick={() => onSearch()}

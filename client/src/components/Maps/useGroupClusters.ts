@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import MarkerCluster from '@google/markerclustererplus'
-import { useData } from '../../contexts/DataProvider'
+import { useGroupsList } from '../../state/selectors'
 import { Group } from '../../utils/types'
 
 export type Coord = { lat: number; lng: number }
@@ -12,7 +12,7 @@ export type ClustorProps = {
   disable?: boolean
 }
 export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: ClustorProps) => {
-  const { groups } = useData()
+  const groups = useGroupsList()
   const markers = useRef<google.maps.Marker[]>()
   const cluster = useRef<MarkerCluster>()
   const listeners = useRef<google.maps.MapsEventListener[]>([])
@@ -49,12 +49,14 @@ export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: C
     }
   }, [groups, disable, map, onSelect])
 
-  // Selecting markers
-  const select = selected?.id
-  useEffect(() => {
-    markers.current?.map((x) => (x.getTitle() === select ? x.setOpacity(1) : x.setOpacity(0.5)))
-  }, [select])
+  const selectMarker = useCallback((id: string) => {
+    cluster.current?.getMarkers().map((marker) => {
+      if (marker.getTitle() === id) return marker.setOpacity(1)
+      if (marker.getOpacity() === 1) return marker.setOpacity(0.7)
+      return marker
+    })
+  }, [])
 
   useEffect(() => () => listeners.current.forEach((x) => x.remove()), [])
-  return cluster
+  return selectMarker
 }

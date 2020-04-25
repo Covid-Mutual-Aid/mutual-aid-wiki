@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 const smoothZoom = (
   map: React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>,
@@ -15,18 +15,10 @@ const smoothZoom = (
   }, 80)
 }
 
-const useZoom = (
-  map: React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>,
-  initialZoom?: number
-) => {
-  const [zoom, setZoom] = useState(initialZoom || map.current?.getZoom() || 3)
-
-  useEffect(() => {
+const useZoom = (map: React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>) =>
+  useCallback((zoom) => {
     if (!map.current) return
     smoothZoom(map, zoom, map.current.getZoom())
-  }, [zoom, map])
-
-  return setZoom
-}
+  }, [])
 
 export default useZoom

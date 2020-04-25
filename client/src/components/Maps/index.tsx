@@ -1,29 +1,31 @@
 import React, { useRef, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { usePlaceState, usePlaceMethod } from '../../contexts/StateContext'
 import { useGroupClusters } from './useGroupClusters'
 import withGoogleScript from './withGoogleScript'
-import useZoom from './hooks/useZoom'
 import { useMap } from './hooks'
 import InfoBox from '../InfoBox'
+import { useSelectedGroup } from '../../state/selectors'
+import { useDispatch } from 'react-redux'
+import { selectGroup } from '../../state/reducers/groups'
 
 const Map = () => {
-  const { selected } = usePlaceState()
-  const { onSelect } = usePlaceMethod()
+  const dispatch = useDispatch()
+  const selected = useSelectedGroup()
   const elem = useRef<HTMLDivElement>(null)
-  const map = useMap(elem)
-  const setZoom = useZoom(map)
-  useGroupClusters(
+  const [map, setZoom] = useMap(elem)
+
+  const selectMarker = useGroupClusters(
     map,
-    useMemo(() => ({ selected, disable: false, onSelect }), [selected, onSelect])
+    useMemo(() => ({ disable: false, onSelect: (grp) => dispatch(selectGroup(grp)) }), [dispatch])
   )
 
   useEffect(() => {
     if (!map.current || !selected) return
-    if (selected && map.current.getZoom() < 12) setZoom(12)
+    selectMarker(selected?.id || '')
+    if (selected && map.current.getZoom() < 11) setZoom(12)
     map.current.panTo(selected.location_coord)
-  }, [selected, setZoom, map])
+  }, [selected, setZoom, map, selectMarker])
 
   return (
     <MapStyles>

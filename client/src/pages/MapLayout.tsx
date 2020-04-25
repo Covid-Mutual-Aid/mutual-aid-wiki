@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import Map from '../components/Maps'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
-import SearchBox from '../components/SearchBox'
 import GroupsList from '../components/GroupsList'
 import SidePannel from '../components/SidePannel'
+import SearchBox from '../components/SearchBox'
 
 const MapLayout = () => {
   const [open, setOpen] = useState(true)

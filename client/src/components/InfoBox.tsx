@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { usePlaceState } from '../contexts/StateContext'
 import GroupItem from './GroupItem'
 
+import { useSelectedGroup } from '../state/selectors'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
 
 const InfoBox = () => {
-  const { selected } = usePlaceState()
+  const selected = useSelectedGroup()
   return (
     <Wrapper isOpen={!!selected}>
       {/* {place && (
@@ -19,11 +19,7 @@ const InfoBox = () => {
           </button>
         </div>
       )} */}
-      {selected && (
-        <>
-          <GroupItem selected={false} group={selected} onSelect={() => null} />
-        </>
-      )}
+      {selected && <GroupItem group={selected} highlight={false} />}
     </Wrapper>
   )
 }

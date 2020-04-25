@@ -23,3 +23,15 @@ export const updateProp = <T extends any, K extends keyof T, R extends any>(
   ...x,
   [key]: fn(x[key]),
 })
+
+export const mapValues = <A extends any, B extends any>(fn: (value: A) => B) => <
+  T extends Record<any, A>
+>(
+  x: T
+) =>
+  (Object.keys(x) as (keyof T)[]).reduce<{ [Key in keyof T]: B }>(
+    (all, key) => ({ ...all, [key]: fn(x[key]) }),
+    {} as any
+  )
+
+export const tuple = <A extends any[]>(...args: A) => args

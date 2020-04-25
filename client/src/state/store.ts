@@ -1,14 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit'
-
-import reducer from './reducer'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import reducer from './reducers'
 
 const store = configureStore({
-  reducer: reducer,
+  reducer,
+  middleware: [
+    ...getDefaultMiddleware({
+      thunk: false,
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
+  ],
 })
 
 if (process.env.NODE_ENV === 'development' && (module as any).hot) {
-  ;(module as any).hot.accept('./reducer', () => {
-    const newRootReducer = require('./reducer').default
+  ;(module as any).hot.accept('./reducers', () => {
+    const newRootReducer = require('./reducers').default
     store.replaceReducer(newRootReducer)
   })
 }

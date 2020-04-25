@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
+import { tuple } from '../../utils/fp'
 
 export type Coord = { lat: number; lng: number }
 export type MapRef = React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>
@@ -8,6 +9,21 @@ export const createSquare = (coord: Coord, radius: number) => {
   const ne = getCoord(center.getNorthEast())
   const sw = getCoord(center.getSouthWest())
   return [ne, { lat: ne.lat, lng: sw.lng }, sw, { lat: sw.lat, lng: ne.lng }]
+}
+
+const smoothZoom = (
+  map: React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>,
+  max: number,
+  cnt: number
+) => {
+  if (cnt >= max || !map.current) return
+  let z = map.current.addListener('zoom_changed', () => {
+    z.remove()
+    smoothZoom(map, max, cnt + 1)
+  })
+  setTimeout(function () {
+    map.current?.setZoom(cnt)
+  }, 80)
 }
 
 export const useLoadScript = () => {
@@ -40,6 +56,7 @@ export const useLoadScript = () => {
 
 export const useMap = (ref: React.RefObject<HTMLDivElement>) => {
   const map = useRef<google.maps.Map<HTMLDivElement>>()
+
   useEffect(() => {
     if (!ref.current) return
     map.current = new google.maps.Map(ref.current, {
@@ -47,7 +64,13 @@ export const useMap = (ref: React.RefObject<HTMLDivElement>) => {
       zoom: 3,
     })
   }, [ref])
-  return map
+
+  const setZoom = useCallback((zoom) => {
+    if (!map.current) return
+    smoothZoom(map, zoom, map.current.getZoom())
+  }, [])
+
+  return tuple(map, setZoom)
 }
 
 type PolyOptions = { path?: Coord[]; onChange?: (x: Coord[]) => void; disable?: boolean }

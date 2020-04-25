@@ -2,22 +2,21 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import * as Sentry from '@sentry/browser'
 import ReactDOM from 'react-dom'
 import React from 'react'
+
 import 'promise-polyfill/src/polyfill'
 import 'whatwg-fetch'
 
-import './styles/index.css'
-
 import RequestProvider from './contexts/RequestProvider'
-import * as serviceWorker from './utils/serviceWorker'
-
-import StateProviderOld from './contexts/StateContext'
+import SearchProvider from './contexts/SearchProvider'
+import I18nProvider from './contexts/I18nProvider'
 import StateProvider from './state/StateProvider'
-import DataProvider from './contexts/DataProvider'
 import MapProvider from './contexts/MapProvider'
+
+import * as serviceWorker from './utils/serviceWorker'
 import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
 
-import I18nProvider from './contexts/I18nProvider'
+import './styles/index.css'
 
 Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
@@ -45,15 +44,13 @@ const render = () => {
     <Router>
       <RequestProvider request={request}>
         <StateProvider>
-          <DataProvider>
-            <StateProviderOld>
-              <I18nProvider>
-                <MapProvider>
-                  <App />
-                </MapProvider>
-              </I18nProvider>
-            </StateProviderOld>
-          </DataProvider>
+          <SearchProvider>
+            <I18nProvider>
+              <MapProvider>
+                <App />
+              </MapProvider>
+            </I18nProvider>
+          </SearchProvider>
         </StateProvider>
       </RequestProvider>
     </Router>,

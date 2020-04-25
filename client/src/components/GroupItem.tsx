@@ -1,44 +1,49 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
+import { selectGroup } from '../state/reducers/groups'
+import { useI18n } from '../contexts/I18nProvider'
 import icons, { iconFromUrl } from '../utils/icons'
 import tidyLink from '../utils/tidyLink'
 import { Group } from '../utils/types'
-import {useI18n} from '../contexts/I18nProvider'
-import { useHistory } from 'react-router-dom'
+import { useSelectedGroup } from '../state/selectors'
 
 const GroupItem = ({
   group,
-  selected,
-  onSelect,
+  highlight,
   disableDropdown = false,
 }: {
-  group: Group & { distance?: number }
-  selected: boolean
-  onSelect: (...args: any[]) => void
+  group: Group
+  highlight: boolean
   disableDropdown?: boolean
 }) => {
-  const t = useI18n(locale => locale.translation.components.group_item)
-  const history = useHistory()
   const [isOpen, setIsOpen] = useState(false)
+  const history = useHistory()
+  const selected = useSelectedGroup()
+
+  const t = useI18n((locale) => locale.translation.components.group_item)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (isOpen) setTimeout(() => setIsOpen(false), 6000)
   })
 
+  if (!group) return null
   return (
-    <GroupWrapper key={group.id} selected={selected}>
+    <GroupWrapper key={group.id} selected={highlight && !!selected && selected.id === group.id}>
       <div className="content">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <h4 onClick={() => onSelect(group.id)}>
+          <h4 onClick={() => dispatch(selectGroup(group))}>
             {group.name === '' ? t.group_name_prompt : group.name}
           </h4>
         </div>
         <span className="location-name">
           {group.location_name === '' ? t.group_location_prompt : group.location_name}
-          {group.distance && group.distance > 0 ? (
+          {/* {group.distance && group.distance > 0 ? (
             <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
-          ) : null}
+          ) : null} */}
         </span>
       </div>
       <div className="actions">
@@ -161,4 +166,4 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
     line-height: 1.4;
   }
 `
-export default GroupItem
+export default React.memo(GroupItem, (a, b) => a.group.id === b.group.id)
