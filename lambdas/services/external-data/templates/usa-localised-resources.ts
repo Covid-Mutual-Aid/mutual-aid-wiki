@@ -24,8 +24,21 @@ const batchDedupe = (newGroups: ExternalGroup[]) =>
         )[0]
     )
 
-const batchGeolocate = (groups: ExternalGroup[]) =>
-  Promise.all(groups.map((g) => googleGeoLocate(g.location_name)))
+const geolocateGroups = (groups: ExternalGroup[]) =>
+  Promise.all(
+    groups.map(
+      (g) =>
+        new Promise<Omit<Group, 'id'>>((resolve) => {
+          googleGeoLocate(g.location_name).then(([place]) => {
+            console.log(place, g)
+            resolve({
+              ...g,
+              location_coord: place.geometry.location,
+            })
+          })
+        })
+    )
+  )
 
 export const getData = () =>
   getGroupsFromSheet('1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY', 1455689482, {
@@ -34,22 +47,10 @@ export const getData = () =>
     link_facebook: 'Link',
   })
     .then((g) => g.slice(0, 20))
-    .then((g) => {
-      console.log(g, 'sheet')
-      return g
-    })
     .then(batchDedupe)
-    .then((g) => {
-      console.log(g, 'deduped')
-      return g
-    })
-    .then(batchGeolocate)
+    .then(geolocateGroups)
     .then((g) => {
       console.log(g, 'geolocated')
       return g
     })
     .then(db.groups.createBatch)
-
-// Dedupe groups
-// Geolocate new groups
-// groupsdb.createBatch(groups)
