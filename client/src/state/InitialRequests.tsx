@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 
-import { setLocation } from './reducers/location'
+import { setUserLocation } from './reducers/location'
 import { addGroups } from './reducers/groups'
 
 import { useRequest } from '../contexts/RequestProvider'
@@ -48,7 +48,7 @@ const useUserLocation = () => {
     request('/info/locate')
       .then((x) => {
         if (x.message) return console.error(x.message)
-        return dispatch(setLocation({ coord: { lat: x.lat, lng: x.lon }, zoom: 4 }))
+        return dispatch(setUserLocation({ coord: { lat: x.lat, lng: x.lon }, zoom: 4 }))
       })
       .catch((err) => console.error(err))
   }, [request, dispatch])

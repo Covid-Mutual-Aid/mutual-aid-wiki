@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
-import { PannelState } from '../pages/MapLayout'
+import { PannelState } from '../containers/Landing'
 import icons from '../utils/icons'
 import Nav from './Nav'
 

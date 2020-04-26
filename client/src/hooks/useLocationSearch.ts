@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { setSearchLocation } from '../state/reducers/location'
 import { useRequest } from '../contexts/RequestProvider'
-import { tuple } from './fp'
 
 export type Place = { name: string; coords: { lat: number; lng: number } }
 
 const useLocationSearch = (query?: string) => {
   const request = useRequest()
-  const [place, setPlace] = useState<null | Place>(null)
+  const dispatch = useDispatch()
   const [error, setError] = useState<null | string>(null)
 
   useEffect(() => {
     if (!query || query.length === 0) {
-      setPlace(null)
+      dispatch(setSearchLocation())
       setError(null)
       return
     }
@@ -21,7 +22,14 @@ const useLocationSearch = (query?: string) => {
       .then((res) => (!res[0] ? Promise.reject() : res[0]))
       .then((place) => {
         if (!mounted) return
-        setPlace({ name: place.formatted_address, coords: place.geometry.location })
+        dispatch(
+          setSearchLocation({
+            name: place.formatted_address,
+            coord: place.geometry.location,
+            zoom: 12,
+          })
+        )
+
         return place
       })
       .catch(() => {
@@ -42,9 +50,9 @@ const useLocationSearch = (query?: string) => {
     return () => {
       mounted = false
     }
-  }, [query, request])
+  }, [query, request, dispatch])
 
-  return tuple(place, error)
+  return error
 }
 
 export default useLocationSearch

@@ -5,7 +5,7 @@ import { updateForm } from './reducers/form'
 import { RootState } from './reducers'
 import { Group } from '../utils/types'
 
-export const useUserLocation = () => useSelector<RootState>((x) => x.location.location)
+export const useUserLocation = () => useSelector<RootState>((x) => x.location.user)
 export const useSelectedGroup = () =>
   useSelector<RootState, Group | undefined>(
     (x) => x.groups.selected,

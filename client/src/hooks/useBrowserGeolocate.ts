@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useCallback } from 'react'
 
-import { setLocation } from '../state/reducers/location'
+import { setUserLocation } from '../state/reducers/location'
 
 const useBrowserGeolocate = () => {
   const dispatch = useDispatch()
@@ -11,7 +11,7 @@ const useBrowserGeolocate = () => {
       navigator.geolocation.getCurrentPosition(
         (position) =>
           dispatch(
-            setLocation({
+            setUserLocation({
               coord: { lat: position.coords.latitude, lng: position.coords.longitude },
               zoom: position.coords.altitudeAccuracy || 7,
             })

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import GroupForm from '../components/GroupForm'
-import { useFetch } from '../utils/useAsync'
+import { useFetch } from '../hooks/useAsync'
 
 const CreateGroup = () => {
   const history = useHistory()

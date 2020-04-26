@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import { updateForm } from '../state/reducers/form'
 import GroupForm from '../components/GroupForm'
-import { useFetch } from '../utils/useAsync'
+import { useFetch } from '../hooks/useAsync'
 import { updateProp } from '../utils/fp'
 import { Group } from '../utils/types'
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import { Request } from './api'
+import { Request } from '../utils/api'
 
 export const useFetch = <T extends any, R extends any = T>(
   fn?: (req: Request, args?: any) => Promise<T>,

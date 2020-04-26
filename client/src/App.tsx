@@ -1,10 +1,10 @@
 import { Switch, Route } from 'react-router-dom'
 import React from 'react'
 
-import MapLayout from './pages/MapLayout'
-import EmailAuth from './pages/EmailAuth'
-import Report from './pages/Report'
-import About from './pages/About'
+import MapLayout from './containers/Landing'
+import EmailAuth from './containers/Authenticate'
+import Report from './containers/Report'
+import About from './containers/About'
 
 function App() {
   return (
