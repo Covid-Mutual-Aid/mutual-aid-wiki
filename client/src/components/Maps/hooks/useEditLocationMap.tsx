@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useReducer } from 'react'
+import React, { useContext, useEffect, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { useFormControl } from '../../../state/selectors'
@@ -14,20 +14,8 @@ const useEditLocationMap = (disable: boolean) => {
   const [coord, onDrag] = useFormControl('location_coord')
   const [path, onChange] = useFormControl('location_poly')
 
-  useMarker(
-    map,
-    useMemo(() => ({ coord, disable: disable || !marker, onDrag }), [
-      marker,
-      disable,
-      coord,
-      onDrag,
-    ])
-  )
-
-  usePolygon(
-    map,
-    useMemo(() => ({ path, onChange, disable: disable || !poly }), [poly, disable, path, onChange])
-  )
+  useMarker(map, { coord, disable: disable || !marker || !coord, onDrag })
+  usePolygon(map, { path, onChange, disable: disable || !poly || !coord })
 
   useEffect(() => {
     if (!coord) return
@@ -42,7 +30,7 @@ const useEditLocationMap = (disable: boolean) => {
 
   return (
     <Controls
-      disable={disable}
+      disable={disable || !coord}
       selected={[marker ? 'marker' : 'none', poly ? 'poly' : 'none']}
       style={{}}
     >

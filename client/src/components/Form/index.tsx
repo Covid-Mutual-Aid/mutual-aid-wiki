@@ -28,8 +28,8 @@ const GroupForm = ({
   }
 
   useEffect(() => {
-    if (error.length > 0) setError('')
-  }, [error])
+    setError('')
+  }, [values])
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -84,7 +84,7 @@ const GroupForm = ({
           {t.group_form_elements.buttons.submit}
         </button>
       </FormButtons>
-      <p>{error}</p>
+      <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>
     </Form>
   )
 }
