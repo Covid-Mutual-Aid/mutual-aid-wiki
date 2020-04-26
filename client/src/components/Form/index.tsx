@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import React, { useState, useEffect } from 'react'
 
-import { useFormControl, useFormValues } from '../state/selectors'
-import { useI18n } from '../contexts/I18nProvider'
-import { InputGroup } from '../styles/styles'
+import { useFormControl, useFormValues } from '../../state/selectors'
+import { useI18n } from '../../contexts/I18nProvider'
+import { InputGroup } from '../../styles/styles'
 import EmailsInput from './EmailsInput'
-import { Group } from '../utils/types'
-import Location from './Location'
+import { Group } from '../../utils/types'
+import Location from '../Location'
 
 const GroupForm = ({
   onSave,
@@ -47,7 +47,7 @@ const GroupForm = ({
   }
 
   return (
-    <form onSubmit={onSubmit} style={{ width: '100%', maxWidth: '30rem', margin: '0 auto' }}>
+    <Form onSubmit={onSubmit}>
       <Input
         disabled={disabled}
         name="name"
@@ -85,11 +85,19 @@ const GroupForm = ({
         </button>
       </FormButtons>
       <p>{error}</p>
-    </form>
+    </Form>
   )
 }
 
 export default GroupForm
+
+const Form = styled.form`
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+`
 
 const Input = <K extends 'name' | 'link_facebook'>({
   name,

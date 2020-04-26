@@ -1,18 +1,27 @@
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
+import distance from 'haversine-distance'
 
-import { useGroupsList } from '../state/selectors'
+import { useGroupsList } from '../state/reducers/groups'
 import { useI18n } from '../contexts/I18nProvider'
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
 
 import GroupItem from './GroupItem'
+import { useLocationState } from '../state/reducers/location'
 
 const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
   const [limit, toggleMore] = useReducer((x) => x + 50, 50)
   const t = useI18n((locale) => locale.translation.components.groups_list)
   const groups = useGroupsList()
-  const visibleGroups = groups.slice(0, limit)
+  const search = useLocationState().search
+
+  const visibleGroups = (!search
+    ? groups
+    : groups
+        .map((x) => ({ ...x, distance: distance(search.coord, x.location_coord) }))
+        .sort((a, b) => a.distance - b.distance)
+  ).slice(0, limit)
 
   return (
     <Styles>

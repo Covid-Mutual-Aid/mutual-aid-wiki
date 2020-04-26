@@ -2,7 +2,8 @@ import React, { createContext, useContext, useCallback } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 
 import useLocationSearch from '../hooks/useLocationSearch'
-import { useLocationState, Location } from '../state/reducers/location'
+import { useLocationState, Location, setSearchLocation } from '../state/reducers/location'
+import { useDispatch } from 'react-redux'
 
 const SearchContext = createContext<[(x?: string) => void, null | string]>([() => null, null])
 
@@ -23,8 +24,14 @@ const SearchProvider = ({ children }: { children: React.ReactNode }) => {
 }
 
 export const useSearch = (): [(x?: string) => void, Location | undefined, null | string] => {
-  const [onSearch, error] = useContext(SearchContext)
+  const dispatch = useDispatch()
+  const [handleSearch, error] = useContext(SearchContext)
   const place = useLocationState().search
+
+  const onSearch = (q?: string) => {
+    if (!q) return dispatch(setSearchLocation())
+    handleSearch(q)
+  }
   return [onSearch, place, error]
 }
 

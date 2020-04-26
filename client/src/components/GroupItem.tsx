@@ -3,19 +3,18 @@ import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { selectGroup } from '../state/reducers/groups'
+import { selectGroup, useSelectedGroup } from '../state/reducers/groups'
 import { useI18n } from '../contexts/I18nProvider'
 import icons, { iconFromUrl } from '../utils/icons'
 import tidyLink from '../utils/tidyLink'
 import { Group } from '../utils/types'
-import { useSelectedGroup } from '../state/selectors'
 
 const GroupItem = ({
   group,
   highlight,
   disableDropdown = false,
 }: {
-  group: Group
+  group: Group & { distance?: number }
   highlight: boolean
   disableDropdown?: boolean
 }) => {
@@ -41,9 +40,9 @@ const GroupItem = ({
         </div>
         <span className="location-name">
           {group.location_name === '' ? t.group_location_prompt : group.location_name}
-          {/* {group.distance && group.distance > 0 ? (
+          {group.distance && group.distance > 0 ? (
             <span className="distance">{(group.distance / 1000).toFixed(1) + 'km'}</span>
-          ) : null} */}
+          ) : null}
         </span>
       </div>
       <div className="actions">

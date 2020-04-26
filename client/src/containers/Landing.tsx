@@ -67,9 +67,11 @@ const LayoutStyles = styled.div<{ state: PannelState; open: boolean }>`
     return '50vw'
   }} 1fr;
   height: 100vh;
+  width: 100vw;
   transition: grid 0.3s;
+  overflow: hidden;
   }
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
-    grid: 100% / ${(p) => (p.open ? '100vw' : '1rem')} 1fr;
+    grid: 100% / ${(p) => (p.open ? '100vw 0rem' : '1rem 1fr')};
   }
 `

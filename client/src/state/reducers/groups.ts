@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Group } from '../../utils/types'
+import { useSelector } from 'react-redux'
+import { RootState } from '.'
 
 type GroupsState = {
   all: Group[]
@@ -27,3 +29,15 @@ const groupsSlice = createSlice({
 export const { addGroups, selectGroup, setVisible } = groupsSlice.actions
 
 export default groupsSlice.reducer
+
+export const useSelectedGroup = () =>
+  useSelector<RootState, Group | undefined>(
+    (x) => x.groups.selected,
+    (a, b) => a === b && a?.id === b?.id
+  )
+export const useGroupsList = () => useSelector<RootState, Group[]>((x) => x.groups.all)
+export const useGroup = (id: string) =>
+  useSelector<RootState, Group | undefined>(
+    (x) => x.groups.all.find((y) => y.id === id),
+    (a, b) => !!(a && b) && a.id === b.id
+  )

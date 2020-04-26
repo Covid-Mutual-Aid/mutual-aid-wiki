@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react'
 import MarkerCluster from '@google/markerclustererplus'
-import { useGroupsList } from '../../../state/selectors'
 import { Group } from '../../../utils/types'
+import { useGroupsList } from '../../../state/reducers/groups'
 
 export type Coord = { lat: number; lng: number }
 export type MapRef = React.MutableRefObject<google.maps.Map | undefined>

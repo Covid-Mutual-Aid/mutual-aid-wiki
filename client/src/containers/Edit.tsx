@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import { updateForm } from '../state/reducers/form'
-import GroupForm from '../components/GroupForm'
+import GroupForm from '../components/Form'
 import { useFetch } from '../hooks/useAsync'
 import { updateProp } from '../utils/fp'
 import { Group } from '../utils/types'

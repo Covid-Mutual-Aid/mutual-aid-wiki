@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import GroupItem from './GroupItem'
 
-import { useSelectedGroup } from '../state/selectors'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
+import { useSelectedGroup } from '../state/reducers/groups'
 
 const InfoBox = () => {
   const selected = useSelectedGroup()

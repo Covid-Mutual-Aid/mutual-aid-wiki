@@ -1,8 +1,8 @@
 import CreatableSelect from 'react-select/creatable'
 import React, { useState } from 'react'
 
-import { useI18n } from '../contexts/I18nProvider'
-import { useFormControl } from '../state/selectors'
+import { useI18n } from '../../contexts/I18nProvider'
+import { useFormControl } from '../../state/selectors'
 
 const EmailsInput = () => {
   const t = useI18n((locale) => locale.translation.components.emails_input)
