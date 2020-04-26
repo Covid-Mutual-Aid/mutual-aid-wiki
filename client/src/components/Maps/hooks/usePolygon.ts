@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react'
 
 export type Coord = { lat: number; lng: number }
-export type MapRef = React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>
+export type MapRef = React.MutableRefObject<google.maps.Map | undefined>
 
 type PolyOptions = { path?: Coord[]; onChange?: (x: Coord[]) => void; disable?: boolean }
 const usePolygon = (map: MapRef, { path, onChange, disable }: PolyOptions) => {
   const poly = useRef<google.maps.Polygon>()
+
   useEffect(() => {
-    if (!map.current) return
+    if (!map.current || disable) return
     poly.current = new google.maps.Polygon({
       paths: path ? [path] : [],
       map: map.current,
@@ -17,34 +18,40 @@ const usePolygon = (map: MapRef, { path, onChange, disable }: PolyOptions) => {
       strokeWeight: 2,
       editable: true,
     })
-    let listeners: google.maps.MapsEventListener[] = []
 
-    if (onChange) {
-      listeners = [
-        ...listeners,
-        poly.current.addListener('mouseup', (event) => {
-          let pths = [] as Coord[][]
-          poly.current?.getPaths().forEach((x) => {
-            let pth = [] as Coord[]
-            // console.log(x.forEach((y) => void (pth = [...pth, getCoord(y)])))
-            pths = [...pths, pth]
-          })
-          onChange(pths[0])
+    const getCoords = () =>
+      poly.current
+        ? poly.current
+            .getPath()
+            .getArray()
+            .map((x) => ({ lat: x.lat(), lng: x.lng() }))
+        : []
+
+    const polypath = poly.current.getPath()
+    const unsubs = [
+      poly.current.addListener('dblclick', (e) => {
+        const coords = getCoords()
+        if (e.vertex && onChange && coords.length > 3)
+          return onChange(getCoords().filter((x, i) => i !== e.vertex))
+      }),
+      polypath &&
+        polypath.addListener('set_at', () => {
+          onChange &&
+            poly.current &&
+            onChange(
+              poly.current
+                ?.getPath()
+                .getArray()
+                .map((x) => ({ lat: x.lat(), lng: x.lng() }))
+            )
         }),
-      ]
-    }
+    ]
 
     return () => {
-      listeners.forEach((x) => x.remove())
+      unsubs.forEach((x) => x && x.remove())
       poly.current?.setMap(null)
     }
-  }, [map, onChange, path])
-
-  useEffect(() => {
-    if (!poly.current) return
-    if (path) poly.current.setPaths([path])
-    poly.current.setVisible(!disable)
-  }, [path, disable])
+  }, [map, onChange, path, disable])
 
   return poly
 }

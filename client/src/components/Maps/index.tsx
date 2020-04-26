@@ -3,11 +3,10 @@ import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { useFormControl } from '../../state/selectors'
-import { useGroupClusters } from './hooks/useGroupClusters'
 import { selectGroup, useSelectedGroup } from '../../state/reducers/groups'
+import useEditLocationMap from './hooks/useEditLocationMap'
+import { useGroupClusters } from './hooks/useGroupClusters'
 import withMap, { MapContext } from './withMap'
-import { useMarker } from './hooks/useMarker'
 import InfoBox from '../InfoBox'
 
 const useClusterMap = (disable: boolean) => {
@@ -28,32 +27,17 @@ const useClusterMap = (disable: boolean) => {
   }, [selected, setZoom, map, selectMarker])
 }
 
-const useEditLocationMap = (disable: boolean) => {
-  const [, map, setZoom] = useContext(MapContext)
-  const [coord, onDrag] = useFormControl('location_coord')
-
-  useMarker(
-    map,
-    useMemo(() => ({ coord, disable, onDrag }), [disable, coord, onDrag])
-  )
-
-  useEffect(() => {
-    if (!coord) return
-    setZoom(13)
-    map.current?.panTo(coord)
-  }, [coord, map, setZoom])
-}
-
 const Map = () => {
   const [ref] = useContext(MapContext)
   const { pathname } = useLocation()
 
   useClusterMap(pathname !== '/')
-  useEditLocationMap(!/\/add-group|\/edit\/.*?\/.*?$/.test(pathname))
+  const controls = useEditLocationMap(!/\/add-group|\/edit\/.*?\/.*?$/.test(pathname))
 
   return (
     <MapStyles>
       <InfoBox />
+      {controls}
       <div id="map" ref={ref} style={{ width: '100%', flex: '1 1 100%' }} />
     </MapStyles>
   )

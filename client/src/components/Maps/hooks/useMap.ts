@@ -29,7 +29,6 @@ const useMap = (): [
       center: { lat: 55.3781, lng: -3.436 },
       zoom: 3,
     })
-    return map.current.unbindAll
   }, [])
 
   const setZoom = useCallback((zoom: number) => {

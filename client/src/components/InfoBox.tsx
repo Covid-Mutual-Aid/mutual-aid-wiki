@@ -29,10 +29,10 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   left: calc(50% - (22rem * 0.5));
   width: 18rem;
   box-shadow: 0px 0px 22px -9px #959595;
+  background-color: white;
   margin: 1rem;
   padding: 1rem;
   z-index: 1;
-  background-color: white;
   border-radius: 8px;
   transition: top 0.3s;
   top: ${(p) => (p.isOpen ? '0' : '-20rem')};
