@@ -1,7 +1,7 @@
 import { Group } from './types'
 import { parse } from 'url'
 
-const norm = (x: string) => x.toLowerCase().trim()
+const norm = (x: string | undefined) => (x || '').toLowerCase().trim()
 export const normLink = (s: string) => {
   const { host, pathname } = parse(s)
   return host === 'facebook.com' ? pathname?.replace(/\/$/, '') : s
