@@ -16,12 +16,8 @@ const debounce = (value: string) => {
 const Location = () => {
   const t = useI18n((locale) => locale.translation.components.location)
   const request = useRequest()
-  const [locationName, onLocationName] = useFormControl(
-    'location_name',
-    '',
-    (x) => x.length > 0 || t.errors.none_provided
-  )
-  const [, onCoords] = useFormControl('location_coord', { lat: 0, lng: 0 })
+  const [locationName, onLocationName] = useFormControl('location_name', '')
+  const [, onCoords] = useFormControl('location_coord')
 
   return (
     <AsyncCreatableSelect

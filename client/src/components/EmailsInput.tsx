@@ -6,11 +6,7 @@ import { useFormControl } from '../state/selectors'
 
 const EmailsInput = () => {
   const t = useI18n((locale) => locale.translation.components.emails_input)
-  const [emails, onChange] = useFormControl(
-    'emails',
-    [] as string[],
-    (x) => x.length > 0 || t.errors.none_provided
-  )
+  const [emails, onChange] = useFormControl('emails', [] as string[])
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {

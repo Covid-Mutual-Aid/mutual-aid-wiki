@@ -1,10 +1,10 @@
 import { useRef, useEffect, useCallback } from 'react'
 import MarkerCluster from '@google/markerclustererplus'
-import { useGroupsList } from '../../state/selectors'
-import { Group } from '../../utils/types'
+import { useGroupsList } from '../../../state/selectors'
+import { Group } from '../../../utils/types'
 
 export type Coord = { lat: number; lng: number }
-export type MapRef = React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>
+export type MapRef = React.MutableRefObject<google.maps.Map | undefined>
 
 export type ClustorProps = {
   onSelect?: (x: Group) => void
@@ -20,6 +20,7 @@ export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: C
 
   useEffect(() => {
     if (!map.current) return
+
     cluster.current = new MarkerCluster(map.current, markers.current, {
       minimumClusterSize: 6,
       gridSize: 50,

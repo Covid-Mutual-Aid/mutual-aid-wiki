@@ -1,5 +1,5 @@
 export type Coord = { lat: number; lng: number }
-export type MapRef = React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>
+export type MapRef = React.MutableRefObject<google.maps.Map | undefined>
 export const getCoord = (x: google.maps.LatLng) => ({ lat: x.lat(), lng: x.lng() })
 export const createSquare = (coord: Coord, radius: number) => {
   const center = new google.maps.Circle({ center: coord, radius }).getBounds()

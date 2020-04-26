@@ -1,11 +1,11 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import GroupForm from '../components/GroupForm'
 import { useFetch } from '../utils/useAsync'
 
 const CreateGroup = () => {
-  const [done, setDone] = useState(false)
+  const history = useHistory()
   const { data, trigger, isLoading, error } = useFetch<any>(
     useCallback(
       (req, grp) =>
@@ -18,20 +18,12 @@ const CreateGroup = () => {
   )
 
   useEffect(() => {
-    console.log(data)
+    if (error) return alert('Something went wrong with the network')
     if (!data) return
-    setDone(true)
-  }, [data])
+    history.replace('/')
+  }, [data, error, history])
 
-  if (done) {
-    return (
-      <div>
-        Thank you for submiting your group click <Link to="/">here</Link> to go back to the map
-      </div>
-    )
-  }
-
-  return <GroupForm saveGroup={trigger} disable={isLoading} error={error} />
+  return <>{!isLoading && <GroupForm onSave={trigger} />}</>
 }
 
 export default CreateGroup

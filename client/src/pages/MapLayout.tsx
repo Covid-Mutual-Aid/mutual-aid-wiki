@@ -9,6 +9,7 @@ import GroupsList from '../components/GroupsList'
 import SidePannel from '../components/SidePannel'
 import SearchBox from '../components/SearchBox'
 import CreateGroup from './CreateGroup'
+import EditGroup from './EditGroup'
 import inIframe from '../utils/inIframe'
 import { useI18n } from '../contexts/I18nProvider'
 
@@ -24,9 +25,8 @@ const MapLayout = () => {
     <LayoutStyles state={pannelState} open={open}>
       <SidePannel state={pannelState} open={open} toggle={() => setOpen(!open)}>
         <Switch>
-          <Route path="/add-group">
-            <CreateGroup />
-          </Route>
+          <Route path="/edit/:id/:token" component={EditGroup} />
+          <Route path="/add-group" component={CreateGroup} />
           <Route path="/">
             <div
               style={{

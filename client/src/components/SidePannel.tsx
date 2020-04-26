@@ -2,9 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
-import { useI18n } from '../contexts/I18nProvider'
 import { PannelState } from '../pages/MapLayout'
-import inIframe from '../utils/inIframe'
 import icons from '../utils/icons'
 import Nav from './Nav'
 

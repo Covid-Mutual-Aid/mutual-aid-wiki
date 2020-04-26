@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 
 import { updateForm } from './reducers/form'
 import { RootState } from './reducers'
@@ -18,30 +18,33 @@ export const useGroup = (id: string) =>
     (a, b) => !!(a && b) && a.id === b.id
   )
 
-export const useFormControl = <T extends Group, K extends keyof T, V extends T[K]>(
-  name: K,
-  init: V,
-  validate?: (x: V) => string | true
-): [V, (x: V) => void, string | true] => {
-  const dispatch = useDispatch()
-  const value = useSelector<RootState, V | undefined>((x) => (x.form.values as any)[name])
-  const error = useSelector<RootState, string | true>((x) => (x.form.errors as any)[name])
+export const useFormValues = () => useSelector<RootState, RootState['form']>((x) => x.form)
 
-  const onChange = useCallback(
-    (value: V) =>
-      dispatch(
-        updateForm({
-          errors: { [name]: validate ? validate(value) : true },
-          values: { [name]: value },
-        })
-      ),
-    [dispatch, name, validate]
-  )
+type UseFormControl = {
+  <T extends Group, K extends keyof T, V extends T[K]>(name: K, init: V): [V, (x: V) => void]
+  <T extends Group, K extends keyof T, V extends T[K]>(name: K, init?: V): [
+    V | undefined,
+    (x: V) => void
+  ]
+}
+
+export const useFormControl: UseFormControl = <T extends Group, K extends keyof T, V extends T[K]>(
+  name: K,
+  init?: V
+): [V | undefined, (x: V) => void] => {
+  const initial = useRef(init)
+  const dispatch = useDispatch()
+  const value = useSelector<RootState, V | undefined>((x) => (x.form as any)[name])
+
+  const onChange = useCallback((value: V) => dispatch(updateForm({ [name]: value })), [
+    dispatch,
+    name,
+  ])
 
   useEffect(() => {
-    if (value !== undefined || value === init) return
-    onChange(init)
-  }, [value, init, onChange])
+    if (initial.current === undefined) return
+    dispatch(updateForm({ [name]: initial.current }))
+  }, [name, dispatch])
 
-  return [value || init, onChange, error]
+  return [value || init, onChange]
 }

@@ -1,58 +1,143 @@
-import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import React, { useState, useEffect } from 'react'
 
-import GroupFormElements from '../components/GroupFormElements'
-import ValuesListener from './FormControl/ValuesListener'
-import Form from '../components/FormControl'
+import { useFormControl, useFormValues } from '../state/selectors'
+import { useI18n } from '../contexts/I18nProvider'
+import { InputGroup } from '../styles/styles'
+import EmailsInput from './EmailsInput'
 import { Group } from '../utils/types'
-import { head } from '../utils/fp'
+import Location from './Location'
 
-const GroupForm = <T extends Partial<Group>>({
-  group: initialGroup,
-  saveGroup,
-  disable,
-  error: serverError,
+const GroupForm = ({
+  onSave,
+  disabled,
 }: {
-  group?: T
-  saveGroup: (x: T) => void
-  disable?: boolean
-  error?: string
+  disabled?: boolean
+  onSave: (group: Group) => void
 }) => {
   const [error, setError] = useState('')
-  const [group, setGroup] = useState(initialGroup)
+  const values = useFormValues()
+  const t = useI18n((locale) => locale.translation.components)
+
+  const validate: Partial<{ [Key in keyof Group]: (x: Group[Key]) => true | string }> = {
+    name: (x) => x.length > 0 || t.group_form_elements.name.errors.none_provided,
+    link_facebook: (x) => validURL(x) || t.group_form_elements.url.errors.none_provided,
+    emails: (x) => !!(x && x.length > 0) || t.emails_input.errors.none_provided,
+    location_name: (x) => x.length > 0 || t.location.errors.none_provided,
+  }
 
   useEffect(() => {
-    setGroup(initialGroup)
-  }, [initialGroup])
+    if (error.length > 0) setError('')
+  }, [error])
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const error = (Object.keys(values) as (keyof typeof values)[]).reduce(
+      (all, key) =>
+        typeof all === 'string'
+          ? all
+          : (validate as any)[key]
+          ? (validate as any)[key](values[key])
+          : true,
+      true
+    )
+    if (typeof error === 'string') return setError(error)
+    return onSave(values as Group)
+  }
 
   return (
-    <Form
-      style={{ width: '100%' }}
-      onSubmit={(values, errors) => {
-        if (errors && errors.length > 0) {
-          setError(head(errors)[1])
-          setGroup(values)
-          return
-        }
-        saveGroup(values)
-      }}
-      initialValues={group}
-    >
-      <ValuesListener onChange={(x) => (error.length > 0 ? setError('') : null)} />
-      <Styles>
-        <GroupFormElements disabled={disable} />
-        <span style={{ color: 'red', height: '1rem' }}>{error || serverError}</span>
-      </Styles>
-    </Form>
+    <form onSubmit={onSubmit} style={{ width: '100%', maxWidth: '30rem', margin: '0 auto' }}>
+      <Input
+        disabled={disabled}
+        name="name"
+        init=""
+        placeholder={t.group_form_elements.name.placeholder}
+      />
+
+      <Input
+        disabled={disabled}
+        name="link_facebook"
+        init=""
+        placeholder={t.group_form_elements.url.placeholder}
+      />
+
+      <div>
+        <Description>
+          {t.group_form_elements.emails.description}{' '}
+          <small style={{ color: 'grey' }}>({t.group_form_elements.emails.note})</small>
+        </Description>
+        <EmailsInput />
+      </div>
+
+      <div style={{ marginTop: '2rem', opacity: disabled ? '.8' : 1 }}>
+        <Location />
+      </div>
+
+      <FormButtons>
+        <Link to="/">
+          <button className="btn-secondary" type="button" disabled={disabled}>
+            {t.group_form_elements.buttons.cancel}
+          </button>
+        </Link>
+        <button type="submit" disabled={disabled}>
+          {t.group_form_elements.buttons.submit}
+        </button>
+      </FormButtons>
+      <p>{error}</p>
+    </form>
   )
 }
 
-const Styles = styled.div`
-  width: 100%;
-  height: 100%;
+export default GroupForm
+
+const Input = <K extends 'name' | 'link_facebook'>({
+  name,
+  init,
+  description,
+  ...inputProps
+}: {
+  name: K
+  init: string
+  description?: string
+} & React.InputHTMLAttributes<HTMLInputElement>) => {
+  const [value, onChange] = useFormControl<Group, K, string>(name, init)
+  return (
+    <div style={{ margin: '1rem 0' }}>
+      {description && <Description>{description}</Description>}
+      {/* <Error>{error}</Error> */}
+      <InputGroup>
+        <input {...inputProps} value={value} onChange={(e) => onChange(e.target.value)} />
+      </InputGroup>
+    </div>
+  )
+}
+
+const FormButtons = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem 0;
+
+  button {
+    margin: 0 0.4rem;
+  }
 `
 
-export default GroupForm
+const Description = styled.p`
+  padding: 0 1rem;
+  margin: 0.5rem 0rem 0.5rem 0rem;
+`
+
+export function validURL(str: string) {
+  var pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
+  ) // fragment locator
+
+  return !!pattern.test(str)
+}

@@ -1,8 +1,7 @@
-import { useRef, useEffect, useCallback } from 'react'
-import { tuple } from '../../../utils/fp'
+import { useRef, useCallback, useLayoutEffect } from 'react'
 
 const smoothZoom = (
-  map: React.MutableRefObject<google.maps.Map<HTMLDivElement> | undefined>,
+  map: React.MutableRefObject<google.maps.Map | undefined>,
   max: number,
   cnt: number
 ) => {
@@ -16,23 +15,29 @@ const smoothZoom = (
   }, 80)
 }
 
-const useMap = (ref: React.RefObject<HTMLDivElement>) => {
-  const map = useRef<google.maps.Map<HTMLDivElement>>()
+const useMap = (): [
+  React.RefObject<HTMLDivElement>,
+  React.MutableRefObject<google.maps.Map | undefined>,
+  (zoom: number) => void
+] => {
+  const ref = useRef<HTMLDivElement>(null)
+  const map = useRef<google.maps.Map>()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ref.current) return
     map.current = new google.maps.Map(ref.current, {
       center: { lat: 55.3781, lng: -3.436 },
       zoom: 3,
     })
-  }, [ref])
+    return map.current.unbindAll
+  }, [])
 
-  const setZoom = useCallback((zoom) => {
+  const setZoom = useCallback((zoom: number) => {
     if (!map.current) return
     smoothZoom(map, zoom, map.current.getZoom())
   }, [])
 
-  return tuple(map, setZoom)
+  return [ref, map, setZoom]
 }
 
 export default useMap

@@ -12,21 +12,19 @@ export const useMarker = (map: MapRef, { disable, coord, onDrag }: MarkerProps) 
 
   useEffect(() => {
     if (!map.current) return
+
     marker.current = new google.maps.Marker({
       map: map.current,
       animation: google.maps.Animation.DROP,
       draggable: true,
     })
-    let listeners: google.maps.MapsEventListener[] = []
-    if (onDrag) {
-      listeners = [
-        ...listeners,
-        marker.current.addListener('dragend', (x) => onDrag(getCoord(x.latLng))),
-      ]
-    }
+    const listener = marker.current.addListener(
+      'dragend',
+      (x) => onDrag && onDrag(getCoord(x.latLng))
+    )
     return () => {
       marker.current?.setMap(null)
-      listeners.forEach((x) => x.remove())
+      listener.remove()
     }
   }, [onDrag, map])
 

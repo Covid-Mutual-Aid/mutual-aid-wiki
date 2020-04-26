@@ -1,28 +1,23 @@
-import React, { useRef, useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useContext } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { useSelectedGroup } from '../../state/selectors'
+import { useSelectedGroup, useFormControl } from '../../state/selectors'
+import { useGroupClusters } from './hooks/useGroupClusters'
 import { selectGroup } from '../../state/reducers/groups'
-import { useGroupClusters } from './useGroupClusters'
-import withGoogleScript from './withGoogleScript'
-import useMap from './hooks/useMap'
+import withMap, { MapContext } from './withMap'
+import { useMarker } from './hooks/useMarker'
 import InfoBox from '../InfoBox'
 
-const Map = () => {
-  const { pathname } = useLocation()
-  const dispatch = useDispatch()
+const useClusterMap = (disable: boolean) => {
+  const [, map, setZoom] = useContext(MapContext)
   const selected = useSelectedGroup()
-  const elem = useRef<HTMLDivElement>(null)
-  const [map, setZoom] = useMap(elem)
+  const dispatch = useDispatch()
 
   const selectMarker = useGroupClusters(
     map,
-    useMemo(() => ({ disable: pathname !== '/', onSelect: (grp) => dispatch(selectGroup(grp)) }), [
-      dispatch,
-      pathname,
-    ])
+    useMemo(() => ({ disable, onSelect: (grp) => dispatch(selectGroup(grp)) }), [dispatch, disable])
   )
 
   useEffect(() => {
@@ -31,16 +26,40 @@ const Map = () => {
     if (selected && map.current.getZoom() < 11) setZoom(12)
     map.current.panTo(selected.location_coord)
   }, [selected, setZoom, map, selectMarker])
+}
+
+const useEditLocationMap = (disable: boolean) => {
+  const [, map, setZoom] = useContext(MapContext)
+  const [coord, onDrag] = useFormControl('location_coord')
+
+  useMarker(
+    map,
+    useMemo(() => ({ coord, disable, onDrag }), [disable, coord, onDrag])
+  )
+
+  useEffect(() => {
+    if (!coord) return
+    setZoom(13)
+    map.current?.panTo(coord)
+  }, [coord, map, setZoom])
+}
+
+const Map = () => {
+  const [ref] = useContext(MapContext)
+  const { pathname } = useLocation()
+
+  useClusterMap(pathname !== '/')
+  useEditLocationMap(!/\/add-group|\/edit\/.*?\/.*?$/.test(pathname))
 
   return (
     <MapStyles>
       <InfoBox />
-      <div id="map" ref={elem} style={{ width: '100%', flex: '1 1 100%' }} />
+      <div id="map" ref={ref} style={{ width: '100%', flex: '1 1 100%' }} />
     </MapStyles>
   )
 }
 
-export default withGoogleScript(Map)
+export default withMap(Map)
 
 const MapStyles = styled.div`
   position: relative;

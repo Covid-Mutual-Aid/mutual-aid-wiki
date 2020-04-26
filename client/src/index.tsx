@@ -10,15 +10,12 @@ import RequestProvider from './contexts/RequestProvider'
 import SearchProvider from './contexts/SearchProvider'
 import I18nProvider from './contexts/I18nProvider'
 import StateProvider from './state/StateProvider'
-import MapProvider from './contexts/MapProvider'
 
 import * as serviceWorker from './utils/serviceWorker'
 import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
 
 import './styles/index.css'
-
-Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 
 if (!inIframe()) {
   gtag('event', 'Viewed on covidmutualaid.cc', {
@@ -30,6 +27,8 @@ if (!inIframe()) {
 let current = { endpoint: '/api' }
 if ((window as any).location.host.includes('localhost')) {
   current.endpoint = 'http://staging.mutualaid.wiki/api'
+} else {
+  Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 }
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
@@ -46,9 +45,7 @@ const render = () => {
         <StateProvider>
           <SearchProvider>
             <I18nProvider>
-              <MapProvider>
-                <App />
-              </MapProvider>
+              <App />
             </I18nProvider>
           </SearchProvider>
         </StateProvider>
