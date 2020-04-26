@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useReducer } from 'react'
 import styled from 'styled-components'
 
 import { useFormControl } from '../../../state/selectors'
+import { MOBILE_BREAKPOINT } from '../../../utils/CONSTANTS'
 import { MapContext } from '../withMap'
 import { useMarker } from './useMarker'
 import usePolygon from './usePolygon'
@@ -47,6 +48,7 @@ const useEditLocationMap = (disable: boolean) => {
 export default useEditLocationMap
 
 const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 'none')[] }>`
+  z-index: 1;
   top: ${(p) => (p.disable ? '-10rem' : '0rem')};
   left: calc(50% - (22rem * 0.5));
   width: 18rem;
@@ -54,7 +56,6 @@ const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 
   background-color: white;
   border-radius: 10px;
   margin: 1rem;
-  z-index: 2;
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -79,4 +80,11 @@ const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 
       `
       )
       .join('\n')}
+
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+    top: initial;
+    margin-bottom: 4rem
+    transition: bottom 0.3s;
+    bottom: 0;
+  }
 `
