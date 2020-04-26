@@ -1,8 +1,9 @@
-import React from 'react'
 import AsyncCreatableSelect from 'react-select/async-creatable'
+import React from 'react'
+
 import { useRequest } from '../contexts/RequestProvider'
+import { useFormControl } from '../state/selectors'
 import { useI18n } from '../contexts/I18nProvider'
-import { useControl } from './FormControl'
 
 let last = ''
 const debounce = (value: string) => {
@@ -13,18 +14,14 @@ const debounce = (value: string) => {
 }
 
 const Location = () => {
-  const t = useI18n(locale => locale.translation.components.location)
+  const t = useI18n((locale) => locale.translation.components.location)
   const request = useRequest()
-  const {
-    props: { value, onChange: onValue },
-  } = useControl(
+  const [locationName, onLocationName] = useFormControl(
     'location_name',
     '',
     (x) => x.length > 0 || t.errors.none_provided
   )
-  const {
-    props: { onChange: onCoords },
-  } = useControl('location_coord', undefined as { lat: number; lng: number } | undefined)
+  const [, onCoords] = useFormControl('location_coord', { lat: 0, lng: 0 })
 
   return (
     <AsyncCreatableSelect
@@ -36,10 +33,10 @@ const Location = () => {
       onChange={(x: any) =>
         request<any>(`/google/placeDetails?place_id=${x.value}`).then((y) => {
           onCoords(y.geometry.location)
-          onValue(x.label)
+          onLocationName(x.label)
         })
       }
-      placeholder={value || t.placeholder }
+      placeholder={locationName || t.placeholder}
       loadOptions={(value) =>
         debounce(value)
           .then((val) =>

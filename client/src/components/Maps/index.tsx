@@ -1,4 +1,5 @@
 import React, { useRef, useMemo, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -10,6 +11,7 @@ import useMap from './hooks/useMap'
 import InfoBox from '../InfoBox'
 
 const Map = () => {
+  const { pathname } = useLocation()
   const dispatch = useDispatch()
   const selected = useSelectedGroup()
   const elem = useRef<HTMLDivElement>(null)
@@ -17,7 +19,10 @@ const Map = () => {
 
   const selectMarker = useGroupClusters(
     map,
-    useMemo(() => ({ disable: false, onSelect: (grp) => dispatch(selectGroup(grp)) }), [dispatch])
+    useMemo(() => ({ disable: pathname !== '/', onSelect: (grp) => dispatch(selectGroup(grp)) }), [
+      dispatch,
+      pathname,
+    ])
   )
 
   useEffect(() => {

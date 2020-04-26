@@ -2,14 +2,15 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import React from 'react'
 
-import { InputGroup } from '../styles/styles'
-import { useControl } from './FormControl'
-import EmailsInput from './EmailsInput'
-import Location from './Location'
+import { useFormControl } from '../state/selectors'
 import { useI18n } from '../contexts/I18nProvider'
+import { InputGroup } from '../styles/styles'
+import EmailsInput from './EmailsInput'
+import { Group } from '../utils/types'
+import Location from './Location'
 
 const EditGroupForm = ({ disabled }: { disabled?: boolean }) => {
-    const t = useI18n(locale => locale.translation.components.group_form_elements)
+  const t = useI18n((locale) => locale.translation.components.group_form_elements)
   return (
     <div style={{ width: '100%', maxWidth: '30rem' }}>
       <Input
@@ -30,8 +31,7 @@ const EditGroupForm = ({ disabled }: { disabled?: boolean }) => {
 
       <div>
         <Description>
-          {t.emails.description}{' '}
-          <small style={{ color: 'grey' }}>({t.emails.note})</small>
+          {t.emails.description} <small style={{ color: 'grey' }}>({t.emails.note})</small>
         </Description>
         <EmailsInput />
       </div>
@@ -43,11 +43,11 @@ const EditGroupForm = ({ disabled }: { disabled?: boolean }) => {
       <FormButtons>
         <Link to="/">
           <button className="btn-secondary" type="button" disabled={disabled}>
-              {t.buttons.cancel}
+            {t.buttons.cancel}
           </button>
         </Link>
         <button type="submit" disabled={disabled}>
-            {t.buttons.submit}
+          {t.buttons.submit}
         </button>
       </FormButtons>
     </div>
@@ -56,19 +56,19 @@ const EditGroupForm = ({ disabled }: { disabled?: boolean }) => {
 
 export default EditGroupForm
 
-const Input = <T extends any>({
+const Input = <K extends 'name' | 'link_facebook'>({
   name,
   init,
   valid,
   description,
   ...inputProps
 }: {
-  name: string
-  init: T
+  name: K
+  init: string
   description?: string
-  valid?: (x: T) => string | true
+  valid?: (x: string) => string | true
 } & React.InputHTMLAttributes<HTMLInputElement>) => {
-  const { error, props } = useControl(name, init, valid)
+  const [value, onChange, error] = useFormControl<Group, K, string>(name, init, valid)
   return (
     <div style={{ margin: '1rem 0' }}>
       {description && <Description>{description}</Description>}
@@ -79,7 +79,8 @@ const Input = <T extends any>({
             backgroundColor: error ? 'inherit' : 'rgba(0, 255, 0, 0.05)',
           }}
           {...inputProps}
-          {...props}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
         />
       </InputGroup>
     </div>

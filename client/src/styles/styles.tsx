@@ -2,36 +2,6 @@ import styled from 'styled-components'
 import { MOON_BLUE, MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 export const EditPage = styled.div`
-  display: grid;
-  grid: 1fr / 4fr 3fr;
-
-  .main {
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-    form {
-      padding: 1rem;
-      max-width: 28rem;
-    }
-  }
-
-  .item {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 22px -9px #959595;
-    padding: 1rem;
-    border-radius: 8px;
-    width: 100%;
-    min-width: 12rem;
-    max-width: 22rem;
-    margin: 2rem;
-  }
-
-  .preview {
-    background-color: rgba(0, 0, 0, 0.04);
-
-    .item {
-      background-color: rgba(255, 255, 255, 1);
-    }
-  }
-
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     grid: 1fr / 1fr;
 

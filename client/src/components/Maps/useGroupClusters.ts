@@ -13,41 +13,56 @@ export type ClustorProps = {
 }
 export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: ClustorProps) => {
   const groups = useGroupsList()
-  const markers = useRef<google.maps.Marker[]>()
+
   const cluster = useRef<MarkerCluster>()
+  const markers = useRef<google.maps.Marker[]>([])
   const listeners = useRef<google.maps.MapsEventListener[]>([])
 
   useEffect(() => {
-    if (!map.current || groups.length < 1 || disable) return
-    markers.current = groups.map((group, i) => {
-      const marker = new google.maps.Marker({
-        opacity: 0.7,
-        title: group.id,
-        position: group.location_coord,
-        icon: process.env.PUBLIC_URL + '/marker_1.png',
-        clickable: true,
-      })
-      if (onSelect)
-        listeners.current = [
-          ...listeners.current,
-          marker.addListener('click', () => onSelect(group)),
-        ]
-      return marker
-    })
-
+    if (!map.current) return
     cluster.current = new MarkerCluster(map.current, markers.current, {
       minimumClusterSize: 6,
       gridSize: 50,
       clusterClass: 'map-cluster-icon',
       imagePath: process.env.PUBLIC_URL + '/cluster_',
     })
+  }, [map])
 
-    return () => {
-      if (!markers.current || !cluster.current) return
-      markers.current.map((x) => x.unbindAll)
-      cluster.current.clearMarkers()
+  // Adding markers to Cluster
+  useEffect(() => {
+    if (!map.current || groups.length < 1) return
+    const current = cluster.current?.getMarkers().map((x) => x.getTitle())
+    const missing = groups
+      .filter((x) => !current?.includes(x.id))
+      .map((group, i) => {
+        const marker = new google.maps.Marker({
+          opacity: 0.7,
+          title: group.id,
+          position: group.location_coord,
+          icon: process.env.PUBLIC_URL + '/marker_1.png',
+          clickable: true,
+        })
+        if (onSelect)
+          listeners.current = [
+            ...listeners.current,
+            marker.addListener('click', () => onSelect(group)),
+          ]
+        return marker
+      })
+    markers.current = [...markers.current, ...missing]
+    cluster.current?.addMarkers(missing)
+  }, [groups, onSelect, map])
+
+  useEffect(() => {
+    if (!map.current) return
+    if (disable) {
+      cluster.current?.getMarkers().map((x) => x.setVisible(false))
+      cluster.current?.setMap(null)
+    } else {
+      cluster.current?.getMarkers().map((x) => x.setVisible(true))
+      cluster.current?.setMap(map.current)
     }
-  }, [groups, disable, map, onSelect])
+  }, [disable, map])
 
   const selectMarker = useCallback((id: string) => {
     cluster.current?.getMarkers().map((marker) => {
@@ -57,6 +72,15 @@ export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: C
     })
   }, [])
 
-  useEffect(() => () => listeners.current.forEach((x) => x.remove()), [])
+  useEffect(
+    () => () => {
+      cluster.current?.clearMarkers()
+      listeners.current.forEach((x) => x.remove())
+      markers.current.map((x) => x.setMap(null))
+      cluster.current?.setMap(null)
+    },
+    []
+  )
+
   return selectMarker
 }

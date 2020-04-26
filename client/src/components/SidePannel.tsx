@@ -1,25 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
-import Nav from './Nav'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import { useI18n } from '../contexts/I18nProvider'
+import { PannelState } from '../pages/MapLayout'
 import inIframe from '../utils/inIframe'
 import icons from '../utils/icons'
+import Nav from './Nav'
 
 const SidePannel = ({
   children,
   open,
+  state,
   toggle,
 }: {
   open: boolean
+  state: PannelState
   toggle: () => void
   children: React.ReactNode
 }) => {
-  const t = useI18n((locale) => locale.translation.pages.groups)
-
   return (
-    <SidePannelStyles sidebar={open}>
+    <SidePannelStyles state={state} open={open}>
       <div className="panel">
         <div onClick={toggle} className="toggle">
           {open ? icons('chevronL') : icons('chevronR')}
@@ -29,22 +30,6 @@ const SidePannel = ({
             <div onClick={toggle}>{icons('map', 'green')}</div>
           </div>
         </Nav>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            marginTop: '-1rem',
-          }}
-        >
-          {inIframe() ? (
-            <div style={{ height: '1rem' }}></div>
-          ) : (
-            <h3>
-              {t.cta.line1} <br className="break" /> {t.cta.line2}
-            </h3>
-          )}
-        </div>
       </div>
       {children}
     </SidePannelStyles>
@@ -53,11 +38,17 @@ const SidePannel = ({
 
 export default SidePannel
 
-const SidePannelStyles = styled.div<{ sidebar: boolean }>`
+const SidePannelStyles = styled.div<{ state: PannelState; open: boolean }>`
   display: grid;
   grid: 0fr 0fr 0fr 1fr / 1fr;
-  width: 30rem;
-  transform: translateX(${(p) => (p.sidebar ? '0rem' : '-29rem')});
+  width: ${(p) => (p.state === 'pannel' ? '30rem' : '50vw')};
+  transform: translateX(
+    ${(p) => {
+      if (p.open) return '0rem'
+      if (p.state === 'edit') return 'calc(-50vw + 1rem)'
+      return '-29rem'
+    }}
+  );
   height: 100%;
   box-shadow: 0px 0px 22px -9px #959595;
   background-color: white;
@@ -127,7 +118,12 @@ const SidePannelStyles = styled.div<{ sidebar: boolean }>`
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     width: 100vw;
-    transform: translateX(${(p) => (p.sidebar ? '0rem' : 'calc(1rem - 100vw)')});
+    transform: translateX(
+      ${(p) => {
+        if (p.open) return '0rem'
+        return 'calc(1rem - 100vw)'
+      }}
+    );
     .map div {
       opacity: 1;
       margin-right: 0;

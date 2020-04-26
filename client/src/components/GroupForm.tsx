@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 
 import GroupFormElements from '../components/GroupFormElements'
 import ValuesListener from './FormControl/ValuesListener'
-import { EditPage, CenterAlign } from '../styles/styles'
 import Form from '../components/FormControl'
 import { Group } from '../utils/types'
 import { head } from '../utils/fp'
-import PolygonMap from './Maps/PolygonMap'
 
 const GroupForm = <T extends Partial<Group>>({
   group: initialGroup,
@@ -40,19 +39,20 @@ const GroupForm = <T extends Partial<Group>>({
       initialValues={group}
     >
       <ValuesListener onChange={(x) => (error.length > 0 ? setError('') : null)} />
-      <EditPage>
-        <div className="main">
-          <CenterAlign>
-            <GroupFormElements disabled={disable} />
-            <span style={{ color: 'red', height: '1rem' }}>{error || serverError}</span>
-          </CenterAlign>
-        </div>
-        <div className="preview">
-          <PolygonMap />
-        </div>
-      </EditPage>
+      <Styles>
+        <GroupFormElements disabled={disable} />
+        <span style={{ color: 'red', height: '1rem' }}>{error || serverError}</span>
+      </Styles>
     </Form>
   )
 }
+
+const Styles = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export default GroupForm

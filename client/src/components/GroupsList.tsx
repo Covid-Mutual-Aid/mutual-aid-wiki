@@ -1,4 +1,3 @@
-import haversineDistance from 'haversine-distance'
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
 
