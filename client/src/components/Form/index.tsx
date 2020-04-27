@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import React, { useState, useEffect } from 'react'
+import TextareaAutosize from 'react-textarea-autosize'
 
 import { useFormControl, useFormValues } from '../../state/selectors'
 import { useI18n } from '../../contexts/I18nProvider'
-import EmailsInput from './EmailsInput'
+import InputGroup, { Small } from './InputGroup'
 import { Group } from '../../utils/types'
+import EmailsInput from './EmailsInput'
 import Location from '../Location'
-import InputGroup from './InputGroup'
 
 const GroupForm = ({
   onSave,
@@ -48,30 +49,34 @@ const GroupForm = ({
 
   return (
     <Form onSubmit={onSubmit}>
+      <p style={{ padding: '0 1rem', marginBottom: '2rem' }}>
+        Please fill out this form with the details of your group. Be sure to include your email so
+        that if you want to make changes later we
+      </p>
       <Input
         disabled={disabled}
         name="name"
-        init=""
-        placeholder={t.group_form_elements.name.placeholder}
+        placeholder="Name"
+        label={'*' + t.group_form_elements.name.placeholder}
       />
-
       <Input
         disabled={disabled}
         name="link_facebook"
-        init=""
+        label={'*Link to group homepage'}
         placeholder={t.group_form_elements.url.placeholder}
       />
 
-      <div>
-        <Description>
-          {t.group_form_elements.emails.description}{' '}
-          <small style={{ color: 'grey' }}>({t.group_form_elements.emails.note})</small>
-        </Description>
-        <EmailsInput />
+      <InputGroup label="Further details">
+        <GroupDescription />
+      </InputGroup>
+      <EmailsInput label={'*' + t.group_form_elements.emails.description} />
+
+      <div style={{ marginTop: '1rem' }}>
+        <GroupContact />
       </div>
 
       <div style={{ marginTop: '2rem', opacity: disabled ? '.8' : 1 }}>
-        <Location />
+        <InputGroup custom={<Location />} label="Group location" />
       </div>
 
       <FormButtons>
@@ -97,27 +102,63 @@ const Form = styled.form`
   margin: 0 auto;
   padding: 0 1rem;
   box-sizing: border-box;
+  overflow-y: scroll;
+  padding-bottom: 7rem;
 `
 
 const Input = <K extends 'name' | 'link_facebook'>({
   name,
-  init,
   description,
+  label,
   ...inputProps
 }: {
   name: K
-  init: string
   description?: string
+  label?: string
 } & React.InputHTMLAttributes<HTMLInputElement>) => {
-  const [value, onChange] = useFormControl<Group, K, string>(name, init)
+  const [value, onChange] = useFormControl<Group, K, string>(name, '')
   return (
-    <div style={{ margin: '1rem 0' }}>
-      {description && <Description>{description}</Description>}
-      {/* <Error>{error}</Error> */}
-      <InputGroup>
-        <input {...inputProps} value={value} onChange={(e) => onChange(e.target.value)} />
-      </InputGroup>
-    </div>
+    <InputGroup description={description} label={label}>
+      <input {...inputProps} value={value} onChange={(e) => onChange(e.target.value)} />
+    </InputGroup>
+  )
+}
+
+const GroupDescription = () => {
+  const [value, onChange] = useFormControl('description', '')
+  return (
+    <TextareaAutosize
+      placeholder="description"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  )
+}
+
+const GroupContact = () => {
+  const [value, onChange] = useFormControl('contact', { phone: '', email: '' })
+  return (
+    <>
+      <Small>Contact details for the group (Displayed to the public)</Small>
+      <div className="inputs">
+        <InputGroup>
+          <input
+            type="email"
+            placeholder="email"
+            value={value.email}
+            onChange={(e) => onChange({ ...value, email: e.target.value })}
+          />
+        </InputGroup>
+        <InputGroup>
+          <input
+            type="tel"
+            placeholder="Phone"
+            value={value.phone}
+            onChange={(e) => onChange({ ...value, phone: e.target.value })}
+          />
+        </InputGroup>
+      </div>
+    </>
   )
 }
 
@@ -129,11 +170,6 @@ const FormButtons = styled.div`
   button {
     margin: 0 0.4rem;
   }
-`
-
-const Description = styled.p`
-  padding: 0 1rem;
-  margin: 0.5rem 0rem 0.5rem 0rem;
 `
 
 export function validURL(str: string) {

@@ -82,6 +82,7 @@ const Styles = styled.div`
   }
   .add-group {
     padding: 0rem 0.2rem;
+    margin-top: 0rem;
     margin-bottom: 1.2rem;
     color: ${MOON_BLUE};
     cursor: pointer;

@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 
 import { useI18n } from '../../contexts/I18nProvider'
 import { useFormControl } from '../../state/selectors'
+import InputGroup from './InputGroup'
 
-const EmailsInput = () => {
+const EmailsInput = ({ label }: { label?: string }) => {
   const t = useI18n((locale) => locale.translation.components.emails_input)
   const [emails, onChange] = useFormControl('emails', [] as string[])
   const [value, setValue] = useState('')
@@ -27,25 +28,35 @@ const EmailsInput = () => {
     }
   }
   return (
-    <div>
-      <CreatableSelect
-        components={{ DropdownIndicator: null }}
-        styles={{
-          control: (x) => ({ ...x, borderRadius: '20px', padding: '.4rem' }),
-        }}
-        inputValue={value}
-        isClearable
-        isMulti
-        menuIsOpen={false}
-        onChange={(x) => onChange(Array.isArray(x) ? x.map((y) => y.value) : [])}
-        onBlur={() => handleKeyDown({ key: 'Tab' } as any)}
-        onInputChange={setValue}
-        onKeyDown={handleKeyDown}
-        placeholder={t.placeholder}
-        value={emails.map((x) => ({ label: x, value: x }))}
-      />
-      <p style={{ paddingLeft: '1rem', margin: '.4rem 0rem 0rem 0rem', color: 'red' }}>{error}</p>
-    </div>
+    <InputGroup
+      error={error}
+      label={label}
+      custom={
+        <CreatableSelect
+          components={{ DropdownIndicator: null }}
+          styles={{
+            control: (x) => ({
+              ...x,
+              // borderRadius: '20px',
+              borderRadius: '20px',
+              border: 'none',
+              padding: '.4rem',
+              backgroundColor: 'transparent',
+            }),
+          }}
+          inputValue={value}
+          isClearable
+          isMulti
+          menuIsOpen={false}
+          onChange={(x) => onChange(Array.isArray(x) ? x.map((y) => y.value) : [])}
+          onBlur={() => handleKeyDown({ key: 'Tab' } as any)}
+          onInputChange={setValue}
+          onKeyDown={handleKeyDown}
+          placeholder={t.placeholder}
+          value={emails.map((x) => ({ label: x, value: x }))}
+        />
+      }
+    />
   )
 }
 

@@ -23,7 +23,15 @@ const Location = () => {
     <AsyncCreatableSelect
       styles={{
         placeholder: (styles) => ({ ...styles, color: 'rgba(0, 0, 0, 0.3) !important;' }),
-        control: (x) => ({ ...x, borderRadius: '20px', padding: '.2rem .4rem' }),
+        control: (x) => ({
+          ...x,
+          borderRadius: '20px',
+          padding: '.2rem .4rem',
+          border: 'none',
+          backgroundColor: 'transparent',
+        }),
+        menu: (x) => ({ ...x, borderRadius: '25px', padding: '.4rem' }),
+        option: (x) => ({ ...x, borderRadius: '25px' }),
       }}
       multi={false}
       onChange={(x: any) =>

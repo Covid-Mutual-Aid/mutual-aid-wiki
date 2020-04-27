@@ -64,8 +64,7 @@
         }
       },
       "emails": {
-        "description": "Enter any emails for people you want to give access to edit this group",
-        "note": "These will not be public"
+        "description": "Administrators emails (These are private and used to authenticate those who have access to edit information for this group)"
       },
       "buttons": {
         "cancel": "cancel",
