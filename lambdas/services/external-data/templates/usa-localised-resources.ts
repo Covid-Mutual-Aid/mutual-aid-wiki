@@ -1,44 +1,11 @@
 // curl https://sheets.googleapis.com/v4/spreadsheets/1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY/values/Local%20Mutual%20Aid\?key=AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg
 
-import { google, sheets_v4 } from 'googleapis'
-import ENV from '../../_utility_/environment'
-import { ExternalGroup, Group } from '../../_utility_/types'
 import { getGroupsFromSheet } from '../../google/sheets'
 import db from '../../_utility_/database'
-import { isSameGroup } from '../../_utility_/utils'
-import { googleGeoLocate } from '../../google/handler'
+import { batchDedupe, geolocateGroups } from '../helpers'
+import { uniqueBy, isSameGroup } from '../../_utility_/utils'
 
 type Cell = string | undefined | null
-
-const batchDedupe = (newGroups: ExternalGroup[]) =>
-  db.groups
-    .get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'updated_at'])
-    .then(
-      (groups: Group[]) =>
-        newGroups.reduce(
-          ([uniqs, dups], group) =>
-            groups.find((ng) => isSameGroup(group, ng))
-              ? [uniqs, [...dups, group]]
-              : [[...uniqs, group], dups],
-          [[], []] as ExternalGroup[][]
-        )[0]
-    )
-
-const geolocateGroups = (groups: ExternalGroup[]) =>
-  Promise.all(
-    groups.map(
-      (g) =>
-        new Promise<Omit<Group, 'id'>>((resolve) => {
-          googleGeoLocate(g.location_name).then(([place]) => {
-            console.log(place, g)
-            resolve({
-              ...g,
-              location_coord: place.geometry.location,
-            })
-          })
-        })
-    )
-  )
 
 export const getData = () =>
   getGroupsFromSheet('1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY', 1455689482, {
@@ -47,10 +14,32 @@ export const getData = () =>
     link_facebook: 'Link',
   })
     .then((g) => g.slice(0, 20))
+    .then(uniqueBy(isSameGroup))
     .then(batchDedupe)
     .then(geolocateGroups)
     .then((g) => {
       console.log(g, 'geolocated')
-      return g
+      return g.map((g) => ({
+        ...g,
+        source: {
+          name: 'usa-localised-resources',
+          external: true,
+          origin:
+            'https://docs.google.com/spreadsheets/d/1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY/edit#gid=1455689482',
+        },
+      }))
     })
     .then(db.groups.createBatch)
+/*
+    - Scrape groups from sheet & dedupe
+    - Get groups from our db from this sheet
+    - For all scraped groups where location_name matches a group we already have, copy location_coords to the new group
+    - Geolocate remaining groups that dont have location_coords
+    - Delete all our entries from this sheet
+    - Replace with geolocated entries
+
+    Cases:
+    - Group is deleted
+    - Group is added 
+    - Group info is edited
+*/

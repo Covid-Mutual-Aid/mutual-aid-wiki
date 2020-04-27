@@ -94,29 +94,6 @@ export const getGroupsFromSheet = (spreadsheetId: string, sheetId: number, map: 
         .filter((x) => x.location_name && x.name && x.link_facebook)
     })
 
-// export const getGroupsFromSheet = (sheetId?: string) =>
-//   sheets.spreadsheets
-//     .get({ spreadsheetId, auth: ENV.GOOGLE_API_KEY, includeGridData: true })
-//     .then((spreadsheet) =>
-//       (spreadsheet.data.sheets || []).find((x) => x.properties?.sheetId === sheetId || ENV.SHEET_ID)
-//     )
-//     .then((x) => {
-//       const rowData = x && x.data && x.data[0] && x.data[0].rowData
-//       if (!rowData) return Promise.reject('No row data')
-//       return rowData
-//         .map((x) => {
-//           const values = (x.values || []).map(
-//             (x) => x.userEnteredValue && x.userEnteredValue.stringValue
-//           )
-//           return {
-//             location_name: values[0] as string,
-//             name: values[2] as string,
-//             link_facebook: values[3] as string,
-//           }
-//         })
-//         .filter((x) => x.location_name && x.name && x.link_facebook)
-//     })
-
 // export const createDedupeSheet = async () => {
 //   const name = new Date().toISOString()
 //   const auth = await authorise()
