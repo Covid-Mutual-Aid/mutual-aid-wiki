@@ -36,7 +36,7 @@ const Map = () => {
 
   return (
     <MapStyles>
-      <InfoBox />
+      {pathname === '/' && <InfoBox />}
       {controls}
       <div id="map" ref={ref} style={{ width: '100%', flex: '1 1 100%' }} />
     </MapStyles>

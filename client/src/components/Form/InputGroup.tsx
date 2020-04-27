@@ -95,4 +95,8 @@ const inputStyles = css`
     position: relative;
     top: -0.25rem;
   }
+
+  input:-internal-autofill-selected {
+    border-radius: 25px;
+  }
 `

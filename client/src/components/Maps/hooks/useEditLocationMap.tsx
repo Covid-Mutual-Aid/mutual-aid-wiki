@@ -49,12 +49,12 @@ export default useEditLocationMap
 
 const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 'none')[] }>`
   z-index: 1;
-  top: ${(p) => (p.disable ? '-10rem' : '0rem')};
+  bottom: ${(p) => (p.disable ? '-10rem' : '4rem')};
   left: calc(50% - (22rem * 0.5));
   width: 18rem;
   box-shadow: 0px 0px 22px -9px #959595;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 25px;
   margin: 1rem;
   position: absolute;
   display: flex;
@@ -66,7 +66,8 @@ const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 
     background-color: transparent;
     transition: 0.2s;
     border: 1px solid black;
-    margin: 1rem;
+    border-radius: 25px;
+    margin: .5rem;
   }
 
   ${(p) =>
@@ -83,8 +84,7 @@ const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     top: initial;
-    margin-bottom: 4rem
+    bottom: ${(p) => (p.disable ? '-10rem' : '4rem')};
     transition: bottom 0.3s;
-    bottom: 0;
   }
 `
