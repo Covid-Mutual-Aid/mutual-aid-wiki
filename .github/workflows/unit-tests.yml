@@ -7,7 +7,7 @@ on:
       - client/**
 
 jobs:
-  test:
+  cache:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,8 +21,21 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('js/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+  lambdas:
+    runs-on: ubuntu-latest
+    needs: cache
+    steps:
       - name: Install dependancies
         run: yarn install
-      - name: Run lambda tests
+      - name: Run lambda unit tests
         run: yarn test
         working-directory: lambdas
+  client:
+    runs-on: ubuntu-latest
+    needs: cache
+    steps:
+      - name: Install dependancies
+        run: yarn install
+      - name: Run client unit tests
+        run: yarn test
+        working-directory: client
