@@ -89,7 +89,9 @@ const GroupForm = ({
           {t.group_form_elements.buttons.submit}
         </button>
       </FormButtons>
-      <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>
+      <p style={{ textAlign: 'center', color: 'red' }} data-testid="validation-error">
+        {error}
+      </p>
     </Form>
   )
 }
@@ -146,7 +148,7 @@ const GroupContact = () => {
           <input
             type="email"
             placeholder="email"
-            value={value.email}
+            value={value.email || ''}
             onChange={(e) => onChange({ ...value, email: e.target.value })}
           />
         </InputGroup>
@@ -154,7 +156,7 @@ const GroupContact = () => {
           <input
             type="tel"
             placeholder="Phone"
-            value={value.phone}
+            value={value.phone || ''}
             onChange={(e) => onChange({ ...value, phone: e.target.value })}
           />
         </InputGroup>

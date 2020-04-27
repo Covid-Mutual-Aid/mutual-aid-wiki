@@ -9,9 +9,12 @@ const offlineOptions = {
   endpoint: 'http://localhost:8000',
   accessKeyId: 'DEFAULT_ACCESS_KEY',
   secretAccessKey: 'DEFAULT_SECRET',
+  convertEmptyValues: true,
 }
 
-export const dynamoClient = isOffline() ? new DocumentClient(offlineOptions) : new DocumentClient()
+export const dynamoClient = isOffline()
+  ? new DocumentClient(offlineOptions)
+  : new DocumentClient({ convertEmptyValues: true })
 
 export const groupsdb = createTableAPI<Group>({
   table: ENV.GROUPS_TABLE as string,

@@ -16,6 +16,7 @@ import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
 
 import './styles/index.css'
+import InitialRequests from './state/InitialRequests'
 
 if (!inIframe()) {
   gtag('event', 'Viewed on covidmutualaid.cc', {
@@ -24,18 +25,22 @@ if (!inIframe()) {
   })
 }
 
-let current = { endpoint: '/api' }
+let current = { endpoint: '/api' } as { endpoint: string | Promise<string> }
 if ((window as any).location.host.includes('localhost')) {
-  current.endpoint = 'http://staging.mutualaid.wiki/api'
+  current.endpoint = fetch('http://localhost:4000/local/ping')
+    .then((x) => (x.ok ? (current.endpoint = 'http://localhost:4000/local') : Promise.reject('')))
+    .catch((err) => (current.endpoint = 'http://staging.mutualaid.wiki/api'))
 } else {
   Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 }
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
-  fetch(current.endpoint + input, init).then((x) => {
-    if (!x.ok) return Promise.reject(x.statusText)
-    return (x.json && x.json()) || x
-  })
+  Promise.resolve(current.endpoint).then((endpoint) =>
+    fetch(endpoint + input, init).then((x) => {
+      if (!x.ok) return Promise.reject(x.statusText)
+      return (x.json && x.json()) || x
+    })
+  )
 
 const render = () => {
   const App = require('./App').default
@@ -43,6 +48,7 @@ const render = () => {
     <Router>
       <RequestProvider request={request}>
         <StateProvider>
+          <InitialRequests />
           <SearchProvider>
             <I18nProvider>
               <App />
