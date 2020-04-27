@@ -1,11 +1,17 @@
+export type Coord = { lat: number; lng: number }
 export type Group = {
   id: string
   name: string
   emails?: string[]
+  description?: string
+  contact?: {
+    phone?: string
+    email?: string
+  }
   link_facebook: string
   location_name: string
-  location_coord: { lat: number; lng: number }
-  location_poly?: { lat: number; lng: number }[]
+  location_coord: Coord
+  location_poly?: Coord[]
   created_at?: string
   updated_at?: string
 }

@@ -35,8 +35,11 @@ export const getGroups = lambda((req$) =>
         'location_name',
         'location_coord',
         'location_poly',
+        'contact',
+        'description',
+        'updated_at',
       ]
-      console.log(auth)
+
       const attributes: (keyof Group)[] = auth ? [...base, 'emails'] : base
 
       if (params && params.id) return db.groups.getById(params.id, attributes)

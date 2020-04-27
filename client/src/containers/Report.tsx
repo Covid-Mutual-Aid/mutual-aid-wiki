@@ -41,14 +41,6 @@ const Report = () => {
           <p>{t.report_reason_prompt}</p>
           <InputGroup>
             <input
-              style={{
-                backgroundColor:
-                  message.length > 0
-                    ? validMessage(message)
-                      ? 'rgba(0, 255, 0, 0.1)'
-                      : 'rgba(255, 0, 0, 0.1)'
-                    : 'inherit',
-              }}
               placeholder={t.report_reason_placeholder}
               value={message}
               onChange={(e) => {
