@@ -9,8 +9,8 @@ import { selectGroup } from '../state/reducers/groups'
 
 import useBrowserGeolocate from '../hooks/useBrowserGeolocate'
 import { MOON_BLUE } from '../utils/CONSTANTS'
-import { InputGroup } from '../styles/styles'
 import icons from '../utils/icons'
+import InputGroup from './Form/InputGroup'
 
 const SearchBox = () => {
   const dispatch = useDispatch()
@@ -57,7 +57,13 @@ const SearchBox = () => {
           </p>
         </div>
       ) : (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Link to="/add-group">
             <p className="add-group">{t.add_prompt}</p>
           </Link>
@@ -75,7 +81,8 @@ const Styles = styled.div`
     color: ${MOON_BLUE};
   }
   .add-group {
-    padding: 0rem 1rem;
+    padding: 0rem 0.2rem;
+    margin-bottom: 1.2rem;
     color: ${MOON_BLUE};
     cursor: pointer;
   }

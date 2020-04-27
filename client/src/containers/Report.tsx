@@ -1,9 +1,10 @@
-import { CenterAlign, FormButtons, InputGroup } from '../styles/styles'
+import { CenterAlign, FormButtons } from '../styles/styles'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import React, { useState } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
 import { useI18n } from '../contexts/I18nProvider'
+import InputGroup from '../components/Form/InputGroup'
 
 const Report = () => {
   const [successModal, setSuccessModal] = useState(false)

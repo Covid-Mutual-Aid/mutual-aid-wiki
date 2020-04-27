@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { InputGroup } from '../styles/styles'
 import { useRequest } from '../contexts/RequestProvider'
 import { useI18n } from '../contexts/I18nProvider'
 import styled from 'styled-components'
 import { Link, useParams, useHistory } from 'react-router-dom'
+import InputGroup from '../components/Form/InputGroup'
 
 const EmailAuth = () => {
   const { id } = useParams()

@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react'
 
 import { useFormControl, useFormValues } from '../../state/selectors'
 import { useI18n } from '../../contexts/I18nProvider'
-import { InputGroup } from '../../styles/styles'
 import EmailsInput from './EmailsInput'
 import { Group } from '../../utils/types'
 import Location from '../Location'
+import InputGroup from './InputGroup'
 
 const GroupForm = ({
   onSave,
