@@ -2,16 +2,15 @@ import { useLocation, Switch, Route } from 'react-router-dom'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import Map from '../components/Maps'
-
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import { useI18n } from '../contexts/I18nProvider'
 import GroupsList from '../components/GroupsList'
 import SidePannel from '../components/SidePannel'
 import SearchBox from '../components/SearchBox'
+import inIframe from '../utils/inIframe'
+import Map from '../components/Maps'
 import CreateGroup from './Create'
 import EditGroup from './Edit'
-import inIframe from '../utils/inIframe'
-import { useI18n } from '../contexts/I18nProvider'
 
 export type PannelState = 'pannel' | 'edit'
 
@@ -40,9 +39,9 @@ const MapLayout = () => {
               {inIframe() ? (
                 <div style={{ height: '1rem' }}></div>
               ) : (
-                <h3>
+                <h1 style={{ margin: '.2rem 0rem', paddingLeft: '.1rem' }}>
                   {t.cta.line1} <br className="break" /> {t.cta.line2}
-                </h3>
+                </h1>
               )}
             </div>
             <SearchBox />
