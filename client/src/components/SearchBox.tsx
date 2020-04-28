@@ -11,6 +11,7 @@ import useBrowserGeolocate from '../hooks/useBrowserGeolocate'
 import { MOON_BLUE } from '../utils/CONSTANTS'
 import icons from '../utils/icons'
 import InputGroup from './Form/InputGroup'
+import inIframe from '../utils/inIframe'
 
 const SearchBox = () => {
   const dispatch = useDispatch()
@@ -39,7 +40,7 @@ const SearchBox = () => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <div className="button-group">
-            <button onClick={() => geolocateUser()}>{icons('nav')}</button>
+            {!inIframe() && <button onClick={() => geolocateUser()}>{icons('nav')}</button>}
             <button type="submit">{icons('search')}</button>
           </div>
         </InputGroup>
