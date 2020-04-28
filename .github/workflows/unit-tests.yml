@@ -5,6 +5,7 @@ on:
     paths:
       - lambdas/**
       - client/**
+      - .github/**
 
 jobs:
   cache:
