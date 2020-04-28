@@ -36,3 +36,7 @@ yarn-error.log*
 .env
 # Local Netlify folder
 .netlify
+
+# Data files
+scripts/groups-table.json
+groups-table.json

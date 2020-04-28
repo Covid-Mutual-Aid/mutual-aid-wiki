@@ -6,21 +6,17 @@ import React from 'react'
 import 'promise-polyfill/src/polyfill'
 import 'whatwg-fetch'
 
-import './styles/index.css'
-
 import RequestProvider from './contexts/RequestProvider'
-import * as serviceWorker from './utils/serviceWorker'
+import SearchProvider from './contexts/SearchProvider'
+import I18nProvider from './contexts/I18nProvider'
+import StateProvider from './state/StateProvider'
 
-import StateProvider from './contexts/StateContext'
-import DataProvider from './contexts/DataProvider'
-import MapProvider from './contexts/MapProvider'
+import * as serviceWorker from './utils/serviceWorker'
 import inIframe from './utils/inIframe'
 import { gtag } from './utils/gtag'
-import App from './App'
 
-import I18nProvider from './contexts/I18nProvider'
-
-Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
+import './styles/index.css'
+import InitialRequests from './state/InitialRequests'
 
 if (!inIframe()) {
   gtag('event', 'Viewed on covidmutualaid.cc', {
@@ -29,35 +25,46 @@ if (!inIframe()) {
   })
 }
 
-let current = { endpoint: '/api' }
+let current = { endpoint: '/api' } as { endpoint: string | Promise<string> }
 if ((window as any).location.host.includes('localhost')) {
-  current.endpoint = 'http://mutualaid.wiki/api'
+  current.endpoint = fetch('http://localhost:4000/local/ping')
+    .then((x) => (x.ok ? (current.endpoint = 'http://localhost:4000/local') : Promise.reject('')))
+    .catch((err) => (current.endpoint = 'http://staging.mutualaid.wiki/api'))
+} else {
+  Sentry.init({ dsn: 'https://54b6389bc04849729985b907d7dfcffe@sentry.io/5169267' })
 }
 
 const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 0): Promise<T> =>
-  fetch(current.endpoint + input, init).then((x) => {
-    if (!x.ok) return Promise.reject(x.statusText)
-    return (x.json && x.json()) || x
-  })
+  Promise.resolve(current.endpoint).then((endpoint) =>
+    fetch(endpoint + input, init).then((x) => {
+      if (!x.ok) return Promise.reject(x.statusText)
+      return (x.json && x.json()) || x
+    })
+  )
 
-const Render = () => (
-  <Router>
-    <RequestProvider request={request}>
-      <DataProvider>
+const render = () => {
+  const App = require('./App').default
+  ReactDOM.render(
+    <Router>
+      <RequestProvider request={request}>
         <StateProvider>
-          <I18nProvider>
-            <MapProvider>
+          <InitialRequests />
+          <SearchProvider>
+            <I18nProvider>
               <App />
-            </MapProvider>
-          </I18nProvider>
+            </I18nProvider>
+          </SearchProvider>
         </StateProvider>
-      </DataProvider>
-    </RequestProvider>
-  </Router>
-)
+      </RequestProvider>
+    </Router>,
+    document.getElementById('root')
+  )
+}
+render()
 
-ReactDOM.render(<Render />, document.getElementById('root'))
-
+if (process.env.NODE_ENV === 'development' && (module as any).hot) {
+  ;(module as any).hot.accept('./App', render)
+}
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA

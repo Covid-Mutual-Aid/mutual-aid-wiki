@@ -70,3 +70,28 @@ export const comp2 = <A extends any, B extends any, C extends any>(
   fn1: (x: B) => C,
   fn2: (x: A) => B
 ) => (x: A) => fn1(fn2(x))
+
+export const isObject = <T extends Record<any, any>>(item: unknown): item is T =>
+  typeof item === 'object' && !Array.isArray(item) && item !== null
+
+export const filterObj = <T extends {}>(
+  fn: <K extends keyof T>(key: K, value: T[K]) => boolean
+) => (x: T): Partial<T> =>
+  (Object.keys(x) as (keyof T)[])
+    .filter((key) => fn(key, x[key]))
+    .reduce((all, key) => ({ ...all, [key]: x[key] }), {})
+
+export const goDeep = (fn: (x: any) => any) => (x: any) =>
+  fn(
+    Object.keys(x).reduce(
+      (all, key) => ({
+        ...all,
+        [key]: isObject(x[key]) ? fn(x[key]) : x[key],
+      }),
+      {}
+    )
+  )
+
+export const mapValues = <T extends Record<any, any>>(fn: <K extends keyof T>(x: K) => T[K]) => (
+  x: T
+) => Object.keys(x).reduce((all, key) => ({ ...all, [key]: fn(x[key]) }), {})

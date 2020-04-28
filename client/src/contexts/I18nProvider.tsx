@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useData } from "./DataProvider"
-import useLocallyStoredState from "../utils/useLocallyStoredState"
+import React, { createContext, useContext, useEffect } from 'react'
+import useLocallyStoredState from '../utils/useLocallyStoredState'
 
 import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'
 
 import esTranslation from '../locales/es.json'
 import AboutES from '../components/internationalized/AboutES'
+import { useLocationState } from '../state/reducers/location'
 
 type Translation = typeof enTranslation
 
@@ -15,58 +15,57 @@ class Locale {
   name: string
   translation: Translation
   components: { about: JSX.Element }
-  constructor(code: string, name: string, translation: Translation, components: { about: JSX.Element }) {
-    this.code = code;
-    this.name = name;
-    this.translation = translation;
-    this.components = components;
+  constructor(
+    code: string,
+    name: string,
+    translation: Translation,
+    components: { about: JSX.Element }
+  ) {
+    this.code = code
+    this.name = name
+    this.translation = translation
+    this.components = components
   }
 }
 
+const en: Locale = new Locale('en', 'English', enTranslation, { about: <AboutEN /> })
 
-const en : Locale = new Locale("en", "English", enTranslation,
-                               { about: <AboutEN /> })
+const es: Locale = new Locale('es', 'Español (Castellano)', esTranslation, { about: <AboutES /> })
 
-const es : Locale = new Locale("es", "Español (Castellano)", esTranslation,
-                               { about: <AboutES /> })
+const defaultLocaleCode = 'en'
 
-const defaultLocaleCode = "en"
-
-const locales : { [index: string] : Locale } = {
-  "en": en,
-  "es": es
+const locales: { [index: string]: Locale } = {
+  en: en,
+  es: es,
 }
-
 
 const I18nContext = createContext<Locale>(en)
 
-const I18nMethodsContext = createContext<(x : string) => void>((_x) => null)
+const I18nMethodsContext = createContext<(x: string) => void>((_x) => null)
 
 const I18nProvider = ({ children }: { children: React.ReactNode }) => {
-  const { location } = useData();
-  const [localeString, setLocale] = useLocallyStoredState<string | undefined>("locale", undefined)
+  const location = useLocationState().user
+  const [localeString, setLocale] = useLocallyStoredState<string | undefined>('locale', undefined)
   useEffect(() => {
     const localeCode = location && location.countryCode && location.countryCode.toLowerCase()
-    if(localeString === undefined) {
+    if (localeString === undefined) {
       return setLocale(localeCode)
     }
-  }, [location])
+  }, [location, setLocale, localeString])
   const locale = locales[localeString || defaultLocaleCode]
-  const localeCallback = (x : string) => {
+  const localeCallback = (x: string) => {
     setLocale(x)
   }
   return (
     <I18nMethodsContext.Provider value={localeCallback}>
-        <I18nContext.Provider value={locale}>
-            {children}
-        </I18nContext.Provider>
+      <I18nContext.Provider value={locale}>{children}</I18nContext.Provider>
     </I18nMethodsContext.Provider>
   )
 }
 
-type LocaleTransformer<T> = (v : Locale) => T
+type LocaleTransformer<T> = (v: Locale) => T
 
-export function useI18n<T>(f : LocaleTransformer<T>) : T {
+export function useI18n<T>(f: LocaleTransformer<T>): T {
   return f(useContext(I18nContext))
 }
 

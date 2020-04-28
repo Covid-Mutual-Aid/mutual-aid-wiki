@@ -53,21 +53,20 @@
       "placeholder": "Enter any emails..."
     },
     "group_form_elements": {
-      "name" : {
+      "name": {
         "placeholder": "Group name",
         "errors": {
           "none_provided": "Must provide a group name"
         }
       },
-      "url" : {
+      "url": {
         "placeholder": "https://www.f...",
         "errors": {
           "none_provided": "Must provide a valid Group URL"
         }
       },
       "emails": {
-        "description": "Enter any emails for people you want to give access to edit this group",
-        "note": "These will not be public"
+        "description": "Administrators emails (These are private and used to authenticate those who have access to edit information for this group)"
       },
       "buttons": {
         "cancel": "cancel",

@@ -7,7 +7,7 @@ name: Deploy Production
 on:
   push:
     paths:
-      - .github/**
+      - .github/deploy-prod.yml
       - lambdas/**
     branches:
       - master
@@ -42,7 +42,7 @@ jobs:
         working-directory: lambdas
         run: |
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          yarn sls deploy --verbose
+          yarn sls deploy --stage dev --verbose
         env:
           # AWS
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

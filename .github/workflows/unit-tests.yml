@@ -3,11 +3,12 @@ name: Unit Tests
 on:
   push:
     paths:
+      - .github/unit-tests.yml
       - lambdas/**
       - client/**
 
 jobs:
-  test:
+  cache:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,6 +24,9 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependancies
         run: yarn install
-      - name: Run lambda tests
+      - name: Run lambda unit tests
         run: yarn test
         working-directory: lambdas
+      - name: Run client unit tests
+        run: yarn test
+        working-directory: client
