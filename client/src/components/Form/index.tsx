@@ -13,8 +13,10 @@ import Location from '../Location'
 const GroupForm = ({
   onSave,
   disabled,
+  noValidate,
 }: {
   disabled?: boolean
+  noValidate?: boolean
   onSave: (group: Group) => void
 }) => {
   const [error, setError] = useState('')
@@ -43,7 +45,7 @@ const GroupForm = ({
           : true,
       true
     )
-    if (typeof error === 'string') return setError(error)
+    if (typeof error === 'string' && !noValidate) return setError(error)
     return onSave(values as Group)
   }
 

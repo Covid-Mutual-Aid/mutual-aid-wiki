@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import GroupForm from '../components/Form'
 import { useFetch } from '../hooks/useAsync'
 
 const CreateGroup = () => {
   const history = useHistory()
+  const { pathname } = useLocation()
   const { data, trigger, isLoading, error } = useFetch<any>(
     useCallback(
       (req, grp) =>
@@ -23,7 +24,9 @@ const CreateGroup = () => {
     history.replace('/')
   }, [data, error, history])
 
-  return <>{!isLoading && <GroupForm onSave={trigger} />}</>
+  return (
+    <>{!isLoading && <GroupForm onSave={trigger} noValidate={/no-validate/.test(pathname)} />}</>
+  )
 }
 
 export default CreateGroup
