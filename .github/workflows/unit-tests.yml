@@ -24,7 +24,6 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependancies
         run: yarn install
-        working-directory: lambdas
       - name: Run lambda unit tests
         run: yarn test
         working-directory: lambdas
