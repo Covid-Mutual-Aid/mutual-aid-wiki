@@ -7,7 +7,7 @@ name: Run Integration Suit
 on:
   push:
     paths:
-      - .github/**
+      - .github/integration-test.yml
       - lambdas/**
     branches:
       - staging
