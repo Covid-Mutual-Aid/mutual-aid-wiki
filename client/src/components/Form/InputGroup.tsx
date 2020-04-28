@@ -93,7 +93,9 @@ const inputStyles = css`
     background-color: transparent;
     color: ${MOON_BLUE};
     position: relative;
-    top: -0.25rem;
+    & > svg {
+      margin-top: -0.1rem;
+    }
   }
 
   input:-internal-autofill-selected {
