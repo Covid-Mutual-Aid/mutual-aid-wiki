@@ -1,0 +1,85 @@
+{
+  "pages": {
+    "groups": {
+      "cta": {
+        "line1": "Encuentra grupos",
+        "line2": "de apoyo mutuo"
+      }
+    },
+    "group_form": {
+      "after_submit_message": "¡Gracias por añadir tu grupo!",
+      "complete_cta": "Por favor completa",
+      "cancel_button": "borrar",
+      "submit_button": "enviar"
+    },
+    "email_auth": {
+      "after_submit_message": "Gracias por tu petición, por favor revisar tu email para más instrucciones",
+      "enter_email_prompt": "Por favor introduce tu dirección de email",
+      "cancel_button": "borrar",
+      "submit_button": "enviar"
+    },
+    "report": {
+      "after_submit_message": "¡Gracias por ponerte en contacto con nosotros!",
+      "report_reason_prompt": "¿Por qué quieres denunciar este grupo?",
+      "report_reason_placeholder": "p. ej. ya no existe",
+      "cancel_button": "borrar",
+      "submit_button": "enviar"
+    }
+  },
+  "components": {
+    "nav": {
+      "information_link": "¿Que está pasando?",
+      "view_full_site_link": "¡Ver el sitio completo!"
+    },
+    "search_box": {
+      "search_prompt": "Busca un lugar",
+      "add_prompt": "...o añade un grupo",
+      "place_name_label": "Mostrando grupos en"
+    },
+    "groups_list": {
+      "load_more_prompt": "mostrar mas"
+    },
+    "group_item": {
+      "group_name_prompt": "Nombre de tu grupo...",
+      "group_location_prompt": "Ubicación de tu grupo...",
+      "edit_link": "Edita grupo",
+      "report_link": "Denuncia grupo"
+    },
+    "emails_input": {
+      "errors": {
+        "none_provided": "Debes agregar al menos una dirección de correo electrónico",
+        "wrong_format": "Debes agregar una dirección de correo electrónico válida"
+      },
+      "placeholder": "Agrega cualquiera dirección de correo electrónico"
+    },
+    "group_form_elements": {
+      "name" : {
+        "placeholder": "Nombre de grupo",
+        "errors": {
+          "none_provided": "Debes agregar un nombre de grupo"
+        }
+      },
+      "url" : {
+        "placeholder": "https://www.f...",
+        "errors": {
+          "none_provided": "Debes agregar una dirección de web válida"
+        }
+      },
+      "emails": {
+        "description": "Agregar todas las direcciones de correo electrónico para las que se quiera dar acceso para editar este grupo",
+        "note": "No van a ser públicas"
+      },
+      "buttons": {
+        "cancel": "borrar",
+        "submit": "enviar"
+      }
+    },
+    "location": {
+      "placeholder": "p.ej. \"Barcelona 08001\"",
+      "create_prompt_prefix": "Ubicación:",
+      "errors": {
+        "none_provided": "Debes agregar un ubicación para tu grupo"
+      }
+    }
+  }
+}
