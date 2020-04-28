@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import { updateForm } from '../state/reducers/form'
@@ -12,6 +12,7 @@ const EditGroup = () => {
   const { id, token } = useParams<{ id: string; token: string }>()
   const [done, setDone] = useState(false)
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const { data: group, isLoading, trigger: refetch } = useFetch<Omit<Group, 'id'>>(
     useCallback((req) => req(`/group/get?id=${id}&token=${token}`), [id, token]),
@@ -41,8 +42,8 @@ const EditGroup = () => {
 
   useEffect(() => {
     if (!savedGroup) return
-    setDone(true)
-  }, [savedGroup])
+    history.push('/')
+  }, [savedGroup, history])
 
   if (done)
     return (
