@@ -27,6 +27,7 @@ jobs:
     steps:
       - name: Install dependancies
         run: yarn install
+        working-directory: lambdas
       - name: Run lambda unit tests
         run: yarn test
         working-directory: lambdas
@@ -36,6 +37,7 @@ jobs:
     steps:
       - name: Install dependancies
         run: yarn install
+        working-directory: client
       - name: Run client unit tests
         run: yarn test
         working-directory: client
