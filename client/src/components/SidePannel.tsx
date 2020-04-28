@@ -5,6 +5,7 @@ import React from 'react'
 import { MOBILE_BREAKPOINT, MOON_BLUE } from '../utils/CONSTANTS'
 import { PannelState } from '../containers/Landing'
 import { useI18n } from '../contexts/I18nProvider'
+import LocaleSwitcher from './LocaleSwitcher'
 import inIframe from '../utils/inIframe'
 import icons from '../utils/icons'
 
@@ -41,6 +42,7 @@ const SidePannel = ({
               <div onClick={toggle}>{icons('map', 'green')}</div>
             </MapIcon>
           </div>
+          <LocaleSwitcher />
         </NavWrapper>
       </div>
       {children}

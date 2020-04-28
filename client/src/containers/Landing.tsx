@@ -14,7 +14,7 @@ import EditGroup from './Edit'
 
 export type PannelState = 'pannel' | 'edit'
 
-const MapLayout = () => {
+const Landing = () => {
   const t = useI18n((locale) => locale.translation.pages.groups)
   const [open, setOpen] = useState(true)
   const { pathname } = useLocation()
@@ -56,7 +56,7 @@ const MapLayout = () => {
   )
 }
 
-export default MapLayout
+export default Landing
 
 const LayoutStyles = styled.div<{ state: PannelState; open: boolean }>`
   display: grid;

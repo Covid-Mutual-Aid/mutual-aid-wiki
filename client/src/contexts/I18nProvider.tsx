@@ -1,22 +1,42 @@
-import React, { createContext, useContext, useState } from 'react'
-import AboutEN from '../components/internationalized/AboutEN'
+import React, { createContext, useContext, useEffect } from 'react'
+import useLocallyStoredState from '../utils/useLocallyStoredState'
+
 import enTranslation from '../locales/en.json'
+import AboutEN from '../components/internationalized/AboutEN'
+
+import esTranslation from '../locales/es.json'
+import AboutES from '../components/internationalized/AboutES'
+import { useLocationState } from '../state/reducers/location'
 
 type Translation = typeof enTranslation
 
 class Locale {
+  code: string
+  name: string
   translation: Translation
   components: { about: JSX.Element }
-  constructor(translation: Translation, components: { about: JSX.Element }) {
+  constructor(
+    code: string,
+    name: string,
+    translation: Translation,
+    components: { about: JSX.Element }
+  ) {
+    this.code = code
+    this.name = name
     this.translation = translation
     this.components = components
   }
 }
 
-const en: Locale = new Locale(enTranslation, { about: <AboutEN /> })
+const en: Locale = new Locale('en', 'English', enTranslation, { about: <AboutEN /> })
+
+const es: Locale = new Locale('es', 'Español (Castellano)', esTranslation, { about: <AboutES /> })
+
+const defaultLocaleCode = 'en'
 
 const locales: { [index: string]: Locale } = {
   en: en,
+  es: es,
 }
 
 const I18nContext = createContext<Locale>(en)
@@ -24,9 +44,18 @@ const I18nContext = createContext<Locale>(en)
 const I18nMethodsContext = createContext<(x: string) => void>((_x) => null)
 
 const I18nProvider = ({ children }: { children: React.ReactNode }) => {
-  const [localeString, setLocale] = useState<string>('en')
-  const locale = locales[localeString] || en
-  const localeCallback = (x: string) => setLocale(x)
+  const location = useLocationState().user
+  const [localeString, setLocale] = useLocallyStoredState<string | undefined>('locale', undefined)
+  useEffect(() => {
+    const localeCode = location && location.countryCode && location.countryCode.toLowerCase()
+    if (localeString === undefined) {
+      return setLocale(localeCode)
+    }
+  }, [location, setLocale, localeString])
+  const locale = locales[localeString || defaultLocaleCode]
+  const localeCallback = (x: string) => {
+    setLocale(x)
+  }
   return (
     <I18nMethodsContext.Provider value={localeCallback}>
       <I18nContext.Provider value={locale}>{children}</I18nContext.Provider>
@@ -41,5 +70,7 @@ export function useI18n<T>(f: LocaleTransformer<T>): T {
 }
 
 export const useI18nSetter = () => useContext(I18nMethodsContext)
+
+export const LOCALES = Object.values(locales)
 
 export default I18nProvider

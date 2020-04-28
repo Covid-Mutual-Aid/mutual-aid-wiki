@@ -19,7 +19,10 @@ const GroupsList = ({ closeSidebar }: { closeSidebar: () => void }) => {
   const visibleGroups = (!search
     ? groups
     : groups
-        .map((x) => ({ ...x, distance: distance(search.coord, x.location_coord) }))
+        .map((x) => ({
+          ...x,
+          distance: search.coord ? distance(search.coord, x.location_coord) : 0,
+        }))
         .sort((a, b) => a.distance - b.distance)
   ).slice(0, limit)
 

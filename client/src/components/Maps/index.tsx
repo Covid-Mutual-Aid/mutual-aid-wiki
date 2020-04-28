@@ -31,7 +31,7 @@ const useClusterMap = (disable: boolean) => {
   )
 
   useEffect(() => {
-    if (!search || !map.current) return
+    if (!search || !map.current || !search.coord || !search.zoom) return
     map.current.panTo(search.coord)
     setZoom(search.zoom)
   }, [search, setZoom, map])

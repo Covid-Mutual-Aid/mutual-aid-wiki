@@ -47,8 +47,8 @@ const GroupItem = ({
       </div>
       <div className="actions">
         <div style={{ display: !disableDropdown && isOpen ? 'block' : 'none' }} className="menu">
-          <div onMouseDown={(e) => history.push(`/edit/${group.id}`)}>Edit group</div>
-          <div onMouseDown={(e) => history.push(`/report/${group.id}`)}>Report group</div>
+          <div onMouseDown={(e) => history.push(`/edit/${group.id}`)}>{t.edit_link}</div>
+          <div onMouseDown={(e) => history.push(`/report/${group.id}`)}>{t.report_link}</div>
         </div>
         <div
           className="more"

@@ -4,14 +4,14 @@ import { RootState } from '.'
 
 type Languages = 'en'
 export type Location = {
-  coord: { lat: number; lng: number }
-  zoom: number
+  coord?: { lat: number; lng: number }
+  zoom?: number
   name?: string
 }
 
 type LocationState = {
   language: Languages
-  user?: Location
+  user?: Location & { countryCode?: string }
   search?: Location
 }
 
@@ -23,8 +23,8 @@ const groupsSlice = createSlice({
     setLanguage(state, action: PayloadAction<Languages>) {
       state.language = action.payload
     },
-    setUserLocation(state, action: PayloadAction<LocationState['user']>) {
-      state.user = action.payload
+    setUserLocation(state, action: PayloadAction<Partial<LocationState['user']>>) {
+      state.user = action.payload ? { ...state.user, ...(action.payload || {}) } : undefined
     },
     setSearchLocation(state, action: PayloadAction<LocationState['search']>) {
       state.search = action.payload

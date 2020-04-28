@@ -48,7 +48,13 @@ const useUserLocation = () => {
     request('/info/locate')
       .then((x) => {
         if (x.message) return console.error(x.message)
-        return dispatch(setUserLocation({ coord: { lat: x.lat, lng: x.lon }, zoom: 4 }))
+        return dispatch(
+          setUserLocation({
+            coord: { lat: x.lat, lng: x.lon },
+            zoom: 4,
+            countryCode: x.countryCode,
+          })
+        )
       })
       .catch((err) => console.error(err))
   }, [request, dispatch])

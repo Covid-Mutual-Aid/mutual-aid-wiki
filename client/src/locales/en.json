@@ -41,7 +41,9 @@
     },
     "group_item": {
       "group_name_prompt": "Your group name...",
-      "group_location_prompt": "Your group location..."
+      "group_location_prompt": "Your group location...",
+      "edit_link": "Edit group",
+      "report_link": "Report group"
     },
     "emails_input": {
       "errors": {
