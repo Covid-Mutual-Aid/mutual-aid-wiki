@@ -7,17 +7,34 @@ import { selectGroup, useSelectedGroup } from '../../state/reducers/groups'
 import useEditLocationMap from './hooks/useEditLocationMap'
 import { useGroupClusters } from './hooks/useGroupClusters'
 import withMap, { MapContext } from './withMap'
+import usePolygon from './hooks/usePolygon'
 import InfoBox from '../InfoBox'
+import { useLocationState } from '../../state/reducers/location'
 
 const useClusterMap = (disable: boolean) => {
   const [, map, setZoom] = useContext(MapContext)
   const selected = useSelectedGroup()
+  const search = useLocationState().search
   const dispatch = useDispatch()
 
   const selectMarker = useGroupClusters(
     map,
     useMemo(() => ({ disable, onSelect: (grp) => dispatch(selectGroup(grp)) }), [dispatch, disable])
   )
+
+  usePolygon(
+    map,
+    useMemo(
+      () => ({ disable: !selected?.location_poly, path: selected?.location_poly, editable: false }),
+      [selected]
+    )
+  )
+
+  useEffect(() => {
+    if (!search || !map.current) return
+    map.current.panTo(search.coord)
+    setZoom(search.zoom)
+  }, [search, setZoom, map])
 
   useEffect(() => {
     if (!map.current || !selected) return

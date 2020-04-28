@@ -3,8 +3,13 @@ import { useEffect, useRef } from 'react'
 export type Coord = { lat: number; lng: number }
 export type MapRef = React.MutableRefObject<google.maps.Map | undefined>
 
-type PolyOptions = { path?: Coord[]; onChange?: (x: Coord[]) => void; disable?: boolean }
-const usePolygon = (map: MapRef, { path, onChange, disable }: PolyOptions) => {
+type PolyOptions = {
+  path?: Coord[]
+  onChange?: (x: Coord[]) => void
+  disable?: boolean
+  editable: boolean
+}
+const usePolygon = (map: MapRef, { path, onChange, disable, editable = true }: PolyOptions) => {
   const poly = useRef<google.maps.Polygon>()
 
   useEffect(() => {
@@ -13,10 +18,12 @@ const usePolygon = (map: MapRef, { path, onChange, disable }: PolyOptions) => {
       paths: path ? [path] : [],
       map: map.current,
       geodesic: true,
-      strokeColor: '#FF0000',
+      fillOpacity: 0.6,
+      fillColor: '#FFFFFF',
+      strokeColor: '#0000DD',
       strokeOpacity: 1.0,
       strokeWeight: 2,
-      editable: true,
+      editable,
     })
 
     const getCoords = () =>
@@ -51,7 +58,7 @@ const usePolygon = (map: MapRef, { path, onChange, disable }: PolyOptions) => {
       unsubs.forEach((x) => x && x.remove())
       poly.current?.setMap(null)
     }
-  }, [map, onChange, path, disable])
+  }, [map, onChange, path, disable, editable])
 
   return poly
 }

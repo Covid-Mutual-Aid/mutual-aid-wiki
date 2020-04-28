@@ -40,7 +40,11 @@ const SearchBox = () => {
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <div className="button-group">
-            {!inIframe() && <button onClick={() => geolocateUser()}>{icons('nav')}</button>}
+            {!inIframe() && (
+              <button onClick={() => geolocateUser()} type="button">
+                {icons('nav')}
+              </button>
+            )}
             <button type="submit">{icons('search')}</button>
           </div>
         </InputGroup>

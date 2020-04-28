@@ -16,7 +16,7 @@ const useEditLocationMap = (disable: boolean) => {
   const [path, onChange] = useFormControl('location_poly')
 
   useMarker(map, { coord, disable: disable || !marker || !coord, onDrag })
-  usePolygon(map, { path, onChange, disable: disable || !poly || !coord })
+  usePolygon(map, { path, onChange, editable: true, disable: disable || !poly || !coord })
 
   useEffect(() => {
     if (!coord) return
