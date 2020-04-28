@@ -7,7 +7,7 @@ name: Deploy Staging
 on:
   push:
     paths:
-      - .github/**
+      - .github/deploy-staging.yml
       - lambdas/**
       - scripts/**
     branches:

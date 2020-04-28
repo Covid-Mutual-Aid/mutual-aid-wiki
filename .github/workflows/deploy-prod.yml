@@ -7,7 +7,7 @@ name: Deploy Production
 on:
   push:
     paths:
-      - .github/**
+      - .github/deploy-prod.yml
       - lambdas/**
     branches:
       - master
