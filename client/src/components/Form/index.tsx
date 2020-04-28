@@ -132,7 +132,7 @@ const GroupDescription = () => {
     <TextareaAutosize
       placeholder="description"
       value={value}
-      style={{ fontFamily: 'inherit' }}
+      style={{ fontFamily: 'inherit', minHeight: '4rem' }}
       onChange={(e) => onChange(e.target.value)}
     />
   )

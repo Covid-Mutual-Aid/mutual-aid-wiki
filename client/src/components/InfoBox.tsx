@@ -1,25 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import GroupItem from './GroupItem'
-
+import { useSelectedGroup } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import isIosSafari from '../utils/isIosSafari'
-import { useSelectedGroup } from '../state/reducers/groups'
+import GroupItem from './GroupItem'
+import DropDown from './DropDown'
 
 const InfoBox = () => {
   const selected = useSelectedGroup()
   return (
     <Wrapper isOpen={!!selected}>
-      {/* {place && (
-        <div className={place ? 'open' : ''}>
-          show results nearest: <span style={{ fontWeight: 'bold' }}>{place.name}</span>
-          <button type="button" className="clear" onClick={() => onSearch()}>
-            clear
-          </button>
-        </div>
-      )} */}
       {selected && <GroupItem group={selected} highlight={false} />}
+      {selected && <DropDown />}
     </Wrapper>
   )
 }
