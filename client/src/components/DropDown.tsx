@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import distance from 'haversine-distance'
+import styled from 'styled-components'
 
 import { useSelectedGroup, useGroupsList } from '../state/reducers/groups'
 import GroupItem from './GroupItem'
@@ -28,7 +28,9 @@ const DropDown = () => {
         <span>near by</span>
         <div>{icons('chevronL')}</div>
       </button>
-      {open && near && near.map((group) => <GroupItem group={group} highlight={false} />)}
+      {open &&
+        near &&
+        near.map((group) => <GroupItem key={group.id} group={group} highlight={false} />)}
     </DropDownStyles>
   )
 }
@@ -36,28 +38,28 @@ const DropDown = () => {
 export default DropDown
 const DropDownStyles = styled.div<{ open: boolean }>`
   height: ${(p) => (p.open ? '80vh' : '2rem')};
-  transition: height 0.3s;
-  width: 100%;
   background-color: white;
-  overflow-y: scroll;
-  padding: 0.2rem;
   box-sizing: border-box;
+  transition: height 0.3s;
+  padding-bottom: 2rem;
+  padding: 1rem 0.2rem;
+  overflow-y: scroll;
+  width: 100%;
 
+  & > div:nth-child(1) {
+    margin-top: 3rem;
+  }
   button {
     background-color: white;
-    padding: 0.1rem 1rem;
-    height: 1.8rem;
-    margin: 0;
-    margin-left: 50%;
-    position: relative;
-    left: -2.5rem;
-    display: flex;
     align-items: center;
-    border-radius: 20px;
-    margin-bottom: 0.2rem;
-    position: sticky;
-    top: 0;
+    position: absolute;
     background: white;
+    display: flex;
+    margin-top: -0.5rem;
+    padding: 0.1rem 1rem;
+    border-radius: 20px;
+    height: 1.8rem;
+    z-index: 3;
     & > div {
       transform: rotateZ(${(p) => (p.open ? '90deg' : '-90deg')});
       transition: transform 0.3s;
