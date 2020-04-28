@@ -5,6 +5,7 @@ import { of, Observable, throwError, OperatorFunction, ObservableInput, forkJoin
 import { map, mergeMap } from 'rxjs/operators'
 
 import { requestFailed } from '../logging'
+import ENV from '../environment'
 
 export type LambdaInput = {
   _event: APIGatewayProxyEvent
@@ -22,7 +23,7 @@ const lambdaRx = (
       const error = err.message || err
       return requestFailed(JSON.stringify({ message: error }), _event).then(() => ({
         statusCode: 500,
-        headers: { 'Access-Control-Allow-Origin': 'mutualaid.wiki' },
+        headers: { 'Access-Control-Allow-Origin': ENV.STAGE === 'dev' ? 'mutualaid.wiki' : '*' },
         body: JSON.stringify({ message: error }),
       }))
     })
@@ -69,7 +70,7 @@ export const prove = <P extends Proof<any>>(proof: P) => <T extends Record<strin
 
 export const responseJson$ = map((res) => ({
   statusCode: 200,
-  headers: { 'Access-Control-Allow-Origin': 'mutualaid.wiki' },
+  headers: { 'Access-Control-Allow-Origin': ENV.STAGE === 'dev' ? 'mutualaid.wiki' : '*' },
   body: JSON.stringify(res),
 }))
 

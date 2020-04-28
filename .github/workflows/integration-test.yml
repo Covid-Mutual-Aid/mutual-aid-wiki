@@ -1,0 +1,99 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Run Integration Suit
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    paths:
+      - .github/**
+      - lambdas/**
+    branches:
+      - staging
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('js/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependancies
+        run: yarn install
+      - name: Deploy lambdas
+        working-directory: lambdas
+        run: |
+          yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          yarn sls deploy --verbose --stage test
+        env:
+          # AWS
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:
+            ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            # Google
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          # Airtable
+          AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
+          AIRTABLE_ATTACH_EMAIL_BASE: appkctIgrzQ69ap4e
+          # other
+          API_ENDPOINT: https://staging.mutualaid.wiki/api
+          CLIENT_ENDPOINT: https://staging.mutualaid.wiki
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: 'Run intergration tests'
+        run: 'yarn test:integration'
+        working-directory: lambdas
+        env:
+          STAGE: test
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Tear down lambdas
+        working-directory: lambdas
+        run: |
+          yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          yarn sls remove --verbose --stage test
+        env:
+          # AWS
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:
+            ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            # Google
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          # Airtable
+          AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
+          AIRTABLE_ATTACH_EMAIL_BASE: appkctIgrzQ69ap4e
+          # other
+          API_ENDPOINT: https://staging.mutualaid.wiki/api
+          CLIENT_ENDPOINT: https://staging.mutualaid.wiki
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Remove dynamodb tables
+        run: |
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          export AWS_DEFAULT_REGION=eu-west-2
+
+          aws --region eu-west-2 dynamodb delete-table --table-name test-active-tokens
+          aws --region eu-west-2 dynamodb delete-table --table-name test-groups10
+          aws --region eu-west-2 dynamodb delete-table --table-name test-location-search

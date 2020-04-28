@@ -1,6 +1,5 @@
 import Airtable from 'airtable'
 import env from '../environment'
-import { omit } from '../utils'
 
 export const airtable = new Airtable({ apiKey: env.AIRTABLE_ATTACH_EMAIL_KEY }).base(
   env.AIRTABLE_ATTACH_EMAIL_BASE
@@ -13,6 +12,7 @@ export type ReportsTable = {
   id: string
   edit: string
   delete: string
+  action: 'waiting'
 }
 
 export type WaitingTable = {
@@ -29,33 +29,29 @@ export type DoneTable = Omit<WaitingTable, 'reject' | 'confirm'> & {
   status: 'confirmed' | 'rejected'
 }
 
-export type Tables = { Waiting: WaitingTable; Done: DoneTable; Reports: ReportsTable }
+export type Tables = {
+  Waiting: WaitingTable
+  Done: DoneTable
+  Reports: ReportsTable
+}
 
-const getAll = <T extends keyof Tables>(table: T) =>
+export const getAll = <T extends keyof Tables>(table: T) =>
   airtable(table).select().all() as Promise<Airtable.Records<Tables[T]>>
-
-export const removeRowByField = <T extends keyof Tables, K extends keyof Tables[T]>(
-  table: T,
-  field: K,
-  value: Tables[T][K]
-) =>
-  (airtable(table).select().all() as Promise<Airtable.Records<WaitingTable>>)
-    .then((x) => x.filter((y) => (y.fields as any)[field] === value))
-    .then((rows) => Promise.all(rows.map((x) => airtable('Waiting').destroy(x.id))))
 
 export const createRow = <T extends keyof Tables>(table: T, fields: Tables[T]) =>
   airtable(table).create([{ fields }])
 
-export const transferToDone = (key: string, status: DoneTable['status']) =>
-  getAll('Waiting')
-    .then((rows) => rows.filter((y) => y.fields.key === key))
+export const transferRow = <T1 extends keyof Tables, T2 extends keyof Tables>(
+  table1: T1,
+  table2: T2,
+  transformer: (table1: Tables[T1]) => Tables[T2]
+) => (selector: (row: Tables[T1]) => boolean) =>
+  getAll(table1)
+    .then((rows) => rows.filter((row) => selector(row.fields)))
     .then((rows) =>
       Promise.all(
         rows.map((row) =>
-          createRow('Done', {
-            status,
-            ...omit(['confirm', 'reject', 'date'], row.fields),
-          }).then(() => removeRowByField('Waiting', 'key', key))
+          createRow(table2, transformer(row.fields)).then(() => airtable(table1).destroy(row.id))
         )
       )
     )

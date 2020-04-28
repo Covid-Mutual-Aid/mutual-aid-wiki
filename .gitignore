@@ -9,7 +9,7 @@ env.json
 .serverless
 stack.json
 live_groups.json
-*.json
+package-lock.json
 
 # Webpack directories
 .webpack
@@ -36,3 +36,7 @@ yarn-error.log*
 .env
 # Local Netlify folder
 .netlify
+
+# Data files
+scripts/groups-table.json
+groups-table.json

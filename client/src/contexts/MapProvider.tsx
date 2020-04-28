@@ -1,8 +1,7 @@
-import React, { createContext, useRef, useContext, useState, useMemo, useEffect } from 'react'
+import React, { createContext, useRef, useContext } from 'react'
+
+import { useLoadScript } from '../components/Maps/hooks/useLoadScripts'
 import { Coord, Group } from '../utils/types'
-import { animate } from '../utils/animate'
-import { usePlaceState } from './StateContext'
-import { useData } from './DataProvider'
 
 export type MapState = {
   center: Coord
@@ -10,78 +9,19 @@ export type MapState = {
   group?: Omit<Group, 'id'>
 }
 
-const MapContext = createContext<{
-  map: React.RefObject<google.maps.Map>
-  setMapState: React.Dispatch<React.SetStateAction<MapState>>
-}>({ map: { current: null }, setMapState: () => null })
+const MapContext = createContext<[React.RefObject<google.maps.Map<Element>>, boolean]>([
+  { current: null },
+  false,
+])
 
 export const defaultState: MapState = { center: { lat: 55.3781, lng: -3.436 }, zoom: 3 }
-const MapStateContext = createContext<[MapState, MapState]>([defaultState, defaultState])
 
 const MapProvider = ({ children }: { children: React.ReactNode }) => {
-  const [mapState, setMapState] = useState<MapState>(defaultState)
+  const loaded = useLoadScript()
   const map = useRef<google.maps.Map>(null)
-  return (
-    <MapContext.Provider value={useMemo(() => ({ map, setMapState }), [map, setMapState])}>
-      <MapStateContext.Provider value={[mapState, defaultState]}>
-        <MapControls />
-        {children}
-      </MapStateContext.Provider>
-    </MapContext.Provider>
-  )
+  return <MapContext.Provider value={[map, loaded]}>{children}</MapContext.Provider>
 }
 
 export default MapProvider
 
-export const useMap = () => useContext(MapContext)
-export const useMapState = () => useContext(MapStateContext)
-
-export const useMapControls = () => {
-  const { map } = useContext(MapContext)
-
-  const panTo = (coord: { lat: number; lng: number }) => {
-    if (!map.current || !window.google) return
-    map.current.panTo(new window.google.maps.LatLng(coord))
-  }
-
-  let unsub = () => void null
-  const zoomTo = (n: number) => {
-    if (!map.current || n === map.current.getZoom()) return
-    unsub = animate(map.current.getZoom(), n, 300)((n) => map.current && map.current.setZoom(n))
-  }
-
-  useEffect(() => unsub)
-
-  return { panTo, zoomTo }
-}
-
-const useControlMap = () => {
-  const { map } = useContext(MapContext)
-  const { panTo, zoomTo } = useMapControls()
-  const { groups, location } = useData()
-  const {
-    search: { place },
-    selected,
-  } = usePlaceState()
-
-  useEffect(() => {
-    const group = selected && groups.find((x) => x.id === selected)
-    if (group) {
-      panTo(group.location_coord)
-      if (map.current && map.current.getZoom() < 15) zoomTo(15)
-    } else if (place) {
-      panTo(place.coords)
-      zoomTo(15)
-    } else if (location) {
-      panTo({ lat: location.lat, lng: location.lng })
-      zoomTo(location.zoom)
-    } else {
-      panTo(defaultState.center)
-      zoomTo(defaultState.zoom)
-    }
-  }, [place, panTo, groups, map, selected, zoomTo, location])
-}
-const MapControls = () => {
-  useControlMap()
-  return null
-}
+export const useMapContext = () => useContext(MapContext)

@@ -3,8 +3,6 @@ import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
 import lambda, { params, body, select, responseJson$, passThrough } from '../_utility_/lib/lambdaRx'
-import { isOffline } from '../_utility_/environment'
-import { addSheetRow } from '../google/sheets'
 import { authorise } from '../_utility_/observables'
 import { isSameGroup } from '../_utility_/utils'
 import { proofs } from '../_utility_/proofs'
@@ -25,26 +23,36 @@ const createNoDuplicates = (
 
 export const getGroups = lambda((req$) =>
   req$.pipe(
-    params(),
-    switchMap((params) =>
-      params && params.id
-        ? db.groups.getById(params.id as string, [
-            'id',
-            'name',
-            'link_facebook',
-            'location_name',
-            'location_coord',
-          ])
-        : db.groups
-            .get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'updated_at'])
-            .then((grps) =>
-              grps.sort(
-                (a, b) =>
-                  new Date(b.updated_at || '01 Jan 2020').valueOf() -
-                  new Date(a.updated_at || '01 Jan 2020').valueOf()
-              )
-            )
-    ),
+    select({
+      params: params(),
+      auth: authorise('edit', true),
+    }),
+    switchMap(({ params, auth }) => {
+      const base: (keyof Group)[] = [
+        'id',
+        'name',
+        'link_facebook',
+        'location_name',
+        'location_coord',
+        'location_poly',
+        'contact',
+        'description',
+        'updated_at',
+      ]
+
+      const attributes: (keyof Group)[] = auth ? [...base, 'emails'] : base
+
+      if (params && params.id) return db.groups.getById(params.id, attributes)
+      return db.groups
+        .get(attributes)
+        .then((grps) =>
+          grps.sort(
+            (a, b) =>
+              new Date(b.updated_at || '01 Jan 2020').valueOf() -
+              new Date(a.updated_at || '01 Jan 2020').valueOf()
+          )
+        )
+    }),
     responseJson$
   )
 )
@@ -69,26 +77,14 @@ export const updateGroup = lambda((req$) =>
 
 // /group/create
 export const createGroup = lambda((req$) =>
-  req$.pipe(
-    body(proofs.groupCreation),
-    switchMap((group) =>
-      createNoDuplicates(group).then((res) =>
-        isOffline()
-          ? res
-          : addSheetRow(group)
-              .catch((err) => console.log('ERROR adding group to sheet'))
-              .then(() => res)
-      )
-    ),
-    responseJson$
-  )
+  req$.pipe(body(proofs.groupCreation), switchMap(createNoDuplicates), responseJson$)
 )
 
 // /group/delete
 export const deleteGroup = lambda((req$) =>
   req$.pipe(
     authorise('delete'),
-    switchMap((val) => db.groups.delete(val.id)),
+    switchMap((val) => (val ? db.groups.delete(val.id) : throwError('No id provided'))),
     responseJson$
   )
 )

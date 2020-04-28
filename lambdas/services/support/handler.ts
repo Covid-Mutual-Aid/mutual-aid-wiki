@@ -4,7 +4,7 @@ import shortid from 'shortid'
 import P from 'ts-prove'
 
 import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
-import { createRow, transferToDone } from '../_utility_/dep/airtable'
+import { createRow, transferRow } from '../_utility_/dep/airtable'
 import { switchMergeKey, authorise } from '../_utility_/observables'
 import { Group } from '../_utility_/types'
 import ENV from '../_utility_/environment'
@@ -18,6 +18,7 @@ import {
   sendSuccessfulVerification,
   sendFailedVerification,
 } from './templates'
+import { omit } from '../_utility_/utils'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
@@ -66,7 +67,12 @@ export const confirmSupportRequest = lambda((req$) =>
       db.groups
         .update({ id: x.id, emails: [x.email] })
         .then(() => sendSuccessfulVerification(x.email, x.id))
-        .then(() => transferToDone(x.key, 'confirmed'))
+        .then(() =>
+          transferRow('Waiting', 'Done', (y) => ({
+            status: 'confirmed',
+            ...omit(['confirm', 'reject', 'date'], y),
+          }))((y) => y.key === x.key)
+        )
     ),
     responseJson$
   )
@@ -76,7 +82,14 @@ export const confirmSupportRequest = lambda((req$) =>
 export const rejectSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('reject'),
-    switchMap((x) => sendFailedVerification(x.email).then(() => transferToDone(x.key, 'rejected'))),
+    switchMap((x) =>
+      sendFailedVerification(x.email).then(() =>
+        transferRow('Waiting', 'Done', (y) => ({
+          status: 'rejected',
+          ...omit(['confirm', 'reject', 'date'], y),
+        }))((y) => y.key === x.key)
+      )
+    ),
     responseJson$
   )
 )
@@ -94,6 +107,7 @@ export const reportGroup = lambda((req$) =>
     switchMap((x) =>
       db.groups.getById(x.id, ['link_facebook', 'name', 'id']).then((grp) =>
         createRow('Reports', {
+          action: 'waiting',
           message: x.message,
           url: grp.link_facebook,
           name: grp.name,

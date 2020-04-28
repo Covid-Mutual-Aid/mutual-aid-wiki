@@ -1,6 +1,7 @@
 import { DocumentClient, WriteRequest } from 'aws-sdk/clients/dynamodb'
 import { v4 as uuid } from 'uuid'
 import { is } from 'ts-prove'
+import { omit, filterObj, goDeep } from '../utils'
 
 const toExp = (x: any): any => {
   if (is.string(x)) return { S: x }
@@ -66,8 +67,11 @@ export default function createTableAPI<
     createBatch: (items: Omit<T, 'id'>[]) =>
       batchRequest(client, TableName, items.map(create).map(putRequest)),
 
-    update: (item: Partial<T> & { id: string }) => {
-      const modifiedKeys = Object.keys(item).filter((x) => x !== 'id')
+    update: (item: Partial<T> & { id: string; updated_at?: string }) => {
+      const modifiedKeys = Object.keys(item).filter(
+        (x) => !['updated_at', 'created_at', 'id'].includes(x)
+      )
+
       const param = {
         TableName,
         Key: { id: item.id },

@@ -1,0 +1,82 @@
+{
+  "pages": {
+    "groups": {
+      "cta": {
+        "line1": "Find local",
+        "line2": "mutual aid groups"
+      }
+    },
+    "group_form": {
+      "after_submit_message": "Thanks for submitting your group",
+      "complete_cta": "Please complete",
+      "cancel_button": "cancel",
+      "submit_button": "submit"
+    },
+    "email_auth": {
+      "after_submit_message": "Thank you for your request. Please check you email for further instructions",
+      "enter_email_prompt": "Please enter your email",
+      "cancel_button": "Cancel",
+      "submit_button": "submit"
+    },
+    "report": {
+      "after_submit_message": "Thanks for your report",
+      "report_reason_prompt": "Why are you reporting this group?",
+      "report_reason_placeholder": "E.g, it no longer exists...",
+      "cancel_button": "Cancel",
+      "submit_button": "submit"
+    }
+  },
+  "components": {
+    "nav": {
+      "information_link": "What's going on?",
+      "view_full_site_link": "View full site!"
+    },
+    "search_box": {
+      "search_prompt": "Enter place",
+      "add_prompt": "Or add a group",
+      "place_name_label": "Showing groups for"
+    },
+    "groups_list": {
+      "load_more_prompt": "load more"
+    },
+    "group_item": {
+      "group_name_prompt": "Your group name...",
+      "group_location_prompt": "Your group location..."
+    },
+    "emails_input": {
+      "errors": {
+        "none_provided": "Must provide at least one email",
+        "wrong_format": "Must be a valid email address"
+      },
+      "placeholder": "Enter any emails..."
+    },
+    "group_form_elements": {
+      "name": {
+        "placeholder": "Group name",
+        "errors": {
+          "none_provided": "Must provide a group name"
+        }
+      },
+      "url": {
+        "placeholder": "https://www.f...",
+        "errors": {
+          "none_provided": "Must provide a valid Group URL"
+        }
+      },
+      "emails": {
+        "description": "Administrators emails (These are private and used to authenticate those who have access to edit information for this group)"
+      },
+      "buttons": {
+        "cancel": "cancel",
+        "submit": "submit"
+      }
+    },
+    "location": {
+      "placeholder": "e.g. \"SE14 4NW\"",
+      "create_prompt_prefix": "Location:",
+      "errors": {
+        "none_provided": "You must set a location for your group"
+      }
+    }
+  }
+}
