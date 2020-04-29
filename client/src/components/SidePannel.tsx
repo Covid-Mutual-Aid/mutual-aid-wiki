@@ -38,11 +38,11 @@ const SidePannel = ({
             )}
           </div>
           <div className="buttons-right">
+            <LocaleSwitcher />
             <MapIcon>
               <div onClick={toggle}>{icons('map', 'green')}</div>
             </MapIcon>
           </div>
-          <LocaleSwitcher />
         </NavWrapper>
       </div>
       {children}
@@ -55,10 +55,11 @@ export default SidePannel
 const MapIcon = styled.div`
   cursor: pointer;
   overflow: none;
-  width: 3rem;
+  width: 0rem;
   height: 3rem;
   border-radius: 50%;
-  transition: box-shadow 0.3s;
+  transition: all 0.3s;
+  transition-property: box-shadow, width;
 
   & > div {
     transition: box-shadow 0.3s;
@@ -78,6 +79,8 @@ const MapIcon = styled.div`
     box-shadow: 0px 0px 22px -4px rgba(111, 111, 111, 0.69);
   }
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+    width: 3rem;
+
     & > div {
       opacity: 1;
       margin-right: 0;
@@ -103,6 +106,14 @@ const SidePannelStyles = styled.div<{ state: PannelState; open: boolean }>`
   display: flex;
   flex-flow: column;
   transition: all 0.3s;
+
+  .buttons-right {
+    width: 8rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
   .panel {
     padding: 0.6rem;

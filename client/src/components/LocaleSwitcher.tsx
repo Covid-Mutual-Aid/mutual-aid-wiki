@@ -22,6 +22,9 @@ const LocaleSwitcher = () => {
 }
 
 const Styles = styled.div`
+  position: relative;
+  height: 1.7rem;
+
   & ul {
     list-style-type: none;
     margin: 0;
