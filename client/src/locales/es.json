@@ -30,8 +30,8 @@
   },
   "components": {
     "nav": {
-      "home": "Map XXX",
-      "information_link": "Information XXX",
+      "home": "Map",
+      "information_link": "Information",
       "view_full_site_link": "¡Ver el sitio completo!"
     },
     "search_box": {

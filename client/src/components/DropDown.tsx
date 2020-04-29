@@ -37,13 +37,12 @@ const DropDown = () => {
 
 export default DropDown
 const DropDownStyles = styled.div<{ open: boolean }>`
-  height: ${(p) => (p.open ? '80vh' : '2rem')};
+  height: ${(p) => (p.open ? '70vh' : '0')};
   background-color: white;
   box-sizing: border-box;
   transition: height 0.3s;
-  padding-bottom: 2rem;
-  padding: 1rem 0.2rem;
-  overflow-y: scroll;
+  margin: 2.6rem 0 0.2rem 0;
+  overflow-y: ${(p) => (p.open ? 'scroll' : 'hidden')};
   width: 100%;
 
   & > div:nth-child(1) {
@@ -55,7 +54,7 @@ const DropDownStyles = styled.div<{ open: boolean }>`
     position: absolute;
     background: white;
     display: flex;
-    margin-top: -0.5rem;
+    margin-top: -2.2rem;
     padding: 0.1rem 1rem;
     border-radius: 20px;
     height: 1.8rem;

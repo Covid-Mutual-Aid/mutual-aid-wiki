@@ -11,23 +11,19 @@ import { createSquare } from './utils'
 const useEditLocationMap = (disable: boolean) => {
   const [, map, setZoom] = useContext(MapContext)
   const [marker, toggleMaker] = useReducer((x) => !x, true)
-  const [poly, togglePoly] = useReducer((x) => !x, false)
+  const [poly, togglePoly] = useReducer((x) => !x, true)
   const [coord, onDrag] = useFormControl('location_coord')
   const [path, onChange] = useFormControl('location_poly')
 
+  const pth = path || (coord ? createSquare(coord, 700) : [])
   useMarker(map, { coord, disable: disable || !marker || !coord, onDrag })
-  usePolygon(map, { path, onChange, editable: true, disable: disable || !poly || !coord })
+  usePolygon(map, { path: pth, onChange, editable: true, disable: disable || !poly || !coord })
 
   useEffect(() => {
     if (!coord) return
     setZoom(13)
     map.current?.panTo(coord)
   }, [coord, map, setZoom])
-
-  useEffect(() => {
-    if ((path && path.length > 0) || !coord) return
-    onChange(createSquare(coord, 1000))
-  }, [coord, path, onChange])
 
   return (
     <Controls
@@ -38,7 +34,13 @@ const useEditLocationMap = (disable: boolean) => {
       <button className="marker" onClick={toggleMaker}>
         marker
       </button>
-      <button className="poly" onClick={togglePoly}>
+      <button
+        className="poly"
+        onClick={() => {
+          togglePoly()
+          onChange(undefined)
+        }}
+      >
         polygon
       </button>
     </Controls>

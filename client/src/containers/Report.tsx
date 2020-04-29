@@ -3,10 +3,8 @@ import { Link, useParams, useHistory } from 'react-router-dom'
 import React, { useState } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import { useI18n } from '../contexts/I18nProvider'
 import InputGroup from '../components/Form/InputGroup'
-import styled from 'styled-components'
-import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import { useI18n } from '../contexts/I18nProvider'
 
 const Report = () => {
   const [successModal, setSuccessModal] = useState(false)

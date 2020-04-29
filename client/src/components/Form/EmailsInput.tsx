@@ -44,7 +44,7 @@ const EmailsInput = ({ label }: { label?: string }) => {
               backgroundColor: 'transparent',
             }),
           }}
-          inputValue={value}
+          name="emails"
           isClearable
           isMulti
           menuIsOpen={false}

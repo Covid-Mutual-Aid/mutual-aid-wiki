@@ -1,7 +1,7 @@
+import TextareaAutosize from 'react-textarea-autosize'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import React, { useState, useEffect } from 'react'
-import TextareaAutosize from 'react-textarea-autosize'
 
 import { useFormControl, useFormValues } from '../../state/selectors'
 import { useI18n } from '../../contexts/I18nProvider'
@@ -88,7 +88,7 @@ const GroupForm = ({
               {t.group_form_elements.buttons.cancel}
             </button>
           </Link>
-          <button role="submit" type="submit" disabled={disabled}>
+          <button type="submit" name="submit" disabled={disabled}>
             {t.group_form_elements.buttons.submit}
           </button>
         </FormButtons>
@@ -130,7 +130,7 @@ const Input = <K extends 'name' | 'link_facebook'>({
   const [value, onChange] = useFormControl<Group, K, string>(name, '')
   return (
     <InputGroup description={description} label={label}>
-      <input {...inputProps} value={value} onChange={(e) => onChange(e.target.value)} />
+      <input {...inputProps} value={value} name={name} onChange={(e) => onChange(e.target.value)} />
     </InputGroup>
   )
 }
@@ -140,6 +140,7 @@ const GroupDescription = () => {
   return (
     <TextareaAutosize
       placeholder="description"
+      name="description"
       value={value}
       style={{ fontFamily: 'inherit', minHeight: '4rem' }}
       onChange={(e) => onChange(e.target.value)}
@@ -156,6 +157,7 @@ const GroupContact = () => {
         <InputGroup>
           <input
             type="email"
+            name="email"
             placeholder="email"
             value={value.email || ''}
             onChange={(e) => onChange({ ...value, email: e.target.value })}
@@ -164,6 +166,7 @@ const GroupContact = () => {
         <InputGroup>
           <input
             type="tel"
+            name="phone"
             placeholder="Phone"
             value={value.phone || ''}
             onChange={(e) => onChange({ ...value, phone: e.target.value })}
