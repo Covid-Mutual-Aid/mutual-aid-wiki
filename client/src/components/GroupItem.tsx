@@ -56,7 +56,7 @@ const GroupItem = ({
           onClick={(e) => setIsOpen(!isOpen)}
           onBlur={(e) => setIsOpen(false)}
         >
-          {icons('more', 'rgba(0,0,0,0.2')}
+          {icons('more', 'rgba(0,0,0,0.6')}
         </div>
         <a target="_blank" rel="noopener noreferrer" href={tidyLink(group.link_facebook)}>
           {iconFromUrl(group.link_facebook)}
@@ -69,7 +69,7 @@ const GroupItem = ({
 const GroupWrapper = styled.div<{ selected: boolean }>`
   position: relative;
   transition: background 0.3s;
-  background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.11)' : 'inherit;')};
+  background: ${(p) => (p.selected ? 'rgba(0, 0, 255, 0.06)' : 'inherit;')};
   padding: 0.5rem 1rem;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 

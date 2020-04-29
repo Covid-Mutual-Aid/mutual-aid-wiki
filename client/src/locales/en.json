@@ -29,7 +29,7 @@
   "components": {
     "nav": {
       "information_link": "What's going on?",
-      "view_full_site_link": "View full site!"
+      "view_full_site_link": "View full screen!"
     },
     "search_box": {
       "search_prompt": "Enter place",

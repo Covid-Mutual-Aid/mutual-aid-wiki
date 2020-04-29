@@ -23,7 +23,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   width: 18rem;
   box-shadow: 0px 0px 22px -9px #959595;
   background-color: white;
-  margin: 1rem;
+  margin: 4rem 0;
   padding: 1rem;
   z-index: 1;
   border-radius: 8px;
