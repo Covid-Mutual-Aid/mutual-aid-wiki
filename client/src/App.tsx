@@ -5,10 +5,12 @@ import MapLayout from './containers/Landing'
 import EmailAuth from './containers/Authenticate'
 import Report from './containers/Report'
 import About from './containers/About'
+import Landing from './components/Landing'
 
 function App() {
   return (
     <Switch>
+      <Route path="/landing" component={Landing} />
       <Route path="/about" exact component={About} />
       <Route path="/report/:id" exact component={Report} />
       <Route path="/edit/:id" exact component={EmailAuth} />
