@@ -1,7 +1,7 @@
+import TextareaAutosize from 'react-textarea-autosize'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import React, { useState, useEffect } from 'react'
-import TextareaAutosize from 'react-textarea-autosize'
 
 import { useFormControl, useFormValues } from '../../state/selectors'
 import { useI18n } from '../../contexts/I18nProvider'
@@ -88,7 +88,7 @@ const GroupForm = ({
               {t.group_form_elements.buttons.cancel}
             </button>
           </Link>
-          <button role="submit" type="submit" disabled={disabled}>
+          <button type="submit" disabled={disabled}>
             {t.group_form_elements.buttons.submit}
           </button>
         </FormButtons>

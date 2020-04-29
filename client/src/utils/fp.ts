@@ -35,3 +35,28 @@ export const mapValues = <A extends any, B extends any>(fn: (value: A) => B) => 
   )
 
 export const tuple = <A extends any[]>(...args: A) => args
+
+export const isObject = <T extends Record<any, any>>(item: unknown): item is T =>
+  typeof item === 'object' && !Array.isArray(item) && item !== null
+
+export const compare = <A extends any, B extends any>(fn: (a: A, b: B) => boolean) => (
+  a: A,
+  b: B
+) => fn(a, b)
+
+export const deepCompare = <A extends any, B extends any>(fn: (a: A, b: B) => boolean) => (
+  a: any,
+  b: any
+): boolean => {
+  if (Array.isArray(a) && Array.isArray(b))
+    return a.reduce<boolean>((all, ai, i) => all && deepCompare(fn)(ai, b[i]), true)
+  if (isObject(a) && isObject(b))
+    return Array.from(new Set([...Object.keys(a), ...Object.keys(b)])).reduce<boolean>(
+      (all, key) => all && deepCompare(fn)(a[key], b[key]),
+      true
+    )
+  return fn(a, b)
+}
+
+export const uniqBy = <T extends any>(fn: (a: T, b: T) => boolean) => (x: T[]) =>
+  x.reduce((all, n) => (all.some((x) => fn(x, n)) ? all : [...all, n]), [] as T[])
