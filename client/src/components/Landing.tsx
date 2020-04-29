@@ -51,6 +51,7 @@ const Landing = () => {
           <div className="description">
             <h1>Add and edit your group</h1>
           </div>
+          <div className="spacer"></div>
           <div className="image">
             <div className="image-placeholder"></div>
           </div>
@@ -61,6 +62,7 @@ const Landing = () => {
           <div className="image">
             <div className="image-placeholder"></div>
           </div>
+          <div className="spacer"></div>
           <div className="description">
             <h1>Add and edit your group</h1>
           </div>
@@ -117,7 +119,8 @@ const Highlight = styled.div`
 const Feature = styled.div`
   display: flex;
   justify-content: center;
-  padding: 2rem 0;
+  padding: 4rem 0;
+  background-color: rgba(0, 0, 255, 0.03);
 
   .wrapper {
     max-width: 60rem;
@@ -125,9 +128,13 @@ const Feature = styled.div`
     flex-direction: row;
   }
 
+  .spacer {
+    width: 6rem;
+  }
+
   .image-placeholder {
-    background-color: grey;
+    background-color: lightgray;
     height: 20rem;
-    width: 40rem;
+    width: 30rem;
   }
 `
