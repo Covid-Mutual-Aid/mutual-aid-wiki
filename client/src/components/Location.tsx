@@ -18,7 +18,6 @@ const Location = () => {
   const request = useRequest()
   const [locationName, onLocationName] = useFormControl('location_name', '')
   const [, onCoords] = useFormControl('location_coord')
-
   return (
     <AsyncCreatableSelect
       styles={{
