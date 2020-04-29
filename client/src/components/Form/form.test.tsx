@@ -28,7 +28,7 @@ const getInputFields = (base: HTMLElement) => {
 it('should show validation error when submited without any input', async () => {
   const p = render(<Render />)
   expect(!!p.getByTestId('validation-error').textContent).toBe(false)
-  fireEvent.click(p.getByRole('submit'))
+  fireEvent.click(p.baseElement.querySelector('[name=submit]') as HTMLButtonElement)
   expect(!!p.getByTestId('validation-error').textContent).toBe(true)
 })
 
@@ -55,23 +55,23 @@ it('should show validation error when submited without link, name or email', asy
   }
   const p = render(<Render onSave={onSave} req={req} />)
   const { name, link_facebook, emails, location, phone, email } = getInputFields(p.baseElement)
-
+  const submit = p.baseElement.querySelector('[name=submit]') as HTMLButtonElement
   // Name
   fireEvent.change(name, { target: { value: mocGroup.name } })
-  fireEvent.click(p.getByRole('submit'))
+  fireEvent.click(submit)
   expect(!!p.getByTestId('validation-error').textContent).toBe(true)
   expect(onSave.mock.calls).toEqual([])
 
   // Link
   fireEvent.change(link_facebook, { target: { value: mocGroup.link_facebook } })
-  fireEvent.click(p.getByRole('submit'))
+  fireEvent.click(submit)
   expect(!!p.getByTestId('validation-error').textContent).toBe(true)
   expect(onSave.mock.calls).toEqual([])
 
   // Emails
   fireEvent.change(emails, { target: { value: mocGroup.emails[0] } })
   fireEvent.keyDown(emails, { key: 'Tab', code: 'Tab' })
-  fireEvent.click(p.getByRole('submit'))
+  fireEvent.click(submit)
   expect(!!p.getByTestId('validation-error').textContent).toBe(true)
   expect(onSave.mock.calls).toEqual([])
 
@@ -91,6 +91,6 @@ it('should show validation error when submited without link, name or email', asy
   fireEvent.change(email, { target: { value: mocGroup.contact.email } })
 
   // Contact
-  fireEvent.click(p.getByRole('submit'))
+  fireEvent.click(submit)
   expect(onSave.mock.calls[0]).toEqual([mocGroup])
 })

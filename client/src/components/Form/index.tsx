@@ -88,7 +88,7 @@ const GroupForm = ({
               {t.group_form_elements.buttons.cancel}
             </button>
           </Link>
-          <button type="submit" disabled={disabled}>
+          <button type="submit" name="submit" disabled={disabled}>
             {t.group_form_elements.buttons.submit}
           </button>
         </FormButtons>
