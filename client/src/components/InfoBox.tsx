@@ -30,6 +30,10 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   transition: top 0.3s;
   top: ${(p) => (p.isOpen ? '0' : '-20rem')};
 
+  button {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
   h4 {
     font-size: 1.2rem;
   }
