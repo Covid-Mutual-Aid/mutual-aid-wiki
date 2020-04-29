@@ -16,10 +16,10 @@ const Render = ({ onSave }: { onSave: any }) => (
   </Router>
 )
 
-test('rewr', async () => {
+it('should show validation error when submited without data input', async () => {
   const onSave = jest.fn()
   const p = render(<Render onSave={onSave} />)
+  expect(!!p.getByTestId('validation-error').textContent).toBe(false)
   fireEvent.click(p.getByRole('submit'))
-  p.debug()
-  expect(true).toBe(true)
+  expect(!!p.getByTestId('validation-error').textContent).toBe(true)
 })
