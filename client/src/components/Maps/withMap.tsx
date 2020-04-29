@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 
-import { useLoadScript } from './hooks/useLoadScripts'
+import { useLoadScript } from './hooks/useLoadScript'
 import useMap from './hooks/useMap'
 
 export const MapContext = createContext<ReturnType<typeof useMap>>([

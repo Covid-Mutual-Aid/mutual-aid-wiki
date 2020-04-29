@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect } from 'react'
-import useLocallyStoredState from '../utils/useLocallyStoredState'
+import useLocallyStoredState from '../hooks/useLocallyStoredState'
 
 import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'

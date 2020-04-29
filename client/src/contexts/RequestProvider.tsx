@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { Request } from '../utils/api'
+import { Request } from '../utils/types'
 
 const RequestContext = createContext<Request>(() => Promise.reject('No Provider'))
 
