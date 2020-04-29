@@ -11,7 +11,7 @@ const LocaleSwitcher = () => {
       <ul>
         {LOCALES.map((locale) => (
           <li key={locale.code} className={currentLocale === locale.code ? 'selected' : ''}>
-            <button type="button" onClick={() => setLocale(locale.code)}>
+            <button className="btn-bland" type="button" onClick={() => setLocale(locale.code)}>
               <img src={`/flags/${locale.code}.png`} alt={locale.name} />
             </button>
           </li>

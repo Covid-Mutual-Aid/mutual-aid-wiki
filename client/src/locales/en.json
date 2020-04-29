@@ -13,12 +13,14 @@
       "submit_button": "submit"
     },
     "email_auth": {
+      "title": "Edit group",
       "after_submit_message": "Thank you for your request. Please check you email for further instructions",
       "enter_email_prompt": "Please enter your email",
       "cancel_button": "Cancel",
       "submit_button": "submit"
     },
     "report": {
+      "report_group_title": "Report a group",
       "after_submit_message": "Thanks for your report",
       "report_reason_prompt": "Why are you reporting this group?",
       "report_reason_placeholder": "E.g, it no longer exists...",
@@ -28,7 +30,8 @@
   },
   "components": {
     "nav": {
-      "information_link": "What's going on?",
+      "home": "Map",
+      "information_link": "Information",
       "view_full_site_link": "View full screen!"
     },
     "search_box": {
