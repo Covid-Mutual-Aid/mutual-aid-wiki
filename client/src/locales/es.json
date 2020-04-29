@@ -13,12 +13,14 @@
       "submit_button": "enviar"
     },
     "email_auth": {
+      "title": "Editar este grupo",
       "after_submit_message": "Gracias por tu petición, por favor revisar tu email para más instrucciones",
       "enter_email_prompt": "Por favor introduce tu dirección de email",
       "cancel_button": "borrar",
       "submit_button": "enviar"
     },
     "report": {
+      "report_group_title": "Denunciar este grupo",
       "after_submit_message": "¡Gracias por ponerte en contacto con nosotros!",
       "report_reason_prompt": "¿Por qué quieres denunciar este grupo?",
       "report_reason_placeholder": "p. ej. ya no existe",
@@ -28,7 +30,8 @@
   },
   "components": {
     "nav": {
-      "information_link": "¿Que está pasando?",
+      "home": "Map XXX",
+      "information_link": "Information XXX",
       "view_full_site_link": "¡Ver el sitio completo!"
     },
     "search_box": {
@@ -53,13 +56,13 @@
       "placeholder": "Agrega cualquiera dirección de correo electrónico"
     },
     "group_form_elements": {
-      "name" : {
+      "name": {
         "placeholder": "Nombre de grupo",
         "errors": {
           "none_provided": "Debes agregar un nombre de grupo"
         }
       },
-      "url" : {
+      "url": {
         "placeholder": "https://www.f...",
         "errors": {
           "none_provided": "Debes agregar una dirección de web válida"

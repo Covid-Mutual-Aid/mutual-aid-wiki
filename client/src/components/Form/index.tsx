@@ -50,51 +50,53 @@ const GroupForm = ({
   }
 
   return (
-    <Form onSubmit={onSubmit}>
-      <p style={{ padding: '0 1rem', marginBottom: '2rem' }}>
-        Please fill out this form with the details of your group. Be sure to include your email so
-        that if you want to make changes later we
-      </p>
-      <Input
-        disabled={disabled}
-        name="name"
-        placeholder="Name"
-        label={'*' + t.group_form_elements.name.placeholder}
-      />
-      <Input
-        disabled={disabled}
-        name="link_facebook"
-        label={'*Link to group homepage'}
-        placeholder={t.group_form_elements.url.placeholder}
-      />
+    <FormWrapper>
+      <Form onSubmit={onSubmit}>
+        <p style={{ padding: '0 1rem', marginBottom: '2rem' }}>
+          Please fill out this form with the details of your group. You will be able to edit your
+          information via the emails you provide in the Administrators emails section.
+        </p>
+        <Input
+          disabled={disabled}
+          name="name"
+          placeholder="Name"
+          label={'*' + t.group_form_elements.name.placeholder}
+        />
+        <Input
+          disabled={disabled}
+          name="link_facebook"
+          label={'*Link to group homepage'}
+          placeholder={t.group_form_elements.url.placeholder}
+        />
 
-      <InputGroup label="Further details">
-        <GroupDescription />
-      </InputGroup>
-      <EmailsInput label={'*' + t.group_form_elements.emails.description} />
+        <InputGroup label="Further details">
+          <GroupDescription />
+        </InputGroup>
+        <EmailsInput label={'*' + t.group_form_elements.emails.description} />
 
-      <div style={{ marginTop: '1rem' }}>
-        <GroupContact />
-      </div>
+        <div style={{ marginTop: '1rem' }}>
+          <GroupContact />
+        </div>
 
-      <div style={{ marginTop: '2rem', opacity: disabled ? '.8' : 1 }}>
-        <InputGroup custom={<Location />} label="Group location" />
-      </div>
+        <div style={{ marginTop: '2rem', opacity: disabled ? '.8' : 1 }}>
+          <InputGroup custom={<Location />} label="Group location" />
+        </div>
 
-      <FormButtons>
-        <Link to="/">
-          <button className="btn-secondary" type="button" disabled={disabled}>
-            {t.group_form_elements.buttons.cancel}
+        <FormButtons>
+          <Link to="/">
+            <button className="btn-secondary" type="button" disabled={disabled}>
+              {t.group_form_elements.buttons.cancel}
+            </button>
+          </Link>
+          <button role="submit" type="submit" disabled={disabled}>
+            {t.group_form_elements.buttons.submit}
           </button>
-        </Link>
-        <button type="submit" disabled={disabled}>
-          {t.group_form_elements.buttons.submit}
-        </button>
-      </FormButtons>
-      <p style={{ textAlign: 'center', color: 'red' }} data-testid="validation-error">
-        {error}
-      </p>
-    </Form>
+        </FormButtons>
+        <p style={{ textAlign: 'center', color: 'red' }} data-testid="validation-error">
+          {error}
+        </p>
+      </Form>
+    </FormWrapper>
   )
 }
 
@@ -106,8 +108,13 @@ const Form = styled.form`
   margin: 0 auto;
   padding: 0 1rem;
   box-sizing: border-box;
-  overflow-y: scroll;
   padding-bottom: 7rem;
+`
+
+const FormWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  overflow-y: scroll;
 `
 
 const Input = <K extends 'name' | 'link_facebook'>({

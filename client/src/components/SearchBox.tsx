@@ -50,11 +50,27 @@ const SearchBox = () => {
         </InputGroup>
       </form>
       {place ? (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p style={{ padding: '0 1rem' }}>
-            {t.place_name_label}: <b>{place.name}</b>{' '}
+        <div
+          style={{
+            position: 'relative',
+            margin: '0rem 1rem 1rem 1rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <p style={{ margin: 0 }}>
+            {t.place_name_label}: <br />
+            <b>{place.name}</b>{' '}
             <span
-              style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
+              style={{
+                position: 'absolute',
+                top: '0',
+                right: '0',
+                color: 'blue',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
               onClick={() => onSearch()}
             >
               clear
@@ -70,7 +86,9 @@ const SearchBox = () => {
           }}
         >
           <Link to="/add-group">
-            <p className="add-group">{t.add_prompt}</p>
+            <b>
+              <p className="add-group">{t.add_prompt}</p>
+            </b>
           </Link>
         </div>
       )}
@@ -91,6 +109,8 @@ const Styles = styled.div`
     margin-bottom: 1.2rem;
     color: ${MOON_BLUE};
     cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem;
   }
   .search {
     margin-top: 0.5rem;
