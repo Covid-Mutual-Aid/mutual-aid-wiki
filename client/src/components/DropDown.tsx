@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useSelectedGroup, useGroupsList } from '../state/reducers/groups'
 import GroupItem from './GroupItem'
-import icons from '../utils/icons'
+import icons from './icons'
 
 const DropDown = () => {
   const [open, setOpen] = useState(false)

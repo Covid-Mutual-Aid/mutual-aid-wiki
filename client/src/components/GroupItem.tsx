@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { selectGroup, useSelectedGroup } from '../state/reducers/groups'
 import { useI18n } from '../contexts/I18nProvider'
-import icons, { iconFromUrl } from '../utils/icons'
+import icons, { iconFromUrl } from './icons'
 import tidyLink from '../utils/tidyLink'
 import { Group } from '../utils/types'
 

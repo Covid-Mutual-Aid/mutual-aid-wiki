@@ -1,3 +1,5 @@
+export type Request = <T extends any>(input: RequestInfo, init?: RequestInit) => Promise<T>
+
 export type Coord = {
   lat: number
   lng: number

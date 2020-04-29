@@ -6,7 +6,7 @@ import { PannelState } from '../containers/Landing'
 import { useI18n } from '../contexts/I18nProvider'
 import LocaleSwitcher from './LocaleSwitcher'
 import inIframe from '../utils/inIframe'
-import icons from '../utils/icons'
+import icons from './icons'
 import { Toggle } from '../styles/styles'
 
 const SidePannel = ({

@@ -9,7 +9,7 @@ import { selectGroup, useGroupsList } from '../state/reducers/groups'
 
 import useBrowserGeolocate from '../hooks/useBrowserGeolocate'
 import { MOON_BLUE } from '../utils/CONSTANTS'
-import icons from '../utils/icons'
+import icons from './icons'
 import InputGroup from './Form/InputGroup'
 import inIframe from '../utils/inIframe'
 
