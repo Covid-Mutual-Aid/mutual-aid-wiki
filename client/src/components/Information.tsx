@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { useGroupsList } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
@@ -8,11 +8,12 @@ import { useI18n } from '../contexts/I18nProvider'
 import { CenterAlign } from '../styles/styles'
 import icons from './icons'
 
-const Information = ({ open }: { open: boolean }) => {
+const Information = () => {
+  const { pathname } = useLocation()
   const aboutInformation = useI18n((locale) => locale.components.about)
   const groups = useGroupsList()
   return (
-    <LandingStyles open={open}>
+    <LandingStyles open={pathname === '/'}>
       <Hero>
         <div className="hero-content">
           <h1>Mutual Aid Wiki</h1>

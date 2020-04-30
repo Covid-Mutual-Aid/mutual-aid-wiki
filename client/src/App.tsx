@@ -10,7 +10,7 @@ import Report from './containers/Report'
 const App = () => (
   <>
     <Route path="/" component={Information} />
-    <Route path="/map" component={MapLayout} />
+    <Route path="/" component={MapLayout} />
     <Route path="/map/edit/:id" exact component={withModal(EmailAuth)} />
     <Route path="/map/report/:id" exact component={withModal(Report)} />
   </>
