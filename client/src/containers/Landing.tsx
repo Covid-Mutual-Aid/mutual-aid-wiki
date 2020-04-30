@@ -21,11 +21,12 @@ const Landing = () => {
   const t = useI18n((locale) => locale.translation.pages.groups)
   const [open, toggleSideBar] = useSideBar()
   const { pathname } = useLocation()
-  const pannelState = pathname === '/map' ? 'pannel' : 'edit'
+
+  const pannelState = /(add-group)|(edit\/.*?\/.{1,}?$)/.test(pathname) ? 'edit' : 'pannel'
 
   useEffect(() => {
     toggleSideBar(pathname !== '/')
-  }, [pathname])
+  }, [pathname, toggleSideBar])
 
   return (
     <LayoutStyles state={pannelState} open={open}>

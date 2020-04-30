@@ -5,14 +5,12 @@ import { useRequest } from '../contexts/RequestProvider'
 import { useI18n } from '../contexts/I18nProvider'
 
 import { CenterAlign, FormButtons, Card } from '../styles/styles'
-import { useModalClose } from '../components/withModal'
 import InputGroup from '../components/Form/InputGroup'
 
 const Report = () => {
   const [successModal, setSuccessModal] = useState(false)
   const [message, setMessage] = useState('')
   const [validated, setValidated] = useState(false)
-  const closeModal = useModalClose()
 
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
@@ -58,7 +56,7 @@ const Report = () => {
               <button
                 className="btn-secondary"
                 type="button"
-                onClick={() => closeModal(() => history.replace('/map'))}
+                onClick={() => history.replace('/map')}
               >
                 {t.cancel_button}
               </button>

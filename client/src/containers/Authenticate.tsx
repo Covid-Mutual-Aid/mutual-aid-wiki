@@ -1,16 +1,16 @@
+import { useParams, useHistory } from 'react-router-dom'
 import React, { useState } from 'react'
+import styled from 'styled-components'
+
 import { useRequest } from '../contexts/RequestProvider'
 import { useI18n } from '../contexts/I18nProvider'
-import styled from 'styled-components'
-import { useParams, useHistory } from 'react-router-dom'
+
 import InputGroup from '../components/Form/InputGroup'
 import { Card, FormButtons } from '../styles/styles'
-import { useModalClose } from '../components/withModal'
 
 const EmailAuth = () => {
   const { id } = useParams()
   const history = useHistory()
-  const closeModal = useModalClose()
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [sucessModal, setSucessModal] = useState(false)
@@ -50,10 +50,7 @@ const EmailAuth = () => {
             </InputGroup>
             <p style={{ color: 'red' }}>{error}</p>
             <FormButtons>
-              <button
-                className="btn-secondary"
-                onClick={() => closeModal(() => history.replace('/map'))}
-              >
+              <button className="btn-secondary" onClick={() => history.replace('/map')}>
                 {t.cancel_button}
               </button>
               <button type="submit">{t.submit_button}</button>

@@ -73,7 +73,7 @@ export const Toggle = () => {
   )
 }
 
-const ToggleStyles = styled.div`
+export const ToggleStyles = styled.div`
   position: relative;
   display: grid;
   grid: 0fr/1fr 1fr;

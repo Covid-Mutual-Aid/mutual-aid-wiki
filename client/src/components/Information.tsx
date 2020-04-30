@@ -1,17 +1,25 @@
-import React from 'react'
+import { Link, useLocation, useHistory } from 'react-router-dom'
+import React, { useLayoutEffect } from 'react'
 import styled from 'styled-components'
-import { Link, useLocation } from 'react-router-dom'
 
 import { useGroupsList } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import { useI18n } from '../contexts/I18nProvider'
-import { CenterAlign } from '../styles/styles'
+import inIframe from '../utils/inIframe'
 import icons from './icons'
 
 const Information = () => {
+  const history = useHistory()
   const { pathname } = useLocation()
   const aboutInformation = useI18n((locale) => locale.components.about)
   const groups = useGroupsList()
+
+  useLayoutEffect(() => {
+    if (inIframe() && pathname === '/') {
+      history.replace('/map')
+    }
+  }, [pathname, history])
+
   return (
     <LandingStyles open={pathname === '/'}>
       <Hero>
