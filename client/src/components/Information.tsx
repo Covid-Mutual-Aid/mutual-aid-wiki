@@ -138,6 +138,7 @@ const LandingStyles = styled.div<{ open: boolean }>`
   bottom: 0;
   height: 100vh;
   transform: translate3d(0, ${(p) => (!p.open ? '100vh' : '0')}, 0);
+  visibility: ${(p) => (p.open ? 'inherit' : 'hidden')};
   z-index: 3;
   overflow-y: auto;
   transition: transform 0.4s;
