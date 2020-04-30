@@ -70,7 +70,7 @@ export const Toggle = () => {
       <Link className={isHome ? 'selected' : ''} to="/">
         {t.home}
       </Link>
-      <Link className={!isHome ? 'selected' : ''} to="/about">
+      <Link className={!isHome ? 'selected' : ''} to="/information">
         {t.information_link}
       </Link>
     </ToggleStyles>

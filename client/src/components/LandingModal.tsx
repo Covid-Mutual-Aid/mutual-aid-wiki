@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import icons from '../utils/icons'
-import useEditLocationMap from './Maps/hooks/useEditLocationMap'
+import { useGroupsList } from '../state/reducers/groups'
+import { Link } from 'react-router-dom'
 
-const Landing = () => {
+const LandingModal = ({ open }: { open: boolean }) => {
+  const groups = useGroupsList()
   return (
-    <LandingStyles>
+    <LandingStyles open={open}>
       <Hero>
         <div className="hero-content">
           <h1>Mutual Aid Wiki</h1>
@@ -18,7 +20,14 @@ const Landing = () => {
             mutual aid communities and enable mutual aid communities find each other, share
             approaches and support one another.
           </p>
-          <button className="btn-primary">Visit the Map</button>
+          <div className="buttons">
+            <Link to="/">
+              <button className="btn-primary">Visit the Map</button>
+            </Link>
+            <Link to="/about">
+              <button className="btn-secondary">More information</button>
+            </Link>
+          </div>
         </div>
       </Hero>
       <Highlight>
@@ -42,15 +51,16 @@ const Landing = () => {
           </div>
           <div>
             {icons('globe')}
-            <h3>3.5k Groups and counting</h3>
+            <h3>{groups.length} Groups</h3>
             <p>
-              We have just over 3.5k groups from around the world, with new groups being added
+              We have {groups.length} groups from around the world, with new groups being added
               daily. Please get in touch if you would like to sync your data with this resouce.
             </p>
           </div>
         </div>
       </Highlight>
-      <Feature>
+
+      <Feature tint={'rgb(244, 250, 255)'}>
         <div className="wrapper">
           <div className="description">
             <h1>Add your group</h1>
@@ -65,7 +75,7 @@ const Landing = () => {
           </div>
         </div>
       </Feature>
-      <Feature>
+      <Feature tint={'rgb(255, 255, 255)'}>
         <div className="wrapper">
           <div className="image">
             <div className="image-placeholder"></div>
@@ -80,7 +90,7 @@ const Landing = () => {
           </div>
         </div>
       </Feature>
-      <Feature>
+      <Feature tint={'rgb(244, 250, 255)'}>
         <div className="wrapper">
           <div className="description">
             <h1>Embed this map</h1>
@@ -99,17 +109,24 @@ const Landing = () => {
   )
 }
 
-export default Landing
+export default LandingModal
 
-const LandingStyles = styled.div`
+const LandingStyles = styled.div<{ open: boolean }>`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 100vh;
+  transform: translate3d(0, ${(p) => (!p.open ? '100vh' : '0')}, 0);
+  z-index: 3;
   overflow-y: auto;
+  transition: transform 0.4s;
 `
 
 const Hero = styled.div`
   position: relative;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.74);
   height: calc(24rem + 12vw);
   justify-content: center;
   align-items: center;
@@ -130,12 +147,17 @@ const Hero = styled.div`
     padding: 1rem;
     color: white;
   }
+
+  .buttons a {
+    margin-right: 1rem;
+  }
 `
 
 const Highlight = styled.div`
   display: flex;
   justify-content: center;
   padding: 4rem 0;
+  background-color: white;
 
   .wrapper {
     justify-content: space-evenly;
@@ -155,11 +177,11 @@ const Highlight = styled.div`
   }
 `
 
-const Feature = styled.div`
+const Feature = styled.div<{ tint: string }>`
   display: flex;
   justify-content: center;
   padding: 4rem 0;
-  background-color: rgba(0, 0, 255, 0.03);
+  background-color: ${(p) => p.tint};
 
   .wrapper {
     max-width: 60rem;
