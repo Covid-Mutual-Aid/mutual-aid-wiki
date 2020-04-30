@@ -8,6 +8,8 @@ import { useI18n } from '../contexts/I18nProvider'
 import icons, { iconFromUrl } from './icons'
 import tidyLink from '../utils/tidyLink'
 import { Group } from '../utils/types'
+import { useSideBar } from '../state/reducers/layout'
+import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 const GroupItem = ({
   group,
@@ -18,25 +20,28 @@ const GroupItem = ({
   highlight: boolean
   disableDropdown?: boolean
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const history = useHistory()
-  const selected = useSelectedGroup()
-
   const t = useI18n((locale) => locale.translation.components.group_item)
+  const [isOpen, setIsOpen] = useState(false)
+  const [, toggleSideBar] = useSideBar()
+  const selected = useSelectedGroup()
   const dispatch = useDispatch()
+  const history = useHistory()
 
   useEffect(() => {
     if (isOpen) setTimeout(() => setIsOpen(false), 6000)
   })
+
+  const handleSelect = () => {
+    if (window.innerWidth <= MOBILE_BREAKPOINT) toggleSideBar()
+    dispatch(selectGroup(group))
+  }
 
   if (!group) return null
   return (
     <GroupWrapper key={group.id} selected={highlight && !!selected && selected.id === group.id}>
       <div className="content">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <h4 onClick={() => dispatch(selectGroup(group))}>
-            {group.name === '' ? t.group_name_prompt : group.name}
-          </h4>
+          <h4 onClick={handleSelect}>{group.name === '' ? t.group_name_prompt : group.name}</h4>
         </div>
         <span className="location-name">
           {group.location_name === '' ? t.group_location_prompt : group.location_name}

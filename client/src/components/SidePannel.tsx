@@ -8,23 +8,15 @@ import LocaleSwitcher from './LocaleSwitcher'
 import inIframe from '../utils/inIframe'
 import icons from './icons'
 import { Toggle } from '../styles/styles'
+import { useSideBar } from '../state/reducers/layout'
 
-const SidePannel = ({
-  children,
-  open,
-  state,
-  toggle,
-}: {
-  open: boolean
-  state: PannelState
-  toggle: () => void
-  children: React.ReactNode
-}) => {
+const SidePannel = ({ children, state }: { state: PannelState; children: React.ReactNode }) => {
   const t = useI18n((locale) => locale.translation.components.nav)
+  const [open, toggle] = useSideBar()
   return (
     <SidePannelStyles state={state} open={open}>
       <div className="panel">
-        <div onClick={toggle} className="toggle">
+        <div onClick={() => toggle()} className="toggle">
           {open ? icons('chevronL') : icons('chevronR')}
         </div>
         <NavWrapper>
@@ -40,7 +32,7 @@ const SidePannel = ({
           <div className="buttons-right">
             <LocaleSwitcher />
             <MapIcon>
-              <div onClick={toggle}>{icons('map', 'green')}</div>
+              <div onClick={() => toggle()}>{icons('map', 'green')}</div>
             </MapIcon>
           </div>
         </NavWrapper>

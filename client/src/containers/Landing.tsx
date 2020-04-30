@@ -1,5 +1,5 @@
 import { useLocation, Switch, Route } from 'react-router-dom'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
@@ -12,24 +12,25 @@ import Map from '../components/Maps'
 import CreateGroup from './Create'
 import EditGroup from './Edit'
 import LandingModal from '../components/LandingModal'
+import { useSideBar } from '../state/reducers/layout'
 
 export type PannelState = 'pannel' | 'edit'
 
 const Landing = ({ showModal }: { showModal: boolean }) => {
   const t = useI18n((locale) => locale.translation.pages.groups)
-  const [open, setOpen] = useState(true)
+  const [open, toggleSideBar] = useSideBar()
   const { pathname } = useLocation()
   const pannelState = pathname === '/' ? 'pannel' : 'edit'
 
   useEffect(() => {
-    setOpen(!showModal)
-  }, [showModal])
+    toggleSideBar(!showModal)
+  }, [showModal, toggleSideBar])
 
   return (
     <>
       <LandingModal open={showModal} />
       <LayoutStyles state={pannelState} open={open}>
-        <SidePannel state={pannelState} open={open} toggle={() => setOpen(!open)}>
+        <SidePannel state={pannelState}>
           <Switch>
             <Route path="/edit/:id/:token" component={EditGroup} />
             <Route path="/add-group" component={CreateGroup} />
@@ -53,7 +54,9 @@ const Landing = ({ showModal }: { showModal: boolean }) => {
               </div>
               <SearchBox />
               <GroupsList
-                closeSidebar={() => (window.innerWidth < MOBILE_BREAKPOINT ? setOpen(false) : null)}
+                closeSidebar={() =>
+                  window.innerWidth < MOBILE_BREAKPOINT ? toggleSideBar(false) : null
+                }
               />
             </Route>
           </Switch>
@@ -78,7 +81,7 @@ const LayoutStyles = styled.div<{ state: PannelState; open: boolean }>`
   transition: grid 0.3s;
   overflow: hidden;
   }
-  
+
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     grid: 100% / ${(p) => (p.open ? '100vw 0rem' : '1rem 1fr')};
   }
