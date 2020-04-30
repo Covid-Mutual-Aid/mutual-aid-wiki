@@ -3,7 +3,19 @@ import React from 'react'
 const width = '1.4rem'
 
 const icons = (
-  name: 'wa' | 'fb' | 'link' | 'search' | 'map' | 'chevronL' | 'chevronR' | 'more' | 'nav',
+  name:
+    | 'wa'
+    | 'fb'
+    | 'link'
+    | 'search'
+    | 'map'
+    | 'chevronL'
+    | 'chevronR'
+    | 'more'
+    | 'nav'
+    | 'users'
+    | 'git'
+    | 'globe',
   color?: string
 ) =>
   ({
@@ -150,6 +162,59 @@ const icons = (
         strokeLinejoin="round"
       >
         <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+      </svg>
+    ),
+    globe: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+    ),
+    git: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="18" cy="18" r="3"></circle>
+        <circle cx="6" cy="6" r="3"></circle>
+        <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+        <line x1="6" y1="9" x2="6" y2="21"></line>
+      </svg>
+    ),
+    users: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
       </svg>
     ),
   }[name])
