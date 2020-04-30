@@ -66,9 +66,10 @@ export const Toggle = () => {
   const t = useI18n((locale) => locale.translation.components.nav)
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+  const path = /(add-group)|(edit\/.*?\/.{1,}?$)/.test(pathname) ? '/map' : '/'
   return (
-    <Link className={!isHome ? 'selected' : ''} to="/">
-      {t.information_link}
+    <Link className={!isHome ? 'selected' : ''} to={path}>
+      {path === '/map' ? 'map' : t.information_link}
     </Link>
   )
 }
