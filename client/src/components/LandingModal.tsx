@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import icons from '../utils/icons'
-import { useGroupsList } from '../state/reducers/groups'
 import { Link } from 'react-router-dom'
+
+import { useGroupsList } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import icons from './icons'
 
 const LandingModal = ({ open }: { open: boolean }) => {
   const groups = useGroupsList()

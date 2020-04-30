@@ -1,12 +1,13 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import React from 'react'
 
-import MapLayout from './containers/Landing'
+import LandingModal from './components/LandingModal'
 import EmailAuth from './containers/Authenticate'
+import MapLayout from './containers/Landing'
 import Report from './containers/Report'
 import About from './containers/About'
-import LandingModal from './components/LandingModal'
-import useLocalyStoredState from './utils/useLocallyStoredState'
+
+import useLocalyStoredState from './hooks/useLocallyStoredState'
 
 function App() {
   const [firstVisit, setFirstVisit] = useLocalyStoredState('firstVisit')
