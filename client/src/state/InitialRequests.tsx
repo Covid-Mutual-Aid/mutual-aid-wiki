@@ -45,6 +45,8 @@ const useUserLocation = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    // Can't geolocate by ip on localhost
+    if ((window as any).location.host.includes('localhost')) return
     request('/info/locate')
       .then((x) => {
         if (x.message) return console.error(x.message)
