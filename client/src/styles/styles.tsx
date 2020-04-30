@@ -66,14 +66,9 @@ export const Toggle = () => {
   const { pathname } = useLocation()
   const isHome = pathname === '/'
   return (
-    <ToggleStyles>
-      <Link className={isHome ? 'selected' : ''} to="/">
-        {t.home}
-      </Link>
-      <Link className={!isHome ? 'selected' : ''} to="/information">
-        {t.information_link}
-      </Link>
-    </ToggleStyles>
+    <Link className={!isHome ? 'selected' : ''} to="/">
+      {t.information_link}
+    </Link>
   )
 }
 

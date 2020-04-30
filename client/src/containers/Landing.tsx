@@ -16,19 +16,19 @@ import { useSideBar } from '../state/reducers/layout'
 
 export type PannelState = 'pannel' | 'edit'
 
-const Landing = ({ showModal }: { showModal: boolean }) => {
+const Landing = () => {
   const t = useI18n((locale) => locale.translation.pages.groups)
   const [open, toggleSideBar] = useSideBar()
   const { pathname } = useLocation()
-  const pannelState = pathname === '/' ? 'pannel' : 'edit'
+  const pannelState = pathname === '/map' ? 'pannel' : 'edit'
 
   useEffect(() => {
-    toggleSideBar(!showModal)
-  }, [showModal, toggleSideBar])
+    toggleSideBar(pathname !== '/')
+  }, [pathname])
 
   return (
     <>
-      <Information open={showModal} />
+      <Information open={pathname === '/'} />
       <LayoutStyles state={pannelState} open={open}>
         <SidePannel state={pannelState}>
           <Switch>
@@ -72,15 +72,14 @@ export default Landing
 const LayoutStyles = styled.div<{ state: PannelState; open: boolean }>`
   display: grid;
   grid: 100% / ${(p) => {
-    if (!p.open) return '1rem'
-    if (p.state === 'pannel') return '30rem'
-    return '50vw'
-  }} 1fr;
+      if (!p.open) return '1rem'
+      if (p.state === 'pannel') return '30rem'
+      return '50vw'
+    }} 1fr;
   height: 100vh;
   width: 100vw;
   transition: grid 0.3s;
   overflow: hidden;
-  }
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     grid: 100% / ${(p) => (p.open ? '100vw 0rem' : '1rem 1fr')};

@@ -11,7 +11,7 @@ const Map = () => {
   const [ref] = useContext(MapContext)
   const { pathname } = useLocation()
 
-  useGroupsMap(pathname !== '/')
+  useGroupsMap(!(pathname === '/map' || pathname === '/'))
   const controls = useEditLocationMap(!/\/add-group|\/edit\/.*?\/.*?$/.test(pathname))
 
   return (

@@ -22,7 +22,7 @@ const Information = ({ open }: { open: boolean }) => {
             mutual aid communities find each other, share approaches and support one another.
           </p>
           <div className="buttons">
-            <Link to="/">
+            <Link to="/map">
               <button className="btn-primary">Visit the Map</button>
             </Link>
           </div>
