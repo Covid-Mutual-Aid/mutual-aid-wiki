@@ -10,13 +10,12 @@ import { createSquare } from './utils'
 
 const useEditLocationMap = (disable: boolean) => {
   const [, map, setZoom] = useContext(MapContext)
-  const [marker, toggleMaker] = useReducer((x) => !x, true)
-  const [poly, togglePoly] = useReducer((x) => !x, true)
+  const [poly, togglePoly] = useReducer((x) => !x, false)
   const [coord, onDrag] = useFormControl('location_coord')
   const [path, onChange] = useFormControl('location_poly')
 
   const pth = path || (coord ? createSquare(coord, 700) : [])
-  useMarker(map, { coord, disable: disable || !marker || !coord, onDrag })
+  useMarker(map, { coord, disable: disable || !coord, onDrag })
   usePolygon(map, { path: pth, onChange, editable: true, disable: disable || !poly || !coord })
 
   useEffect(() => {
@@ -26,34 +25,26 @@ const useEditLocationMap = (disable: boolean) => {
   }, [coord, map, setZoom])
 
   return (
-    <Controls
-      disable={disable || !coord}
-      selected={[marker ? 'marker' : 'none', poly ? 'poly' : 'none']}
-      style={{}}
-    >
-      <button className="marker" onClick={toggleMaker}>
-        marker
-      </button>
+    <Controls disable={disable || !coord} active={poly} style={{}}>
+      Include area
       <button
         className="poly"
         onClick={() => {
           togglePoly()
           onChange(undefined)
         }}
-      >
-        polygon
-      </button>
+      />
     </Controls>
   )
 }
 
 export default useEditLocationMap
 
-const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 'none')[] }>`
+const Controls = styled.div<{ disable?: boolean; active: boolean }>`
   z-index: 1;
   bottom: ${(p) => (p.disable ? '-10rem' : '4rem')};
   left: calc(50% - (22rem * 0.5));
-  width: 18rem;
+  width: 15rem;
   box-shadow: 0px 0px 22px -9px #959595;
   background-color: white;
   border-radius: 25px;
@@ -61,28 +52,28 @@ const Controls = styled.div<{ disable?: boolean; selected: ('marker' | 'poly' | 
   position: absolute;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.8rem;
   transition: top 0.3s;
   button {
-    flex: 1 1 50%;
-    border: none;
-    background-color: transparent;
-    transition: 0.2s;
-    border: 1px solid black;
+    transition: background-color ease-in-out 0.3s;
+    background-color: ${(p) => (p.active ? '#007cff' : '#aeacac')};
     border-radius: 25px;
-    margin: .5rem;
+    transition: 0.2s;
+    height: 2.5rem;
+    width: 4.5rem;
+    &:after {
+      content: '';
+      position: absolute;
+      border-radius: 25px;
+      width: 2.1rem;
+      height: 2.1rem;
+      background: white;
+      margin-top: -1.05rem;
+      transition: margin ease-in-out 0.3s;
+      margin-left: ${(p) => (p.active ? '0rem' : '-2rem')};
+    }
   }
-
-  ${(p) =>
-    p.selected
-      .map(
-        (key) => `
-        .${key} {
-          background: #1f1e1e;
-          color: white;
-        }
-      `
-      )
-      .join('\n')}
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     top: initial;
