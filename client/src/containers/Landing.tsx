@@ -3,16 +3,17 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import { useSideBar } from '../state/reducers/layout'
+import inIframe from '../utils/inIframe'
+
 import { useI18n } from '../contexts/I18nProvider'
 import GroupsList from '../components/GroupsList'
 import SidePannel from '../components/SidePannel'
 import SearchBox from '../components/SearchBox'
-import inIframe from '../utils/inIframe'
 import Map from '../components/Maps'
+
 import CreateGroup from './Create'
 import EditGroup from './Edit'
-import Information from '../components/Information'
-import { useSideBar } from '../state/reducers/layout'
 
 export type PannelState = 'pannel' | 'edit'
 
@@ -27,43 +28,40 @@ const Landing = () => {
   }, [pathname])
 
   return (
-    <>
-      <Information open={pathname === '/'} />
-      <LayoutStyles state={pannelState} open={open}>
-        <SidePannel state={pannelState}>
-          <Switch>
-            <Route path="/edit/:id/:token" component={EditGroup} />
-            <Route path="/add-group" component={CreateGroup} />
-            <Route path="/">
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  marginTop: '-1rem',
-                  padding: '0rem 1rem 1rem 1rem',
-                }}
-              >
-                {inIframe() ? (
-                  <div style={{ height: '1rem' }}></div>
-                ) : (
-                  <h1 style={{ margin: '.2rem 0rem', paddingLeft: '.1rem' }}>
-                    {t.cta.line1} <br className="break" /> {t.cta.line2}
-                  </h1>
-                )}
-              </div>
-              <SearchBox />
-              <GroupsList
-                closeSidebar={() =>
-                  window.innerWidth < MOBILE_BREAKPOINT ? toggleSideBar(false) : null
-                }
-              />
-            </Route>
-          </Switch>
-        </SidePannel>
-        <Map />
-      </LayoutStyles>
-    </>
+    <LayoutStyles state={pannelState} open={open}>
+      <SidePannel state={pannelState}>
+        <Switch>
+          <Route path="/map/edit/:id/:token" component={EditGroup} />
+          <Route path="/map/add-group" component={CreateGroup} />
+          <Route path="/">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                marginTop: '-1rem',
+                padding: '0rem 1rem 1rem 1rem',
+              }}
+            >
+              {inIframe() ? (
+                <div style={{ height: '1rem' }}></div>
+              ) : (
+                <h1 style={{ margin: '.2rem 0rem', paddingLeft: '.1rem' }}>
+                  {t.cta.line1} <br className="break" /> {t.cta.line2}
+                </h1>
+              )}
+            </div>
+            <SearchBox />
+            <GroupsList
+              closeSidebar={() =>
+                window.innerWidth < MOBILE_BREAKPOINT ? toggleSideBar(false) : null
+              }
+            />
+          </Route>
+        </Switch>
+      </SidePannel>
+      <Map />
+    </LayoutStyles>
   )
 }
 

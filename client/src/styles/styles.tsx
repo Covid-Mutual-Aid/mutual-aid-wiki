@@ -54,6 +54,7 @@ export const Card = styled.div`
   border-radius: 8px;
   box-shadow: 0px 0px 22px -9px #959595;
   padding: 2rem;
+  background: white;
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     box-shadow: none;

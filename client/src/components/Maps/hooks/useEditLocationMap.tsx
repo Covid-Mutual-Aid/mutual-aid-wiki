@@ -42,6 +42,7 @@ export default useEditLocationMap
 
 const Controls = styled.div<{ disable?: boolean; active: boolean }>`
   z-index: 1;
+  visibility: ${(p) => (p.disable ? 'hidden' : 'inherit')};
   bottom: ${(p) => (p.disable ? '-10rem' : '4rem')};
   left: calc(50% - (22rem * 0.5));
   width: 15rem;

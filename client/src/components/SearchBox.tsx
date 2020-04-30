@@ -86,7 +86,7 @@ const SearchBox = () => {
             alignItems: 'center',
           }}
         >
-          <Link to="/add-group">
+          <Link to="/map/add-group">
             <b>
               <p className="add-group">{t.add_prompt}</p>
             </b>

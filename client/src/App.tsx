@@ -1,20 +1,19 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import React from 'react'
 
+import Information from './components/Information'
 import EmailAuth from './containers/Authenticate'
+import withModal from './components/withModal'
 import MapLayout from './containers/Landing'
 import Report from './containers/Report'
-import About from './containers/About'
 
-function App() {
-  return (
-    <Switch>
-      <Route path="/about" exact component={About} />
-      <Route path="/report/:id" exact component={Report} />
-      <Route path="/edit/:id" exact component={EmailAuth} />
-      <Route path="/" component={MapLayout} />
-    </Switch>
-  )
-}
+const App = () => (
+  <>
+    <Route path="/" component={Information} />
+    <Route path="/map" component={MapLayout} />
+    <Route path="/map/edit/:id" exact component={withModal(EmailAuth)} />
+    <Route path="/map/report/:id" exact component={withModal(Report)} />
+  </>
+)
 
 export default App

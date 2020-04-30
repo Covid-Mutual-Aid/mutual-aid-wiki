@@ -1,15 +1,18 @@
-import { CenterAlign, FormButtons, Card } from '../styles/styles'
-import { Link, useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import React, { useState } from 'react'
 
 import { useRequest } from '../contexts/RequestProvider'
-import InputGroup from '../components/Form/InputGroup'
 import { useI18n } from '../contexts/I18nProvider'
+
+import { CenterAlign, FormButtons, Card } from '../styles/styles'
+import { useModalClose } from '../components/withModal'
+import InputGroup from '../components/Form/InputGroup'
 
 const Report = () => {
   const [successModal, setSuccessModal] = useState(false)
   const [message, setMessage] = useState('')
   const [validated, setValidated] = useState(false)
+  const closeModal = useModalClose()
 
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
@@ -52,11 +55,13 @@ const Report = () => {
               />
             </InputGroup>
             <FormButtons>
-              <Link to="/">
-                <button className="btn-secondary" type="button">
-                  {t.cancel_button}
-                </button>
-              </Link>
+              <button
+                className="btn-secondary"
+                type="button"
+                onClick={() => closeModal(() => history.replace('/map'))}
+              >
+                {t.cancel_button}
+              </button>
               <button type="submit">{t.submit_button}</button>
             </FormButtons>
           </form>
