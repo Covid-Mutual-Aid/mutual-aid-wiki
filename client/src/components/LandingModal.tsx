@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import icons from '../utils/icons'
 import { useGroupsList } from '../state/reducers/groups'
 import { Link } from 'react-router-dom'
+import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 
 const LandingModal = ({ open }: { open: boolean }) => {
   const groups = useGroupsList()
@@ -175,6 +176,16 @@ const Highlight = styled.div`
       }
     }
   }
+
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+    padding: 1rem 0;
+    .wrapper {
+      flex-direction: column;
+      div {
+        width: 100%;
+      }
+    }
+  }
 `
 
 const Feature = styled.div<{ tint: string }>`
@@ -197,5 +208,24 @@ const Feature = styled.div<{ tint: string }>`
     background-color: lightgray;
     height: 20rem;
     width: 30rem;
+  }
+
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+    padding: 1rem;
+
+    .wrapper {
+      flex-direction: column;
+    }
+
+    .image {
+      order: 1;
+      width: auto;
+    }
+    .description {
+      order: 2;
+    }
+    .spacer {
+      display: none;
+    }
   }
 `
