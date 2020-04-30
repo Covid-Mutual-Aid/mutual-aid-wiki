@@ -11,7 +11,7 @@ import inIframe from '../utils/inIframe'
 import Map from '../components/Maps'
 import CreateGroup from './Create'
 import EditGroup from './Edit'
-import LandingModal from '../components/LandingModal'
+import Information from '../components/Information'
 import { useSideBar } from '../state/reducers/layout'
 
 export type PannelState = 'pannel' | 'edit'
@@ -28,7 +28,7 @@ const Landing = ({ showModal }: { showModal: boolean }) => {
 
   return (
     <>
-      <LandingModal open={showModal} />
+      <Information open={showModal} />
       <LayoutStyles state={pannelState} open={open}>
         <SidePannel state={pannelState}>
           <Switch>

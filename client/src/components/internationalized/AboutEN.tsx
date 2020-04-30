@@ -4,14 +4,6 @@ import icons from '../icons'
 const AboutEN = () => {
   return (
     <div>
-      <h2>A global map of COVID-19 Mutual Aid groups</h2>
-      <p>
-        Have a list of groups or want to translate this app? Send us an{' '}
-        <a href="mailto:info@mutualaid.wiki">email</a>, we would love to hear from you.
-      </p>
-      <br />
-
-      <p>FAQ:</p>
       <ul>
         <li>Can I edit my group info?</li>
         <p>

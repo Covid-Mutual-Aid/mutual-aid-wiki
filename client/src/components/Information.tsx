@@ -4,30 +4,26 @@ import { Link } from 'react-router-dom'
 
 import { useGroupsList } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+import { useI18n } from '../contexts/I18nProvider'
+import { CenterAlign } from '../styles/styles'
 import icons from './icons'
 
-const LandingModal = ({ open }: { open: boolean }) => {
+const Information = ({ open }: { open: boolean }) => {
+  const aboutInformation = useI18n((locale) => locale.components.about)
   const groups = useGroupsList()
   return (
     <LandingStyles open={open}>
       <Hero>
         <div className="hero-content">
           <h1>Mutual Aid Wiki</h1>
+          <p>A community mananged resource documenting mutual aid groups throughout the world.</p>
           <p>
-            We believe communities know what is best for themselves and that communities share many
-            common challenges.
-          </p>
-          <p>
-            We hope that by creating this resource, we enable individuals to connect with their
-            mutual aid communities and enable mutual aid communities find each other, share
-            approaches and support one another.
+            Built to enable individuals to connect with their mutual aid communities and to enable
+            mutual aid communities find each other, share approaches and support one another.
           </p>
           <div className="buttons">
             <Link to="/">
               <button className="btn-primary">Visit the Map</button>
-            </Link>
-            <Link to="/about">
-              <button className="btn-secondary">More information</button>
             </Link>
           </div>
         </div>
@@ -55,8 +51,8 @@ const LandingModal = ({ open }: { open: boolean }) => {
             {icons('globe')}
             <h3>{groups.length} Groups</h3>
             <p>
-              We have {groups.length} groups from around the world, with new groups being added
-              daily. Please get in touch if you would like to sync your data with this resouce.
+              This resource currently documents {groups.length} groups from around the world, with
+              new groups being added daily. Please get in touch if you would like to sync your data.
             </p>
           </div>
         </div>
@@ -92,14 +88,19 @@ const LandingModal = ({ open }: { open: boolean }) => {
           </div>
         </div>
       </Feature>
-      <Feature tint={'rgb(244, 250, 255)'}>
+      <Feature tint={'rgba(0, 0, 0, 0.8)'}>
         <div className="wrapper">
-          <div className="description">
+          <div className="description white">
             <h1>Embed this map</h1>
             <h3>
-              To get the functionality of this map on your website, just paste the embed code into
-              your page. We are happy to help if you're not sure.
+              To get the functionality of this map on your website, just paste the the following
+              code into your page. We are happy to help if you're not sure.
             </h3>
+            <code>{`<iframe `}</code>
+            <br />
+            <code>&nbsp;{`src="https://mutualaid.wiki/">`}</code>
+            <br />
+            <code>{`</iframe>`}</code>
           </div>
           <div className="spacer"></div>
           <div className="image">
@@ -107,11 +108,19 @@ const LandingModal = ({ open }: { open: boolean }) => {
           </div>
         </div>
       </Feature>
+      <FAQ>
+        <div className="wrapper">
+          <div className="title">
+            <h1>FAQ</h1>
+          </div>
+          {aboutInformation}
+        </div>
+      </FAQ>
     </LandingStyles>
   )
 }
 
-export default LandingModal
+export default Information
 
 const LandingStyles = styled.div<{ open: boolean }>`
   position: absolute;
@@ -151,7 +160,8 @@ const Hero = styled.div`
   }
 
   .buttons a {
-    margin-right: 1rem;
+    display: block;
+    margin: 1rem 1rem 0 0;
   }
 `
 
@@ -190,12 +200,18 @@ const Highlight = styled.div`
 `
 
 const Feature = styled.div<{ tint: string }>`
+  position: relative;
   display: flex;
   justify-content: center;
   padding: 4rem 0;
   background-color: ${(p) => p.tint};
 
+  .white {
+    color: white;
+  }
+
   .wrapper {
+    padding: 1rem;
     max-width: 60rem;
     display: flex;
     flex-direction: row;
@@ -205,10 +221,10 @@ const Feature = styled.div<{ tint: string }>`
     width: 6rem;
   }
 
-  .image-placeholder {
+  .image {
     background-color: lightgray;
     height: 20rem;
-    width: 30rem;
+    min-width: 30rem;
   }
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
@@ -220,13 +236,31 @@ const Feature = styled.div<{ tint: string }>`
 
     .image {
       order: 1;
-      width: auto;
+      min-width: 100%;
     }
     .description {
       order: 2;
     }
     .spacer {
       display: none;
+    }
+  }
+`
+
+const FAQ = styled.div`
+  padding: 1rem;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+
+  .title {
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .wrapper {
+    max-width: 38rem;
+    li {
+      font-size: 1.2rem;
     }
   }
 `
