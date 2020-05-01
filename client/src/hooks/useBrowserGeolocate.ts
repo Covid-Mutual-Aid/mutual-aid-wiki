@@ -13,13 +13,13 @@ const useBrowserGeolocate = () => {
           setSearchLocation({
             name: 'Your area',
             coord: { lat: position.coords.latitude, lng: position.coords.longitude },
-            zoom: position.coords.altitudeAccuracy || 7,
+            zoom: position.coords.altitudeAccuracy || 9,
           })
         )
         dispatch(
           setUserLocation({
             coord: { lat: position.coords.latitude, lng: position.coords.longitude },
-            zoom: position.coords.altitudeAccuracy || 7,
+            zoom: position.coords.altitudeAccuracy || 9,
           })
         )
       }, console.error)
