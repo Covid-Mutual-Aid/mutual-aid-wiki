@@ -5,11 +5,18 @@ import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'
 import HeroContentEN from '../components/internationalized/HeroContentEN'
 import HighlightsContentEN from '../components/internationalized/HighlightsContentEN'
+import AddGroupContentEN from '../components/internationalized/AddGroupContentEN'
+import EditGroupContentEN from '../components/internationalized/EditGroupContentEN'
+import EmbedMapContentEN from '../components/internationalized/EmbedMapContentEN'
 
 import esTranslation from '../locales/es.json'
 import AboutES from '../components/internationalized/AboutES'
 import HeroContentES from '../components/internationalized/HeroContentES'
 import HighlightsContentES from '../components/internationalized/HighlightsContentES'
+import AddGroupContentES from '../components/internationalized/AddGroupContentES'
+import EditGroupContentES from '../components/internationalized/EditGroupContentES'
+import EmbedMapContentES from '../components/internationalized/EmbedMapContentES'
+
 import { useLocationState } from '../state/reducers/location'
 
 type Translation = typeof enTranslation
@@ -20,14 +27,20 @@ class Locale {
   translation: Translation
   components: { about: JSX.Element,
                 heroContent: JSX.Element,
-                highlightsContent: JSX.Element }
+                highlightsContent: JSX.Element,
+                addGroupContent: JSX.Element,
+                editGroupContent: JSX.Element,
+                embedMapContent: JSX.Element }
   constructor(
     code: string,
     name: string,
     translation: Translation,
     components: { about: JSX.Element,
                   heroContent: JSX.Element,
-                  highlightsContent: JSX.Element }
+                  highlightsContent: JSX.Element,
+                  addGroupContent: JSX.Element,
+                  editGroupContent: JSX.Element,
+                  embedMapContent: JSX.Element }
   ) {
     this.code = code
     this.name = name
@@ -39,13 +52,19 @@ class Locale {
 const en: Locale = new Locale('en', 'English', enTranslation, {
   about: <AboutEN />,
   heroContent: <HeroContentEN />,
-  highlightsContent: <HighlightsContentEN />
+  highlightsContent: <HighlightsContentEN />,
+  addGroupContent: <AddGroupContentEN />,
+  editGroupContent: <EditGroupContentEN />,
+  embedMapContent: <EmbedMapContentEN />
 })
 
 const es: Locale = new Locale('es', 'Castellano', esTranslation, {
   about: <AboutES />,
   heroContent: <HeroContentES />,
-  highlightsContent: <HighlightsContentES />
+  highlightsContent: <HighlightsContentES />,
+  addGroupContent: <AddGroupContentES />,
+  editGroupContent: <EditGroupContentES />,
+  embedMapContent: <EmbedMapContentES />
 })
 
 const defaultLocaleCode = 'en'

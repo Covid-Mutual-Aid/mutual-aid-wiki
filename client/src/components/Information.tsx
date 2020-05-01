@@ -17,6 +17,9 @@ const Information = () => {
   const aboutInformation = localizedComponents.about
   const heroContent = localizedComponents.heroContent
   const highlightsContent = localizedComponents.highlightsContent
+  const addGroupContent = localizedComponents.addGroupContent
+  const editGroupContent = localizedComponents.editGroupContent
+  const embedMapContent = localizedComponents.embedMapContent
 
   useLayoutEffect(() => {
     if (inIframe() && pathname === '/') {
@@ -35,13 +38,7 @@ const Information = () => {
 
       <Feature tint={'rgb(244, 250, 255)'}>
         <div className="wrapper">
-          <div className="description">
-            <h1>Add your group</h1>
-            <h3>
-              Add your group to the map immediately. You can specify your group's location by
-              dropping a marker or defining a perimeter.
-            </h3>
-          </div>
+          {addGroupContent}
           <div className="spacer"></div>
           <div className="img">
             <img alt="Add a group" src={info_add} />
@@ -54,23 +51,13 @@ const Information = () => {
             <img alt="Edit a group" src={info_edit} />
           </div>
           <div className="spacer"></div>
-          <div className="description">
-            <h1>Edit your group</h1>
-            <h3>
-              Edit your groups information with the email used to create it, or verify your email
-              with an existing group to edit it.
-            </h3>
-          </div>
+          {editGroupContent}
         </div>
       </Feature>
       <Feature tint={'rgba(0, 0, 0, 0.8)'}>
         <div className="wrapper">
           <div className="description white">
-            <h1>Embed this map</h1>
-            <h3>
-              To get the functionality of this map on your website, just paste the the following
-              code into your page. We are happy to help if you're not sure.
-            </h3>
+            {embedMapContent}
             <code>{`<iframe `}</code>
             <br />
             <code>&nbsp;{`src="https://mutualaid.wiki">`}</code>

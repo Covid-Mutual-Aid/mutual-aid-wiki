@@ -14,7 +14,7 @@ const AboutES = () => {
         </p>
         <li>¿Puedo denunciar un grupo?</li>
         <p>
-          Si, haz click sobre el icono {icons('more')} arriba a la derecha y elige 'Denuncia grupo
+          Si, haz click sobre el icono {icons('more')} arriba a la derecha y elige 'Denuncia grupo'
           en el menu despegable. Cuando hayas completado el modelo, revisaremos tu informe y
           eliminaremos el grupo si lo consideramos apropiado. Normalmente eliminamos el grupo si es
           un enlace a un individuo, spam, o una pagina promocional. También si ya no está accessible
@@ -44,7 +44,7 @@ const AboutES = () => {
         </p>
         <li>¿Quién está detrás de esto?</li>
         <p>
-          Somos un grupo de voluntarios autodirigido y hacemos software de código abierto. También
+          Somos un grupo de voluntari@s autodirigido y hacemos software de código abierto. También
           somos parte del equipo tecnico de{' '}
           <a href="https://covidmutualaid.org">covidmutualaid.org</a>
         </p>

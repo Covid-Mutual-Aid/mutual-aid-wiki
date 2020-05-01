@@ -5,9 +5,9 @@ const HeroContentES = () => {
   return (
     <div className="hero-content">
       <h1>Mutual Aid Wiki</h1>
-      <p>Un recurso gestionado por la communidad que documenta los grupos de apoyo mutuo en todo el mundo.</p>
+      <p>Un recurso gestionado por la comunidad que registra los grupos de apoyo mutuo en todo el mundo.</p>
       <p>
-        Creado para habilitar a individuos a connectar con sus communidades de apoyo mutuo, y para habilitar a communidades de apoyo mutuo encontrar el uno a otro, compartir enfoques, y apoyar el uno a otro.
+        Creado para ayudar a individuos a connectar con sus communidades de apoyo mutuo y también para ayudar a communidades de apoyo mutuo a encontrarse, compartir enfoques y apoyarse.
       </p>
       <div className="buttons">
         <Link to="/map">
