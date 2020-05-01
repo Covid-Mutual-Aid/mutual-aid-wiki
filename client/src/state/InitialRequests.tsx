@@ -53,7 +53,7 @@ const useUserLocation = () => {
         return dispatch(
           setUserLocation({
             coord: { lat: x.lat, lng: x.lon },
-            zoom: 4,
+            zoom: 9,
             countryCode: x.countryCode,
           })
         )
