@@ -22,7 +22,7 @@ const Information = () => {
     if (inIframe() && pathname === '/') {
       history.replace('/map/' + search)
     }
-  }, [pathname, history])
+  }, [pathname, history, search])
 
   return (
     <LandingStyles open={pathname === '/'}>

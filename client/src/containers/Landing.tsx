@@ -6,7 +6,6 @@ import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import { useSideBar } from '../state/reducers/layout'
 import inIframe from '../utils/inIframe'
 
-import { useI18n } from '../contexts/I18nProvider'
 import GroupsList from '../components/GroupsList'
 import SidePannel from '../components/SidePannel'
 import SearchBox from '../components/SearchBox'
@@ -18,7 +17,6 @@ import EditGroup from './Edit'
 export type PannelState = 'pannel' | 'edit'
 
 const Landing = () => {
-  const t = useI18n((locale) => locale.translation.pages.groups)
   const [open, toggleSideBar] = useSideBar()
   const { pathname } = useLocation()
 

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { useSearch } from '../contexts/SearchProvider'
 import { useI18n } from '../contexts/I18nProvider'
-import { selectGroup, useGroupsList } from '../state/reducers/groups'
+import { selectGroup } from '../state/reducers/groups'
 
 import useBrowserGeolocate from '../hooks/useBrowserGeolocate'
 import { MOON_BLUE } from '../utils/CONSTANTS'
@@ -19,7 +19,6 @@ const SearchBox = () => {
   const [searchInput, setSearchInput] = useState('')
   const geolocateUser = useBrowserGeolocate()
   const [onSearch, place] = useSearch()
-  const groups = useGroupsList()
 
   return (
     <Styles>
