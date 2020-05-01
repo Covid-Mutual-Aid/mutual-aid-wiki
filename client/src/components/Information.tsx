@@ -81,12 +81,16 @@ const Information = () => {
             </h3>
           </div>
           <div className="spacer"></div>
-          <div className="image info_add"></div>
+          <div className="img">
+            <img src={info_add} />
+          </div>
         </div>
       </Feature>
       <Feature tint={'rgb(255, 255, 255)'}>
         <div className="wrapper">
-          <div className="image info_edit"></div>
+          <div className="img">
+            <img src={info_edit} />
+          </div>
           <div className="spacer"></div>
           <div className="description">
             <h1>Edit your group</h1>
@@ -112,7 +116,9 @@ const Information = () => {
             <code>{`</iframe>`}</code>
           </div>
           <div className="spacer"></div>
-          <div className="image info_embed"></div>
+          <div className="img">
+            <img src={info_embed} />
+          </div>
         </div>
       </Feature>
       <FAQ>
@@ -240,26 +246,21 @@ const Feature = styled.div<{ tint: string }>`
     width: 6rem;
   }
 
-  .image {
+  .img {
+    position: relative;
     height: 20rem;
     min-width: 30rem;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
     border-radius: 6px;
     box-shadow: 0px 0px 22px -9px #959595;
     border: 1px solid rgb(225, 225, 225);
     background-size: contain;
     background-color: transparent;
-  }
-
-  .info_add {
-    background-image: url(${info_add});
-  }
-
-  .info_edit {
-    background-image: url(${info_edit});
-  }
-
-  .info_embed {
-    background-image: url(${info_embed});
+    background-repeat: no-repeat;
   }
 
   @media (max-width: ${MOBILE_BREAKPOINT + 120 + 'px'}) {
@@ -275,10 +276,12 @@ const Feature = styled.div<{ tint: string }>`
       flex-direction: column;
     }
 
-    .image {
+    .img {
       order: 1;
-      width: 30rem;
+      min-width: 100%;
+      height: 100%;
     }
+
     .description {
       order: 2;
       code {
