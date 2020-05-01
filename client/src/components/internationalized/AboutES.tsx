@@ -4,13 +4,6 @@ import icons from '../icons'
 const AboutES = () => {
   return (
     <div>
-      <h2>Un mapa global de grupos de apoyo mutuo COVID-19</h2>
-      <p>
-        ¿Tienes una lista de grupos o quieres traducir este sitio? Mandanos un{' '}
-        <a href="mailto:info@mutualaid.wiki">correo</a>, nos encantará saber de ti.
-      </p>
-      <br />
-
       <p>Preguntas frecuentes:</p>
       <ul>
         <li>¿Puedo cambiar mi información de grupo?</li>
@@ -55,6 +48,10 @@ const AboutES = () => {
           somos parte del equipo tecnico de{' '}
           <a href="https://covidmutualaid.org">covidmutualaid.org</a>
         </p>
+        <li>¿Tienes una lista de grupos o quieres traducir este sitio?</li>
+        <p>
+          Mandanos un <a href="mailto:info@mutualaid.wiki">correo</a>, nos encantará saber de ti.
+        </p>
       </ul>
       <br />
 
@@ -68,9 +65,6 @@ const AboutES = () => {
         </li>
       </ul>
       <br />
-      <p>¡Incorpóranos en tu propio sitio!</p>
-      <code>{`<iframe src="https://mutualaid.wiki/"></iframe>`}</code>
-      <br />
       <br />
       <br />
 
@@ -81,6 +75,8 @@ const AboutES = () => {
         </span>
       </p>
       <p>El equipo Mutual Aid Wiki</p>
+      <br />
+      <br />
     </div>
   )
 }

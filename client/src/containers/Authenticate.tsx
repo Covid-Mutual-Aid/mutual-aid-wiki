@@ -1,8 +1,10 @@
+import { useParams, useHistory } from 'react-router-dom'
 import React, { useState } from 'react'
+import styled from 'styled-components'
+
 import { useRequest } from '../contexts/RequestProvider'
 import { useI18n } from '../contexts/I18nProvider'
-import styled from 'styled-components'
-import { Link, useParams, useHistory } from 'react-router-dom'
+
 import InputGroup from '../components/Form/InputGroup'
 import { Card, FormButtons } from '../styles/styles'
 
@@ -48,9 +50,9 @@ const EmailAuth = () => {
             </InputGroup>
             <p style={{ color: 'red' }}>{error}</p>
             <FormButtons>
-              <Link to="/">
-                <button className="btn-secondary">{t.cancel_button}</button>
-              </Link>
+              <button className="btn-secondary" onClick={() => history.replace('/map')}>
+                {t.cancel_button}
+              </button>
               <button type="submit">{t.submit_button}</button>
             </FormButtons>
           </form>

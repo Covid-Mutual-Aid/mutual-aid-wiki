@@ -4,14 +4,6 @@ import icons from '../icons'
 const AboutEN = () => {
   return (
     <div>
-      <h2>A global map of COVID-19 Mutual Aid groups</h2>
-      <p>
-        Have a list of groups or want to translate this app? Send us an{' '}
-        <a href="mailto:info@mutualaid.wiki">email</a>, we would love to hear from you.
-      </p>
-      <br />
-
-      <p>FAQ:</p>
       <ul>
         <li>Can I edit my group info?</li>
         <p>
@@ -67,12 +59,7 @@ const AboutEN = () => {
         </li>
       </ul>
       <br />
-      <p>Embed us on your site!</p>
-      <code>{`<iframe src="https://mutualaid.wiki/"></iframe>`}</code>
       <br />
-      <br />
-      <br />
-
       <p>
         With{' '}
         <span aria-label="heart emoji" role="img">
@@ -80,6 +67,8 @@ const AboutEN = () => {
         </span>
       </p>
       <p>Mutual Aid Wiki team</p>
+      <br />
+      <br />
     </div>
   )
 }

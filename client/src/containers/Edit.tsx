@@ -49,7 +49,7 @@ const EditGroup = () => {
     return (
       <div>
         <p>
-          Your changes have been save got back to <Link to="/">map</Link> or continue{' '}
+          Your changes have been save got back to <Link to="/map">map</Link> or continue{' '}
           <button
             type="button"
             onClick={() => {
