@@ -100,11 +100,14 @@ const SidePannelStyles = styled.div<{ state: PannelState; open: boolean }>`
   transition: all 0.3s;
 
   .buttons-right {
+    height: 1.9rem;
     width: 8rem;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    padding: 0;
+    margin: 0;
   }
 
   .panel {
