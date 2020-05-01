@@ -65,9 +65,6 @@ const AboutES = () => {
         </li>
       </ul>
       <br />
-      <p>¡Incorpóranos en tu propio sitio!</p>
-      <code>{`<iframe src="https://mutualaid.wiki/"></iframe>`}</code>
-      <br />
       <br />
       <br />
 
@@ -78,6 +75,8 @@ const AboutES = () => {
         </span>
       </p>
       <p>El equipo Mutual Aid Wiki</p>
+      <br />
+      <br />
     </div>
   )
 }

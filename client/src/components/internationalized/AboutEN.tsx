@@ -59,12 +59,7 @@ const AboutEN = () => {
         </li>
       </ul>
       <br />
-      <p>Embed us on your site!</p>
-      <code>{`<iframe src="https://mutualaid.wiki/"></iframe>`}</code>
       <br />
-      <br />
-      <br />
-
       <p>
         With{' '}
         <span aria-label="heart emoji" role="img">
@@ -72,6 +67,8 @@ const AboutEN = () => {
         </span>
       </p>
       <p>Mutual Aid Wiki team</p>
+      <br />
+      <br />
     </div>
   )
 }

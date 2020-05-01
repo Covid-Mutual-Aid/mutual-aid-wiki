@@ -139,6 +139,7 @@ const LandingStyles = styled.div<{ open: boolean }>`
   visibility: ${(p) => (p.open ? 'inherit' : 'hidden')};
   z-index: 3;
   overflow-y: auto;
+  overflow-x: hidden;
   transition: transform 0.4s;
 `
 
@@ -170,6 +171,10 @@ const Hero = styled.div`
   .buttons a {
     display: block;
     margin: 1rem 1rem 0 0;
+  }
+
+  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+    height: calc(24rem + 32vh);
   }
 `
 
@@ -225,15 +230,24 @@ const Feature = styled.div<{ tint: string }>`
     flex-direction: row;
   }
 
+  .description {
+    h3 {
+      color: rgb(138, 138, 138);
+    }
+  }
+
   .spacer {
     width: 6rem;
   }
 
   .image {
-    background-color: transparent;
     height: 20rem;
     min-width: 30rem;
+    border-radius: 6px;
+    box-shadow: 0px 0px 22px -9px #959595;
+    border: 1px solid rgb(225, 225, 225);
     background-size: contain;
+    background-color: transparent;
   }
 
   .info_add {
@@ -248,6 +262,12 @@ const Feature = styled.div<{ tint: string }>`
     background-image: url(${info_embed});
   }
 
+  @media (max-width: ${MOBILE_BREAKPOINT + 120 + 'px'}) {
+    code {
+      font-size: 0.68rem;
+    }
+  }
+
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     padding: 1rem;
 
@@ -257,10 +277,13 @@ const Feature = styled.div<{ tint: string }>`
 
     .image {
       order: 1;
-      min-width: 100%;
+      width: 30rem;
     }
     .description {
       order: 2;
+      code {
+        font-size: 1rem;
+      }
     }
     .spacer {
       display: none;
