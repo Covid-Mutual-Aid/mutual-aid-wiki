@@ -23,9 +23,35 @@ export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: C
 
     cluster.current = new MarkerCluster(map.current, markers.current, {
       minimumClusterSize: 6,
-      gridSize: 50,
-      clusterClass: 'map-cluster-icon',
-      imagePath: process.env.PUBLIC_URL + '/cluster_',
+      // gridSize: 50,
+      // clusterClass: 'map-cluster-icon',
+      // imagePath: process.env.PUBLIC_URL + '/cluster_',
+      styles: [
+        {
+          width: 39,
+          height: 39,
+          anchorText: [13, 0],
+          className: 'cluster-marker',
+          textColor: 'white',
+          url: process.env.PUBLIC_URL + '/cluster_blue_1.png',
+        },
+        {
+          width: 45,
+          height: 45,
+          anchorText: [15, 0],
+          className: 'cluster-marker',
+          textColor: 'white',
+          url: process.env.PUBLIC_URL + '/cluster_blue_2.png',
+        },
+        {
+          width: 52,
+          height: 52,
+          anchorText: [19, 0],
+          className: 'cluster-marker',
+          textColor: 'white',
+          url: process.env.PUBLIC_URL + '/cluster_blue_3.png',
+        },
+      ],
     })
   }, [map])
 
@@ -37,10 +63,10 @@ export const useGroupClusters = (map: MapRef, { disable, onSelect, selected }: C
       .filter((x) => !current?.includes(x.id))
       .map((group, i) => {
         const marker = new google.maps.Marker({
-          opacity: 0.7,
+          opacity: 1,
           title: group.id,
           position: group.location_coord,
-          icon: process.env.PUBLIC_URL + '/marker_1.png',
+          icon: process.env.PUBLIC_URL + '/cluster_blue_marker.png',
           clickable: true,
         })
         if (onSelect)

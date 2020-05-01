@@ -54,6 +54,7 @@ export const Card = styled.div`
   border-radius: 8px;
   box-shadow: 0px 0px 22px -9px #959595;
   padding: 2rem;
+  background: white;
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     box-shadow: none;
@@ -65,19 +66,15 @@ export const Toggle = () => {
   const t = useI18n((locale) => locale.translation.components.nav)
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+  const path = /(add-group)|(edit\/.*?\/.{1,}?$)/.test(pathname) ? '/map' : '/'
   return (
-    <ToggleStyles>
-      <Link className={isHome ? 'selected' : ''} to="/">
-        {t.home}
-      </Link>
-      <Link className={!isHome ? 'selected' : ''} to="/about">
-        {t.information_link}
-      </Link>
-    </ToggleStyles>
+    <Link className={!isHome ? 'selected' : ''} to={path}>
+      {path === '/map' ? 'map' : t.information_link}
+    </Link>
   )
 }
 
-const ToggleStyles = styled.div`
+export const ToggleStyles = styled.div`
   position: relative;
   display: grid;
   grid: 0fr/1fr 1fr;

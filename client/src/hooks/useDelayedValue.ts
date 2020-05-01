@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const useDelayedValue = <T extends any>(x: T, delay: number, active: boolean) => {
+const useDelayedValue = <T extends any>(x: T, delay: number, active?: boolean) => {
   const [value, setValue] = useState<T>(x)
 
   useEffect(() => {

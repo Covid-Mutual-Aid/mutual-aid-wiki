@@ -12,7 +12,8 @@ const LocaleSwitcher = () => {
         {LOCALES.map((locale) => (
           <li key={locale.code} className={currentLocale === locale.code ? 'selected' : ''}>
             <button className="btn-bland" type="button" onClick={() => setLocale(locale.code)}>
-              <img src={`/flags/${locale.code}.png`} alt={locale.name} />
+              {locale.name}
+              {/* <img src={`/flags/${locale.code}.png`} alt={locale.name} /> */}
             </button>
           </li>
         ))}
@@ -46,10 +47,11 @@ const Styles = styled.div`
 
   & button {
     height: 1.4rem;
-    padding: 0;
+    padding: 0.2rem;
     margin: 0;
     border: none;
     outline: none;
+    color: grey;
   }
   & img {
     height: 100%;

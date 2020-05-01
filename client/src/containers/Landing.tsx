@@ -1,31 +1,37 @@
 import { useLocation, Switch, Route } from 'react-router-dom'
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
-import { useI18n } from '../contexts/I18nProvider'
+import { useSideBar } from '../state/reducers/layout'
+import inIframe from '../utils/inIframe'
+
 import GroupsList from '../components/GroupsList'
 import SidePannel from '../components/SidePannel'
 import SearchBox from '../components/SearchBox'
-import inIframe from '../utils/inIframe'
 import Map from '../components/Maps'
+
 import CreateGroup from './Create'
 import EditGroup from './Edit'
 
 export type PannelState = 'pannel' | 'edit'
 
 const Landing = () => {
-  const t = useI18n((locale) => locale.translation.pages.groups)
-  const [open, setOpen] = useState(true)
+  const [open, toggleSideBar] = useSideBar()
   const { pathname } = useLocation()
-  const pannelState = pathname === '/' ? 'pannel' : 'edit'
+
+  const pannelState = /(add-group)|(edit\/.*?\/.{1,}?$)/.test(pathname) ? 'edit' : 'pannel'
+
+  useEffect(() => {
+    toggleSideBar(pathname !== '/')
+  }, [pathname, toggleSideBar])
 
   return (
     <LayoutStyles state={pannelState} open={open}>
-      <SidePannel state={pannelState} open={open} toggle={() => setOpen(!open)}>
+      <SidePannel state={pannelState}>
         <Switch>
-          <Route path="/edit/:id/:token" component={EditGroup} />
-          <Route path="/add-group" component={CreateGroup} />
+          <Route path="/map/edit/:id/:token" component={EditGroup} />
+          <Route path="/map/add-group" component={CreateGroup} />
           <Route path="/">
             <div
               style={{
@@ -36,17 +42,13 @@ const Landing = () => {
                 padding: '0rem 1rem 1rem 1rem',
               }}
             >
-              {inIframe() ? (
-                <div style={{ height: '1rem' }}></div>
-              ) : (
-                <h1 style={{ margin: '.2rem 0rem', paddingLeft: '.1rem' }}>
-                  {t.cta.line1} <br className="break" /> {t.cta.line2}
-                </h1>
-              )}
+              {inIframe() ? <div style={{ height: '1rem' }}></div> : <span></span>}
             </div>
             <SearchBox />
             <GroupsList
-              closeSidebar={() => (window.innerWidth < MOBILE_BREAKPOINT ? setOpen(false) : null)}
+              closeSidebar={() =>
+                window.innerWidth < MOBILE_BREAKPOINT ? toggleSideBar(false) : null
+              }
             />
           </Route>
         </Switch>
@@ -61,15 +63,15 @@ export default Landing
 const LayoutStyles = styled.div<{ state: PannelState; open: boolean }>`
   display: grid;
   grid: 100% / ${(p) => {
-    if (!p.open) return '1rem'
-    if (p.state === 'pannel') return '30rem'
-    return '50vw'
-  }} 1fr;
+      if (!p.open) return '1rem'
+      if (p.state === 'pannel') return '30rem'
+      return '50vw'
+    }} 1fr;
   height: 100vh;
   width: 100vw;
   transition: grid 0.3s;
   overflow: hidden;
-  }
+
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
     grid: 100% / ${(p) => (p.open ? '100vw 0rem' : '1rem 1fr')};
   }

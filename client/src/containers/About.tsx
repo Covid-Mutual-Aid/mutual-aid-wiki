@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import { useI18n } from '../contexts/I18nProvider'
 import { Toggle } from '../styles/styles'
 

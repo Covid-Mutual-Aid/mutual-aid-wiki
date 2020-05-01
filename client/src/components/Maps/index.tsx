@@ -11,12 +11,12 @@ const Map = () => {
   const [ref] = useContext(MapContext)
   const { pathname } = useLocation()
 
-  useGroupsMap(pathname !== '/')
+  useGroupsMap(/(add-group)|(edit\/.*?\/.{1,}?$)/.test(pathname))
   const controls = useEditLocationMap(!/\/add-group|\/edit\/.*?\/.*?$/.test(pathname))
 
   return (
     <MapStyles>
-      {pathname === '/' && <InfoBox />}
+      {pathname === '/map' && <InfoBox />}
       {controls}
       <div id="map" ref={ref} style={{ width: '100%', flex: '1 1 100%' }} />
     </MapStyles>

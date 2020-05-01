@@ -83,7 +83,7 @@ const GroupForm = ({
         </div>
 
         <FormButtons>
-          <Link to="/">
+          <Link to="/map">
             <button className="btn-secondary" type="button" disabled={disabled}>
               {t.group_form_elements.buttons.cancel}
             </button>
