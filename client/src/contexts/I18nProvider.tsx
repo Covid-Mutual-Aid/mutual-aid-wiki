@@ -3,9 +3,13 @@ import useLocallyStoredState from '../hooks/useLocallyStoredState'
 
 import enTranslation from '../locales/en.json'
 import AboutEN from '../components/internationalized/AboutEN'
+import HeroContentEN from '../components/internationalized/HeroContentEN'
+import HighlightsContentEN from '../components/internationalized/HighlightsContentEN'
 
 import esTranslation from '../locales/es.json'
 import AboutES from '../components/internationalized/AboutES'
+import HeroContentES from '../components/internationalized/HeroContentES'
+import HighlightsContentES from '../components/internationalized/HighlightsContentES'
 import { useLocationState } from '../state/reducers/location'
 
 type Translation = typeof enTranslation
@@ -14,12 +18,16 @@ class Locale {
   code: string
   name: string
   translation: Translation
-  components: { about: JSX.Element }
+  components: { about: JSX.Element,
+                heroContent: JSX.Element,
+                highlightsContent: JSX.Element }
   constructor(
     code: string,
     name: string,
     translation: Translation,
-    components: { about: JSX.Element }
+    components: { about: JSX.Element,
+                  heroContent: JSX.Element,
+                  highlightsContent: JSX.Element }
   ) {
     this.code = code
     this.name = name
@@ -28,9 +36,17 @@ class Locale {
   }
 }
 
-const en: Locale = new Locale('en', 'English', enTranslation, { about: <AboutEN /> })
+const en: Locale = new Locale('en', 'English', enTranslation, {
+  about: <AboutEN />,
+  heroContent: <HeroContentEN />,
+  highlightsContent: <HighlightsContentEN />
+})
 
-const es: Locale = new Locale('es', 'Castellano', esTranslation, { about: <AboutES /> })
+const es: Locale = new Locale('es', 'Castellano', esTranslation, {
+  about: <AboutES />,
+  heroContent: <HeroContentES />,
+  highlightsContent: <HighlightsContentES />
+})
 
 const defaultLocaleCode = 'en'
 

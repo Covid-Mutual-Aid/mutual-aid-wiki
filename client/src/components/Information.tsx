@@ -1,12 +1,10 @@
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import React, { useLayoutEffect } from 'react'
 import styled from 'styled-components'
 
-import { useGroupsList } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import { useI18n } from '../contexts/I18nProvider'
 import inIframe from '../utils/inIframe'
-import icons from './icons'
 
 import info_add from './img/info_add.png'
 import info_edit from './img/info_edit.png'
@@ -15,8 +13,10 @@ import info_embed from './img/info_embed.png'
 const Information = () => {
   const history = useHistory()
   const { pathname, search } = useLocation()
-  const aboutInformation = useI18n((locale) => locale.components.about)
-  const groups = useGroupsList()
+  const localizedComponents = useI18n(x => x.components)
+  const aboutInformation = localizedComponents.about
+  const heroContent = localizedComponents.heroContent
+  const highlightsContent = localizedComponents.highlightsContent
 
   useLayoutEffect(() => {
     if (inIframe() && pathname === '/') {
@@ -27,48 +27,10 @@ const Information = () => {
   return (
     <LandingStyles open={pathname === '/'}>
       <Hero>
-        <div className="hero-content">
-          <h1>Mutual Aid Wiki</h1>
-          <p>A community mananged resource documenting mutual aid groups throughout the world.</p>
-          <p>
-            Created to enable individuals to connect with their mutual aid communities and to enable
-            mutual aid communities find each other, share approaches and support one another.
-          </p>
-          <div className="buttons">
-            <Link to="/map">
-              <button className="btn-primary">Visit the Map</button>
-            </Link>
-          </div>
-        </div>
+        {heroContent}
       </Hero>
       <Highlight>
-        <div className="wrapper">
-          <div>
-            {icons('git')}
-            <h3>Open Source</h3>
-            <p>
-              All of our code is published with an open source license. We accept pull requests and
-              actively rely on the work of volunteers to maintain this project.
-            </p>
-          </div>
-          <div>
-            {icons('users')}
-            <h3>Community Created</h3>
-            <p>
-              We are developing this resource together with organising groups from all over the
-              world to make sure that this data is used for the benefit of the global mutual aid
-              community.
-            </p>
-          </div>
-          <div>
-            {icons('globe')}
-            <h3>{groups.length} Communities</h3>
-            <p>
-              This resource currently documents {groups.length} groups from around the world, with
-              new groups being added daily. Please get in touch if you would like to sync your data.
-            </p>
-          </div>
-        </div>
+        {highlightsContent}
       </Highlight>
 
       <Feature tint={'rgb(244, 250, 255)'}>
