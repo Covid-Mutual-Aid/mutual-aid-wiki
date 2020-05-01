@@ -27,7 +27,7 @@ const Information = () => {
           <h1>Mutual Aid Wiki</h1>
           <p>A community mananged resource documenting mutual aid groups throughout the world.</p>
           <p>
-            Built to enable individuals to connect with their mutual aid communities and to enable
+            Created to enable individuals to connect with their mutual aid communities and to enable
             mutual aid communities find each other, share approaches and support one another.
           </p>
           <div className="buttons">
@@ -51,14 +51,14 @@ const Information = () => {
             {icons('users')}
             <h3>Community Created</h3>
             <p>
-              We are developing this resource together with organising groups in the UK and the US
-              to make sure that this data is used for the benefit of the global mutual aid
+              We are developing this resource together with organising groups from all over the
+              world to make sure that this data is used for the benefit of the global mutual aid
               community.
             </p>
           </div>
           <div>
             {icons('globe')}
-            <h3>{groups.length} Groups</h3>
+            <h3>{groups.length} Communities</h3>
             <p>
               This resource currently documents {groups.length} groups from around the world, with
               new groups being added daily. Please get in touch if you would like to sync your data.
