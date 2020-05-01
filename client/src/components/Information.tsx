@@ -82,14 +82,14 @@ const Information = () => {
           </div>
           <div className="spacer"></div>
           <div className="img">
-            <img src={info_add} />
+            <img alt="Add a group" src={info_add} />
           </div>
         </div>
       </Feature>
       <Feature tint={'rgb(255, 255, 255)'}>
         <div className="wrapper">
           <div className="img">
-            <img src={info_edit} />
+            <img alt="Edit a group" src={info_edit} />
           </div>
           <div className="spacer"></div>
           <div className="description">
@@ -117,7 +117,7 @@ const Information = () => {
           </div>
           <div className="spacer"></div>
           <div className="img">
-            <img src={info_embed} />
+            <img alt="Embed a group" src={info_embed} />
           </div>
         </div>
       </Feature>
