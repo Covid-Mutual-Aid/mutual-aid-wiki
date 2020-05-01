@@ -8,6 +8,10 @@ import { useI18n } from '../contexts/I18nProvider'
 import inIframe from '../utils/inIframe'
 import icons from './icons'
 
+import info_add from './img/info_add.png'
+import info_edit from './img/info_edit.png'
+import info_embed from './img/info_embed.png'
+
 const Information = () => {
   const history = useHistory()
   const { pathname } = useLocation()
@@ -77,16 +81,12 @@ const Information = () => {
             </h3>
           </div>
           <div className="spacer"></div>
-          <div className="image">
-            <div className="image-placeholder"></div>
-          </div>
+          <div className="image info_add"></div>
         </div>
       </Feature>
       <Feature tint={'rgb(255, 255, 255)'}>
         <div className="wrapper">
-          <div className="image">
-            <div className="image-placeholder"></div>
-          </div>
+          <div className="image info_edit"></div>
           <div className="spacer"></div>
           <div className="description">
             <h1>Edit your group</h1>
@@ -107,14 +107,12 @@ const Information = () => {
             </h3>
             <code>{`<iframe `}</code>
             <br />
-            <code>&nbsp;{`src="https://mutualaid.wiki/">`}</code>
+            <code>&nbsp;{`src="https://mutualaid.wiki/map">`}</code>
             <br />
             <code>{`</iframe>`}</code>
           </div>
           <div className="spacer"></div>
-          <div className="image">
-            <div className="image-placeholder"></div>
-          </div>
+          <div className="image info_embed"></div>
         </div>
       </Feature>
       <FAQ>
@@ -232,9 +230,22 @@ const Feature = styled.div<{ tint: string }>`
   }
 
   .image {
-    background-color: lightgray;
+    background-color: transparent;
     height: 20rem;
     min-width: 30rem;
+    background-size: contain;
+  }
+
+  .info_add {
+    background-image: url(${info_add});
+  }
+
+  .info_edit {
+    background-image: url(${info_edit});
+  }
+
+  .info_embed {
+    background-image: url(${info_embed});
   }
 
   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {

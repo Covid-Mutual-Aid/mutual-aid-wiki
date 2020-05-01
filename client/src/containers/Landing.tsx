@@ -44,13 +44,7 @@ const Landing = () => {
                 padding: '0rem 1rem 1rem 1rem',
               }}
             >
-              {inIframe() ? (
-                <div style={{ height: '1rem' }}></div>
-              ) : (
-                <h1 style={{ margin: '.2rem 0rem', paddingLeft: '.1rem' }}>
-                  {t.cta.line1} <br className="break" /> {t.cta.line2}
-                </h1>
-              )}
+              {inIframe() ? <div style={{ height: '1rem' }}></div> : <span></span>}
             </div>
             <SearchBox />
             <GroupsList

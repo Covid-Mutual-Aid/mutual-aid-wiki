@@ -91,9 +91,6 @@ const SearchBox = () => {
               <p className="add-group">{t.add_prompt}</p>
             </b>
           </Link>
-          <div>
-            <b>( {groups.length} )</b>
-          </div>
         </div>
       )}
     </Styles>
