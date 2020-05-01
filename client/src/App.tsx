@@ -2,16 +2,17 @@ import React from 'react'
 
 import Information from './components/Information'
 import EmailAuth from './containers/Authenticate'
-import ModalRoute from './components/ModalRoute'
 import MapLayout from './containers/Landing'
 import Report from './containers/Report'
+import { Route } from 'react-router-dom'
+import withModal from './components/withModal'
 
 const App = () => (
   <>
     <Information />
     <MapLayout />
-    <ModalRoute path="/map/edit/:id" exact component={EmailAuth} />
-    <ModalRoute path="/map/report/:id" exact component={Report} />
+    <Route path="/map/edit/:id" exact component={withModal(EmailAuth)} />
+    <Route path="/map/report/:id" exact component={withModal(Report)} />
   </>
 )
 
