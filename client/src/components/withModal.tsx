@@ -12,12 +12,14 @@ const withModal = <P extends any>(Component: React.FC<P>): React.FC<P> => (props
 
   const styles = useSpring({
     to: {
-      transform: `translateY(${mounted ? '0rem' : '5rem'})`,
+      transform: `translateY(${mounted ? '-5rem' : '0rem'})`,
       position: 'fixed',
-      height: '100vh',
+      height: 'calc(100vh + 5rem)',
       width: '100vw',
-      zIndex: 4,
       top: '0px',
+      paddingTop: `${!!mounted ? '0rem' : '5rem'}`,
+      backgroundColor: `rgba(255,255,255,${mounted ? '.8' : '0'})`,
+      zIndex: 4,
     },
   })
 

@@ -40,7 +40,7 @@ const EmailAuth = () => {
                   setSucessModal(true)
                   return new Promise((res) => setTimeout(res, 6000))
                 })
-                .then(() => history.replace('/'))
+                .then(() => history.replace('/map'))
             }}
           >
             <h1>{t.title}</h1>

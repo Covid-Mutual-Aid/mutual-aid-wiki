@@ -37,7 +37,7 @@ const Report = () => {
                   setSuccessModal(true)
                   return new Promise((res) => setTimeout(res, 6000))
                 })
-                .then(() => history.replace('/'))
+                .then(() => history.replace('/map'))
             }}
           >
             <h1>{t.report_group_title}</h1>
