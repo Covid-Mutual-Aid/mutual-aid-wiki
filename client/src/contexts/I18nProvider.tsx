@@ -30,7 +30,7 @@ class Locale {
 
 const en: Locale = new Locale('en', 'English', enTranslation, { about: <AboutEN /> })
 
-const es: Locale = new Locale('es', 'Español (Castellano)', esTranslation, { about: <AboutES /> })
+const es: Locale = new Locale('es', 'Castellano', esTranslation, { about: <AboutES /> })
 
 const defaultLocaleCode = 'en'
 

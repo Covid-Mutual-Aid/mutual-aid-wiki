@@ -98,6 +98,9 @@
     },
     "drop_down": {
       "nearby": "cerca"
+    },
+    "browser_geolocate": {
+      "your_area": "Tu barrio"
     }
   }
 }

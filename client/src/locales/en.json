@@ -97,6 +97,9 @@
     },
     "drop_down": {
       "nearby": "near by"
+    },
+    "browser_geolocate": {
+      "your_area": "Your area"
     }
   }
 }
