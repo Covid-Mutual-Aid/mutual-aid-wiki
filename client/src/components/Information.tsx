@@ -14,13 +14,13 @@ import info_embed from './img/info_embed.png'
 
 const Information = () => {
   const history = useHistory()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   const aboutInformation = useI18n((locale) => locale.components.about)
   const groups = useGroupsList()
 
   useLayoutEffect(() => {
     if (inIframe() && pathname === '/') {
-      history.replace('/map')
+      history.replace('/map/' + search)
     }
   }, [pathname, history])
 
@@ -107,7 +107,7 @@ const Information = () => {
             </h3>
             <code>{`<iframe `}</code>
             <br />
-            <code>&nbsp;{`src="https://mutualaid.wiki/map">`}</code>
+            <code>&nbsp;{`src="https://mutualaid.wiki">`}</code>
             <br />
             <code>{`</iframe>`}</code>
           </div>
@@ -264,7 +264,7 @@ const Feature = styled.div<{ tint: string }>`
 
   @media (max-width: ${MOBILE_BREAKPOINT + 120 + 'px'}) {
     code {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
     }
   }
 
