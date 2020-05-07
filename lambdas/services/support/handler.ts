@@ -112,7 +112,7 @@ export const reportGroup = lambda((req$) =>
           url: grp.link_facebook,
           name: grp.name,
           id: grp.id,
-          edit: `${ENV.CLIENT_ENDPOINT}/edit/${x.id}/${x.editToken}`,
+          edit: `${ENV.CLIENT_ENDPOINT}/map/edit/${x.id}/${x.editToken}`,
           delete: `${ENV.API_ENDPOINT}/group/delete?token=${x.deleteToken}`,
         })
       )

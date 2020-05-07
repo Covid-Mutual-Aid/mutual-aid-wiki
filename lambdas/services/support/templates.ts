@@ -8,7 +8,7 @@ const from = 'no-reply@mutualaid.wiki'
 
 export const sendEditLink = async (email: string, id: string) => {
   const token = await tokens.edit.sign({ id, email })
-  const link = `${ENV.CLIENT_ENDPOINT}/edit/${id}/${token}`
+  const link = `${ENV.CLIENT_ENDPOINT}/map/edit/${id}/${token}`
 
   return sendGrid
     .send({
@@ -118,7 +118,7 @@ export const sendSubmitedRequest = (email: string, key: string) => {
 
 export const sendSuccessfulVerification = async (email: string, id: string) => {
   const token = await tokens.edit.sign({ id, email })
-  const link = `${ENV.CLIENT_ENDPOINT}/edit/${id}/${token}`
+  const link = `${ENV.CLIENT_ENDPOINT}/map/edit/${id}/${token}`
 
   return sendGrid.send({
     to: email,
