@@ -2,6 +2,8 @@ import { google, sheets_v4 } from 'googleapis'
 import { uniqueBy, isSameGroup } from '../_utility_/utils'
 import { Group, ExternalGroup } from '../_utility_/types'
 import ENV from '../_utility_/environment'
+import axios from 'axios'
+import { groupConstructor } from '../external-data/helpers'
 
 export const sheets = google.sheets('v4')
 
@@ -63,13 +65,6 @@ export const addSheetRow = (
   authorise().then((auth) =>
     updateSheet(auth)(addRow(getGroupRow(group), sheetId || (ENV.SHEET_ID as any)))
   )
-
-type Cell = string | undefined | null
-
-export const groupConstructor = (titleRow: Cell[], map: ExternalGroup) => (row: Cell[]) =>
-  (Object.keys(map) as [keyof ExternalGroup]).reduce((group, key) => {
-    return { ...group, [key]: row[titleRow.findIndex((v) => (v || '').trim() === map[key])] }
-  }, {} as ExternalGroup)
 
 export const getGroupsFromSheet = (spreadsheetId: string, sheetId: number, map: ExternalGroup) =>
   sheets.spreadsheets
