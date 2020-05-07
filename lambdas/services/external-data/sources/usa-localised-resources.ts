@@ -2,8 +2,9 @@
 
 import { getGroupsFromSheet } from '../../google/sheets'
 import db from '../../_utility_/database'
-import { batchDedupe, geolocateGroups } from '../helpers'
+import { batchDedupe, geolocateGroups, matchAgainst } from '../helpers'
 import { uniqueBy, isSameGroup } from '../../_utility_/utils'
+import { Group } from '../../_utility_/types'
 
 type Cell = string | undefined | null
 
@@ -29,17 +30,4 @@ export const getData = () =>
         },
       }))
     })
-    .then(db.groups.createBatch)
-/*
-    - Scrape groups from sheet & dedupe
-    - Get groups from our db from this sheet
-    - For all scraped groups where location_name matches a group we already have, copy location_coords to the new group
-    - Geolocate remaining groups that dont have location_coords
-    - Delete all our entries from this sheet
-    - Replace with geolocated entries
-
-    Cases:
-    - Group is deleted
-    - Group is added 
-    - Group info is edited
-*/
+// .then(db.groups.createBatch)
