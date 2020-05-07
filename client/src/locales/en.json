@@ -20,7 +20,7 @@
       "submit_button": "submit"
     },
     "report": {
-      "report_group_title": "Report a group",
+      "report_group_title": "Report an issue",
       "after_submit_message": "Thanks for your report",
       "report_reason_prompt": "Why are you reporting this group?",
       "report_reason_placeholder": "E.g, it no longer exists...",

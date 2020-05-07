@@ -97,7 +97,7 @@ export const rejectSupportRequest = lambda((req$) =>
 // request/report
 export const reportGroup = lambda((req$) =>
   req$.pipe(
-    body(P.shape({ id: P.string, message: P.string })),
+    body(P.shape({ id: P.string, message: P.string, email: P.optional(P.string) })),
     switchMap((x) =>
       Promise.all([
         tokens.edit.sign({ id: x.id, email: 'NONE' }),
@@ -109,6 +109,7 @@ export const reportGroup = lambda((req$) =>
         createRow('Reports', {
           action: 'waiting',
           message: x.message,
+          email: x.email,
           url: grp.link_facebook,
           name: grp.name,
           id: grp.id,

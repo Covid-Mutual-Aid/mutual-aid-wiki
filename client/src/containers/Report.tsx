@@ -6,10 +6,12 @@ import { useI18n } from '../contexts/I18nProvider'
 
 import { CenterAlign, FormButtons, Card } from '../styles/styles'
 import InputGroup from '../components/Form/InputGroup'
+import TextareaAutosize from 'react-textarea-autosize'
 
 const Report = () => {
   const [successModal, setSuccessModal] = useState(false)
   const [message, setMessage] = useState('')
+  const [email, setEmail] = useState('')
   const [validated, setValidated] = useState(false)
 
   const { id } = useParams<{ id: string }>()
@@ -31,7 +33,7 @@ const Report = () => {
               if (!validated) return
               request('/request/report', {
                 method: 'POST',
-                body: JSON.stringify({ id, message }),
+                body: JSON.stringify({ id, message, email }),
               })
                 .then((x) => {
                   setSuccessModal(true)
@@ -43,13 +45,22 @@ const Report = () => {
             <h1>{t.report_group_title}</h1>
             <p>{t.report_reason_prompt}</p>
             <InputGroup>
-              <input
+              <TextareaAutosize
                 placeholder={t.report_reason_placeholder}
+                name="description"
                 value={message}
+                style={{ fontFamily: 'inherit', minHeight: '4rem' }}
                 onChange={(e) => {
                   setMessage(e.target.value)
                   setValidated(validMessage(e.target.value))
                 }}
+              />
+            </InputGroup>
+            <InputGroup>
+              <input
+                placeholder={'Your email'}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </InputGroup>
             <FormButtons>

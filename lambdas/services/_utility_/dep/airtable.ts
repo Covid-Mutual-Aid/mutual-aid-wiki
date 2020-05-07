@@ -8,6 +8,7 @@ export const airtable = new Airtable({ apiKey: env.AIRTABLE_ATTACH_EMAIL_KEY }).
 export type ReportsTable = {
   name: string
   message: string
+  email?: string
   url: string
   id: string
   edit: string
