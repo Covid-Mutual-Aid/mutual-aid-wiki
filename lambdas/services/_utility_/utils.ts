@@ -40,7 +40,7 @@ export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'lo
   normLink(norm(a.link_facebook)) === normLink(norm(b.link_facebook)) ||
   (norm(a.name) === norm(b.name) && norm(a.location_name) === norm(b.location_name))
 
-export const missingIn = <T extends any>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
+export const missingIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
   b.filter((x) => !a.some((y) => fn(x, y)))
 
 export const uniqueBy = <T>(fn: (a: T, b: T) => boolean) => (arr: T[]) =>
