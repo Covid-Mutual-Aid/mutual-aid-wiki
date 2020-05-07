@@ -1,4 +1,4 @@
-getExternalData:
+usaLocalisedResources:
   handler: services/external-data/handler.getExternalData
   timeout: 15
   events:
@@ -6,3 +6,6 @@ getExternalData:
         method: get
         path: external/get
         cors: true
+
+getTestData:
+  handler: services/external-data/handler.getTestData

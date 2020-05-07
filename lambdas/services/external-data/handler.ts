@@ -4,7 +4,8 @@ import P from 'ts-prove'
 
 import lambda, { body, responseJson$ } from '../_utility_/lib/lambdaRx'
 import db from '../_utility_/database'
-import { getData } from './templates/usa-localised-resources'
+import { getData } from './sources/usa-localised-resources'
+import { testSource } from './sources/test-sheet'
 
 export const getLocationSearches = lambda((req$) =>
   req$.pipe(
@@ -29,3 +30,5 @@ export const addLocationSearch = lambda((req$) =>
 )
 
 export const getExternalData = lambda((req$) => req$.pipe(switchMap(getData), responseJson$))
+
+export const getTestData = lambda((req$) => req$.pipe(switchMap(testSource), responseJson$))
