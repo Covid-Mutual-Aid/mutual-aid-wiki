@@ -67,7 +67,9 @@ export const createSource = ({
   id: string
   displayName: string
   origin: string
-}) => (getGroups: (...args: any) => Promise<ExternalGroup[]>) => async () => {
+}) => (getGroups: (...args: any) => Promise<ExternalGroup[]>) => (
+  testCases: Partial<Group>[]
+) => async () => {
   const externalGroups = await getGroups()
   console.log(externalGroups, 'externalGroups')
 
@@ -78,14 +80,14 @@ export const createSource = ({
   // type GroupI = Pick<Group, 'id' | 'name' | 'location_name' | 'link_facebook'>
   // type GroupE = Omit<GroupI, 'id'>
 
-  // const internalGroups = await db.groups.get(['id', 'name', 'location_name', 'link_facebook'])
   const internalGroups = await db.groups.getByKeyEqualTo('origin', origin) //['id', 'name', 'location_name', 'link_facebook']
 
   console.log(internalGroups, 'getGroupsBysource')
-  if (typeof internalGroups === 'undefined')
-    return { status: `This source (${origin}) does not exist` }
 
-  const matches = matchAgainst<ExternalGroup, Group>(isSameGroup)(externalGroups, internalGroups)
+  const matches = matchAgainst<ExternalGroup, Group>(isSameGroup)(
+    externalGroups,
+    internalGroups || []
+  )
 
   // console.log(internalGroups, 'internalGroups')
   // console.log(matches, 'matches')

@@ -24,4 +24,4 @@ export const testSource = createSource({
     name: 'Name',
     link_facebook: 'Link',
   })
-)
+)([])
