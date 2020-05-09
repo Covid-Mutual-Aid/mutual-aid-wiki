@@ -14,8 +14,9 @@ export type Group = {
   location_poly?: Coord[]
   created_at?: string
   updated_at?: string
-  isExternalGroup: boolean
-  origin: string
+  isExternalGroup?: boolean
+  origin?: string
+  external_data?: Record<any, any>
 }
 
 export type ExternalGroup = Pick<Group, 'name' | 'link_facebook' | 'location_name' | 'emails'>

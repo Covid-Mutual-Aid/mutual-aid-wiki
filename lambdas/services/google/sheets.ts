@@ -1,9 +1,7 @@
 import { google, sheets_v4 } from 'googleapis'
-import { uniqueBy, isSameGroup } from '../_utility_/utils'
 import { Group, ExternalGroup } from '../_utility_/types'
 import ENV from '../_utility_/environment'
-import axios from 'axios'
-import { groupConstructor } from '../external-data/helpers'
+import { groupConstructor } from '../external-data/adapters'
 
 export const sheets = google.sheets('v4')
 
