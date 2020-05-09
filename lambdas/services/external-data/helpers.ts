@@ -1,7 +1,8 @@
 import { ExternalGroup, Group, LatLng } from '../_utility_/types'
 import db from '../_utility_/database'
-import { isSameGroup } from '../_utility_/utils'
+import { isExactSameGroup, matchAgainst, missingIn, includedIn } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
+import ENV from '../_utility_/environment'
 
 type Cell = string | undefined | null
 
@@ -10,31 +11,14 @@ export const batchDedupe = (newGroups: ExternalGroup[]) =>
     .get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'updated_at'])
     .then((groups) =>
       newGroups.reduce(
-        (uniqs, group) => (groups.find((ng) => isSameGroup(group, ng)) ? uniqs : [...uniqs, group]),
+        (uniqs, group) =>
+          groups.find((ng) => isExactSameGroup(group, ng)) ? uniqs : [...uniqs, group],
         [] as ExternalGroup[]
       )
     )
 
-export const filterAgainst = <I, A>(filter: (i: I, a: A) => boolean) => (
-  initial: I[],
-  against: A[]
-) =>
-  initial.reduce(
-    ([dups, uniqs], group) =>
-      against.find((g) => filter(group, g)) ? [uniqs, [...dups, group]] : [[...uniqs, group], dups],
-    [[], []] as (I | A)[][]
-  )
-
-export const matchAgainst = <O, E>(isMatch: (o: O, e: E) => boolean) => (
-  initial: O[],
-  exists: E[]
-) =>
-  initial.reduce((pairs, obj) => {
-    const matches = exists.filter((g) => isMatch(obj, g))
-    return matches.length > 0 ? [...pairs, { obj, matches }] : [...pairs, { obj, matches: [] }]
-  }, [] as { obj: O; matches: E[] }[])
-
 export const groupConstructor = (titleRow: Cell[], map: ExternalGroup) => (row: Cell[]) =>
+  // Add external_fields key for remaining cells
   (Object.keys(map) as [keyof ExternalGroup]).reduce((group, key) => {
     return { ...group, [key]: row[titleRow.findIndex((v) => (v || '').trim() === map[key])] }
   }, {} as ExternalGroup)
@@ -59,49 +43,40 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
     )
   )
 
-export const createSource = ({
-  id,
+export const createSource = (getGroups: (...args: any) => Promise<ExternalGroup[]>) => ({
+  identifier,
   displayName,
   origin,
 }: {
-  id: string
+  identifier: string
   displayName: string
   origin: string
-}) => (getGroups: (...args: any) => Promise<ExternalGroup[]>) => (
-  testCases: Partial<Group>[]
-) => async () => {
+}) => (testCases: ExternalGroup[]) => async () => {
   const externalGroups = await getGroups()
-  console.log(externalGroups, 'externalGroups')
 
-  // const passing = filterAgainst(isSameGroup)(externalGroups, tests)
-  // const passRatio = tests.length / passing.length
-  // if(passRatio === 0) return {statusObj} // All tests are failing, bail out
+  const failingTests = missingIn(isExactSameGroup)(externalGroups, testCases)
+  const testStatus = (testCases.length - failingTests.length) / testCases.length
 
-  // type GroupI = Pick<Group, 'id' | 'name' | 'location_name' | 'link_facebook'>
-  // type GroupE = Omit<GroupI, 'id'>
+  const internalGroups = await db.groups.getByKeyEqualTo('origin', origin)
 
-  const internalGroups = await db.groups.getByKeyEqualTo('origin', origin) //['id', 'name', 'location_name', 'link_facebook']
-
-  console.log(internalGroups, 'getGroupsBysource')
-
-  const matches = matchAgainst<ExternalGroup, Group>(isSameGroup)(
-    externalGroups,
+  const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
+    externalGroups || [],
     internalGroups || []
   )
 
-  // console.log(internalGroups, 'internalGroups')
-  // console.log(matches, 'matches')
-
-  const outdatedGroups = matches
+  const existingGroups = matchPairs
     .filter(({ matches }) => matches.length > 0)
-    .map(({ matches }) => matches.map(({ id }) => id))
-    .reduce((ids, id) => ids.concat(id), [])
+    .map(({ matches }) => matches)
+    .reduce((groups, g) => groups.concat(g), [] as Group[])
 
-  const newGroups = matches
+  // Groups we remove
+  const outdatedGroups = missingIn<Group>((i, g) => i.id === g.id)(existingGroups, internalGroups)
+  db.groups.deleteBatch(outdatedGroups.map((g) => g.id))
+
+  // New groups we add
+  const newGroups = matchPairs
     .filter(({ matches }) => matches.length === 0)
-    .map(({ obj }) => ({ ...obj, isExternalGroup: true, origin }))
-
-  if (newGroups.length === 0) return { status: 'No new groups' }
+    .map(({ obj }) => ({ ...obj, isExternalGroup: true, origin: identifier }))
 
   const geolocated = await geolocateGroups(newGroups)
 
@@ -110,13 +85,21 @@ export const createSource = ({
       ...g,
       emails: [],
       created_at: Date.now() + '',
+      isExternalGroup: true,
+      origin: identifier,
     }))
   )
 
   // return {statusObj}
   return {
-    outdatedGroups,
-    newGroups,
-    geolocated,
+    identifier, //test-sheet
+    displayName, //Test Sheet
+    origin, //https://google.com...
+    triggerUrl: `http://www.google.com`, // ENV.domain + identifier
+    testStatus, //ratio of passing/failing
+    failingTests,
+    existingGroups: existingGroups.length,
+    newGroups: newGroups.length,
+    geolocated: geolocated.length,
   }
 }
