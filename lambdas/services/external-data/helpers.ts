@@ -1,4 +1,4 @@
-import { ExternalGroup, Group, LatLng } from '../_utility_/types'
+import { ExternalGroup, Group, LatLng, Source } from '../_utility_/types'
 import db from '../_utility_/database'
 import { isExactSameGroup, matchAgainst, missingIn } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
@@ -41,21 +41,11 @@ const test = <T>(allGroups: T[], testCases: T[]) => {
   return { failingTests, testRatio }
 }
 
-type Source = {
-  displayName: string
-  external_id: string
+const syncExternalData = async (
+  externalGroups: ExternalGroup[],
+  external_id: string,
   external_link: string
-}
-
-export const createSource = (getGroups: (...args: any) => Promise<ExternalGroup[]>) => ({
-  displayName,
-  external_id,
-  external_link,
-}: Source) => (testCases: ExternalGroup[]) => async () => {
-  const externalGroups = await getGroups()
-
-  const { failingTests, testRatio } = test(externalGroups, testCases)
-
+) => {
   const storedGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
   const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
     externalGroups,
@@ -66,11 +56,9 @@ export const createSource = (getGroups: (...args: any) => Promise<ExternalGroup[
     .filter(({ matches }) => matches.length > 0)
     .reduce((groups, { matches }) => groups.concat(matches), [] as Group[])
 
-  // Groups in the db that do not match external groups
   const outdatedGroups = missingIn<Group>((e, g) => e.id === g.id)(matches, storedGroups)
   db.groups.deleteBatch(outdatedGroups.map((g) => g.id))
 
-  // Groups not yet in the db
   const newGroups = matchPairs
     .filter(({ matches }) => matches.length === 0)
     .map(({ obj }) => ({ ...obj, external: true, external_id, external_link }))
@@ -85,13 +73,40 @@ export const createSource = (getGroups: (...args: any) => Promise<ExternalGroup[
   )
 
   return {
-    displayName, //Test Sheet
-    external_id, //test-sheet
-    external_link, //https://google.com...
-    triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`, // ENV.domain + identifier
-    testRatio, //ratio of passing/failing
-    failingTests: failingTests.map(({ name }) => name),
     groupsAdded: newGroups.length,
     groupsRemoved: outdatedGroups.length,
   }
 }
+
+export const createSource = ({
+  displayName,
+  external_id,
+  external_link,
+  getGroups,
+  testCases,
+}: Source) => ({
+  external_id,
+  handler: async () => {
+    const externalGroups = await getGroups()
+
+    const { failingTests, testRatio } = test(externalGroups, testCases)
+    if (testRatio === 0) return
+
+    const { groupsAdded, groupsRemoved } = await syncExternalData(
+      externalGroups,
+      external_id,
+      external_link
+    )
+
+    return {
+      displayName, //Test Sheet
+      external_id, //test-sheet
+      external_link, //https://google.com...
+      triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`, // ENV.domain + identifier
+      testRatio, //ratio of passing/failing
+      failingTests: failingTests.map(({ name }) => name),
+      groupsAdded,
+      groupsRemoved,
+    }
+  },
+})

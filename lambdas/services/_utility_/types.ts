@@ -21,6 +21,14 @@ export type Group = {
   external_data?: Record<any, any>
 }
 
+export type Source = {
+  displayName: string
+  external_id: string
+  external_link: string
+  getGroups: (...args: any) => Promise<ExternalGroup[]>
+  testCases: ExternalGroup[]
+}
+
 export type ExternalGroup = Pick<Group, 'name' | 'link_facebook' | 'location_name' | 'emails'>
 
 export type Search = {
