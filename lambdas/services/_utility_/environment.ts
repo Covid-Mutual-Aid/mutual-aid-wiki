@@ -13,7 +13,8 @@ const other = {
 
 const airtable = {
   AIRTABLE_ATTACH_EMAIL_BASE: env.AIRTABLE_ATTACH_EMAIL_BASE as string,
-  AIRTABLE_ATTACH_EMAIL_KEY: env.AIRTABLE_ATTACH_EMAIL_KEY as string,
+  AIRTABLE_EXTERNAL_DATA_BASE: env.AIRTABLE_EXTERNAL_DATA_BASE as string,
+  AIRTABLE_KEY: env.AIRTABLE_KEY as string,
 }
 
 const google = {

@@ -9,3 +9,12 @@ usaLocalisedResources:
 
 getTestData:
   handler: services/external-data/handler.getTestData
+  timeout: 250
+
+triggerSource:
+  handler: services/external-data/handler.triggerSource
+  timeout: 250
+  events:
+    - http:
+        method: get
+        path: external_data/trigger

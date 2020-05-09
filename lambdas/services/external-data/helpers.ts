@@ -3,6 +3,7 @@ import db from '../_utility_/database'
 import { isExactSameGroup, matchAgainst, missingIn } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
 import ENV from '../_utility_/environment'
+import { getAllEntries } from '../_utility_/dep/airtable'
 
 export const batchDedupe = (newGroups: ExternalGroup[]) =>
   db.groups
@@ -78,6 +79,24 @@ const syncExternalData = async (
   }
 }
 
+const updateAirtable = async (source: {
+  displayName: string
+  external_id: string
+  external_link: string
+  triggerUrl: string
+  testRatio: number
+  failingTests: string
+  groupsAdded: number
+  groupsRemoved: number
+}) => {
+  const sources = await getAllEntries('Sources')
+  console.log(sources)
+  // If external_id is not in sources, create a new one with the params
+  // Now create a new snapshot!
+
+  return source
+}
+
 export const createSource = ({
   displayName,
   external_id,
@@ -90,7 +109,6 @@ export const createSource = ({
     const externalGroups = await getGroups()
 
     const { failingTests, testRatio } = test(externalGroups, testCases)
-    if (testRatio === 0) return
 
     const { groupsAdded, groupsRemoved } = await syncExternalData(
       externalGroups,
@@ -98,15 +116,15 @@ export const createSource = ({
       external_link
     )
 
-    return {
+    return updateAirtable({
       displayName, //Test Sheet
       external_id, //test-sheet
       external_link, //https://google.com...
       triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`, // ENV.domain + identifier
       testRatio, //ratio of passing/failing
-      failingTests: failingTests.map(({ name }) => name),
+      failingTests: failingTests.map(({ name }) => name).join(''),
       groupsAdded,
       groupsRemoved,
-    }
+    })
   },
 })

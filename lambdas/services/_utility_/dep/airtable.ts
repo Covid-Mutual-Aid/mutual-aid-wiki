@@ -1,9 +1,11 @@
 import Airtable from 'airtable'
 import env from '../environment'
 
-export const airtable = new Airtable({ apiKey: env.AIRTABLE_ATTACH_EMAIL_KEY }).base(
-  env.AIRTABLE_ATTACH_EMAIL_BASE
-)
+const airtable = (base: 'AIRTABLE_ATTACH_EMAIL_BASE' | 'AIRTABLE_EXTERNAL_DATA_BASE') =>
+  new Airtable({ apiKey: env.AIRTABLE_KEY }).base(env[base])
+
+export const airtableAttachEmail = airtable('AIRTABLE_ATTACH_EMAIL_BASE')
+export const airtableExternalData = airtable('AIRTABLE_EXTERNAL_DATA_BASE')
 
 export type ReportsTable = {
   name: string
@@ -25,6 +27,24 @@ export type WaitingTable = {
   url: string
 }
 
+export type SourcesTable = {
+  id: string
+  Name: string
+  'Origin URL': string
+  Trigger: string
+  'Test Ratio': number
+  Snapshots: string[]
+}
+
+export type SnapshotsTable = {
+  Timestamp: string
+  'Groups Added': number
+  'Groups Removed': number
+  'Test Ratio': number
+  'Failing Tests': string
+  Source: string[]
+}
+
 export type DoneTable = Omit<WaitingTable, 'reject' | 'confirm'> & {
   status: 'confirmed' | 'rejected'
 }
@@ -39,7 +59,7 @@ export const getAll = <T extends keyof Tables>(table: T) =>
   airtable(table).select().all() as Promise<Airtable.Records<Tables[T]>>
 
 export const createRow = <T extends keyof Tables>(table: T, fields: Tables[T]) =>
-  airtable(table).create([{ fields }])
+  airtableAttachEmail(table).create([{ fields }])
 
 export const transferRow = <T1 extends keyof Tables, T2 extends keyof Tables>(
   table1: T1,
