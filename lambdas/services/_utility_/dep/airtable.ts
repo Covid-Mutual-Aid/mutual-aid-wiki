@@ -56,7 +56,7 @@ export type Tables = {
 }
 
 export const getAll = <T extends keyof Tables>(table: T) =>
-  airtable(table).select().all() as Promise<Airtable.Records<Tables[T]>>
+  airtableAttachEmail(table).select().all() as Promise<Airtable.Records<Tables[T]>>
 
 export const createRow = <T extends keyof Tables>(table: T, fields: Tables[T]) =>
   airtableAttachEmail(table).create([{ fields }])
@@ -71,7 +71,9 @@ export const transferRow = <T1 extends keyof Tables, T2 extends keyof Tables>(
     .then((rows) =>
       Promise.all(
         rows.map((row) =>
-          createRow(table2, transformer(row.fields)).then(() => airtable(table1).destroy(row.id))
+          createRow(table2, transformer(row.fields)).then(() =>
+            airtableAttachEmail(table1).destroy(row.id)
+          )
         )
       )
     )

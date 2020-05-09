@@ -1,7 +1,5 @@
 import { getGroupsFromSheet } from '../adapters'
 import { createSource } from '../helpers'
-import ENV from '../../_utility_/environment'
-import axios from 'axios'
 
 const getGroups = () =>
   getGroupsFromSheet('1rOnO6iAkSAc90-Zzd4a09L7DouoO3wo9eL_Ia2_CSLg', 'Sheet1', {

@@ -1,9 +1,9 @@
-import { ExternalGroup, Group, LatLng, Source } from '../_utility_/types'
+import { ExternalGroup, Group, Coord, Source } from '../_utility_/types'
 import db from '../_utility_/database'
 import { isExactSameGroup, matchAgainst, missingIn } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
 import ENV from '../_utility_/environment'
-import { getAllEntries } from '../_utility_/dep/airtable'
+// import { getAllEntries } from '../_utility_/dep/airtable'
 
 export const batchDedupe = (newGroups: ExternalGroup[]) =>
   db.groups
@@ -25,7 +25,7 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
   Promise.all(
     groups.map(
       (g) =>
-        new Promise<T & { location_coord: LatLng }>((resolve) => {
+        new Promise<T & { location_coord: Coord }>((resolve) => {
           googleGeoLocate(g.location_name).then(([place]) => {
             resolve({
               ...g,
@@ -89,8 +89,8 @@ const updateAirtable = async (source: {
   groupsAdded: number
   groupsRemoved: number
 }) => {
-  const sources = await getAllEntries('Sources')
-  console.log(sources)
+  // const sources = await getAllEntries('Sources')
+  // console.log(sources)
   // If external_id is not in sources, create a new one with the params
   // Now create a new snapshot!
 
@@ -107,9 +107,7 @@ export const createSource = ({
   external_id,
   handler: async () => {
     const externalGroups = await getGroups()
-
     const { failingTests, testRatio } = test(externalGroups, testCases)
-
     const { groupsAdded, groupsRemoved } = await syncExternalData(
       externalGroups,
       external_id,
