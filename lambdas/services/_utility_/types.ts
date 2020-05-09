@@ -14,8 +14,10 @@ export type Group = {
   location_poly?: Coord[]
   created_at?: string
   updated_at?: string
-  isExternalGroup?: boolean
-  origin?: string
+
+  external?: boolean
+  external_id?: string
+  external_link?: string
   external_data?: Record<any, any>
 }
 

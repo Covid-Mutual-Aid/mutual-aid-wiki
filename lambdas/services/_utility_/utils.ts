@@ -41,8 +41,11 @@ export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'lo
   (norm(a.name) === norm(b.name) && norm(a.location_name) === norm(b.location_name))
 
 // This needs tests!
-export const isExactSameGroup = <T extends Record<any, any>>(a: T, b: T) =>
-  Object.keys(a).reduce((matching, key) => matching && a[key] === b[key], true)
+export const isExactSameGroup = <T extends Partial<Group>>(a: T, b: T) =>
+  (Object.keys(omit(['id', 'created_at', 'updated_at'], a)) as [keyof T]).reduce(
+    (matching, key) => matching && JSON.stringify(a[key]) === JSON.stringify(b[key]),
+    true
+  )
 
 export const missingIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
   b.filter((x) => !a.some((y) => fn(x, y)))

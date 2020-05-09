@@ -50,11 +50,6 @@ export const getGroupsFromSheet = async (
   const [titleRow, ...rows] = groupData.values
   const createGroup = groupConstructor(titleRow, map)
 
-  console.log(
-    rows.map((r: any) => createGroup(r)),
-    'created Groups'
-  )
-
   return rows
     .map((r: any) => createGroup(r))
     .filter((x: any) => x.location_name && x.name && x.link_facebook) as ExternalGroup[]

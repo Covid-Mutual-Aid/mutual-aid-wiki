@@ -37,43 +37,43 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
 
 const test = <T>(allGroups: T[], testCases: T[]) => {
   const failingTests = missingIn(isExactSameGroup)(allGroups, testCases)
-  const testStatus = (testCases.length - failingTests.length) / testCases.length
-  return { failingTests, testStatus }
+  const testRatio = (testCases.length - failingTests.length) / testCases.length
+  return { failingTests, testRatio }
 }
 
 type Source = {
-  identifier: string
   displayName: string
-  origin: string
+  external_id: string
+  external_link: string
 }
 
 export const createSource = (getGroups: (...args: any) => Promise<ExternalGroup[]>) => ({
-  identifier,
   displayName,
-  origin,
+  external_id,
+  external_link,
 }: Source) => (testCases: ExternalGroup[]) => async () => {
   const externalGroups = await getGroups()
 
-  const { failingTests, testStatus } = test(externalGroups, testCases)
+  const { failingTests, testRatio } = test(externalGroups, testCases)
 
-  const internalGroups = await db.groups.getByKeyEqualTo('origin', origin)
+  const storedGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
   const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
     externalGroups,
-    internalGroups
+    storedGroups
   )
 
-  const existingGroups = matchPairs
+  const matches = matchPairs
     .filter(({ matches }) => matches.length > 0)
     .reduce((groups, { matches }) => groups.concat(matches), [] as Group[])
 
   // Groups in the db that do not match external groups
-  const outdatedGroups = missingIn<Group>((i, g) => i.id === g.id)(existingGroups, internalGroups)
+  const outdatedGroups = missingIn<Group>((e, g) => e.id === g.id)(matches, storedGroups)
   db.groups.deleteBatch(outdatedGroups.map((g) => g.id))
 
   // Groups not yet in the db
   const newGroups = matchPairs
     .filter(({ matches }) => matches.length === 0)
-    .map(({ obj }) => ({ ...obj, isExternalGroup: true, origin: identifier }))
+    .map(({ obj }) => ({ ...obj, external: true, external_id, external_link }))
 
   const geolocated = await geolocateGroups(newGroups)
   db.groups.createBatch(
@@ -81,18 +81,16 @@ export const createSource = (getGroups: (...args: any) => Promise<ExternalGroup[
       ...g,
       emails: [],
       created_at: Date.now() + '',
-      isExternalGroup: true,
-      origin: identifier,
     }))
   )
 
   return {
-    identifier, //test-sheet
     displayName, //Test Sheet
-    origin, //https://google.com...
-    triggerUrl: `http://www.google.com/${identifier}`, // ENV.domain + identifier
-    testStatus, //ratio of passing/failing
-    failingTests,
+    external_id, //test-sheet
+    external_link, //https://google.com...
+    triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`, // ENV.domain + identifier
+    testRatio, //ratio of passing/failing
+    failingTests: failingTests.map(({ name }) => name),
     groupsAdded: newGroups.length,
     groupsRemoved: outdatedGroups.length,
   }

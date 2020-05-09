@@ -10,6 +10,7 @@ import {
   isExactSameGroup,
 } from './utils'
 import { Group } from './types'
+import { groupCreated } from './logging'
 
 const group1 = { link_facebook: 'foo', name: 'foo', location_name: 'foo' }
 const group2 = { link_facebook: 'bar', name: 'bar', location_name: 'bar' }
@@ -18,6 +19,8 @@ type TestGroup = {
   link_facebook: string
   name: string
   location_name: string
+  external_data?: Record<any, any>
+  updated_at?: string
 }
 
 const corrGroup = {
@@ -87,8 +90,12 @@ describe('isSamegroup', () => {
 
 describe('isExactSameGroup', () => {
   test('Correctly identifies exact same group', () => {
+    const exd = { ...groupCreated, external_data: { ex: 'd' } }
+
     expect(isExactSameGroup(testA, testA)).toBe(true)
     expect(isExactSameGroup(testA, testB)).toBe(false)
+    expect(isExactSameGroup(exd, exd)).toBe(true)
+    expect(isExactSameGroup({ ...exd, updated_at: '1' }, { ...exd, updated_at: '2' })).toBe(true)
   })
 })
 
@@ -169,15 +176,15 @@ describe('purgeIncorrectlyNamedFields', () => {
 
 describe('Test matchAgainst', () => {
   test('Works as expected with empty arrays', () => {
-    expect(matchAgainst<Group, Group>(isSameGroup)([], [])).toEqual([])
+    expect(matchAgainst<Group, Group>(isExactSameGroup)([], [])).toEqual([])
   })
   test('Matches two single element arrays correctly', () => {
-    expect(matchAgainst<TestGroup, TestGroup>(isSameGroup)([testA], [testA])).toEqual([
+    expect(matchAgainst<TestGroup, TestGroup>(isExactSameGroup)([testA], [testA])).toEqual([
       { obj: testA, matches: [testA] },
     ])
   })
   test('Does not match two single non matching element arrays', () => {
-    expect(matchAgainst<TestGroup, TestGroup>(isSameGroup)([testA], [testB])).toEqual([
+    expect(matchAgainst<TestGroup, TestGroup>(isExactSameGroup)([testA], [testB])).toEqual([
       { obj: testA, matches: [] },
     ])
   })
