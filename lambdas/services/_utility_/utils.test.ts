@@ -5,10 +5,20 @@ import {
   isDateTimeString,
   isCorrectlyNamed,
   normLink,
+  matchAgainst,
+  filterAgainst,
+  isExactSameGroup,
 } from './utils'
+import { Group } from './types'
 
 const group1 = { link_facebook: 'foo', name: 'foo', location_name: 'foo' }
 const group2 = { link_facebook: 'bar', name: 'bar', location_name: 'bar' }
+
+type TestGroup = {
+  link_facebook: string
+  name: string
+  location_name: string
+}
 
 const corrGroup = {
   link_facebook: 'http://facebook.com',
@@ -72,6 +82,13 @@ describe('isSamegroup', () => {
   })
   test('Should be the same value', () => {
     expect(isSameGroup(testA, testB)).toBe(false)
+  })
+})
+
+describe('isExactSameGroup', () => {
+  test('Correctly identifies exact same group', () => {
+    expect(isExactSameGroup(testA, testA)).toBe(true)
+    expect(isExactSameGroup(testA, testB)).toBe(false)
   })
 })
 
@@ -147,5 +164,21 @@ describe('purgeIncorrectlyNamedFields', () => {
       correctlyNamedGroups.length === 1 &&
         JSON.stringify(correctlyNamedGroups[0]) === JSON.stringify(arr[0])
     ).toBe(true)
+  })
+})
+
+describe('Test matchAgainst', () => {
+  test('Works as expected with empty arrays', () => {
+    expect(matchAgainst<Group, Group>(isSameGroup)([], [])).toEqual([])
+  })
+  test('Matches two single element arrays correctly', () => {
+    expect(matchAgainst<TestGroup, TestGroup>(isSameGroup)([testA], [testA])).toEqual([
+      { obj: testA, matches: [testA] },
+    ])
+  })
+  test('Does not match two single non matching element arrays', () => {
+    expect(matchAgainst<TestGroup, TestGroup>(isSameGroup)([testA], [testB])).toEqual([
+      { obj: testA, matches: [] },
+    ])
   })
 })

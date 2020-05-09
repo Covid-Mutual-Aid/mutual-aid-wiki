@@ -40,6 +40,10 @@ export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'lo
   normLink(norm(a.link_facebook)) === normLink(norm(b.link_facebook)) ||
   (norm(a.name) === norm(b.name) && norm(a.location_name) === norm(b.location_name))
 
+// This needs tests!
+export const isExactSameGroup = <T extends Record<any, any>>(a: T, b: T) =>
+  Object.keys(a).reduce((matching, key) => matching && a[key] === b[key], true)
+
 export const missingIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
   b.filter((x) => !a.some((y) => fn(x, y)))
 
@@ -95,3 +99,23 @@ export const goDeep = (fn: (x: any) => any) => (x: any) =>
 export const mapValues = <T extends Record<any, any>>(fn: <K extends keyof T>(x: K) => T[K]) => (
   x: T
 ) => Object.keys(x).reduce((all, key) => ({ ...all, [key]: fn(x[key]) }), {})
+export const filterAgainst = <I, A>(filter: (i: I, a: A) => boolean) => (
+  initial: I[],
+  against: A[]
+) =>
+  initial.reduce(
+    ([matches, nonMatches], group) =>
+      against.find((g) => filter(group, g))
+        ? [[...matches, group], nonMatches]
+        : [matches, [...nonMatches, group]],
+    [[], []] as (I | A)[][]
+  )
+
+export const matchAgainst = <O, E>(isMatch: (o: O, e: E) => boolean) => (
+  initial: O[],
+  exists: E[]
+) =>
+  initial.reduce((pairs, obj) => {
+    const matches = exists.filter((g) => isMatch(obj, g))
+    return matches.length > 0 ? [...pairs, { obj, matches }] : [...pairs, { obj, matches: [] }]
+  }, [] as { obj: O; matches: E[] }[])
