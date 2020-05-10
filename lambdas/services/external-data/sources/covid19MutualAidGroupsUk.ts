@@ -1,8 +1,6 @@
-import { getGroupsFromSheet, getSheetData, groupConstructor } from '../adapters'
+import { getSheetData, groupConstructor } from '../adapters'
 import { createSource } from '../helpers'
 import { ExternalGroup } from '../../_utility_/types'
-
-//https://sheets.googleapis.com/v4/spreadsheets/18P898HWbdR5ouW61sAxW_iBl3yiZlgJu0nSmepn6NwM/values/Form responses 1/?key=AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg
 
 const getGroups = async () => {
   const groupData: any = await getSheetData(

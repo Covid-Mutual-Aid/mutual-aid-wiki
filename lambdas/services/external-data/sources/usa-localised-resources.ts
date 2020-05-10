@@ -1,10 +1,6 @@
-// curl https://sheets.googleapis.com/v4/spreadsheets/1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY/values/Local%20Mutual%20Aid\?key=AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg
-
 import { getGroupsFromSheet } from '../../google/sheets'
 import { batchDedupe, geolocateGroups } from '../helpers'
 import { uniqueBy, isSameGroup } from '../../_utility_/utils'
-
-type Cell = string | undefined | null
 
 export const getData = () =>
   getGroupsFromSheet('1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY', 1455689482, {
