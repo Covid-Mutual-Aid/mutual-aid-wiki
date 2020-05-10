@@ -27,8 +27,8 @@ export default function createTableAPI<
     client,
     get: <A extends (keyof T)[]>(attributes: A) => {
       const getAll = (
-        ExclusiveStartKey?: Record<string, string>,
-        items?: Pick<T, A[number]>[]
+        items: Pick<T, A[number]>[],
+        ExclusiveStartKey?: Record<string, string>
       ): Promise<Pick<T, A[number]>[]> =>
         client
           .scan({
@@ -40,10 +40,11 @@ export default function createTableAPI<
           .promise()
           .then((x) =>
             x.LastEvaluatedKey
-              ? getAll(x.LastEvaluatedKey, x.Items as any)
-              : [...(items || []), ...(x.Items as any)]
+              ? getAll([...items, ...(x.Items as any)], x.LastEvaluatedKey)
+              : [...items, ...(x.Items as any)]
           )
-      return getAll()
+
+      return getAll([])
     },
     getById: <A extends (keyof T)[]>(id: string, attributes: A) =>
       client
