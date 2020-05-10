@@ -9,7 +9,6 @@ const exampleRows = [
 describe('groupConstructor', () => {
   const createGroup = groupConstructor(labels, { name: 'namelike', link: 'linkylink' })
   test('Correctly construct group', () => {
-    console.log(createGroup(exampleRows[0]), 'ggg')
     expect(createGroup(exampleRows[0])).toEqual({
       name: 'a',
       link: 'a.com',
@@ -22,7 +21,6 @@ describe('groupConstructor', () => {
 
 describe('getKeyByValue', () => {
   test('Return name of key when given value', () => {
-    console.log(getKeyByValue({ field: 'value' }, 'value'), 'should be field')
     expect(getKeyByValue({ field: 'value' }, 'value')).toEqual('field')
   })
 })
