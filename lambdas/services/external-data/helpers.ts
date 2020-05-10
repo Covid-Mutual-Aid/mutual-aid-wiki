@@ -1,9 +1,11 @@
-import { ExternalGroup, Group, Coord, Source } from '../_utility_/types'
+import { ExternalGroup, Group, Coord, Source, Snapshot } from '../_utility_/types'
 import db from '../_utility_/database'
 import { isExactSameGroup, matchAgainst, missingIn } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
 import ENV from '../_utility_/environment'
-// import { getAllEntries } from '../_utility_/dep/airtable'
+import { airtableAPI, airtableExternalData } from '../_utility_/dep/airtable'
+import Airtable from 'airtable'
+import { groupCreated } from '../_utility_/logging'
 
 export const batchDedupe = (newGroups: ExternalGroup[]) =>
   db.groups
@@ -79,20 +81,43 @@ const syncExternalData = async (
   }
 }
 
-const updateAirtable = async (source: {
-  displayName: string
-  external_id: string
-  external_link: string
-  triggerUrl: string
-  testRatio: number
-  failingTests: string
-  groupsAdded: number
-  groupsRemoved: number
-}) => {
-  // const sources = await getAllEntries('Sources')
-  // console.log(sources)
-  // If external_id is not in sources, create a new one with the params
-  // Now create a new snapshot!
+const updateAirtable = async (source: Snapshot) => {
+  const {
+    displayName,
+    external_id,
+    external_link,
+    triggerUrl,
+    testRatio,
+    failingTests,
+    groupsAdded,
+    groupsRemoved,
+  } = source
+  const { getAll, createRow } = airtableAPI('AIRTABLE_EXTERNAL_DATA_BASE')
+  const ATSourceId = await getAll('Sources').then(async (records) => {
+    let source = records.find((r) => r.fields.id === external_id)
+    if (typeof source !== 'undefined') return source.id
+    let { id } = await createRow('Sources', {
+      id: external_id,
+      Name: displayName,
+      'Origin URL': external_link,
+      Trigger: triggerUrl,
+      'Test Ratio': testRatio,
+      Snapshots: [],
+    })
+
+    return id
+  })
+
+  const snapshotRes = await createRow('Snapshots', {
+    Timestamp: new Date().toISOString(),
+    'Groups Added': groupsAdded,
+    'Groups Removed': groupsRemoved,
+    'Test Ratio': testRatio,
+    'Failing Tests': failingTests,
+    Source: [ATSourceId],
+  })
+
+  console.log(snapshotRes, 'snapshotRes')
 
   return source
 }

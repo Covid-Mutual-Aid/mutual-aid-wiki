@@ -29,6 +29,17 @@ export type Source = {
   testCases: ExternalGroup[]
 }
 
+export type Snapshot = {
+  displayName: string
+  external_id: string
+  external_link: string
+  triggerUrl: string
+  testRatio: number
+  failingTests: string
+  groupsAdded: number
+  groupsRemoved: number
+}
+
 export type ExternalGroup = Pick<Group, 'name' | 'link_facebook' | 'location_name' | 'emails'>
 
 export type Search = {
