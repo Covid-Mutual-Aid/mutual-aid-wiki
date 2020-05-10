@@ -20,7 +20,7 @@ const getGroups = async () => {
   const groups = rows
     .map((r: any) => createGroup(r))
     .filter((x: any) => x.location_name && x.name && x.link_facebook) as ExternalGroup[]
-  console.log(groups)
+
   return groups
 }
 

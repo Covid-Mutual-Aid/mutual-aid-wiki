@@ -1,19 +1,22 @@
 import { ExternalGroup, Group, Coord, Source, Snapshot } from '../_utility_/types'
 import db from '../_utility_/database'
-import { isExactSameGroup, matchAgainst, missingIn, includedIn } from '../_utility_/utils'
+import {
+  isExactSameGroup,
+  matchAgainst,
+  missingIn,
+  includedIn,
+  isSameGroup,
+} from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
 import ENV from '../_utility_/environment'
-import { airtableAPI, airtableExternalData } from '../_utility_/dep/airtable'
-import Airtable from 'airtable'
-import { groupCreated } from '../_utility_/logging'
+import { airtableAPI } from '../_utility_/dep/airtable'
 
 export const batchDedupe = (newGroups: ExternalGroup[]) =>
   db.groups
-    .get(['id', 'name', 'link_facebook', 'location_name', 'location_coord', 'updated_at'])
+    .get(['name', 'link_facebook', 'location_name'])
     .then((groups) =>
       newGroups.reduce(
-        (uniqs, group) =>
-          groups.find((ng) => isExactSameGroup(group, ng)) ? uniqs : [...uniqs, group],
+        (uniqs, group) => (groups.find((ng) => isSameGroup(group, ng)) ? uniqs : [...uniqs, group]),
         [] as ExternalGroup[]
       )
     )
@@ -23,20 +26,37 @@ export const batchDedupe = (newGroups: ExternalGroup[]) =>
   Right now this fails to geolocate large arrays of groups because the google API rate limits requests. 
   Would be great if we can recursively retry geolocations that have failed due to rate limiting (and not retry for failed geolocations)
 */
-export const geolocateGroups = <T extends { location_name: string }>(groups: T[]) =>
-  Promise.all(
-    groups.map(
-      (g) =>
-        new Promise<T & { location_coord: Coord }>((resolve) => {
-          googleGeoLocate(g.location_name).then(([place]) => {
-            resolve({
-              ...g,
-              location_coord: place.geometry.location,
-            })
-          })
-        })
+export const geolocateGroups = <T extends { location_name: string }>(groups: T[]) => {
+  const [BATCH_SIZE, INTERVAL] = [50, 1000]
+  const delay = <T extends any>(t: number) => (v: T) =>
+    new Promise<T>((resolve) => setTimeout(() => resolve(v), t))
+
+  const recurse = (
+    groups: T[],
+    geolocated: Promise<(T & { location_coord: Coord })[]>
+  ): Promise<(T & { location_coord: Coord })[]> =>
+    geolocated.then((gl) =>
+      groups.length === 0
+        ? Promise.resolve(gl.filter(({ location_coord }) => location_coord !== null))
+        : Promise.all(
+            groups.slice(0, BATCH_SIZE).map(
+              (g) =>
+                new Promise<T & { location_coord: Coord }>((resolve) => {
+                  googleGeoLocate(g.location_name).then(([place]) => {
+                    resolve({
+                      ...g,
+                      location_coord: place ? place.geometry.location : null,
+                    })
+                  })
+                })
+            )
+          )
+            .then(delay(INTERVAL))
+            .then((batch) => recurse(groups.slice(BATCH_SIZE), Promise.resolve(batch.concat(gl))))
     )
-  )
+
+  return recurse(groups, Promise.resolve([]))
+}
 
 const test = <T>(allGroups: T[], testCases: T[]) => {
   const failing = missingIn(isExactSameGroup)(allGroups, testCases)
@@ -50,8 +70,10 @@ const syncExternalData = async (
   external_link: string
 ) => {
   const storedGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
+  const dedupedExternalGroups = await batchDedupe(externalGroups)
+
   const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
-    externalGroups,
+    dedupedExternalGroups,
     storedGroups
   )
 
@@ -66,15 +88,17 @@ const syncExternalData = async (
     .filter(({ matches }) => matches.length === 0)
     .map(({ obj }) => ({ ...obj, external: true, external_id, external_link }))
 
-  const deduped = await batchDedupe(newGroups)
-  const geolocated = await geolocateGroups(deduped)
-  db.groups.createBatch(
-    geolocated.map((g) => ({
-      ...g,
-      emails: [],
-      created_at: Date.now() + '',
-    }))
-  )
+  const geolocated = await geolocateGroups(newGroups)
+  console.log(geolocated.length, 'Number of GEOLOCATED GROUPS!')
+
+  db.groups
+    .createBatch(
+      geolocated.map((g) => ({
+        ...g,
+        emails: [],
+      }))
+    )
+    .catch(console.log)
 
   return {
     groupsAdded: newGroups.length,
@@ -155,8 +179,8 @@ export const createSource = ({
       external_id,
       external_link,
       triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`,
-      testsPassing: `${passing.length} out of ${testCases.length} `,
-      failingTests: failing.map(({ name }) => name).join(''),
+      testsPassing: `${passing.length} / ${testCases.length} `,
+      failingTests: failing.map(({ name }) => name).join(' '),
       groupsAdded,
       groupsRemoved,
     })
