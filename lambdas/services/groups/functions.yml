@@ -1,3 +1,7 @@
+getAllGroups:
+  handler: services/groups/handler.getAllGroups
+  memorySize: 3008
+
 getGroups:
   handler: services/groups/handler.getGroups
   memorySize: 3008
