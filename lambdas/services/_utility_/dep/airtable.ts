@@ -33,15 +33,14 @@ export type SourcesTable = {
   Name: string
   'Origin URL': string
   Trigger: string
-  'Test Ratio': number
-  Snapshots: string[]
+  'Tests Passing': string
 }
 
 export type SnapshotsTable = {
   Timestamp: string
   'Groups Added': number
   'Groups Removed': number
-  'Test Ratio': number
+  'Tests Passing': string
   'Failing Tests': string
   Source: string[]
 }
@@ -64,6 +63,9 @@ export const airtableAPI = (base: Base) => ({
 
   createRow: <T extends keyof Tables>(table: T, fields: Tables[T]) =>
     _airtable(base)(table).create([{ fields }]),
+
+  updateRow: <T extends keyof Tables>(table: T, id: string, fields: Tables[T]) =>
+    _airtable(base)(table).update([{ id, fields }]),
 
   transferRow: <T1 extends keyof Tables, T2 extends keyof Tables>(
     table1: T1,

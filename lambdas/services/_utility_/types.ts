@@ -34,7 +34,7 @@ export type Snapshot = {
   external_id: string
   external_link: string
   triggerUrl: string
-  testRatio: number
+  testsPassing: string
   failingTests: string
   groupsAdded: number
   groupsRemoved: number
