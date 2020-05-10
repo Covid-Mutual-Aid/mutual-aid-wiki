@@ -66,7 +66,8 @@ const syncExternalData = async (
     .filter(({ matches }) => matches.length === 0)
     .map(({ obj }) => ({ ...obj, external: true, external_id, external_link }))
 
-  const geolocated = await geolocateGroups(newGroups)
+  const deduped = await batchDedupe(newGroups)
+  const geolocated = await geolocateGroups(deduped)
   db.groups.createBatch(
     geolocated.map((g) => ({
       ...g,
@@ -150,11 +151,11 @@ export const createSource = ({
     )
 
     return updateAirtable({
-      displayName, //Test Sheet
-      external_id, //test-sheet
-      external_link, //https://google.com...
-      triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`, // ENV.domain + identifier
-      testsPassing: `${passing.length} out of ${testCases.length} `, //ratio of passing/failing
+      displayName,
+      external_id,
+      external_link,
+      triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`,
+      testsPassing: `${passing.length} out of ${testCases.length} `,
       failingTests: failing.map(({ name }) => name).join(''),
       groupsAdded,
       groupsRemoved,
