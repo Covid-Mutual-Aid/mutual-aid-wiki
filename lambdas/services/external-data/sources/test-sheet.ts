@@ -11,6 +11,7 @@ const getGroups = () =>
 const testCases = [
   { name: 'Piglet', location_name: 'bn35de', link_facebook: 'https://pigstyle.com' },
   { name: 'Piglet FAILS', location_name: 'bn35de', link_facebook: 'https://pigstyle.com' },
+  { name: 'Another FAILS', location_name: 'bn35de', link_facebook: 'https://pigstyle.com' },
 ]
 
 export const testSource = createSource({

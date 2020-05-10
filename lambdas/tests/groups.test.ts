@@ -31,7 +31,7 @@ const createTestGroup = () => {
 
 jest.setTimeout(1000 * 60 * 5)
 describe('Groups API', () => {
-  if (process.env.STAGE !== 'test') return
+  if (process.env.STAGE !== 'test' && endpoint !== 'http://localhost:4000/local') return 
 
   let created: Group
   it('should create a group and return the group with id', async () => {
