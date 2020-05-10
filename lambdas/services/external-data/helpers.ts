@@ -149,7 +149,7 @@ export const createSource = ({
     const internalGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
     const { add, remove } = await diff(external_id, external_link)(
       dedupedExternalGroups,
-      internalGroups
+      internalGroups.filter((g) => g.external)
     )
 
     geolocateGroups(add).then((gl) =>
