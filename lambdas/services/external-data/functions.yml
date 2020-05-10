@@ -4,7 +4,7 @@ usaLocalisedResources:
   events:
     - http:
         method: get
-        path: external/get
+        path: external_data/get
         cors: true
 
 getTestData:

@@ -14,5 +14,14 @@ export const getTestData = lambda((req$) => req$.pipe(switchMap(testSource.handl
 const sources = [testSource]
 
 export const triggerSource = lambda((req$) =>
-  req$.pipe(params(P.shape({ external_id: P.string })), responseJson$)
+  req$.pipe(
+    params(P.shape({ id: P.string })),
+    switchMap(async ({ id }) => {
+      const source = sources.find((s) => s.external_id === id)
+      if (typeof source === 'undefined') return { message: 'Invalid source' }
+      const snapShot = await source.handler()
+      return snapShot
+    }),
+    responseJson$
+  )
 )

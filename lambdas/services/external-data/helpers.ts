@@ -108,7 +108,7 @@ const updateAirtable = async (source: Snapshot) => {
     return id
   })
 
-  const snapshotRes = await createRow('Snapshots', {
+  createRow('Snapshots', {
     Timestamp: new Date().toISOString(),
     'Groups Added': groupsAdded,
     'Groups Removed': groupsRemoved,
@@ -116,8 +116,6 @@ const updateAirtable = async (source: Snapshot) => {
     'Failing Tests': failingTests,
     Source: [ATSourceId],
   })
-
-  console.log(snapshotRes, 'snapshotRes')
 
   return source
 }
