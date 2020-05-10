@@ -152,7 +152,7 @@ export const createSource = ({
       internalGroups.filter((g) => g.external)
     )
 
-    geolocateGroups(add).then((gl) =>
+    await geolocateGroups(add).then((gl) =>
       db.groups
         .createBatch(
           gl.map((g) => ({
@@ -163,7 +163,7 @@ export const createSource = ({
         .catch(console.log)
     )
 
-    db.groups.deleteBatch(remove.map((g) => g.id))
+    await db.groups.deleteBatch(remove.map((g) => g.id))
 
     return updateAirtable({
       displayName,
