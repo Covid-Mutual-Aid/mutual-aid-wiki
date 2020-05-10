@@ -2,6 +2,7 @@ import { DocumentClient, WriteRequest } from 'aws-sdk/clients/dynamodb'
 import { v4 as uuid } from 'uuid'
 import { is } from 'ts-prove'
 import { omit, filterObj, goDeep } from '../utils'
+import { Key } from 'aws-sdk/clients/cloudformation'
 
 const toExp = (x: any): any => {
   if (is.string(x)) return { S: x }
@@ -24,15 +25,26 @@ export default function createTableAPI<
   return {
     TableName,
     client,
-    get: <A extends (keyof T)[]>(attributes: A) =>
-      client
-        .scan({
-          TableName,
-          ...(attributes ? { AttributesToGet: attributes as string[] } : {}),
-        })
-        .promise()
-        .then((x) => x.Items as Pick<T, A[number]>[]),
-
+    get: <A extends (keyof T)[]>(attributes: A) => {
+      const getAll = (
+        ExclusiveStartKey?: Record<string, string>,
+        items?: Pick<T, A[number]>[]
+      ): Promise<Pick<T, A[number]>[]> =>
+        client
+          .scan({
+            TableName,
+            ExclusiveStartKey,
+            ...(ExclusiveStartKey ? { ExclusiveStartKey } : {}),
+            ...(attributes ? { AttributesToGet: attributes as string[] } : {}),
+          })
+          .promise()
+          .then((x) =>
+            x.LastEvaluatedKey
+              ? getAll(x.LastEvaluatedKey, x.Items as any)
+              : [...(items || []), ...(x.Items as any)]
+          )
+      return getAll()
+    },
     getById: <A extends (keyof T)[]>(id: string, attributes: A) =>
       client
         .get({
