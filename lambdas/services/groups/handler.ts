@@ -7,7 +7,8 @@ import { authorise } from '../_utility_/observables'
 import { isSameGroup } from '../_utility_/utils'
 import { proofs } from '../_utility_/proofs'
 import { Group } from '../_utility_/types'
-import db from '../_utility_/database'
+import db, { dynamoClient } from '../_utility_/database'
+import ENV from '../_utility_/environment'
 
 // Helper
 const createNoDuplicates = (
@@ -20,6 +21,14 @@ const createNoDuplicates = (
         ? Promise.resolve('Exists')
         : (db.groups.create(group) as any)
     )
+
+export const getAllGroups = () =>
+  dynamoClient
+    .scan({
+      TableName: ENV.GROUPS_TABLE,
+    })
+    .promise()
+    .then((x) => ({ statusCode: 500, body: JSON.stringify(x) }))
 
 export const getGroups = lambda((req$) =>
   req$.pipe(
