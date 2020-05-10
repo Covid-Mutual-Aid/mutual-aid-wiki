@@ -1,8 +1,6 @@
 import { DocumentClient, WriteRequest } from 'aws-sdk/clients/dynamodb'
 import { v4 as uuid } from 'uuid'
 import { is } from 'ts-prove'
-import { omit, filterObj, goDeep } from '../utils'
-import { Key } from 'aws-sdk/clients/cloudformation'
 
 const toExp = (x: any): any => {
   if (is.string(x)) return { S: x }
