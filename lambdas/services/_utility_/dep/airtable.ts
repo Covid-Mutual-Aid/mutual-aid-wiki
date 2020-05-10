@@ -1,9 +1,11 @@
 import Airtable from 'airtable'
 import env from '../environment'
 
-type Base = 'AIRTABLE_ATTACH_EMAIL_BASE' | 'AIRTABLE_EXTERNAL_DATA_BASE'
-
-const _airtable = (base: Base) => new Airtable({ apiKey: env.AIRTABLE_KEY }).base(env[base])
+export type Base = 'AIRTABLE_ATTACH_EMAIL_BASE' | 'AIRTABLE_EXTERNAL_DATA_BASE'
+export const _airtable = (base: Base) =>
+  env[base] !== undefined
+    ? new Airtable({ apiKey: env.AIRTABLE_KEY }).base(env[base])
+    : (): any => _airtable
 
 export const airtableAttachEmail = _airtable('AIRTABLE_ATTACH_EMAIL_BASE')
 export const airtableExternalData = _airtable('AIRTABLE_EXTERNAL_DATA_BASE')
