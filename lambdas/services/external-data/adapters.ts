@@ -2,10 +2,12 @@ import { ExternalGroup } from '../_utility_/types'
 import axios from 'axios'
 import ENV from '../_utility_/environment'
 
-const getSheetData = (id: string, sheetIdentifier: string) =>
+export const getSheetData = (id: string, sheetIdentifier: string) =>
   axios
     .get(
-      `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheetIdentifier}/?key=${ENV.GOOGLE_API_KEY}`
+      `https://sheets.googleapis.com/v4/spreadsheets/${encodeURI(id)}/values/${encodeURI(
+        sheetIdentifier
+      )}/?key=${ENV.GOOGLE_API_KEY}`
     )
     .then((d) => d.data)
 
