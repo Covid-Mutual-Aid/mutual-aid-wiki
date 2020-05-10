@@ -22,13 +22,15 @@ const createNoDuplicates = (
         : (db.groups.create(group) as any)
     )
 
-export const getAllGroups = () =>
-  dynamoClient
+export const getAllGroups = () => {
+  console.log(ENV.GROUPS_TABLE)
+  return dynamoClient
     .scan({
       TableName: ENV.GROUPS_TABLE,
     })
     .promise()
     .then((x) => ({ statusCode: 500, body: JSON.stringify(x) }))
+}
 
 export const getGroups = lambda((req$) =>
   req$.pipe(

@@ -1,5 +1,6 @@
 getGroups:
   handler: services/groups/handler.getGroups
+  memorySize: 3008
   events:
     - http:
         method: get
