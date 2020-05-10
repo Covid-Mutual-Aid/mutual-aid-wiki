@@ -1,7 +1,7 @@
 import { Group } from './types'
 import { parse } from 'url'
 
-const norm = (x: string) => x.toLowerCase().trim()
+const norm = (x: string | undefined) => (x || '').toLowerCase().trim()
 export const normLink = (s: string) => {
   const { host, pathname } = parse(s)
   return host === 'facebook.com' ? pathname?.replace(/\/$/, '') : s
@@ -40,8 +40,18 @@ export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'lo
   normLink(norm(a.link_facebook)) === normLink(norm(b.link_facebook)) ||
   (norm(a.name) === norm(b.name) && norm(a.location_name) === norm(b.location_name))
 
-export const missingIn = <T extends any>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
+// This needs tests!
+export const isExactSameGroup = <T extends Partial<Group>>(a: T, b: T) =>
+  (Object.keys(omit(['id', 'created_at', 'updated_at'], a)) as [keyof T]).reduce(
+    (matching, key) => matching && JSON.stringify(a[key]) === JSON.stringify(b[key]),
+    true
+  )
+
+export const missingIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
   b.filter((x) => !a.some((y) => fn(x, y)))
+
+export const includedIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
+  b.filter((x) => a.some((y) => fn(x, y)))
 
 export const uniqueBy = <T>(fn: (a: T, b: T) => boolean) => (arr: T[]) =>
   arr.reduce((a, b) => (a.some((x) => fn(b, x)) ? a : [...a, b]), [] as T[])
@@ -95,3 +105,23 @@ export const goDeep = (fn: (x: any) => any) => (x: any) =>
 export const mapValues = <T extends Record<any, any>>(fn: <K extends keyof T>(x: K) => T[K]) => (
   x: T
 ) => Object.keys(x).reduce((all, key) => ({ ...all, [key]: fn(x[key]) }), {})
+export const filterAgainst = <I, A>(filter: (i: I, a: A) => boolean) => (
+  initial: I[],
+  against: A[]
+) =>
+  initial.reduce(
+    ([matches, nonMatches], group) =>
+      against.find((g) => filter(group, g))
+        ? [[...matches, group], nonMatches]
+        : [matches, [...nonMatches, group]],
+    [[], []] as (I | A)[][]
+  )
+
+export const matchAgainst = <O, E>(isMatch: (o: O, e: E) => boolean) => (
+  initial: O[],
+  exists: E[]
+) =>
+  initial.reduce((pairs, obj) => {
+    const matches = exists.filter((g) => isMatch(obj, g))
+    return matches.length > 0 ? [...pairs, { obj, matches }] : [...pairs, { obj, matches: [] }]
+  }, [] as { obj: O; matches: E[] }[])

@@ -30,8 +30,8 @@
   },
   "components": {
     "nav": {
-      "home": "Map",
-      "information_link": "Information",
+      "home": "Mapa",
+      "information_link": "Información",
       "view_full_site_link": "¡Ver el sitio completo!"
     },
     "search_box": {
@@ -56,17 +56,29 @@
       "placeholder": "Agrega cualquiera dirección de correo electrónico"
     },
     "group_form_elements": {
+      "introduction": "Por favor, rellena el formulario con los detalles de tu grupo. Podrás editar tu información a través del correo que proporciones en la sección de correos de administración.",
       "name": {
-        "placeholder": "Nombre de grupo",
+        "label": "Nombre de grupo",
+        "placeholder": "Nombre",
         "errors": {
           "none_provided": "Debes agregar un nombre de grupo"
         }
       },
       "url": {
+        "label": "*Enlace a la página del grupo",
         "placeholder": "https://www.f...",
         "errors": {
           "none_provided": "Debes agregar una dirección de web válida"
         }
+      },
+      "details": {
+        "label": "Más detalles",
+        "placeholder": "descripción"
+      },
+      "contact_details": {
+        "label": "Detalles de contacto para el grupo (mostrado al público)",
+        "email_placeholder": "Correo electrónico",
+        "phone_placeholder": "Teléfono"
       },
       "emails": {
         "description": "Agregar todas las direcciones de correo electrónico para las que se quiera dar acceso para editar este grupo",
@@ -79,10 +91,16 @@
     },
     "location": {
       "placeholder": "p.ej. \"Barcelona 08001\"",
-      "create_prompt_prefix": "Ubicación:",
+      "create_prompt_prefix": "Ubicación de grupo:",
       "errors": {
         "none_provided": "Debes agregar un ubicación para tu grupo"
       }
+    },
+    "drop_down": {
+      "nearby": "cerca"
+    },
+    "browser_geolocate": {
+      "your_area": "Tu barrio"
     }
   }
 }

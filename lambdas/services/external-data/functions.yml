@@ -1,0 +1,24 @@
+usaLocalisedResources:
+  handler: services/external-data/handler.getExternalData
+  timeout: 15
+  events:
+    - http:
+        method: get
+        path: external_data/get
+        cors: true
+
+getTestData:
+  handler: services/external-data/handler.getTestData
+  timeout: 250
+
+covid19MutualAidGroupsUk:
+  handler: services/external-data/handler.covid19MutualAidGroupsUkHandler
+  timeout: 250
+
+triggerSource:
+  handler: services/external-data/handler.triggerSource
+  timeout: 250
+  events:
+    - http:
+        method: get
+        path: external_data/trigger

@@ -1,7 +1,7 @@
 import { google, sheets_v4 } from 'googleapis'
-import { uniqueBy, isSameGroup } from '../_utility_/utils'
-import { Group } from '../_utility_/types'
+import { Group, ExternalGroup } from '../_utility_/types'
 import ENV from '../_utility_/environment'
+import { groupConstructor } from '../external-data/adapters'
 
 export const sheets = google.sheets('v4')
 
@@ -64,46 +64,46 @@ export const addSheetRow = (
     updateSheet(auth)(addRow(getGroupRow(group), sheetId || (ENV.SHEET_ID as any)))
   )
 
-export const getGroupsFromSheet = (sheetId?: string) =>
+export const getGroupsFromSheet = (spreadsheetId: string, sheetId: number, map: ExternalGroup) =>
   sheets.spreadsheets
     .get({ spreadsheetId, auth: ENV.GOOGLE_API_KEY, includeGridData: true })
     .then((spreadsheet) =>
-      (spreadsheet.data.sheets || []).find((x) => x.properties?.sheetId === sheetId || ENV.SHEET_ID)
+      (spreadsheet.data.sheets || []).find((x) => x.properties?.sheetId === sheetId)
     )
     .then((x) => {
       const rowData = x && x.data && x.data[0] && x.data[0].rowData
       if (!rowData) return Promise.reject('No row data')
-      return rowData
-        .map((x) => {
-          const values = (x.values || []).map(
-            (x) => x.userEnteredValue && x.userEnteredValue.stringValue
-          )
-          return {
-            location_name: values[0] as string,
-            name: values[2] as string,
-            link_facebook: values[3] as string,
-          }
-        })
+
+      const [titleRow, ...rows] = rowData.map((cell) =>
+        (cell.values || []).map(
+          (cell) => cell.userEnteredValue && cell.userEnteredValue.stringValue
+        )
+      )
+
+      const createGroup = groupConstructor(titleRow, map)
+
+      return rows
+        .map((r) => createGroup(r))
         .filter((x) => x.location_name && x.name && x.link_facebook)
     })
 
-export const createDedupeSheet = async () => {
-  const name = new Date().toISOString()
-  const auth = await authorise()
-  const currentGroups = await getGroupsFromSheet()
-    .then(uniqueBy(isSameGroup))
-    .then((groups) => groups.map(getGroupRow))
+// export const createDedupeSheet = async () => {
+//   const name = new Date().toISOString()
+//   const auth = await authorise()
+//   const currentGroups = await getGroupsFromSheet()
+//     .then(uniqueBy(isSameGroup))
+//     .then((groups) => groups.map(getGroupRow))
 
-  return Promise.resolve()
-    .then(() => updateSheet(auth)(addSheet(name)))
-    .then((res) => res.data.updatedSpreadsheet?.sheets?.find((x) => x.properties?.title === name))
-    .then((sheet) =>
-      updateSheet(auth)({
-        appendCells: {
-          sheetId: sheet?.properties?.sheetId,
-          fields: '*',
-          rows: currentGroups.map((values) => ({ values })),
-        },
-      })
-    )
-}
+//   return Promise.resolve()
+//     .then(() => updateSheet(auth)(addSheet(name)))
+//     .then((res) => res.data.updatedSpreadsheet?.sheets?.find((x) => x.properties?.title === name))
+//     .then((sheet) =>
+//       updateSheet(auth)({
+//         appendCells: {
+//           sheetId: sheet?.properties?.sheetId,
+//           fields: '*',
+//           rows: currentGroups.map((values) => ({ values })),
+//         },
+//       })
+//     )
+// }

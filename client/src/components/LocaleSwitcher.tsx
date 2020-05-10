@@ -34,6 +34,8 @@ const Styles = styled.div`
     border-radius: 4px;
     position: absolute;
     right: 19.2px;
+    background-color: white;
+    z-index: 500;
   }
 
   & li {

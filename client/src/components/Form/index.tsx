@@ -53,23 +53,22 @@ const GroupForm = ({
     <FormWrapper>
       <Form onSubmit={onSubmit}>
         <p style={{ padding: '0 1rem', marginBottom: '2rem' }}>
-          Please fill out this form with the details of your group. You will be able to edit your
-          information via the emails you provide in the Administrators emails section.
+          {t.group_form_elements.introduction}
         </p>
         <Input
           disabled={disabled}
           name="name"
-          placeholder="Name"
-          label={'*' + t.group_form_elements.name.placeholder}
+          placeholder={t.group_form_elements.name.placeholder}
+          label={'*' + t.group_form_elements.name.label}
         />
         <Input
           disabled={disabled}
           name="link_facebook"
-          label={'*Link to group homepage'}
+          label={t.group_form_elements.url.label}
           placeholder={t.group_form_elements.url.placeholder}
         />
 
-        <InputGroup label="Further details">
+        <InputGroup label={t.group_form_elements.details.label}>
           <GroupDescription />
         </InputGroup>
         <EmailsInput label={'*' + t.group_form_elements.emails.description} />
@@ -79,7 +78,7 @@ const GroupForm = ({
         </div>
 
         <div style={{ marginTop: '2rem', opacity: disabled ? '.8' : 1 }}>
-          <InputGroup custom={<Location />} label="Group location" />
+          <InputGroup custom={<Location />} label={t.location.create_prompt_prefix} />
         </div>
 
         <FormButtons>
@@ -136,10 +135,11 @@ const Input = <K extends 'name' | 'link_facebook'>({
 }
 
 const GroupDescription = () => {
+  const t = useI18n(x => x.translation.components)
   const [value, onChange] = useFormControl('description', '')
   return (
     <TextareaAutosize
-      placeholder="description"
+      placeholder={t.group_form_elements.details.placeholder}
       name="description"
       value={value}
       style={{ fontFamily: 'inherit', minHeight: '4rem' }}
@@ -149,16 +149,17 @@ const GroupDescription = () => {
 }
 
 const GroupContact = () => {
+  const t = useI18n(x => x.translation.components)
   const [value, onChange] = useFormControl('contact', { phone: '', email: '' })
   return (
     <>
-      <Small>Contact details for the group (Displayed to the public)</Small>
+      <Small>{t.group_form_elements.contact_details.label}</Small>
       <div className="inputs">
         <InputGroup>
           <input
             type="email"
             name="email"
-            placeholder="email"
+            placeholder={t.group_form_elements.contact_details.email_placeholder}
             value={value.email || ''}
             onChange={(e) => onChange({ ...value, email: e.target.value })}
           />
@@ -167,7 +168,7 @@ const GroupContact = () => {
           <input
             type="tel"
             name="phone"
-            placeholder="Phone"
+            placeholder={t.group_form_elements.contact_details.phone_placeholder}
             value={value.phone || ''}
             onChange={(e) => onChange({ ...value, phone: e.target.value })}
           />

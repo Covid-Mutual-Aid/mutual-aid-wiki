@@ -54,7 +54,7 @@ export default function createTableAPI<
       return client
         .scan(params)
         .promise()
-        .then((x) => x.Items)
+        .then((x) => x.Items as T[])
     },
 
     create: (item: Omit<T, 'id'>) => {

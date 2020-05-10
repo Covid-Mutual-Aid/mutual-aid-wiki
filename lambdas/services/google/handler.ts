@@ -21,7 +21,9 @@ export const googlePlaceDetails = (place_id: string) =>
 
 export const googleGeoLocate = (location: string) =>
   axios
-    .get(`${geocodeEndpoint}/json?address=${location}&region=uk&key=${ENV.GOOGLE_API_KEY}`)
+    .get(
+      `${geocodeEndpoint}/json?address=${encodeURI(location)}&region=uk&key=${ENV.GOOGLE_API_KEY}`
+    )
     .then((x) =>
       x.data.error_message ? Promise.reject(new Error(x.data.error_message)) : x.data.results
     )

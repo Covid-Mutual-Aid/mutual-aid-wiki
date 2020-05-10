@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import distance from 'haversine-distance'
 import styled from 'styled-components'
-
+import { useI18n } from '../contexts/I18nProvider'
 import { useSelectedGroup, useGroupsList } from '../state/reducers/groups'
 import GroupItem from './GroupItem'
 import icons from './icons'
 
 const DropDown = () => {
+  const t = useI18n(x => x.translation.components.drop_down)
   const [open, setOpen] = useState(false)
   const selected = useSelectedGroup()
   const groups = useGroupsList()
@@ -25,7 +26,7 @@ const DropDown = () => {
   return (
     <DropDownStyles open={open}>
       <button onClick={() => setOpen(!open)}>
-        <span>near by</span>
+        <span>{t.nearby}</span>
         <div>{icons('chevronL')}</div>
       </button>
       {open &&

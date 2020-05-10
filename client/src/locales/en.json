@@ -56,17 +56,29 @@
       "placeholder": "Enter any emails..."
     },
     "group_form_elements": {
+      "introduction": "Please fill out this form with the details of your group. You will be able to edit your information via the emails you provide in the Administrators emails section.",
       "name": {
-        "placeholder": "Group name",
+        "label": "Group name",
+        "placeholder": "Name",
         "errors": {
           "none_provided": "Must provide a group name"
         }
       },
       "url": {
+        "label": "*Link to group homepage",
         "placeholder": "https://www.f...",
         "errors": {
           "none_provided": "Must provide a valid Group URL"
         }
+      },
+      "details": {
+        "label": "Further details",
+        "placeholder": "description"
+      },
+      "contact_details": {
+        "label": "Contact details for the group (Displayed to the public)",
+        "email_placeholder": "Email",
+        "phone_placeholder": "Phone"
       },
       "emails": {
         "description": "Administrators emails (These are private and used to authenticate those who have access to edit information for this group)"
@@ -78,10 +90,16 @@
     },
     "location": {
       "placeholder": "e.g. \"SE14 4NW\"",
-      "create_prompt_prefix": "Location:",
+      "create_prompt_prefix": "Group location:",
       "errors": {
         "none_provided": "You must set a location for your group"
       }
+    },
+    "drop_down": {
+      "nearby": "near by"
+    },
+    "browser_geolocate": {
+      "your_area": "Your area"
     }
   }
 }
