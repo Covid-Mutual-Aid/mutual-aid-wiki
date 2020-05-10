@@ -189,3 +189,17 @@ describe('Test matchAgainst', () => {
     ])
   })
 })
+
+describe('Test isExactSameGroup', () => {
+  test('Matches identical group', () => {
+    expect(isExactSameGroup(testA, testA)).toBe(true)
+  })
+  test('Ignores updated_at and created_at', () => {
+    expect(
+      isExactSameGroup(
+        { ...testA, updated_at: 'a', created_at: 'b' },
+        { ...testA, updated_at: 'X', created_at: 'Y' }
+      )
+    ).toBe(true)
+  })
+})
