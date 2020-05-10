@@ -1,6 +1,6 @@
 import { ExternalGroup, Group, Coord, Source, Snapshot } from '../_utility_/types'
 import db from '../_utility_/database'
-import { isExactSameGroup, matchAgainst, missingIn } from '../_utility_/utils'
+import { isExactSameGroup, matchAgainst, missingIn, includedIn } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
 import ENV from '../_utility_/environment'
 import { airtableAPI, airtableExternalData } from '../_utility_/dep/airtable'
@@ -39,9 +39,9 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
   )
 
 const test = <T>(allGroups: T[], testCases: T[]) => {
-  const failingTests = missingIn(isExactSameGroup)(allGroups, testCases)
-  const testRatio = (testCases.length - failingTests.length) / testCases.length
-  return { failingTests, testRatio }
+  const failing = missingIn(isExactSameGroup)(allGroups, testCases)
+  const passing = includedIn(isExactSameGroup)(allGroups, testCases) //testCases.length - failing.length
+  return { failing, passing }
 }
 
 const syncExternalData = async (
@@ -87,22 +87,31 @@ const updateAirtable = async (source: Snapshot) => {
     external_id,
     external_link,
     triggerUrl,
-    testRatio,
+    testsPassing,
     failingTests,
     groupsAdded,
     groupsRemoved,
   } = source
-  const { getAll, createRow } = airtableAPI('AIRTABLE_EXTERNAL_DATA_BASE')
+  const { getAll, createRow, updateRow } = airtableAPI('AIRTABLE_EXTERNAL_DATA_BASE')
   const ATSourceId = await getAll('Sources').then(async (records) => {
     let source = records.find((r) => r.fields.id === external_id)
-    if (typeof source !== 'undefined') return source.id
+    if (typeof source !== 'undefined') {
+      updateRow('Sources', source.id, {
+        id: external_id,
+        Name: displayName,
+        'Origin URL': external_link,
+        Trigger: triggerUrl,
+        'Tests Passing': testsPassing,
+      })
+      return source.id
+    }
+
     let { id } = await createRow('Sources', {
       id: external_id,
       Name: displayName,
       'Origin URL': external_link,
       Trigger: triggerUrl,
-      'Test Ratio': testRatio,
-      Snapshots: [],
+      'Tests Passing': testsPassing,
     })
 
     return id
@@ -112,7 +121,7 @@ const updateAirtable = async (source: Snapshot) => {
     Timestamp: new Date().toISOString(),
     'Groups Added': groupsAdded,
     'Groups Removed': groupsRemoved,
-    'Test Ratio': testRatio,
+    'Tests Passing': testsPassing,
     'Failing Tests': failingTests,
     Source: [ATSourceId],
   })
@@ -130,7 +139,10 @@ export const createSource = ({
   external_id,
   handler: async () => {
     const externalGroups = await getGroups()
-    const { failingTests, testRatio } = test(externalGroups, testCases)
+
+    const { failing, passing } = test(externalGroups, testCases)
+    if (passing.length === 0) return Promise.reject('All tests failed')
+
     const { groupsAdded, groupsRemoved } = await syncExternalData(
       externalGroups,
       external_id,
@@ -142,8 +154,8 @@ export const createSource = ({
       external_id, //test-sheet
       external_link, //https://google.com...
       triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`, // ENV.domain + identifier
-      testRatio, //ratio of passing/failing
-      failingTests: failingTests.map(({ name }) => name).join(''),
+      testsPassing: `${passing.length} out of ${testCases.length} `, //ratio of passing/failing
+      failingTests: failing.map(({ name }) => name).join(''),
       groupsAdded,
       groupsRemoved,
     })

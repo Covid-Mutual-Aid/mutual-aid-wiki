@@ -50,6 +50,9 @@ export const isExactSameGroup = <T extends Partial<Group>>(a: T, b: T) =>
 export const missingIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
   b.filter((x) => !a.some((y) => fn(x, y)))
 
+export const includedIn = <T>(fn: (a: T, b: T) => boolean) => (a: T[], b: T[]) =>
+  b.filter((x) => a.some((y) => fn(x, y)))
+
 export const uniqueBy = <T>(fn: (a: T, b: T) => boolean) => (arr: T[]) =>
   arr.reduce((a, b) => (a.some((x) => fn(b, x)) ? a : [...a, b]), [] as T[])
 
