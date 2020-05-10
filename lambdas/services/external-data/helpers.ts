@@ -63,45 +63,27 @@ const test = <T>(allGroups: T[], testCases: T[]) => {
   return { failing, passing }
 }
 
-const syncExternalData = async (
+const diff = async (
   externalGroups: ExternalGroup[],
+  internalGroups: Group[],
   external_id: string,
   external_link: string
 ) => {
-  const storedGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
   const dedupedExternalGroups = await batchDedupe(externalGroups)
-
   const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
     dedupedExternalGroups,
-    storedGroups
+    internalGroups
   )
 
   const matches = matchPairs
     .filter(({ matches }) => matches.length > 0)
     .reduce((groups, { matches }) => groups.concat(matches), [] as Group[])
 
-  const outdatedGroups = missingIn<Group>((e, g) => e.id === g.id)(matches, storedGroups)
-  db.groups.deleteBatch(outdatedGroups.map((g) => g.id))
-
-  const newGroups = matchPairs
-    .filter(({ matches }) => matches.length === 0)
-    .map(({ obj }) => ({ ...obj, external: true, external_id, external_link }))
-
-  const geolocated = await geolocateGroups(newGroups)
-  console.log(geolocated.length, 'Number of GEOLOCATED GROUPS!')
-
-  db.groups
-    .createBatch(
-      geolocated.map((g) => ({
-        ...g,
-        emails: [],
-      }))
-    )
-    .catch(console.log)
-
   return {
-    groupsAdded: newGroups.length,
-    groupsRemoved: outdatedGroups.length,
+    add: matchPairs
+      .filter(({ matches }) => matches.length === 0)
+      .map(({ obj }) => ({ ...obj, external: true, external_id, external_link })),
+    remove: missingIn<Group>((e, g) => e.id === g.id)(internalGroups, matches),
   }
 }
 
@@ -167,11 +149,21 @@ export const createSource = ({
     const { failing, passing } = test(externalGroups, testCases)
     if (passing.length === 0) return Promise.reject('All tests failed')
 
-    const { groupsAdded, groupsRemoved } = await syncExternalData(
-      externalGroups,
-      external_id,
-      external_link
+    const internalGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
+    const { add, remove } = await diff(externalGroups, internalGroups, external_id, external_link)
+
+    geolocateGroups(add).then((gl) =>
+      db.groups
+        .createBatch(
+          gl.map((g) => ({
+            ...g,
+            emails: [],
+          }))
+        )
+        .catch(console.log)
     )
+
+    db.groups.deleteBatch(remove.map((g) => g.id))
 
     return updateAirtable({
       displayName,
@@ -180,8 +172,8 @@ export const createSource = ({
       triggerUrl: `${ENV.API_ENDPOINT}/external_data/trigger/${external_id}`,
       testsPassing: `${passing.length} / ${testCases.length} `,
       failingTests: failing.map(({ name }) => name).join(' '),
-      groupsAdded,
-      groupsRemoved,
+      groupsAdded: add.length,
+      groupsRemoved: remove.length,
     })
   },
 })
