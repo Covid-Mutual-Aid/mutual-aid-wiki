@@ -2,7 +2,7 @@ import { switchMap, mergeMap } from 'rxjs/operators'
 import { of, throwError } from 'rxjs'
 import P from 'ts-prove'
 
-import lambda, { params, body, select, responseJson$, passThrough } from '../_utility_/lib/lambdaRx'
+import lambda, { params, body, select, responseJson$ } from '../_utility_/lib/lambdaRx'
 import { authorise } from '../_utility_/observables'
 import { isSameGroup } from '../_utility_/utils'
 import { proofs } from '../_utility_/proofs'
