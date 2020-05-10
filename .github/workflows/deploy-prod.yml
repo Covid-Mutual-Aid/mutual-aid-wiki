@@ -55,7 +55,8 @@ jobs:
           GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
           GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
           # Airtable
-          AIRTABLE_ATTACH_EMAIL_KEY: ${{ secrets.AIRTABLE_ATTACH_EMAIL_KEY }}
+          AIRTABLE_KEY: ${{ secrets.AIRTABLE_KEY }}
+          AIRTABLE_EXTERNAL_DATA_BASE: appfLgHbxi4N3qzIq
           AIRTABLE_ATTACH_EMAIL_BASE: appx9HaKKJ0F4GeGG
           # other
           API_ENDPOINT: https://www.mutualaid.wiki/api

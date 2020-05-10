@@ -64,13 +64,12 @@ export const updateGroup = lambda((req$) =>
       group: body(P.shape({ id: P.string })),
       auth: authorise('edit'),
     }),
-    passThrough((x) => console.log('Edit group: ', x.auth)),
     mergeMap(({ group, auth }) =>
       auth && (auth as any).id === group.id
         ? of(group)
         : throwError('Group id does not match token id')
     ),
-    switchMap((grp) => db.groups.update(grp)),
+    switchMap((grp) => db.groups.update({ ...grp, external: false })),
     responseJson$
   )
 )
