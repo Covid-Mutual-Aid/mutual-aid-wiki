@@ -9,7 +9,7 @@ import {
 } from '../_utility_/utils'
 import { googleGeoLocate } from '../google/handler'
 import ENV from '../_utility_/environment'
-import { airtableAPI } from '../_utility_/dep/airtable'
+import { airtableAPI, Base } from '../_utility_/dep/airtable'
 
 export const batchDedupe = (newGroups: ExternalGroup[]) =>
   db.groups
@@ -57,24 +57,20 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
   return recurse(groups, Promise.resolve([]))
 }
 
-const test = <T>(allGroups: T[], testCases: T[]) => {
+export const test = <T>(allGroups: T[], testCases: T[]) => {
   const failing = missingIn(isExactSameGroup)(allGroups, testCases)
   const passing = includedIn(isExactSameGroup)(allGroups, testCases) //testCases.length - failing.length
   return { failing, passing }
 }
 
-const diff = async (
+export const diff = (external_id: string, external_link: string) => (
   externalGroups: ExternalGroup[],
-  internalGroups: Group[],
-  external_id: string,
-  external_link: string
+  internalGroups: Group[]
 ) => {
-  const dedupedExternalGroups = await batchDedupe(externalGroups)
   const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
-    dedupedExternalGroups,
+    externalGroups,
     internalGroups
   )
-
   const matches = matchPairs
     .filter(({ matches }) => matches.length > 0)
     .reduce((groups, { matches }) => groups.concat(matches), [] as Group[])
@@ -83,7 +79,7 @@ const diff = async (
     add: matchPairs
       .filter(({ matches }) => matches.length === 0)
       .map(({ obj }) => ({ ...obj, external: true, external_id, external_link })),
-    remove: missingIn<Group>((e, g) => e.id === g.id)(internalGroups, matches),
+    remove: missingIn<Group>((e, g) => e.id === g.id)(matches, internalGroups),
   }
 }
 
@@ -145,12 +141,16 @@ export const createSource = ({
   external_id,
   handler: async () => {
     const externalGroups = await getGroups()
+    const dedupedExternalGroups = await batchDedupe(externalGroups)
 
     const { failing, passing } = test(externalGroups, testCases)
     if (passing.length === 0) return Promise.reject('All tests failed')
 
     const internalGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
-    const { add, remove } = await diff(externalGroups, internalGroups, external_id, external_link)
+    const { add, remove } = await diff(external_id, external_link)(
+      dedupedExternalGroups,
+      internalGroups
+    )
 
     geolocateGroups(add).then((gl) =>
       db.groups
