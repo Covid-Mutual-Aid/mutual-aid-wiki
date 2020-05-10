@@ -21,11 +21,6 @@ export const batchDedupe = (newGroups: ExternalGroup[]) =>
       )
     )
 
-/*
-  TODO: 
-  Right now this fails to geolocate large arrays of groups because the google API rate limits requests. 
-  Would be great if we can recursively retry geolocations that have failed due to rate limiting (and not retry for failed geolocations)
-*/
 export const geolocateGroups = <T extends { location_name: string }>(groups: T[]) => {
   const [BATCH_SIZE, INTERVAL] = [50, 1000]
   const delay = <T extends any>(t: number) => (v: T) =>
@@ -33,19 +28,23 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
 
   const recurse = (
     groups: T[],
-    geolocated: Promise<(T & { location_coord: Coord })[]>
-  ): Promise<(T & { location_coord: Coord })[]> =>
+    geolocated: Promise<(T & { location_coord: Coord; country: string })[]>
+  ): Promise<(T & { location_coord: Coord; country: string })[]> =>
     geolocated.then((gl) =>
       groups.length === 0
         ? Promise.resolve(gl.filter(({ location_coord }) => location_coord !== null))
         : Promise.all(
             groups.slice(0, BATCH_SIZE).map(
               (g) =>
-                new Promise<T & { location_coord: Coord }>((resolve) => {
+                new Promise<T & { location_coord: Coord; country: string }>((resolve) => {
                   googleGeoLocate(g.location_name).then(([place]) => {
                     resolve({
                       ...g,
                       location_coord: place ? place.geometry.location : null,
+                      country: place
+                        ? place.address_components.find((a: any) => a.types.includes('country'))
+                            .short_name
+                        : null,
                     })
                   })
                 })
