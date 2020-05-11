@@ -22,13 +22,16 @@ export const locate = lambda((req) =>
 )
 
 const getIp = (event: any) => {
-  const value = event.headers['X-Forwarded-For'] || event.headers['x-forwarded-for'] || event.requestContext.identity.sourceIp
+  const value =
+    event.headers['X-Forwarded-For'] ||
+    event.headers['x-forwarded-for'] ||
+    event.requestContext.identity.sourceIp
   return value.split(',')[0]
 }
 
 export const ping = lambda((req) =>
   req.pipe(
-    map(() => 'Ping'),
+    map(() => 'pong'),
     responseJson$
   )
 )
