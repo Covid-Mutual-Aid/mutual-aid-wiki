@@ -13,7 +13,7 @@
     "start:client": "cd client; yarn start",
     "start:lambda": "cd lambdas; yarn start",
     "start": "run-p start:client start:lambda start:db",
-    "backup": "cd lambdas && yarn backup"
+    "backup": "cd lambdas && sls invoke --stage dev -f getGroups > ../groups.json"
   },
   "repository": "https://github.com/Covid-Mutual-Aid/search-by-postcode.git",
   "devDependencies": {

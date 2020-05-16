@@ -39,4 +39,9 @@ yarn-error.log*
 
 # Data files
 scripts/groups-table.json
+scripts/with-countries.json
+scripts/with-source.json
+# scripts/backup.js
+
 groups-table.json
+
