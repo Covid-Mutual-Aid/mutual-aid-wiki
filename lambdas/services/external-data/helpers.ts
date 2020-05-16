@@ -98,7 +98,7 @@ const updateAirtable = async (source: Snapshot) => {
   const ATSourceId = await getAll('Sources').then(async (records) => {
     let source = records.find((r) => r.fields.id === external_id)
     if (typeof source !== 'undefined') {
-      updateRow('Sources', source.id, {
+      await updateRow('Sources', source.id, {
         id: external_id,
         Name: displayName,
         'Origin URL': external_link,
@@ -108,7 +108,7 @@ const updateAirtable = async (source: Snapshot) => {
       return source.id
     }
 
-    let { id } = await createRow('Sources', {
+    let [record] = await createRow('Sources', {
       id: external_id,
       Name: displayName,
       'Origin URL': external_link,
@@ -116,7 +116,7 @@ const updateAirtable = async (source: Snapshot) => {
       'Tests Passing': testsPassing,
     })
 
-    return id
+    return record.id
   })
 
   createRow('Snapshots', {
