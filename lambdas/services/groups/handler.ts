@@ -18,7 +18,7 @@ const createNoDuplicates = (
     .then((groups) =>
       groups.some((g) => isSameGroup(g as any, group))
         ? Promise.resolve('Exists')
-        : (db.groups.create(group) as any)
+        : (db.groups.create({ ...group, external: false, source: 'mutualaidwiki' }) as any)
     )
 
 export const getGroups = lambda((req$) =>
@@ -37,6 +37,7 @@ export const getGroups = lambda((req$) =>
         'location_poly',
         'contact',
         'description',
+        'location_country',
         'updated_at',
       ]
 
@@ -69,7 +70,7 @@ export const updateGroup = lambda((req$) =>
         ? of(group)
         : throwError('Group id does not match token id')
     ),
-    switchMap((grp) => db.groups.update({ ...grp, external: false })),
+    switchMap((grp) => db.groups.update({ ...grp, external: false, source: 'mutualaidwiki' })),
     responseJson$
   )
 )

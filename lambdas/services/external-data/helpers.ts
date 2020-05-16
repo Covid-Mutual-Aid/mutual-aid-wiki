@@ -63,10 +63,7 @@ export const test = <T>(allGroups: T[], testCases: T[]) => {
   return { failing, passing }
 }
 
-export const diff = (external_id: string, external_link: string) => (
-  externalGroups: ExternalGroup[],
-  internalGroups: Group[]
-) => {
+export const diff = (externalGroups: ExternalGroup[], internalGroups: Group[]) => {
   const matchPairs = matchAgainst<ExternalGroup, Group>(isExactSameGroup)(
     externalGroups,
     internalGroups
@@ -76,9 +73,7 @@ export const diff = (external_id: string, external_link: string) => (
     .reduce((groups, { matches }) => groups.concat(matches), [] as Group[])
 
   return {
-    add: matchPairs
-      .filter(({ matches }) => matches.length === 0)
-      .map(({ obj }) => ({ ...obj, external: true, external_id, external_link })),
+    add: matchPairs.filter(({ matches }) => matches.length === 0).map(({ obj }) => obj),
     remove: missingIn<Group>((e, g) => e.id === g.id)(matches, internalGroups),
   }
 }
@@ -147,20 +142,22 @@ export const createSource = ({
     if (passing.length === 0) return Promise.reject('All tests failed')
 
     const internalGroups = await db.groups.getByKeyEqualTo('external_id', external_id)
-    const { add, remove } = await diff(external_id, external_link)(
+    const { add, remove } = diff(
       dedupedExternalGroups,
       internalGroups.filter((g) => g.external)
     )
 
     await geolocateGroups(add).then((gl) =>
-      db.groups
-        .createBatch(
-          gl.map((g) => ({
-            ...g,
-            emails: [],
-          }))
-        )
-        .catch(console.log)
+      db.groups.createBatch(
+        gl.map((g) => ({
+          ...g,
+          emails: [],
+          external: true,
+          source: external_id, //Changed to mutualaidwiki when user edits
+          external_id,
+          external_link,
+        }))
+      )
     )
 
     await db.groups.deleteBatch(remove.map((g) => g.id))
