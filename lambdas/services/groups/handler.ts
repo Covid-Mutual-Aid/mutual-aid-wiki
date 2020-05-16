@@ -35,6 +35,7 @@ export const getGroups = lambda((req$) =>
         'location_name',
         'location_coord',
         'location_poly',
+        'source',
         'contact',
         'description',
         'location_country',
