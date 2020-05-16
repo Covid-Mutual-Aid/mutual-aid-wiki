@@ -12,7 +12,7 @@ export type Group = {
   location_name: string
   location_coord: Coord
   location_poly?: Coord[]
-  country?: string
+  location_country?: string
   created_at?: string
   updated_at?: string
 

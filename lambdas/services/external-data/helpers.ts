@@ -28,20 +28,20 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
 
   const recurse = (
     groups: T[],
-    geolocated: Promise<(T & { location_coord: Coord; country: string })[]>
-  ): Promise<(T & { location_coord: Coord; country: string })[]> =>
+    geolocated: Promise<(T & { location_coord: Coord; location_country: string })[]>
+  ): Promise<(T & { location_coord: Coord; location_country: string })[]> =>
     geolocated.then((gl) =>
       groups.length === 0
         ? Promise.resolve(gl.filter(({ location_coord }) => location_coord !== null))
         : Promise.all(
             groups.slice(0, BATCH_SIZE).map(
               (g) =>
-                new Promise<T & { location_coord: Coord; country: string }>((resolve) => {
+                new Promise<T & { location_coord: Coord; location_country: string }>((resolve) => {
                   googleGeoLocate(g.location_name).then(([place]) => {
                     resolve({
                       ...g,
                       location_coord: place ? place.geometry.location : null,
-                      country: place
+                      location_country: place
                         ? place.address_components.find((a: any) => a.types.includes('country'))
                             .short_name
                         : null,

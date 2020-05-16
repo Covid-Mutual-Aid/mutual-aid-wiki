@@ -49,7 +49,7 @@ const geolocateCountries = (groups) => {
                   }).then(({ countryCode }) => {
                     resolve({
                       ...g,
-                      country: { S: countryCode },
+                      location_country: { S: countryCode },
                     })
                   })
                 })
@@ -80,14 +80,7 @@ const withCountries = () =>
   util
     .promisify(child.exec)(`${awsDynamodb} scan --table-name dev-groups10 > ${groupsFile}`)
     .then(() => require(groupsFile))
-    .then((groups) =>
-      groups.Items.slice(0, 3).map((g) => ({
-        ...g,
-        source: {
-          S: 'mutual-aid-wiki',
-        },
-      }))
-    )
+    .then((groups) => groups.Items.slice(0, 3))
     .then(geolocateCountries)
     .then((g) => util.promisify(fs.writeFile)('with-countries.json', JSON.stringify(g)))
 
