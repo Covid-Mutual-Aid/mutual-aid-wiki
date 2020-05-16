@@ -16,6 +16,7 @@ export type Group = {
   created_at?: string
   updated_at?: string
 
+  source?: string
   external?: boolean
   external_id?: string
   external_link?: string
