@@ -11,6 +11,7 @@ import { covid19MutualAidGroupsUk } from './sources/covid19MutualAidGroupsUk'
 export const getExternalData = lambda((req$) => req$.pipe(switchMap(getData), responseJson$))
 
 export const getTestData = lambda((req$) => req$.pipe(switchMap(testSource.handler), responseJson$))
+
 export const covid19MutualAidGroupsUkHandler = lambda((req$) =>
   req$.pipe(switchMap(covid19MutualAidGroupsUk.handler), responseJson$)
 )

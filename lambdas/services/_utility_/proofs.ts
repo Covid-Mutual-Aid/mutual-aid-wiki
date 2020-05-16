@@ -14,6 +14,7 @@ export const proofs = {
     emails: P.array(P.string),
     link_facebook: P.string,
     location_name: P.string,
+    location_country: P.string,
     location_coord: P.shape({
       lat: P.number,
       lng: P.number,
