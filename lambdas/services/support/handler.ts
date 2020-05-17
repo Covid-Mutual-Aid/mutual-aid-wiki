@@ -19,6 +19,7 @@ import {
   sendFailedVerification,
 } from './templates'
 import { omit } from '../_utility_/utils'
+import { throwError } from 'rxjs'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
@@ -43,17 +44,19 @@ export const requestGroupEdit = lambda((req$) =>
 export const submitSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('support'),
-    switchMergeKey('group', (x) =>
-      db.groups
-        .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
-        .catch(() => null)
-    ),
     switchMap((x) => {
-      const key = shortid.generate()
-      if (!x.group) return Promise.reject('No group')
-      return addSupportRequestToTable(x.email, key, x.group)
-        .then(() => sendSubmitedRequest(x.email, key))
-        .then(() => 'Successfully submited you should recieve an email with further instructions')
+      if (!x) return throwError('Unauthorised')
+      return db.groups
+        .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
+        .then((group) => {
+          const key = shortid.generate()
+          return addSupportRequestToTable(x.email, key, group)
+            .then(() => sendSubmitedRequest(x.email, key))
+            .then(
+              () => 'Successfully submited you should recieve an email with further instructions'
+            )
+        })
+        .catch(() => Promise.reject(`Missing group ${x.id}`))
     }),
     responseJson$
   )
@@ -63,8 +66,9 @@ export const submitSupportRequest = lambda((req$) =>
 export const confirmSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('confirm'),
-    switchMap((x) =>
-      db.groups
+    switchMap((x) => {
+      if (!x) return throwError('Unauthorised')
+      return db.groups
         .update({ id: x.id, emails: [x.email] })
         .then(() => sendSuccessfulVerification(x.email, x.id))
         .then(() =>
@@ -73,7 +77,7 @@ export const confirmSupportRequest = lambda((req$) =>
             ...omit(['confirm', 'reject', 'date'], y),
           }))((y) => y.key === x.key)
         )
-    ),
+    }),
     responseJson$
   )
 )
@@ -82,14 +86,15 @@ export const confirmSupportRequest = lambda((req$) =>
 export const rejectSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('reject'),
-    switchMap((x) =>
-      sendFailedVerification(x.email).then(() =>
+    switchMap((x) => {
+      if (!x) return throwError('Unauthorised')
+      return sendFailedVerification(x.email).then(() =>
         transferRow('Waiting', 'Done', (y) => ({
           status: 'rejected',
           ...omit(['confirm', 'reject', 'date'], y),
         }))((y) => y.key === x.key)
       )
-    ),
+    }),
     responseJson$
   )
 )
