@@ -11,6 +11,10 @@ import App from './App'
 import { render, fireEvent } from '@testing-library/react'
 import { Group } from './utils/types'
 
+declare global {
+  interface Window { Intercom: any }
+}
+
 const Render = ({ request }: { request: any }) => (
   <Router>
     <RequestProvider request={request}>
@@ -37,6 +41,9 @@ const mocGroup: Group = {
 }
 
 test('Info box appears when group is selected', async () => {
+  const intercom = jest.fn();
+  global.Intercom = intercom
+
   const request = (input: string, opt?: any) => {
     if (input === '/group/get') return Promise.resolve([mocGroup])
     console.log({ input, opt })
