@@ -32,6 +32,7 @@ const mocGroup: Group = {
   location_name: 'some location',
   link_facebook: 'www.link.com',
   location_coord: { lat: 0, lng: 0 },
+  location_country: 'UK',
 }
 
 test('Info box appears when group is selected', async () => {

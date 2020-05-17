@@ -98,7 +98,17 @@ const withCountriesAndSource = () =>
   util
     .promisify(child.exec)(`${awsDynamodb} scan --table-name dev-groups10 > ${groupsFile}`)
     .then(() => require(groupsFile))
-    .then((groups) => groups.Items.slice(0, 30))
+    .then((groups) =>
+      groups.Items.then((groups) =>
+        groups
+          .sort(
+            (a, b) =>
+              new Date(b.updated_at || '01 Jan 2020').valueOf() -
+              new Date(a.updated_at || '01 Jan 2020').valueOf()
+          )
+          .Items.slice(0, 30)
+      ).slice(0, 30)
+    )
     .then((groups) =>
       groups.map((g) => ({
         ...omit(['country'], g),
