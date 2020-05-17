@@ -20,18 +20,27 @@ import {
 } from './templates'
 import { omit } from '../_utility_/utils'
 
+function localeCode(code?: string) : string {
+  const mapping : { [code : string] : string} = {
+    'en': 'EN',
+    'es': 'ES'
+  }
+  return code && mapping[code] || 'EN'
+}
+
+
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
   req$.pipe(
-    body(P.shape({ email: P.string, id: P.string })),
+    body(P.shape({ email: P.string, id: P.string, locale: P.optional(P.string) })),
     switchMergeKey('group', (x) => db.groups.getById(x.id, ['emails', 'id']).catch(() => null)),
-    switchMap(({ email, group }) => {
+    switchMap(({ email, group, locale }) => {
       console.log({ email, group })
       if (!group) return Promise.reject("Group doesn't exist")
       // Send email with link to submit support request
-      if (!group.emails || group.emails.length === 0) return sendNoneAssosiated(email, group.id)
+      if (!group.emails || group.emails.length === 0) return sendNoneAssosiated(email, group.id, localeCode(locale))
       // Send Email with link to edit group
-      if (group.emails.includes(email)) return sendEditLink(email, group.id)
+      if (group.emails.includes(email)) return sendEditLink(email, group.id, localeCode(locale))
       // Send email explaining that the email is not assosiated to the group
       return sendNotAssosiated(email)
     }),
@@ -66,7 +75,7 @@ export const confirmSupportRequest = lambda((req$) =>
     switchMap((x) =>
       db.groups
         .update({ id: x.id, emails: [x.email] })
-        .then(() => sendSuccessfulVerification(x.email, x.id))
+        .then(() => sendSuccessfulVerification(x.email, x.id, localeCode(x.locale)))
         .then(() =>
           transferRow('Waiting', 'Done', (y) => ({
             status: 'confirmed',
