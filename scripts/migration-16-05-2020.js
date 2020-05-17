@@ -3,7 +3,10 @@
  * - Rename the country to location_country
  * - Set location_country: country code
  * - Add a source: mutualaidwiki
- * - Set external: false
+ * - Set external: false to all currently stored groups
+ *
+ * - Create links array [{link, name, created, updated}, ...]
+ * - Store more useful geolocation info in location_fields
  *
  * Maybe we should:
  * - rename link_facebook to link
@@ -16,11 +19,18 @@ const path = require('path')
 const fs = require('fs')
 const axios = require('axios')
 
-const groupBy = (n, items) =>
-  !items || items.length < 1 ? [] : [items.slice(0, n), ...groupBy(n, items.slice(n))]
+const AWS = {
+  arr: (arr) => ({ L: arr }),
+  str: (str) => ({ S: str }),
+  bool: (bool) => ({ BOOL: bool }),
+  obj: (obj) => ({ M: obj }),
+}
 
 const groupsFile = path.join(__dirname, 'groups-table.json')
 const awsDynamodb = `aws --profile covid --region eu-west-2 dynamodb`
+
+const groupBy = (n, items) =>
+  !items || items.length < 1 ? [] : [items.slice(0, n), ...groupBy(n, items.slice(n))]
 
 const writeBatch = (batch, i) => {
   const fileP = path.join(__dirname, `batch-${i}.json`)
@@ -64,7 +74,7 @@ const geolocateCountries = (groups) => {
                   }).then(({ countryCode }) => {
                     resolve({
                       ...g,
-                      location_country: { S: countryCode },
+                      location_country: AWS.str(countryCode),
                     })
                   })
                 })
@@ -77,19 +87,29 @@ const geolocateCountries = (groups) => {
   return recurse(groups, Promise.resolve([]))
 }
 
+const getUrlType = (link) =>
+  link.includes('facebook') ? 'facebook' : link.includes('whatsapp') ? 'whatsapp' : 'website'
+
+const capitalise = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+
 //also delete country field, because we are now calling it location_country
 
 const withCountriesAndSource = () =>
   util
     .promisify(child.exec)(`${awsDynamodb} scan --table-name dev-groups10 > ${groupsFile}`)
     .then(() => require(groupsFile))
-    .then((groups) => groups.Items.slice(0, 3))
+    .then((groups) => groups.Items.slice(0, 30))
     .then((groups) =>
       groups.map((g) => ({
         ...omit(['country'], g),
-        source: {
-          S: 'mutualaidwiki',
-        },
+        source: AWS.str('mutualaidwiki'),
+        external: AWS.bool(false),
+        links: AWS.arr([
+          AWS.obj({
+            url: AWS.str(g.link_facebook),
+            type: AWS.str(getUrlType(g.link_facebook)),
+          }),
+        ]),
       }))
     )
     .then(geolocateCountries)
