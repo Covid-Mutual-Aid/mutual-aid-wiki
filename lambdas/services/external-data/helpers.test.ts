@@ -5,6 +5,7 @@ const exGrp = (name: string): ExternalGroup => ({
   name,
   location_name: 'New Cross',
   link_facebook: 'https://fb.com',
+  links: [{ url: 'https://fb.com' }],
 })
 
 const inGrp = (name: string): Group => ({
