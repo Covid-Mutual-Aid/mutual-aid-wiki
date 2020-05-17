@@ -47,7 +47,7 @@ export const submitSupportRequest = lambda((req$) =>
     switchMap((x) => {
       if (!x) return throwError('Unauthorised')
       return db.groups
-        .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
+        .getById(x.id, ['name', 'links', 'location_name', 'emails', 'id'])
         .then((group) => {
           const key = shortid.generate()
           return addSupportRequestToTable(x.email, key, group)
@@ -110,12 +110,12 @@ export const reportGroup = lambda((req$) =>
       ]).then(([editToken, deleteToken]) => ({ ...x, editToken, deleteToken }))
     ),
     switchMap((x) =>
-      db.groups.getById(x.id, ['link_facebook', 'name', 'id']).then((grp) =>
+      db.groups.getById(x.id, ['links', 'name', 'id']).then((grp) =>
         createRow('Reports', {
           action: 'waiting',
           message: x.message,
           email: x.email,
-          url: grp.link_facebook,
+          url: grp.links[0].url,
           name: grp.name,
           id: grp.id,
           edit: `${ENV.CLIENT_ENDPOINT}/map/edit/${x.id}/${x.editToken}`,
@@ -130,14 +130,14 @@ export const reportGroup = lambda((req$) =>
 export const addSupportRequestToTable = async (
   email: string,
   key: string,
-  group: Pick<Group, 'id' | 'name' | 'link_facebook'>
+  group: Pick<Group, 'id' | 'name' | 'links'>
 ) => {
   const confirm = await tokens.confirm.sign({ id: group.id, email, key })
   const reject = await tokens.reject.sign({ id: group.id, email, key })
 
   return createRow('Waiting', {
     name: group.name,
-    url: group.link_facebook,
+    url: group.links[0].url,
     email: email,
     key,
     confirm: `${ENV.API_ENDPOINT}/request/confirm?token=${confirm}`,

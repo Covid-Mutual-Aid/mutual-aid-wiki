@@ -12,7 +12,7 @@ export const getSheetData = (id: string, sheetIdentifier: string) =>
     .then((d) => d.data)
 
 type Cell = string | undefined | null
-type ExternalField = string
+export type FieldMap = { [k: string]: keyof ExternalGroup }
 
 /**
  * Constructs group objects from an array of group arrays. Useful for creating groups from sources like google sheets
@@ -20,10 +20,9 @@ type ExternalField = string
  * @param map Object that maps the labels in labelsRow to labels defined in type ExternalGroup
  * @returns Function that accepts an array of fields and returns a group
  */
-export const groupConstructor = <T extends { [k: string]: keyof ExternalGroup }>(
-  labelRow: string[],
-  map: T
-) => (groupRow: Cell[]) => {
+export const groupConstructor = <T extends FieldMap>(labelRow: string[], map: T) => (
+  groupRow: Cell[]
+) => {
   const value = (groupRow: Cell[], label: string) =>
     groupRow[labelRow.findIndex((v) => (v || '').trim() === label)]
 

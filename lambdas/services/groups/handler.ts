@@ -32,6 +32,7 @@ export const getGroups = lambda((req$) =>
         'id',
         'name',
         'link_facebook',
+        'links',
         'location_name',
         'location_coord',
         'location_poly',

@@ -13,7 +13,7 @@ import { airtableAPI, Base } from '../_utility_/dep/airtable'
 
 export const batchDedupe = (newGroups: ExternalGroup[]) =>
   db.groups
-    .get(['name', 'link_facebook', 'location_name'])
+    .get(['name', 'links', 'location_name'])
     .then((groups) =>
       newGroups.reduce(
         (uniqs, group) => (groups.find((ng) => isSameGroup(group, ng)) ? uniqs : [...uniqs, group]),
