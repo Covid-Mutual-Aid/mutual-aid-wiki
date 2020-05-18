@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom'
 import * as Sentry from '@sentry/browser'
 import ReactDOM from 'react-dom'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import 'promise-polyfill/src/polyfill'
 import 'whatwg-fetch'
@@ -42,19 +42,12 @@ const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 
     })
   )
 
-declare global {
-  interface Window {
-    Intercom: any
-  }
-}
+;(window as any).Intercom('boot', {
+  app_id: 'f1tn2aqi',
+})
 
 const render = () => {
   const App = require('./App').default
-  useEffect(() => {
-    window.Intercom('boot', {
-      app_id: 'f1tn2aqi',
-    })
-  }, [])
   ReactDOM.render(
     <Router>
       <RequestProvider request={request}>
