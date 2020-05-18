@@ -57,6 +57,7 @@ const Information = () => {
           <div className="spacer"></div>
           <div className="img">
             <iframe
+              title="Sources"
               className="airtable-embed"
               src="https://airtable.com/embed/shrgJ4OdI7KBMWVqj?backgroundColor=green"
               frameBorder="0"

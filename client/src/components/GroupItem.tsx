@@ -63,8 +63,8 @@ const GroupItem = ({
         >
           {icons('more', 'rgba(0,0,0,0.6')}
         </div>
-        {group.links.map(({ url }) => (
-          <a target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
+        {group.links.map(({ url }, i) => (
+          <a key={i} target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
             {iconFromUrl(url)}
           </a>
         ))}
