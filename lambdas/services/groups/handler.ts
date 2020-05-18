@@ -9,7 +9,7 @@ import { proofs } from '../_utility_/proofs'
 import { Group } from '../_utility_/types'
 import db from '../_utility_/database'
 
-// Helper
+// Make sure this group hasn't been added
 const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
