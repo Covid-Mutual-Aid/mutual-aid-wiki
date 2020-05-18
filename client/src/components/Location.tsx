@@ -38,7 +38,9 @@ const Location = () => {
         request<any>(`/google/placeDetails?place_id=${x.value}`).then((y) => {
           onCoords(y.geometry.location)
           onLocationCountry(
-            y ? y.address_components.find((a: any) => a.types.includes('country')).short_name : null
+            y.address_components
+              ? y.address_components.find((a: any) => a.types.includes('country')).short_name
+              : null
           )
           onLocationName(x.label)
         })
