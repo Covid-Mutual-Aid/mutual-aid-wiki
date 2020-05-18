@@ -90,6 +90,7 @@ describe('Groups API', () => {
     expect(data).toEqual('FAIL')
   })
 
+  //
   it('should update group', async () => {
     const editToken = sign({ id: created.id, type: 'EDIT_GROUP' }, JWT_SECRET)
     const { data } = await axios
