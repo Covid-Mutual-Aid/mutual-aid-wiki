@@ -14,7 +14,7 @@ const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
   db.groups
-    .get(['name', 'link_facebook', 'location_coord', 'location_name'])
+    .get(['name', 'links', 'location_coord', 'location_name'])
     .then((groups) =>
       groups.some((g) => isSameGroup(g as any, group))
         ? Promise.resolve('Exists')
