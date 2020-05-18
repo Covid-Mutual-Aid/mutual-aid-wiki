@@ -11,20 +11,18 @@ const getGroups = () =>
 const testCases = [
   {
     name: 'Piglet',
-    location_name: 'bn35de',
-    link_facebook: 'https://pigstyle.com',
-    links: [{ url: 'https://pigstyle.com' }],
+    location_name: 'london',
+    link_facebook: 'https://pigs.com',
+    links: [{ url: 'https://pigs.com' }],
   },
   {
-    name: 'Piglet FAILS',
-    location_name: 'bn35de',
-    link_facebook: 'https://pigstyle.com',
-    links: [{ url: 'https://pigstyle.com' }],
+    name: 'Foo edit',
+    location_name: 'london',
+    links: [{ url: 'https://baz.com' }],
   },
   {
-    name: 'Another FAILS',
-    location_name: 'bn35de',
-    link_facebook: 'https://pigstyle.com',
+    name: 'Failing test',
+    location_name: 'london',
     links: [{ url: 'https://pigstyle.com' }],
   },
 ]

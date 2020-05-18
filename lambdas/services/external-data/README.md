@@ -1,43 +1,72 @@
 # Syncing external data
 
-This resource currently syncs data with a number of external sources and it would be great if it could sync with more. You can see what sources are currently being synced by looking in the `sources` directory and the `functions.yml` file which will show the active sources and when they are being scheduled to pull.
+This resource currently syncs data with a number of external sources and it would be great if it could sync with more. You can see what sources are currently being synced by looking in the `sources` directory and the `functions.yml` file.
 
-## Terminology
+## Quick start
 
-Adapters are utilities to create a source and a source is a lambda function that is responsible for pulling from an external dataset and updating the database. A `createSource` function is provided that accepts a few parameters (test cases, source id, url) and an array of groups and handles deduping, geolocating, diffing with existing groups and updating the database. Several more helper functions exist to make formatting external group data into the shape the database expects a little easier.
+Here is what a source that pulls from a google sheet looks like:
 
-## Get Started
+```typescript
+const getGroups = async () => {
+  const groupData: any = await getSheetData(
+    '1rOnO6iAkSAc90-Zzd4a09L7DouoO3wo9eL_Ia2_CSLg',
+    'Mutual Aid Groups'
+  )
+
+  const [titleRow, ...rows] = groupData.values
+  const createGroup = groupConstructor(titleRow, {
+    'Location Name': 'location_name',
+    Name: 'name',
+    Link: 'links',
+  })
+
+  const groups = rows.map((r: any) => createGroup(r))
+  return groups
+}
+
+export const testSource = createSource({
+  displayName: 'Test Source',
+  external_id: 'test-source',
+  external_link:
+    'https://docs.google.com/spreadsheets/d/1rOnO6iAkSAc90-Zzd4a09L7DouoO3wo9eL_Ia2_CSLg/edit#gid=0',
+  getGroups,
+  testCases,
+})
+```
+
+## Adapters
 
 Start by following the instructions in the README at the root of the project. Once you have been able to set up your local environment, duplicate an existing source and have a look at the helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. For example:
 
-```
-  const create = groupConstructorObj({
-    nameField: 'name',
-    linkFieldA: 'links', // `links` is the only field you can reference more then once
-    linkFieldB: 'links',
-    locationField: 'location_name',
-  })
+```typescript
+const create = groupConstructorObj({
+  nameField: 'name',
+  linkFieldA: 'links', // `links` is the only field you can reference more then once
+  linkFieldB: 'links',
+  locationField: 'location_name',
+})
 
-  const formattedGroup = create({
-    nameField: 'example mutual aid',
-    linkFieldA: 'https://linkfielda.com',
-    linkFieldB: 'https://linkfieldb.com',
-    locationField: 'Example Location Somewhere',
+const formattedGroup = create({
+  nameField: 'example mutual aid',
+  linkFieldA: 'https://linkfielda.com',
+  linkFieldB: 'https://linkfieldb.com',
+  locationField: 'Example Location Somewhere',
+  shouldGoIntoExternalData: 'foo bar',
+})
+
+expect(formattedGroup).toEqual({
+  name: 'example mutual aid',
+  links: [{ url: 'https://linkfielda.com' }, { url: 'https://linkfieldb.com' }],
+  location_name: 'Example Location Somewhere',
+  external_data: {
     shouldGoIntoExternalData: 'foo bar',
-  })
+  },
+}) // Pass
 
-  expect(formattedGroup).toEqual({
-    name: 'example mutual aid',
-    links: [{ url: 'https://linkfielda.com' }, { url: 'https://linkfieldb.com' }],
-    location_name: 'Example Location Somewhere',
-    external_data: {
-      shouldGoIntoExternalData: 'foo bar',
-    },
-  }) // Pass
-
-  // You can now use create() like so:
-  const formattedGroups = await axios.get('https://acommunityanagedresource.org/api/get').then(groups => groups.map(create))
-
+// You can now use create() like so:
+const formattedGroups = await axios
+  .get('https://acommunityanagedresource.org/api/get')
+  .then((groups) => groups.map(create))
 ```
 
 The `groupConstructor` constructor works similarly to `groupConstructorObj`, but with an array of groups as an array and a label array which is used to determine which index of the incoming array relates to which field (useful for pulling from google sheets). The above example also shows how fields existing in the incoming data but not present in the map object are automatically added to the external_data field.
@@ -58,6 +87,10 @@ This is how the sync is performed by createSource():
 - Geolocate and add incoming items that have no matches to the database
 
 The code for this is in `helpers.tsx`. When a group is edited directly on mutualaid.wiki (after email authentication), the source of this group is changed to `mutualaidwiki`, at which point it is treated as if it was added directly to the platform and ignored in further syncs.
+
+## Terminology
+
+Adapters are utilities to create a source and a source is a lambda function that is responsible for pulling from an external dataset and updating the database. A `createSource` function is provided that accepts a few parameters (test cases, source id, url) and an array of groups and handles deduping, geolocating, diffing with existing groups and updating the database. Several more helper functions exist to make formatting external group data into the shape the database expects a little easier.
 
 ## Feedback
 
