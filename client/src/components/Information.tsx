@@ -13,13 +13,14 @@ import info_embed from './img/info_embed.png'
 const Information = () => {
   const history = useHistory()
   const { pathname, search } = useLocation()
-  const localizedComponents = useI18n(x => x.components)
+  const localizedComponents = useI18n((x) => x.components)
   const aboutInformation = localizedComponents.about
   const heroContent = localizedComponents.heroContent
   const highlightsContent = localizedComponents.highlightsContent
   const addGroupContent = localizedComponents.addGroupContent
   const editGroupContent = localizedComponents.editGroupContent
   const embedMapContent = localizedComponents.embedMapContent
+  const sourcesContent = localizedComponents.sourcesContent
 
   useLayoutEffect(() => {
     if (inIframe() && pathname === '/') {
@@ -29,12 +30,8 @@ const Information = () => {
 
   return (
     <LandingStyles open={pathname === '/'}>
-      <Hero>
-        {heroContent}
-      </Hero>
-      <Highlight>
-        {highlightsContent}
-      </Highlight>
+      <Hero>{heroContent}</Hero>
+      <Highlight>{highlightsContent}</Highlight>
 
       <Feature tint={'rgb(244, 250, 255)'}>
         <div className="wrapper">
@@ -52,6 +49,22 @@ const Information = () => {
           </div>
           <div className="spacer"></div>
           {editGroupContent}
+        </div>
+      </Feature>
+      <Feature tint={'rgb(244, 250, 255)'}>
+        <div className="wrapper full">
+          <div className="description">{sourcesContent}</div>
+          <div className="spacer"></div>
+          <div className="img">
+            <iframe
+              className="airtable-embed"
+              src="https://airtable.com/embed/shrgJ4OdI7KBMWVqj?backgroundColor=green"
+              frameBorder="0"
+              width="100%"
+              height="320"
+              style={{ background: 'transparent; border: 1px solid #ccc' }}
+            ></iframe>
+          </div>
         </div>
       </Feature>
       <Feature tint={'rgba(0, 0, 0, 0.8)'}>
@@ -167,7 +180,7 @@ const Highlight = styled.div`
   }
 `
 
-const Feature = styled.div<{ tint: string }>`
+const Feature = styled.div<{ tint: string; full?: boolean }>`
   position: relative;
   display: flex;
   justify-content: center;
@@ -210,6 +223,14 @@ const Feature = styled.div<{ tint: string }>`
     background-size: contain;
     background-color: transparent;
     background-repeat: no-repeat;
+  }
+
+  .full {
+    flex-wrap: wrap;
+
+    .img {
+      min-width: 100%;
+    }
   }
 
   @media (max-width: ${MOBILE_BREAKPOINT + 120 + 'px'}) {
