@@ -33,8 +33,11 @@ export const requestGroupEdit = lambda((req$) =>
       if (!group.emails || group.emails.length === 0) return sendNoneAssosiated(email, group.id)
       // Send Email with link to edit group
       if (group.emails.includes(email)) return sendEditLink(email, group.id)
+
+      // Their email is not linked to the group, send email with link to submit support request
+      return sendNoneAssosiated(email, group.id)
       // Send email explaining that the email is not assosiated to the group
-      return sendNotAssosiated(email)
+      // return sendNotAssosiated(email)
     }),
     responseJson$
   )
