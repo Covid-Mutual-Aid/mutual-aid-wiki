@@ -24,21 +24,23 @@ const validURL = (str: string) => {
 export const isDateTimeString = (s: string) =>
   !!/\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{1,2}:\d{1,2}/i.test(s.trim())
 
-export const isCorrectlyNamed = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
-  a: T
-) =>
-  validURL(a.link_facebook) &&
+export const isCorrectlyNamed = <T extends Pick<Group, 'links' | 'name' | 'location_name'>>(a: T) =>
+  a.links.reduce((acc, { url }) => acc && validURL(url), true) &&
   !isDateTimeString(a.name) &&
   !isDateTimeString(a.location_name) &&
   !validURL(a.name) &&
   !validURL(a.location_name)
 
-export const isSameGroup = <T extends Pick<Group, 'link_facebook' | 'name' | 'location_name'>>(
+export const isSameGroup = <T extends Pick<Group, 'links' | 'name' | 'location_name'>>(
   a: T,
   b: T
-) =>
-  normLink(norm(a.link_facebook)) === normLink(norm(b.link_facebook)) ||
-  (norm(a.name) === norm(b.name) && norm(a.location_name) === norm(b.location_name))
+) => {
+  const linkMatch = a.links.filter(({ url }) => b.links.find((l) => url === l.url)).length > 0
+
+  const nameMatch = norm(a.name) === norm(b.name)
+  const locationMatch = norm(a.location_name) === norm(b.location_name)
+  return linkMatch || (nameMatch && locationMatch)
+}
 
 // This needs tests!
 export const isExactSameGroup = <T extends Partial<Group>>(a: T, b: T) =>

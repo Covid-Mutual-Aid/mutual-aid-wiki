@@ -1,4 +1,5 @@
 export type Coord = { lat: number; lng: number }
+export type Link = { url: string }
 export type Group = {
   id: string
   name: string
@@ -8,14 +9,16 @@ export type Group = {
     phone?: string
     email?: string
   }
+  links: Link[]
   link_facebook: string
   location_name: string
   location_coord: Coord
   location_poly?: Coord[]
-  country?: string
+  location_country?: string
   created_at?: string
   updated_at?: string
 
+  source?: string
   external?: boolean
   external_id?: string
   external_link?: string
@@ -27,7 +30,7 @@ export type Source = {
   external_id: string
   external_link: string
   getGroups: (...args: any) => Promise<ExternalGroup[]>
-  testCases: ExternalGroup[]
+  testCases: Omit<ExternalGroup, 'link_facebook'>[]
 }
 
 export type Snapshot = {
@@ -41,7 +44,10 @@ export type Snapshot = {
   groupsRemoved: number
 }
 
-export type ExternalGroup = Pick<Group, 'name' | 'link_facebook' | 'location_name' | 'emails'>
+export type ExternalGroup = Pick<
+  Group,
+  'name' | 'link_facebook' | 'links' | 'location_name' | 'emails'
+>
 
 export type Search = {
   id: string

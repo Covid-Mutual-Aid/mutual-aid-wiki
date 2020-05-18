@@ -43,8 +43,9 @@ const AboutEN = () => {
         </p>
         <li>Who is behind this?</li>
         <p>
-          We are an open source, volunteer run group of. We also part of the technical team at{' '}
-          <a href="https://covidmutualaid.org">covidmutualaid.org</a>
+          We are an open source, volunteer run group from different countries. We also part of the
+          technical team at <a href="https://covidmutualaid.org">covidmutualaid.org</a>. Get in
+          touch if you would like to work with us!
         </p>
       </ul>
       <br />

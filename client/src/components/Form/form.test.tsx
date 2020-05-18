@@ -35,9 +35,15 @@ it('should show validation error when submited without any input', async () => {
 const mocGroup = {
   name: 'NAME',
   link_facebook: 'www.mock.com',
+  links: [
+    {
+      url: 'www.mock.com',
+    },
+  ],
   emails: ['mock@mock.com'],
   location_name: 'LOCATION',
   location_coord: { lat: 1, lng: 1 },
+  location_country: null,
   description: 'Some description',
   contact: { email: 'm@m.com', phone: '1111' },
 }

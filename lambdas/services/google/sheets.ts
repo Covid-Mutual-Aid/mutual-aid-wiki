@@ -1,7 +1,7 @@
 import { google, sheets_v4 } from 'googleapis'
 import { Group, ExternalGroup } from '../_utility_/types'
 import ENV from '../_utility_/environment'
-import { groupConstructor } from '../external-data/adapters'
+import { groupConstructor, FieldMap } from '../external-data/adapters'
 
 export const sheets = google.sheets('v4')
 
@@ -64,7 +64,7 @@ export const addSheetRow = (
     updateSheet(auth)(addRow(getGroupRow(group), sheetId || (ENV.SHEET_ID as any)))
   )
 
-export const getGroupsFromSheet = (spreadsheetId: string, sheetId: number, map: ExternalGroup) =>
+export const getGroupsFromSheet = (spreadsheetId: string, sheetId: number, map: FieldMap) =>
   sheets.spreadsheets
     .get({ spreadsheetId, auth: ENV.GOOGLE_API_KEY, includeGridData: true })
     .then((spreadsheet) =>
@@ -80,7 +80,7 @@ export const getGroupsFromSheet = (spreadsheetId: string, sheetId: number, map: 
         )
       )
 
-      const createGroup = groupConstructor(titleRow, map)
+      const createGroup = groupConstructor(titleRow as string[], map)
 
       return rows
         .map((r) => createGroup(r))

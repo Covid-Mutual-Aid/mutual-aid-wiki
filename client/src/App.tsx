@@ -7,17 +7,7 @@ import Report from './containers/Report'
 import { Route } from 'react-router-dom'
 import withModal from './components/withModal'
 
-declare global {
-  interface Window { Intercom: any }
-}
-
 const App = () => {
-  useEffect(() => {
-    window.Intercom("boot", {
-      app_id: "f1tn2aqi"
-    })
-  }, [])
-
   return (
     <>
       <Information />

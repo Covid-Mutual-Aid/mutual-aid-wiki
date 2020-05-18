@@ -4,9 +4,9 @@ import { uniqueBy, isSameGroup } from '../../_utility_/utils'
 
 export const getData = () =>
   getGroupsFromSheet('1HEdNpLB5p-sieHVK-CtS8_N7SIUhlMpY6q1e8Je0ToY', 1455689482, {
-    location_name: 'State',
-    name: 'Title of Document',
-    link_facebook: 'Link',
+    State: 'location_name',
+    'Title of Document': 'name',
+    Link: 'link_facebook',
   })
     .then((g) => g.slice(0, 20))
     .then(uniqueBy(isSameGroup))

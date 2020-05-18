@@ -18,6 +18,7 @@ const Location = () => {
   const request = useRequest()
   const [locationName, onLocationName] = useFormControl('location_name', '')
   const [, onCoords] = useFormControl('location_coord')
+  const [, onLocationCountry] = useFormControl('location_country')
   return (
     <AsyncCreatableSelect
       styles={{
@@ -36,6 +37,11 @@ const Location = () => {
       onChange={(x: any) =>
         request<any>(`/google/placeDetails?place_id=${x.value}`).then((y) => {
           onCoords(y.geometry.location)
+          onLocationCountry(
+            y.address_components
+              ? y.address_components.find((a: any) => a.types.includes('country')).short_name
+              : null
+          )
           onLocationName(x.label)
         })
       }

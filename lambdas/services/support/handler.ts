@@ -19,6 +19,7 @@ import {
   sendFailedVerification,
 } from './templates'
 import { omit } from '../_utility_/utils'
+import { throwError } from 'rxjs'
 
 // request/groupedit
 export const requestGroupEdit = lambda((req$) =>
@@ -32,8 +33,11 @@ export const requestGroupEdit = lambda((req$) =>
       if (!group.emails || group.emails.length === 0) return sendNoneAssosiated(email, group.id)
       // Send Email with link to edit group
       if (group.emails.includes(email)) return sendEditLink(email, group.id)
+
+      // Their email is not linked to the group, send email with link to submit support request
+      return sendNoneAssosiated(email, group.id)
       // Send email explaining that the email is not assosiated to the group
-      return sendNotAssosiated(email)
+      // return sendNotAssosiated(email)
     }),
     responseJson$
   )
@@ -43,17 +47,19 @@ export const requestGroupEdit = lambda((req$) =>
 export const submitSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('support'),
-    switchMergeKey('group', (x) =>
-      db.groups
-        .getById(x.id, ['name', 'link_facebook', 'location_name', 'emails', 'id'])
-        .catch(() => null)
-    ),
     switchMap((x) => {
-      const key = shortid.generate()
-      if (!x.group) return Promise.reject('No group')
-      return addSupportRequestToTable(x.email, key, x.group)
-        .then(() => sendSubmitedRequest(x.email, key))
-        .then(() => 'Successfully submited you should recieve an email with further instructions')
+      if (!x) return throwError('Unauthorised')
+      return db.groups
+        .getById(x.id, ['name', 'links', 'location_name', 'emails', 'id'])
+        .then((group) => {
+          const key = shortid.generate()
+          return addSupportRequestToTable(x.email, key, group)
+            .then(() => sendSubmitedRequest(x.email, key))
+            .then(
+              () => 'Successfully submited you should recieve an email with further instructions'
+            )
+        })
+        .catch(() => Promise.reject(`Missing group ${x.id}`))
     }),
     responseJson$
   )
@@ -63,8 +69,9 @@ export const submitSupportRequest = lambda((req$) =>
 export const confirmSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('confirm'),
-    switchMap((x) =>
-      db.groups
+    switchMap((x) => {
+      if (!x) return throwError('Unauthorised')
+      return db.groups
         .update({ id: x.id, emails: [x.email] })
         .then(() => sendSuccessfulVerification(x.email, x.id))
         .then(() =>
@@ -73,7 +80,7 @@ export const confirmSupportRequest = lambda((req$) =>
             ...omit(['confirm', 'reject', 'date'], y),
           }))((y) => y.key === x.key)
         )
-    ),
+    }),
     responseJson$
   )
 )
@@ -82,14 +89,15 @@ export const confirmSupportRequest = lambda((req$) =>
 export const rejectSupportRequest = lambda((req$) =>
   req$.pipe(
     authorise('reject'),
-    switchMap((x) =>
-      sendFailedVerification(x.email).then(() =>
+    switchMap((x) => {
+      if (!x) return throwError('Unauthorised')
+      return sendFailedVerification(x.email).then(() =>
         transferRow('Waiting', 'Done', (y) => ({
           status: 'rejected',
           ...omit(['confirm', 'reject', 'date'], y),
         }))((y) => y.key === x.key)
       )
-    ),
+    }),
     responseJson$
   )
 )
@@ -105,12 +113,12 @@ export const reportGroup = lambda((req$) =>
       ]).then(([editToken, deleteToken]) => ({ ...x, editToken, deleteToken }))
     ),
     switchMap((x) =>
-      db.groups.getById(x.id, ['link_facebook', 'name', 'id']).then((grp) =>
+      db.groups.getById(x.id, ['links', 'name', 'id']).then((grp) =>
         createRow('Reports', {
           action: 'waiting',
           message: x.message,
           email: x.email,
-          url: grp.link_facebook,
+          url: grp.links[0].url,
           name: grp.name,
           id: grp.id,
           edit: `${ENV.CLIENT_ENDPOINT}/map/edit/${x.id}/${x.editToken}`,
@@ -125,14 +133,14 @@ export const reportGroup = lambda((req$) =>
 export const addSupportRequestToTable = async (
   email: string,
   key: string,
-  group: Pick<Group, 'id' | 'name' | 'link_facebook'>
+  group: Pick<Group, 'id' | 'name' | 'links'>
 ) => {
   const confirm = await tokens.confirm.sign({ id: group.id, email, key })
   const reject = await tokens.reject.sign({ id: group.id, email, key })
 
   return createRow('Waiting', {
     name: group.name,
-    url: group.link_facebook,
+    url: group.links[0].url,
     email: email,
     key,
     confirm: `${ENV.API_ENDPOINT}/request/confirm?token=${confirm}`,

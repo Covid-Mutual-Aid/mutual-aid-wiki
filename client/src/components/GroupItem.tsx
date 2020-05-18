@@ -63,9 +63,11 @@ const GroupItem = ({
         >
           {icons('more', 'rgba(0,0,0,0.6')}
         </div>
-        <a target="_blank" rel="noopener noreferrer" href={tidyLink(group.link_facebook)}>
-          {iconFromUrl(group.link_facebook)}
-        </a>
+        {group.links.map(({ url }, i) => (
+          <a key={i} target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
+            {iconFromUrl(url)}
+          </a>
+        ))}
       </div>
     </GroupWrapper>
   )

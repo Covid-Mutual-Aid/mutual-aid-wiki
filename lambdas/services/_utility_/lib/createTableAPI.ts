@@ -20,6 +20,31 @@ export default function createTableAPI<
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   })
+
+  const update = (item: Partial<T> & { id: string; updated_at?: string }) => {
+    const modifiedKeys = Object.keys(item).filter(
+      (x) => !['updated_at', 'created_at', 'id'].includes(x)
+    )
+
+    return {
+      ...item,
+      TableName,
+      Key: { id: item.id },
+      ExpressionAttributeValues: modifiedKeys.reduce(
+        (a, b) => ({ ...a, [`:${b}`]: (item as any)[b] }),
+        { [':updated_at']: Date.now() }
+      ),
+      ExpressionAttributeNames: modifiedKeys.reduce((all, key) => ({ ...all, [`#${key}`]: key }), {
+        ['#updated_at']: 'updated_at',
+      }),
+      UpdateExpression: `SET ${modifiedKeys.reduce(
+        (a, b) => a + `, #${b} = :${b}`,
+        '#updated_at = :updated_at'
+      )}`,
+      ReturnValues: 'ALL_NEW',
+    }
+  }
+
   return {
     TableName,
     client,
@@ -79,32 +104,15 @@ export default function createTableAPI<
       batchRequest(client, TableName, items.map(create).map(putRequest)),
 
     update: (item: Partial<T> & { id: string; updated_at?: string }) => {
-      const modifiedKeys = Object.keys(item).filter(
-        (x) => !['updated_at', 'created_at', 'id'].includes(x)
-      )
-
-      const param = {
-        TableName,
-        Key: { id: item.id },
-        ExpressionAttributeValues: modifiedKeys.reduce(
-          (a, b) => ({ ...a, [`:${b}`]: (item as any)[b] }),
-          { [':updated_at']: Date.now() }
-        ),
-        ExpressionAttributeNames: modifiedKeys.reduce(
-          (all, key) => ({ ...all, [`#${key}`]: key }),
-          { ['#updated_at']: 'updated_at' }
-        ),
-        UpdateExpression: `SET ${modifiedKeys.reduce(
-          (a, b) => a + `, #${b} = :${b}`,
-          '#updated_at = :updated_at'
-        )}`,
-        ReturnValues: 'ALL_NEW',
-      }
+      const UpdateItemInput = update(item)
       return client
-        .update(param)
+        .update(UpdateItemInput)
         .promise()
         .then((x) => (x.$response.data as any).Attributes)
     },
+    // Untested
+    updateBatch: (items: (Partial<T> & { id: string; updated_at?: string })[]) =>
+      batchRequest(client, TableName, items.map(update).map(putRequest)),
 
     delete: (id: string) => client.delete({ TableName, Key: { id } }).promise(),
     deleteBatch: (ids: string[]) => batchRequest(client, TableName, ids.map(deleteRequest)),
