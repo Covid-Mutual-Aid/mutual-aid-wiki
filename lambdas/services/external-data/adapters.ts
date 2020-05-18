@@ -64,6 +64,53 @@ export const groupConstructor = <T extends FieldMap>(labelRow: string[], map: T)
   } as ExternalGroup & { external_data: Record<any, any> }
 }
 
+/**
+ * Remaps fields of external group JSON into the format this database expects
+ * @param map Object that maps fields in external groups to groups used here
+ * @returns Function that accepts an external group object and returns one with the map
+ */
+export const groupConstructorObj = <T extends FieldMap>(map: T) => (
+  externalGroup: Record<any, any>
+) => {
+  const [formattedGroup, external_data] = Object.keys(
+    externalGroup as [keyof typeof externalGroup]
+  ).reduce(
+    ([group, external_data], externalLabel, index) => {
+      const groupLabel = map[externalLabel || '']
+      if (typeof groupLabel === 'undefined')
+        return [group, { ...external_data, [externalLabel || '']: externalGroup[externalLabel] }]
+
+      if (groupLabel === 'links') {
+        return [
+          {
+            ...group,
+            links: [
+              ...group.links,
+              {
+                url: externalGroup[externalLabel],
+              },
+            ],
+          },
+          external_data,
+        ]
+      }
+
+      return [
+        {
+          ...group,
+          [groupLabel]: externalGroup[externalLabel],
+        },
+        external_data,
+      ]
+    },
+    [{ links: [] }, {}] as (ExternalGroup | Record<any, any>)[]
+  )
+  return {
+    ...formattedGroup,
+    external_data,
+  } as ExternalGroup & { external_data: Record<any, any> }
+}
+
 export const getGroupsFromSheet = async (
   id: string,
   sheetIdentifier: string,

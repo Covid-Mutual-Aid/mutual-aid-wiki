@@ -23,6 +23,10 @@ It is deployed with serverless on AWS using dynamoDB. Typescript is used through
 
 Our data is available as the embeddable map, or as an endpoint that can be queried directly from your client: https://mutualaid.wiki/api/group/get
 
+## Contribute data
+
+Submit a pull request to sync with an external source. Helper functions to parse group data and to handle syncing are in the [mutual-aid-wiki/lambdas/services/external-data/](https://github.com/Covid-Mutual-Aid/mutual-aid-wiki/tree/master/lambdas/services/external-data) directory. Existing sources can be found inside the `sources` directory also inside.
+
 ## Participate
 
 We are looking for developers to integrate community maintained lists of groups and maintain and improve this resource. We are also looking for volunteers to help us with outreach and community support.
