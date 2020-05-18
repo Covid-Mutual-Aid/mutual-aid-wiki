@@ -4,9 +4,10 @@ This resource currently syncs data with a number of external sources and it woul
 
 ## Quick start
 
-Here is what a source that pulls from a google sheet looks like:
+Here is an example of source that pulls from a google sheet:
 
 ```typescript
+// external-data/source/testSource.ts
 const getGroups = async () => {
   const groupData: any = await getSheetData(
     '1rOnO6iAkSAc90-Zzd4a09L7DouoO3wo9eL_Ia2_CSLg',
@@ -24,6 +25,15 @@ const getGroups = async () => {
   return groups
 }
 
+const testCases = [
+  {
+    name: 'Foo edit',
+    location_name: 'london',
+    links: [{ url: 'https://baz.com' }],
+  },
+  ...
+]
+
 export const testSource = createSource({
   displayName: 'Test Source',
   external_id: 'test-source',
@@ -34,18 +44,23 @@ export const testSource = createSource({
 })
 ```
 
-## Adapters
+When creating a source, you must provide an array of test cases; groups that you expect to exist in this resource. The source will run so long as one of these groups are found. This is to prevent malformed data being entered into the database if the shape of the incoming data changes unexpectedly (e.g someone moved the columns in the google sheet by mistake). Around 7-10 test cases are encouraged for redundancy.
 
-Start by following the instructions in the README at the root of the project. Once you have been able to set up your local environment, duplicate an existing source and have a look at the helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. For example:
+## Helpful utilities
+
+There are some helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. Please use these utilities to construct groups as it makes future schema changes much easier. For example:
 
 ```typescript
+//Pass in map object
 const create = groupConstructorObj({
+  // externalField: internalField
   nameField: 'name',
   linkFieldA: 'links', // `links` is the only field you can reference more then once
   linkFieldB: 'links',
   locationField: 'location_name',
 })
 
+// use create() to format external group
 const formattedGroup = create({
   nameField: 'example mutual aid',
   linkFieldA: 'https://linkfielda.com',
@@ -69,9 +84,7 @@ const formattedGroups = await axios
   .then((groups) => groups.map(create))
 ```
 
-The `groupConstructor` constructor works similarly to `groupConstructorObj`, but with an array of groups as an array and a label array which is used to determine which index of the incoming array relates to which field (useful for pulling from google sheets). The above example also shows how fields existing in the incoming data but not present in the map object are automatically added to the external_data field.
-
-When creating a source, you must provide an array of test cases; groups that you expect to exist in this resource. The source will run so long as one of these groups are found. This is to prevent malformed data being entered into the database if the shape of the incoming data changes unexpectedly (e.g someone moved the columns in the google sheet by mistake). Around 7-10 test cases are encouraged for redundancy.
+The `groupConstructor` constructor works similarly to `groupConstructorObj`, but with an array of groups as an array and a label array (as show in the quick start example) - useful for pulling from google sheets. The above example also shows how fields existing in the incoming data but not present in the map object are automatically added to the external_data field as well as how multiple references of `links` field is handled.
 
 ## Sync protocol
 
@@ -87,10 +100,6 @@ This is how the sync is performed by createSource():
 - Geolocate and add incoming items that have no matches to the database
 
 The code for this is in `helpers.tsx`. When a group is edited directly on mutualaid.wiki (after email authentication), the source of this group is changed to `mutualaidwiki`, at which point it is treated as if it was added directly to the platform and ignored in further syncs.
-
-## Terminology
-
-Adapters are utilities to create a source and a source is a lambda function that is responsible for pulling from an external dataset and updating the database. A `createSource` function is provided that accepts a few parameters (test cases, source id, url) and an array of groups and handles deduping, geolocating, diffing with existing groups and updating the database. Several more helper functions exist to make formatting external group data into the shape the database expects a little easier.
 
 ## Feedback
 
