@@ -23,6 +23,8 @@ It is deployed with serverless on AWS using dynamoDB. Typescript is used through
 
 Our data is available as the embeddable map, or as an endpoint that can be queried directly from your client: https://mutualaid.wiki/api/group/get
 
+This data is made available on a Attribution-NonCommercial-ShareAlike license. The attribution helps us provide this resource to more communities ❤️.
+
 ## Contribute data
 
 Submit a pull request to sync with an external source. Helper functions to parse group data and to handle syncing are in the [mutual-aid-wiki/lambdas/services/external-data/](https://github.com/Covid-Mutual-Aid/mutual-aid-wiki/tree/master/lambdas/services/external-data) directory. Existing sources can be found inside the `sources` directory also inside.
@@ -31,18 +33,20 @@ Submit a pull request to sync with an external source. Helper functions to parse
 
 We are looking for developers to integrate community maintained lists of groups and maintain and improve this resource. We are also looking for volunteers to help us with outreach and community support.
 
-Get in touch here: info@mutualaid.wiki
-Join our community slack channel: XXXXX
-Have a look at our issues here: XXXX
-Our project management board here: XXXX
+- Get in touch here: info@mutualaid.wiki
+- Join our community slack channel: XXXXX
+- Have a look at our issues here: XXXX
+- Our project management board here: XXXX
 
 # Getting started
 
 Clone the repository
 
-- fill out env.json
+- rename EXAMPLE-env.json to env.json and add in the relevant values (if you are interested in long term collaboration, let us know and we can give you our keys)
 - Run `yarn install`
 - Run `yarn start`
+
+If you run `yarn start:client` you should be able to work on the frontend directly as it will proxy all API requests to the https://staging.mutualaid.wiki/ API.
 
 ## Structure
 
