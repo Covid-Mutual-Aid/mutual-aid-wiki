@@ -26,7 +26,7 @@ const AWS = {
   obj: (obj) => ({ M: obj }),
 }
 
-const groupsFile = path.join(__dirname, 'groups-table.json')
+const groupsFile = path.join(__dirname, 'with-countries-and-source.json')
 const awsDynamodb = `aws --profile covid --region eu-west-2 dynamodb`
 
 const groupBy = (n, items) =>
@@ -46,15 +46,17 @@ const writeBatch = (batch, i) => {
 const omit = (keys, x) =>
   Object.keys(x).reduce((all, key) => (keys.includes(key) ? all : { ...all, [key]: x[key] }), {})
 
-const geolocateCountry = (coord) =>
+const googleGeoLocate = (location) =>
   axios
     .get(
-      `http://api.geonames.org/countryCodeJSON?lat=${coord.lat}&lng=${coord.lng}&username=tapjay`
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
+        location
+      )}&region=uk&key=AIzaSyDD8gtVtIrx6A0FpaTb7WXy0r1tZR8iECg`
     )
-    .then((x) => (x.data.status ? Promise.reject(new Error(x.data.status.message)) : x.data))
-
-// geolocateCountry({ lat: 49.03, lng: 10.2 }).then(console.log)
-// geolocateCountry({ lat: -4.113144, lng: -134.523833 }).then(console.log) // Not a country
+    .then((x) => {
+      // console.log(x.data.results)
+      return x.data.error_message ? Promise.reject(new Error(x.data.error_message)) : x.data.results
+    })
 
 const geolocateCountries = (groups) => {
   const [BATCH_SIZE, INTERVAL] = [50, 1000]
@@ -68,13 +70,15 @@ const geolocateCountries = (groups) => {
             groups.slice(0, BATCH_SIZE).map(
               (g) =>
                 new Promise((resolve) => {
-                  geolocateCountry({
-                    lat: g.location_coord.M.lat.N,
-                    lng: g.location_coord.M.lng.N,
-                  }).then(({ countryCode }) => {
+                  googleGeoLocate(g.location_name.S).then(([place]) => {
                     resolve({
                       ...g,
-                      location_country: AWS.str(countryCode),
+                      location_country: AWS.str(
+                        place && place.address_components.find((a) => a.types.includes('country'))
+                          ? place.address_components.find((a) => a.types.includes('country'))
+                              .short_name
+                          : ''
+                      ),
                     })
                   })
                 })
@@ -92,45 +96,57 @@ const getUrlType = (link) =>
 
 const capitalise = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
-//also delete country field, because we are now calling it location_country
+const backup = () =>
+  util.promisify(child.exec)(`${awsDynamodb} scan --table-name dev-groups10 > backup.json`)
 
 const withCountriesAndSource = () =>
   util
     .promisify(child.exec)(`${awsDynamodb} scan --table-name dev-groups10 > ${groupsFile}`)
     .then(() => require(groupsFile))
-    .then((groups) =>
-      groups.Items.then((groups) =>
-        groups
-          .sort(
-            (a, b) =>
-              new Date(b.updated_at || '01 Jan 2020').valueOf() -
-              new Date(a.updated_at || '01 Jan 2020').valueOf()
-          )
-          .Items.slice(0, 30)
-      ).slice(0, 30)
-    )
-    .then((groups) =>
-      groups.map((g) => ({
+    .then((groups) => {
+      // console.log(groups.Items.length)
+      console.log(count)
+      return groups.Items.sort(
+        (a, b) =>
+          new Date(b.updated_at || '01 Jan 2020').valueOf() -
+          new Date(a.updated_at || '01 Jan 2020').valueOf()
+      )
+      // .map((groups) => groups.Items.slice(0, 30))
+      // .slice(0, 10)
+    })
+    .then((groups) => {
+      return groups.map((g) => ({
         ...omit(['country'], g),
         source: AWS.str('mutualaidwiki'),
         external: AWS.bool(false),
         links: AWS.arr([
           AWS.obj({
-            url: AWS.str(g.link_facebook),
+            url: g.link_facebook,
           }),
         ]),
       }))
-    )
+    })
     .then(geolocateCountries)
-    .then((g) => util.promisify(fs.writeFile)('with-countries-and-source.json', JSON.stringify(g)))
-// .then((groups) =>
-//   groupBy(25, groups.Items).map((grps) => ({
-//     'staging-groups10': grps.map((Item) => ({ PutRequest: { Item } })),
-//   }))
-// )
-// .then((batches) => Promise.all(batches.map(writeBatch)))
+    .then((g) =>
+      util.promisify(fs.writeFile)('dev-with-countries-and-source.json', JSON.stringify(g))
+    )
 
-withCountriesAndSource()
+const migrate = () =>
+  Promise.resolve()
+    .then(() => require(path.join(__dirname, 'dev-with-countries-and-source.json')))
+    .then((groups) =>
+      groupBy(25, groups).map((grps) => ({
+        'dev-groups10': grps.map((Item) => ({ PutRequest: { Item } })),
+      }))
+    )
+    .then((batches) => {
+      console.log(batches, 'batches')
+      return Promise.all(batches.map(writeBatch))
+    })
+
+// backup()
+// withCountriesAndSource()
+migrate()
 
 // .then((g) => (g.country ? Promise.resolve(g) : { ...g, country: { S: '' } }))
 // .then((groups) =>
