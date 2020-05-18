@@ -30,7 +30,7 @@ export type Source = {
   external_id: string
   external_link: string
   getGroups: (...args: any) => Promise<ExternalGroup[]>
-  testCases: ExternalGroup[]
+  testCases: Omit<ExternalGroup, 'link_facebook'>[]
 }
 
 export type Snapshot = {

@@ -135,7 +135,9 @@ export const createSource = ({
 }: Source) => ({
   external_id,
   handler: async () => {
-    const externalGroups = await getGroups()
+    const externalGroups = await getGroups().then(
+      (groups) => groups.filter((g: any) => g.location_name && g.name && g.links) as ExternalGroup[]
+    )
     const dedupedExternalGroups = await batchDedupe(externalGroups)
 
     const { failing, passing } = test(externalGroups, testCases)
@@ -151,6 +153,7 @@ export const createSource = ({
       db.groups.createBatch(
         gl.map((g) => ({
           ...g,
+          link_facebook: g.links[0].url, //Backwards compatibility
           emails: [],
           external: true,
           source: external_id, //Changed to mutualaidwiki when user edits
