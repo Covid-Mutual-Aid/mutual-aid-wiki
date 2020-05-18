@@ -49,8 +49,8 @@ const testCases = [
   },
 ]
 
-export const covid19MutualAidGroupsUk = createSource({
-  displayName: 'Covid19 Mutual Aid Groups UK',
+export const mutualaidwikiSheet = createSource({
+  displayName: 'Mutualaid.wiki Sheet',
   external_id: 'covid19-mutual-aid-groups-uk',
   external_link:
     'https://docs.google.com/spreadsheets/d/18P898HWbdR5ouW61sAxW_iBl3yiZlgJu0nSmepn6NwM/edit#gid=1451634215',

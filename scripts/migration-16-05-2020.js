@@ -117,13 +117,18 @@ const withCountriesAndSource = () =>
         links: AWS.arr([
           AWS.obj({
             url: AWS.str(g.link_facebook),
-            type: AWS.str(getUrlType(g.link_facebook)),
           }),
         ]),
       }))
     )
     .then(geolocateCountries)
     .then((g) => util.promisify(fs.writeFile)('with-countries-and-source.json', JSON.stringify(g)))
+// .then((groups) =>
+//   groupBy(25, groups.Items).map((grps) => ({
+//     'staging-groups10': grps.map((Item) => ({ PutRequest: { Item } })),
+//   }))
+// )
+// .then((batches) => Promise.all(batches.map(writeBatch)))
 
 withCountriesAndSource()
 
