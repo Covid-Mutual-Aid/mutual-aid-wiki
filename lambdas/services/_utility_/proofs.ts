@@ -13,7 +13,13 @@ export const proofs = {
     name: P.string,
     emails: P.array(P.string),
     link_facebook: P.string,
+    links: P.array(
+      P.shape({
+        url: P.string,
+      })
+    ),
     location_name: P.string,
+    location_country: P.string,
     location_coord: P.shape({
       lat: P.number,
       lng: P.number,

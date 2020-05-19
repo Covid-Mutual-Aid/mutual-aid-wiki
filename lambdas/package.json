@@ -7,7 +7,8 @@
     "test": "env TESTING=true jest services/**/*.ts",
     "test:integration": "jest ./tests/*.test.ts",
     "start": "env OFFLINE=true sls offline",
-    "sls": "serverless"
+    "sls": "serverless",
+    "backup": "sls invoke --stage dev -f getGroups > groups.json"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.0.1",

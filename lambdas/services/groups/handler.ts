@@ -9,16 +9,16 @@ import { proofs } from '../_utility_/proofs'
 import { Group } from '../_utility_/types'
 import db from '../_utility_/database'
 
-// Helper
+// Make sure this group hasn't been added
 const createNoDuplicates = (
   group: Omit<Group, 'id' | 'pub_id'> & { id?: string; pub_id?: string }
 ) =>
   db.groups
-    .get(['name', 'link_facebook', 'location_coord', 'location_name'])
+    .get(['name', 'links', 'location_coord', 'location_name'])
     .then((groups) =>
       groups.some((g) => isSameGroup(g as any, group))
         ? Promise.resolve('Exists')
-        : (db.groups.create(group) as any)
+        : (db.groups.create({ ...group, external: false, source: 'mutualaidwiki' }) as any)
     )
 
 export const getGroups = lambda((req$) =>
@@ -32,11 +32,14 @@ export const getGroups = lambda((req$) =>
         'id',
         'name',
         'link_facebook',
+        'links',
         'location_name',
         'location_coord',
         'location_poly',
+        'source',
         'contact',
         'description',
+        'location_country',
         'updated_at',
       ]
 
@@ -69,7 +72,7 @@ export const updateGroup = lambda((req$) =>
         ? of(group)
         : throwError('Group id does not match token id')
     ),
-    switchMap((grp) => db.groups.update({ ...grp, external: false })),
+    switchMap((grp) => db.groups.update({ ...grp, external: false, source: 'mutualaidwiki' })),
     responseJson$
   )
 )

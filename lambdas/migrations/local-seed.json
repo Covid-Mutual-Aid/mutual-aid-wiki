@@ -4,6 +4,7 @@
     "name": "Test group with email",
     "location_name": "Forest Row",
     "link_facebook": "http://www.testing.com",
+    "links": [{ "url": "http://www.testing.com" }],
     "created_at": 1586637587868,
     "emails": ["dm.beaven@gmail.com"],
     "location_coord": {

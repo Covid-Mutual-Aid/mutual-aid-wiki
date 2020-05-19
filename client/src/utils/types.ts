@@ -5,6 +5,10 @@ export type Coord = {
   lng: number
 }
 
+export type GroupLink = {
+  url: string
+}
+
 export type Group = {
   id: string
   name: string
@@ -14,8 +18,10 @@ export type Group = {
     phone?: string
     email?: string
   }
+  links: GroupLink[]
   link_facebook: string
   location_name: string
+  location_country: string
   location_coord: Coord
   location_poly?: Coord[]
 }

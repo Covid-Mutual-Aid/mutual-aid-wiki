@@ -70,7 +70,7 @@ export const prove = <P extends Proof<any>>(proof: P) => <T extends Record<strin
 
 export const responseJson$ = map((res) => ({
   statusCode: 200,
-  headers: { 'Access-Control-Allow-Origin': ENV.STAGE === 'dev' ? 'mutualaid.wiki' : '*' },
+  headers: { 'Access-Control-Allow-Origin': '*' },
   body: JSON.stringify(res),
 }))
 

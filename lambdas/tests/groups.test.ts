@@ -23,7 +23,9 @@ const createTestGroup = () => {
   return {
     name: 'test group ' + id,
     link_facebook: 'Link-' + id,
+    links: [{ url: 'Link-' + id }],
     location_name: 'Forest row',
+    location_country: 'XX',
     emails: [`${id}@test.com`],
     location_coord: { lng: -5.8101207, lat: 54.7261871 },
   }
@@ -31,7 +33,8 @@ const createTestGroup = () => {
 
 jest.setTimeout(1000 * 60 * 5)
 describe('Groups API', () => {
-  if (process.env.STAGE !== 'test' && endpoint !== 'http://localhost:4000/local') return 
+  if (process.env.STAGE !== 'test' && endpoint !== 'http://localhost:4000/local') return
+  console.log('running')
 
   let created: Group
   it('should create a group and return the group with id', async () => {
@@ -44,6 +47,7 @@ describe('Groups API', () => {
     expect(returned.id.length).toBeGreaterThan(0)
     expect(create.name).toEqual(returned.name)
     expect(create.link_facebook).toEqual(returned.link_facebook)
+    expect(create.links).toEqual(returned.links)
     expect(create.location_coord).toEqual(returned.location_coord)
   })
 
@@ -88,6 +92,7 @@ describe('Groups API', () => {
     expect(data).toEqual('FAIL')
   })
 
+  //
   it('should update group', async () => {
     const editToken = sign({ id: created.id, type: 'EDIT_GROUP' }, JWT_SECRET)
     const { data } = await axios

@@ -16,6 +16,7 @@ import HighlightsContentES from '../components/internationalized/HighlightsConte
 import AddGroupContentES from '../components/internationalized/AddGroupContentES'
 import EditGroupContentES from '../components/internationalized/EditGroupContentES'
 import EmbedMapContentES from '../components/internationalized/EmbedMapContentES'
+import SourcesContentEN from '../components/internationalized/SourcesContentEN'
 
 import { useLocationState } from '../state/reducers/location'
 
@@ -25,22 +26,28 @@ class Locale {
   code: string
   name: string
   translation: Translation
-  components: { about: JSX.Element,
-                heroContent: JSX.Element,
-                highlightsContent: JSX.Element,
-                addGroupContent: JSX.Element,
-                editGroupContent: JSX.Element,
-                embedMapContent: JSX.Element }
+  components: {
+    about: JSX.Element
+    heroContent: JSX.Element
+    highlightsContent: JSX.Element
+    addGroupContent: JSX.Element
+    editGroupContent: JSX.Element
+    embedMapContent: JSX.Element
+    sourcesContent: JSX.Element
+  }
   constructor(
     code: string,
     name: string,
     translation: Translation,
-    components: { about: JSX.Element,
-                  heroContent: JSX.Element,
-                  highlightsContent: JSX.Element,
-                  addGroupContent: JSX.Element,
-                  editGroupContent: JSX.Element,
-                  embedMapContent: JSX.Element }
+    components: {
+      about: JSX.Element
+      heroContent: JSX.Element
+      highlightsContent: JSX.Element
+      addGroupContent: JSX.Element
+      editGroupContent: JSX.Element
+      embedMapContent: JSX.Element
+      sourcesContent: JSX.Element
+    }
   ) {
     this.code = code
     this.name = name
@@ -55,7 +62,8 @@ const en: Locale = new Locale('en', 'English', enTranslation, {
   highlightsContent: <HighlightsContentEN />,
   addGroupContent: <AddGroupContentEN />,
   editGroupContent: <EditGroupContentEN />,
-  embedMapContent: <EmbedMapContentEN />
+  embedMapContent: <EmbedMapContentEN />,
+  sourcesContent: <SourcesContentEN />,
 })
 
 const es: Locale = new Locale('es', 'Castellano', esTranslation, {
@@ -64,7 +72,8 @@ const es: Locale = new Locale('es', 'Castellano', esTranslation, {
   highlightsContent: <HighlightsContentES />,
   addGroupContent: <AddGroupContentES />,
   editGroupContent: <EditGroupContentES />,
-  embedMapContent: <EmbedMapContentES />
+  embedMapContent: <EmbedMapContentES />,
+  sourcesContent: <SourcesContentEN />,
 })
 
 const defaultLocaleCode = 'en'

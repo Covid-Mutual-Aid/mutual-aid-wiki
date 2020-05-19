@@ -42,6 +42,10 @@ const request = <T extends any>(input: RequestInfo, init?: RequestInit, accum = 
     })
   )
 
+;(window as any).Intercom('boot', {
+  app_id: 'f1tn2aqi',
+})
+
 const render = () => {
   const App = require('./App').default
   ReactDOM.render(

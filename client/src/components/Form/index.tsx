@@ -1,6 +1,6 @@
 import TextareaAutosize from 'react-textarea-autosize'
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { GroupLink } from '../../utils/types'
 import styled from 'styled-components'
 
 import { useFormControl, useFormValues } from '../../state/selectors'
@@ -9,6 +9,7 @@ import InputGroup, { Small } from './InputGroup'
 import { Group } from '../../utils/types'
 import EmailsInput from './EmailsInput'
 import Location from '../Location'
+import { Link } from 'react-router-dom'
 
 const GroupForm = ({
   onSave,
@@ -61,9 +62,8 @@ const GroupForm = ({
           placeholder={t.group_form_elements.name.placeholder}
           label={'*' + t.group_form_elements.name.label}
         />
-        <Input
+        <LinkInput
           disabled={disabled}
-          name="link_facebook"
           label={t.group_form_elements.url.label}
           placeholder={t.group_form_elements.url.placeholder}
         />
@@ -127,6 +127,7 @@ const Input = <K extends 'name' | 'link_facebook'>({
   label?: string
 } & React.InputHTMLAttributes<HTMLInputElement>) => {
   const [value, onChange] = useFormControl<Group, K, string>(name, '')
+
   return (
     <InputGroup description={description} label={label}>
       <input {...inputProps} value={value} name={name} onChange={(e) => onChange(e.target.value)} />
@@ -134,8 +135,35 @@ const Input = <K extends 'name' | 'link_facebook'>({
   )
 }
 
+const LinkInput = ({
+  name,
+  description,
+  label,
+  ...inputProps
+}: {
+  description?: string
+  label?: string
+} & React.InputHTMLAttributes<HTMLInputElement>) => {
+  const [value, onChange] = useFormControl<Group, 'link_facebook', string>('link_facebook', '')
+  const [, setLink] = useFormControl<Group, 'links', GroupLink[]>('links', [])
+
+  return (
+    <InputGroup description={description} label={label}>
+      <input
+        {...inputProps}
+        value={value}
+        name={name}
+        onChange={(e) => {
+          setLink([{ url: e.target.value }])
+          onChange(e.target.value)
+        }}
+      />
+    </InputGroup>
+  )
+}
+
 const GroupDescription = () => {
-  const t = useI18n(x => x.translation.components)
+  const t = useI18n((x) => x.translation.components)
   const [value, onChange] = useFormControl('description', '')
   return (
     <TextareaAutosize
@@ -149,7 +177,7 @@ const GroupDescription = () => {
 }
 
 const GroupContact = () => {
-  const t = useI18n(x => x.translation.components)
+  const t = useI18n((x) => x.translation.components)
   const [value, onChange] = useFormControl('contact', { phone: '', email: '' })
   return (
     <>
