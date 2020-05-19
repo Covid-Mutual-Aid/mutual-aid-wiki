@@ -7,6 +7,7 @@ import lambda, { params, responseJson$ } from '../_utility_/lib/lambdaRx'
 import { getData } from './sources/usa-localised-resources'
 import { testSource } from './sources/test-sheet'
 import { mutualaidwikiSheet } from './sources/mutualaidwiki-sheet'
+import { esLocalisedResources } from './sources/es-localised-resources'
 
 export const getExternalData = lambda((req$) => req$.pipe(switchMap(getData), responseJson$))
 
@@ -16,7 +17,7 @@ export const covid19MutualAidGroupsUkHandler = lambda((req$) =>
   req$.pipe(switchMap(mutualaidwikiSheet.handler), responseJson$)
 )
 
-const sources = [testSource, mutualaidwikiSheet]
+const sources = [testSource, mutualaidwikiSheet, esLocalisedResources]
 
 export const triggerSource = lambda((req$) =>
   req$.pipe(
