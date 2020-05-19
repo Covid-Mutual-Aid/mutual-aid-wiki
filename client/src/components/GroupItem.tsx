@@ -63,13 +63,13 @@ const GroupItem = ({
         >
           {icons('more', 'rgba(0,0,0,0.6')}
         </div>
-        {group.links.map(({ url }, i) => {
-          if (url !== undefined) {
-            return (<a key={i} target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
+        <div className="links">
+          {group.links.map(({ url }, i) => (
+            <a key={i} target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
               {iconFromUrl(url)}
-            </a>)
-          }
-        })}
+            </a>
+          ))}
+        </div>
       </div>
     </GroupWrapper>
   )
@@ -107,6 +107,20 @@ const GroupWrapper = styled.div<{ selected: boolean }>`
 
   .actions a:hover {
     opacity: 1;
+  }
+
+  .links {
+    display: flex;
+    flex-direction: row-reverse;
+    max-width: 8rem;
+
+    a {
+      margin: 0 0.14rem;
+    }
+
+    a:last-child {
+      margin-right: 0;
+    }
   }
 
   .menu {
