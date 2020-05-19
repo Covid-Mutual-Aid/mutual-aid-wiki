@@ -34,6 +34,7 @@ const createTestGroup = () => {
 jest.setTimeout(1000 * 60 * 5)
 describe('Groups API', () => {
   if (process.env.STAGE !== 'test' && endpoint !== 'http://localhost:4000/local') return
+  console.log('running')
 
   let created: Group
   it('should create a group and return the group with id', async () => {
@@ -46,6 +47,7 @@ describe('Groups API', () => {
     expect(returned.id.length).toBeGreaterThan(0)
     expect(create.name).toEqual(returned.name)
     expect(create.link_facebook).toEqual(returned.link_facebook)
+    expect(create.links).toEqual(returned.links)
     expect(create.location_coord).toEqual(returned.location_coord)
   })
 
