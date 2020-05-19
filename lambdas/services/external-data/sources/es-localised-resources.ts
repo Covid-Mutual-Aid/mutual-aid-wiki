@@ -25,25 +25,25 @@ const getGroups = async () => {
 const testCases = [
   {
     link_facebook: "https://t.me/apoionovomesoiro",
-    links: [{url: "https://t.me/apoionovomesoiro" }],
+    links: [],
     location_name: "Novo Mesoiro – Feáns – Pocomaco, A Coruña, España",
     name: "GAM Novo Mesoiro – Feáns – Pocomaco"
   },
   {
     link_facebook: "https://chat.whatsapp.com/IRjVrhsrWi4G5uVyWh6ate",
-    links: [{ url: "https://chat.whatsapp.com/IRjVrhsrWi4G5uVyWh6ate" }],
+    links: [],
     location_name: "Fuencarral, Madrid, España",
     name: "Cuidados de apoyo mutuo vecinal SALVA VIDAS"
   },
   {
     link_facebook: "https://www.facebook.com/groups/208662953818158/",
-    links: [{ url: "https://www.facebook.com/groups/208662953818158/" }],
+    links: [],
     location_name: ", Málaga, España",
     name: "Red Malaguita de Apoyo Mutuo"
   },
   {
     link_facebook: "https://www.facebook.com/PAH.Murcia",
-    links: [{url: "https://www.facebook.com/PAH.Murcia"}],
+    links: [],
     location_name: "Calle Arquitecto Emilio Perez Piñero,Murcia",
     name: "PAH Murcia"
   }

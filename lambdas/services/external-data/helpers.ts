@@ -153,7 +153,7 @@ export const createSource = ({
       db.groups.createBatch(
         gl.map((g) => ({
           ...g,
-          link_facebook: g.links[0].url, //Backwards compatibility
+          link_facebook: g.link_facebook || g.links[0].url, //Backwards compatibility
           emails: [],
           external: true,
           source: external_id, //Changed to mutualaidwiki when user edits
