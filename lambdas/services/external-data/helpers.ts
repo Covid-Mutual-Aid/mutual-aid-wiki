@@ -136,7 +136,8 @@ export const createSource = ({
   external_id,
   handler: async () => {
     const externalGroups = await getGroups().then(
-      (groups) => groups.filter((g: any) => g.location_name && g.name && g.links) as ExternalGroup[]
+      (groups) =>
+        groups.filter((g: any) => g.location_name && g.name && g.links.length > 0) as Group[]
     )
     const dedupedExternalGroups = await batchDedupe(externalGroups)
 

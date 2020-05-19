@@ -1,4 +1,4 @@
-import { ExternalGroup, Group } from '../_utility_/types'
+import { Group } from '../_utility_/types'
 import axios from 'axios'
 import ENV from '../_utility_/environment'
 
@@ -12,7 +12,7 @@ export const getSheetData = (id: string, sheetIdentifier: string) =>
     .then((d) => d.data)
 
 type Cell = string | undefined | null
-export type FieldMap = { [k: string]: keyof ExternalGroup }
+export type FieldMap = { [k: string]: keyof Group }
 
 /**
  * Constructs group objects from an array of group arrays. Useful for creating groups from sources like google sheets
@@ -24,7 +24,7 @@ export const groupConstructor = <T extends FieldMap>(labelRow: string[], map: T)
   groupRow: Cell[]
 ) => {
   const value = (groupRow: Cell[], label: string) =>
-    groupRow[labelRow.findIndex((v) => (v || '').trim() === label)]
+    groupRow[labelRow.findIndex((v) => (v || '').trim() === label)]?.toString()
 
   const [group, external_data] = labelRow.reduce(
     ([group, external_data], externalLabel, index) => {
@@ -55,13 +55,13 @@ export const groupConstructor = <T extends FieldMap>(labelRow: string[], map: T)
         external_data,
       ]
     },
-    [{ links: [] }, {}] as (ExternalGroup | Record<any, any>)[]
+    [{ links: [] }, {}] as (Group | Record<any, any>)[]
   )
 
   return {
     ...group,
     external_data,
-  } as ExternalGroup & { external_data: Record<any, any> }
+  } as Group & { external_data: Record<any, any> }
 }
 
 /**
@@ -78,7 +78,15 @@ export const groupConstructorObj = <T extends FieldMap>(map: T) => (
     ([group, external_data], externalLabel, index) => {
       const groupLabel = map[externalLabel || '']
       if (typeof groupLabel === 'undefined')
-        return [group, { ...external_data, [externalLabel || '']: externalGroup[externalLabel] }]
+        return [
+          group,
+          {
+            ...external_data,
+            [externalLabel || '']: isObject(externalGroup[externalLabel])
+              ? flattenObj(externalGroup[externalLabel])
+              : externalGroup[externalLabel],
+          },
+        ]
 
       if (groupLabel === 'links') {
         return [
@@ -98,23 +106,23 @@ export const groupConstructorObj = <T extends FieldMap>(map: T) => (
       return [
         {
           ...group,
-          [groupLabel]: externalGroup[externalLabel],
+          [groupLabel]: externalGroup[externalLabel].toString(),
         },
         external_data,
       ]
     },
-    [{ links: [] }, {}] as (ExternalGroup | Record<any, any>)[]
+    [{ links: [] }, {}] as (Group | Record<any, any>)[]
   )
   return {
     ...formattedGroup,
     external_data,
-  } as ExternalGroup & { external_data: Record<any, any> }
+  } as Group & { external_data: Record<any, any> }
 }
 
 export const getGroupsFromSheet = async (
   id: string,
   sheetIdentifier: string,
-  map: Record<any, keyof ExternalGroup>
+  map: Record<any, keyof Group>
 ) => {
   const groupData: any = await getSheetData(id, sheetIdentifier)
 
@@ -126,3 +134,13 @@ export const getGroupsFromSheet = async (
   console.log(groups, 'groups')
   return groups
 }
+
+const isObject = (v: any) => ({}.constructor === v.constructor)
+export const flattenObj = (obj: Record<any, any>, prefix?: string): any =>
+  Object.keys(obj).reduce(
+    (flat, key) =>
+      isObject(obj[key])
+        ? { ...flat, ...flattenObj(obj[key], key) }
+        : { ...flat, [prefix ? prefix + '.' + key : key]: obj[key] },
+    {} as { [k: string]: any }
+  )
