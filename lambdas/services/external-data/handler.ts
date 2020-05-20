@@ -25,6 +25,10 @@ export const austrailiaInformalMutualAidHandler = lambda((req$) =>
   req$.pipe(switchMap(austrailiaInformalMutualAid.handler), responseJson$)
 )
 
+export const esLocalisedResourcesHandler = lambda((req$) =>
+  req$.pipe(switchMap(esLocalisedResources.handler), responseJson$)
+)
+
 const sources = [testSource, mutualaidwikiSheet, esLocalisedResources, austrailiaInformalMutualAid]
 
 export const triggerSource = lambda((req$) =>
