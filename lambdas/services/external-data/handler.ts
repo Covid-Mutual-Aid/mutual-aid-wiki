@@ -10,6 +10,7 @@ import { mutualaidwikiSheet } from './sources/mutualaidwiki-sheet'
 import { esLocalisedResources } from './sources/es-localised-resources'
 import { reach4help } from './sources/reach4help'
 import { austrailiaInformalMutualAid } from './sources/austrailiaInformalMutualAid'
+import { usCrowdsourcedMAResources } from './sources/us-crowdsourced-ma-resources-list'
 
 export const getExternalData = lambda((req$) => req$.pipe(switchMap(getData), responseJson$))
 export const getTestData = lambda((req$) => req$.pipe(switchMap(testSource.handler), responseJson$))
@@ -29,7 +30,11 @@ export const esLocalisedResourcesHandler = lambda((req$) =>
   req$.pipe(switchMap(esLocalisedResources.handler), responseJson$)
 )
 
-const sources = [testSource, mutualaidwikiSheet, esLocalisedResources, austrailiaInformalMutualAid]
+export const usCrowdsourcedMAResourcesHander = lambda((req$) =>
+  req$.pipe(switchMap(usCrowdsourcedMAResources.handler), responseJson$)
+)
+
+const sources = [testSource, mutualaidwikiSheet, esLocalisedResources, austrailiaInformalMutualAid, usCrowdsourcedMAResources]
 
 export const triggerSource = lambda((req$) =>
   req$.pipe(

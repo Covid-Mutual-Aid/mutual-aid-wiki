@@ -27,6 +27,10 @@ esLocalisedResources:
   handler: services/external-data/handler.esLocalisedResourcesHandler
   timeout: 250
 
+usCrowdsourcedMAResources:
+  handler: services/external-data/handler.usCrowdsourcedMAResourcesHandler
+
+
 triggerSource:
   handler: services/external-data/handler.triggerSource
   timeout: 250
