@@ -43,7 +43,7 @@ provider:
   runtime: nodejs12.x
   region: ${opt:region, 'eu-west-2'}
   stage: ${opt:stage, 'local'}
-  profile: covid
+  #profile: covid
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
