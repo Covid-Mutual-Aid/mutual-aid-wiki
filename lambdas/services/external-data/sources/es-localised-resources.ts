@@ -12,38 +12,34 @@ const getGroups = async () => {
   const createGroup = groupConstructor(titleRow, {
     "import_location": "location_name",
     "name": "name",
-    "import_url": "link_facebook",
+    "import_url": "links",
   })
 
   const groups = rows
     .map((r: any) => createGroup(r))
-    .filter((x: any) => x.location_name && x.name && x.link_facebook) as ExternalGroup[]
+    .filter((x: any) => x.location_name && x.name && x.links) as ExternalGroup[]
 
   return groups
 }
 
 const testCases = [
   {
-    link_facebook: "https://t.me/apoionovomesoiro",
-    links: [],
+    links: [{ url: "https://t.me/apoionovomesoiro" }],
     location_name: "Novo Mesoiro – Feáns – Pocomaco, A Coruña, España",
     name: "GAM Novo Mesoiro – Feáns – Pocomaco"
   },
   {
-    link_facebook: "https://chat.whatsapp.com/IRjVrhsrWi4G5uVyWh6ate",
-    links: [],
+    links: [{ url: "https://chat.whatsapp.com/IRjVrhsrWi4G5uVyWh6ate" }],
     location_name: "Fuencarral, Madrid, España",
     name: "Cuidados de apoyo mutuo vecinal SALVA VIDAS"
   },
   {
-    link_facebook: "https://www.facebook.com/groups/208662953818158/",
-    links: [],
+    links: [{ url: "https://www.facebook.com/groups/208662953818158/"}],
     location_name: ", Málaga, España",
     name: "Red Malaguita de Apoyo Mutuo"
   },
   {
-    link_facebook: "https://www.facebook.com/PAH.Murcia",
-    links: [],
+    links: [{ url: "https://www.facebook.com/PAH.Murcia" }],
     location_name: "Calle Arquitecto Emilio Perez Piñero,Murcia",
     name: "PAH Murcia"
   }
