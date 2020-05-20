@@ -49,7 +49,7 @@ When creating a source, you must provide an array of test cases; groups that you
 
 ## Helpful utilities
 
-There are some helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. Please use these utilities to construct groups as it makes future schema changes much easier. For example:
+There are some helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. Please use these utilities to construct groups (if it makes sense for your context) as it makes future schema changes easier. For example:
 
 ```typescript
 //Pass in map object
@@ -104,4 +104,4 @@ The code for this is in `helpers.tsx`. When a group is edited directly on mutual
 
 ## Feedback
 
-Please open an issue/PR or send us an email if you spot issues or opportunities for improvements. We would love to hear from you!
+Please open an issue/PR or send us an email if you spot issues or opportunities for improvement. We would love to hear from you!

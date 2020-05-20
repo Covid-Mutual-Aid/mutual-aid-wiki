@@ -19,6 +19,10 @@ covid19MutualAidGroupsUk:
   handler: services/external-data/handler.covid19MutualAidGroupsUkHandler
   timeout: 250
 
+austrailiaInformalMutualAidHandler:
+  handler: services/external-data/handler.austrailiaInformalMutualAidHandler
+  timeout: 250
+
 triggerSource:
   handler: services/external-data/handler.triggerSource
   timeout: 250

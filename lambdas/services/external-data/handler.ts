@@ -9,6 +9,7 @@ import { testSource } from './sources/test-sheet'
 import { mutualaidwikiSheet } from './sources/mutualaidwiki-sheet'
 import { esLocalisedResources } from './sources/es-localised-resources'
 import { reach4help } from './sources/reach4help'
+import { austrailiaInformalMutualAid } from './sources/austrailiaInformalMutualAid'
 
 export const getExternalData = lambda((req$) => req$.pipe(switchMap(getData), responseJson$))
 export const getTestData = lambda((req$) => req$.pipe(switchMap(testSource.handler), responseJson$))
@@ -20,7 +21,11 @@ export const covid19MutualAidGroupsUkHandler = lambda((req$) =>
   req$.pipe(switchMap(mutualaidwikiSheet.handler), responseJson$)
 )
 
-const sources = [testSource, mutualaidwikiSheet, esLocalisedResources]
+export const austrailiaInformalMutualAidHandler = lambda((req$) =>
+  req$.pipe(switchMap(austrailiaInformalMutualAid.handler), responseJson$)
+)
+
+const sources = [testSource, mutualaidwikiSheet, esLocalisedResources, austrailiaInformalMutualAid]
 
 export const triggerSource = lambda((req$) =>
   req$.pipe(

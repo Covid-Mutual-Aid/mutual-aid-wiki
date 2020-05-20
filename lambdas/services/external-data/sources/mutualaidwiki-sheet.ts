@@ -12,12 +12,12 @@ const getGroups = async () => {
   const createGroup = groupConstructor(titleRow, {
     Location: 'location_name',
     'Group name': 'name',
-    'Facebook group/website (Link/URL) Please only provide one link': 'link_facebook',
+    'Facebook group/website (Link/URL) Please only provide one link': 'links',
   })
 
   const groups = rows
     .map((r: any) => createGroup(r))
-    .filter((x: any) => x.location_name && x.name && x.link_facebook) as ExternalGroup[]
+    .filter((x: any) => x.location_name && x.name && x.links.length > 0) as ExternalGroup[]
 
   return groups
 }
