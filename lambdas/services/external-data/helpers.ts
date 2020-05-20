@@ -127,6 +127,9 @@ const updateAirtable = async (source: Snapshot) => {
   return source
 }
 
+export const validLinks = (links: { url: any }[]) =>
+  links.reduce((valid: boolean, { url }) => valid && !!url, true)
+
 export const createSource = ({
   displayName,
   external_id,
@@ -138,7 +141,7 @@ export const createSource = ({
   handler: async () => {
     const externalGroups = await getGroups().then(
       (groups) =>
-        groups.filter((g: any) => g.location_name && g.name && g.links.length > 0) as Group[]
+        groups.filter((g: any) => g.location_name && g.name && validLinks(g.links)) as Group[]
     )
     const dedupedExternalGroups = await batchDedupe(externalGroups)
 

@@ -1,5 +1,6 @@
-import { diff } from './helpers'
+import { diff, validLinks } from './helpers'
 import { ExternalGroup, Group } from '../_utility_/types'
+import { tokensdb } from '../_utility_/database'
 
 const exGrp = (name: string): ExternalGroup => ({
   name,
@@ -20,23 +21,32 @@ describe('diff()', () => {
     expect(add.length).toEqual(0)
     expect(remove.length).toEqual(0)
   })
-  it('shouldnt update if external groups exactly match internal groups', async () => {
+  it('shouldnt update if external groups exactly match internal groups', () => {
     const { add, remove } = diff([exGrp('a')], [inGrp('a')])
     expect(add.length + remove.length).toEqual(0)
   })
-  it('should identify if external groups dont match internal groups', async () => {
+  it('should identify if external groups dont match internal groups', () => {
     const { add, remove } = diff([exGrp('a')], [inGrp('b')])
     expect(add.length).toEqual(1)
     expect(remove.length).toEqual(1)
   })
-  it('should update if there is a new external group', async () => {
+  it('should update if there is a new external group', () => {
     const { add, remove } = diff([exGrp('a')], [])
     expect(add.length).toEqual(1)
     expect(remove.length).toEqual(0)
   })
-  it('should update if there are two new external groups', async () => {
+  it('should update if there are two new external groups', () => {
     const { add, remove } = diff([exGrp('a'), exGrp('b'), exGrp('c')], [inGrp('c')])
     expect(add.length).toEqual(2)
     expect(remove.length).toEqual(0)
+  })
+})
+
+describe('Tests if all links in groups.links are not falsy', () => {
+  it('Should return true to valid values', () => {
+    expect(validLinks([{ url: 'yes' }, { url: 'yes' }])).toBe(true)
+  })
+  it('Should return false if there is one invalid value', () => {
+    expect(validLinks([{ url: 'yes' }, { url: null }])).toBe(false)
   })
 })
