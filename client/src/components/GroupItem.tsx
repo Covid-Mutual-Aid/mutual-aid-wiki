@@ -64,11 +64,14 @@ const GroupItem = ({
           {icons('more', 'rgba(0,0,0,0.6')}
         </div>
         <div className="links">
-          {group.links.map(({ url }, i) => (
-            <a key={i} target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
-              {iconFromUrl(url)}
-            </a>
-          ))}
+          {group.links.map(
+            ({ url }, i) =>
+              url && (
+                <a key={i} target="_blank" rel="noopener noreferrer" href={tidyLink(url)}>
+                  {iconFromUrl(url)}
+                </a>
+              )
+          )}
         </div>
       </div>
     </GroupWrapper>
