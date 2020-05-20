@@ -38,14 +38,16 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
               (g) =>
                 new Promise<T & { location_coord: Coord; location_country: string }>((resolve) => {
                   googleGeoLocate(g.location_name).then(([place]) => {
+                    let country = null
+                    if(place && place.address_components) {
+                      const countryComponent = place.address_components.find((a: any) => a.types.includes('country'))
+                      country = countryComponent ? countryComponent.short_name : null
+                    }
+
                     resolve({
                       ...g,
                       location_coord: place ? place.geometry.location : null,
-                      location_country:
-                        place && place.address_components
-                          ? place.address_components.find((a: any) => a.types.includes('country'))
-                              .short_name
-                          : null,
+                      location_country: country,
                     })
                   })
                 })
@@ -153,15 +155,18 @@ export const createSource = ({
 
     await geolocateGroups(add).then((gl) =>
       db.groups.createBatch(
-        gl.map((g) => ({
-          ...g,
-          link_facebook: g.link_facebook || g.links[0].url, //Backwards compatibility
-          emails: [],
-          external: true,
-          source: external_id, //Changed to mutualaidwiki when user edits
-          external_id,
-          external_link,
-        }))
+        gl.map((g : any) => {
+          delete g["external_data"][""] // stop blank columns in sheets choking dynamodb
+          return {
+            ...g,
+            link_facebook: g.link_facebook || g.links[0].url, //Backwards compatibility
+            emails: [],
+            external: true,
+            source: external_id, //Changed to mutualaidwiki when user edits
+            external_id,
+            external_link,
+          }
+        })
       )
     )
 
