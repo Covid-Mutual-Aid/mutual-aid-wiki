@@ -45,6 +45,8 @@ export const testSource = createSource({
 })
 ```
 
+You then need to expose the source as a lambda function in `handlers.ts` and also in the `functions.yml` file. Once this has been completed, you should be able to trigger it by sending a request to `${API_ENDPOINT}/external_data/trigger/${the-source-id}` replacing API endpoint with the stage you want to trigger (localhost:400, staging endpoint, production endpoint etc) and this will trigger your source.
+
 When creating a source, you must provide an array of test cases; groups that you expect to exist in this resource. The source will run so long as one of these groups are found. This is to prevent malformed data being entered into the database if the shape of the incoming data changes unexpectedly (e.g someone moved the columns in the google sheet by mistake). Around 7-10 test cases are encouraged for redundancy.
 
 ## Helpful utilities
