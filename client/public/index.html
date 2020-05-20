@@ -5,10 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Interactive map and list of COVID Mutual Aid groups in the UK and the world"
-    />
+    <meta name="description" content="Map of Mutual Aid groups throughout the world" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -24,7 +21,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Mutual Aid Groups in the UK and the world</title>
+    <title>Mutual Aid Wiki</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161397715-1"></script>
@@ -41,8 +38,38 @@
     <!-- End of Google Analytics -->
     <!-- Start of intercom.io embed -->
     <script>
-     // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/f1tn2aqi'
-     (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/f1tn2aqi';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+      // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/f1tn2aqi'
+      ;(function () {
+        var w = window
+        var ic = w.Intercom
+        if (typeof ic === 'function') {
+          ic('reattach_activator')
+          ic('update', w.intercomSettings)
+        } else {
+          var d = document
+          var i = function () {
+            i.c(arguments)
+          }
+          i.q = []
+          i.c = function (args) {
+            i.q.push(args)
+          }
+          w.Intercom = i
+          var l = function () {
+            var s = d.createElement('script')
+            s.type = 'text/javascript'
+            s.async = true
+            s.src = 'https://widget.intercom.io/widget/f1tn2aqi'
+            var x = d.getElementsByTagName('script')[0]
+            x.parentNode.insertBefore(s, x)
+          }
+          if (w.attachEvent) {
+            w.attachEvent('onload', l)
+          } else {
+            w.addEventListener('load', l, false)
+          }
+        }
+      })()
     </script>
     <!-- End intercom.io embed -->
   </head>
