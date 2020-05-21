@@ -25,7 +25,7 @@ const createTestGroup = () => {
     link_facebook: 'Link-' + id,
     links: [{ url: 'Link-' + id }],
     location_name: 'Forest row',
-    location_country: 'XX',
+    location_country: 'UK',
     emails: [`${id}@test.com`],
     location_coord: { lng: -5.8101207, lat: 54.7261871 },
   }

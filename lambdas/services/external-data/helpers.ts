@@ -39,8 +39,10 @@ export const geolocateGroups = <T extends { location_name: string }>(groups: T[]
                 new Promise<T & { location_coord: Coord; location_country: string }>((resolve) => {
                   googleGeoLocate(g.location_name).then(([place]) => {
                     let country = null
-                    if(place && place.address_components) {
-                      const countryComponent = place.address_components.find((a: any) => a.types.includes('country'))
+                    if (place && place.address_components) {
+                      const countryComponent = place.address_components.find((a: any) =>
+                        a.types.includes('country')
+                      )
                       country = countryComponent ? countryComponent.short_name : null
                     }
 
@@ -143,7 +145,9 @@ export const createSource = ({
   handler: async () => {
     const externalGroups = await getGroups().then(
       (groups) =>
-        groups.filter((g: any) => g.location_name && g.name && validLinks(g.links)) as Group[]
+        groups.filter(
+          (g: any) => g.location_name && g.name && g.links.length > 0 && validLinks(g.links)
+        ) as Group[]
     )
     const dedupedExternalGroups = await batchDedupe(externalGroups)
 
@@ -158,8 +162,8 @@ export const createSource = ({
 
     await geolocateGroups(add).then((gl) =>
       db.groups.createBatch(
-        gl.map((g : any) => {
-          delete g["external_data"][""] // stop blank columns in sheets choking dynamodb
+        gl.map((g: any) => {
+          delete g['external_data'][''] // stop blank columns in sheets choking dynamodb
           return {
             ...g,
             link_facebook: g.link_facebook || g.links[0].url, //Backwards compatibility
