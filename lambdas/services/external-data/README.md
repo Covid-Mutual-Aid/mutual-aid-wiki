@@ -45,11 +45,13 @@ export const testSource = createSource({
 })
 ```
 
+You then need to expose the source as a lambda function in `handlers.ts` and also in the `functions.yml` file. Once this has been completed, you should be able to trigger it by sending a request to `${API_ENDPOINT}/external_data/trigger/${the-source-id}` replacing API endpoint with the stage you want to trigger (localhost:400, staging endpoint, production endpoint etc) and this will trigger your source.
+
 When creating a source, you must provide an array of test cases; groups that you expect to exist in this resource. The source will run so long as one of these groups are found. This is to prevent malformed data being entered into the database if the shape of the incoming data changes unexpectedly (e.g someone moved the columns in the google sheet by mistake). Around 7-10 test cases are encouraged for redundancy.
 
 ## Helpful utilities
 
-There are some helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. Please use these utilities to construct groups as it makes future schema changes much easier. For example:
+There are some helper functions in `adapters.tsx`. The main two functions that may be useful are `groupConstructor` and `groupConstructorObj`. These functions accept a "mapping" object and map external fields to the ones used by this resource. Please use these utilities to construct groups (if it makes sense for your context) as it makes future schema changes easier. For example:
 
 ```typescript
 //Pass in map object
@@ -104,4 +106,4 @@ The code for this is in `helpers.tsx`. When a group is edited directly on mutual
 
 ## Feedback
 
-Please open an issue/PR or send us an email if you spot issues or opportunities for improvements. We would love to hear from you!
+Please open an issue/PR or send us an email if you spot issues or opportunities for improvement. We would love to hear from you!

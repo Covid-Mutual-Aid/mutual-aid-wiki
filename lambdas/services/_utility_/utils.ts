@@ -35,7 +35,8 @@ export const isSameGroup = <T extends Pick<Group, 'links' | 'name' | 'location_n
   a: T,
   b: T
 ) => {
-  const linkMatch = a.links.filter(({ url }) => b.links.find((l) => url === l.url)).length > 0
+  const linkMatch =
+    a.links.filter(({ url }) => b.links.find((l) => url === l.url)).length === b.links.length
 
   const nameMatch = norm(a.name) === norm(b.name)
   const locationMatch = norm(a.location_name) === norm(b.location_name)

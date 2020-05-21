@@ -11,9 +11,25 @@ getTestData:
   handler: services/external-data/handler.getTestData
   timeout: 250
 
+getReach4Help:
+  handler: services/external-data/handler.getReach4Help
+  timeout: 250
+
 covid19MutualAidGroupsUk:
   handler: services/external-data/handler.covid19MutualAidGroupsUkHandler
   timeout: 250
+
+austrailiaInformalMutualAid:
+  handler: services/external-data/handler.austrailiaInformalMutualAidHandler
+  timeout: 250
+
+esLocalisedResources:
+  handler: services/external-data/handler.esLocalisedResourcesHandler
+  timeout: 250
+
+usCrowdsourcedMAResources:
+  handler: services/external-data/handler.usCrowdsourcedMAResourcesHandler
+
 
 triggerSource:
   handler: services/external-data/handler.triggerSource

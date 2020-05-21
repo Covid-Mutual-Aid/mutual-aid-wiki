@@ -1,4 +1,4 @@
-import { groupConstructor, groupConstructorObj } from './adapters'
+import { groupConstructor, groupConstructorObj, flattenObj } from './adapters'
 
 const labels = ['examplelink', 'examplelink2', 'examplename', 'shouldGoIntoExternalData']
 const exampleRows = [
@@ -48,5 +48,19 @@ describe('groupConstructorObj', () => {
         shouldGoIntoExternalData: 'foo bar',
       },
     })
+  })
+})
+
+describe('Flatten an object', () => {
+  test('A flat object should not change', () => {
+    expect(flattenObj({ one: '1', two: '2' })).toEqual({ one: '1', two: '2' })
+  })
+  test('A nested object should return a flattened one', () => {
+    const nested = { numbers: { one: '1', two: '2' } }
+    expect(flattenObj(nested)).toEqual({ 'numbers.one': '1', 'numbers.two': '2' })
+  })
+  test('A mixed object should be flattened correctly', () => {
+    const nested = { greeting: 'hi', numbers: { one: '1', two: '2' } }
+    expect(flattenObj(nested)).toEqual({ greeting: 'hi', 'numbers.one': '1', 'numbers.two': '2' })
   })
 })
