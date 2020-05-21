@@ -5,7 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "test": "env TESTING=true jest services/**/*.ts",
-    "test:integration": "jest ./tests/*.test.ts",
+    "test:integration": "jest --env=node ./tests/*.test.ts",
     "start": "env OFFLINE=true sls offline",
     "sls": "serverless",
     "backup": "sls invoke --stage dev -f getGroups > groups.json"

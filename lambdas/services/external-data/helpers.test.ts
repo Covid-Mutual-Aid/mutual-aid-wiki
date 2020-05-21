@@ -40,6 +40,11 @@ describe('diff()', () => {
     expect(add.length).toEqual(2)
     expect(remove.length).toEqual(0)
   })
+  it('Should remove groups with non matching urls', () => {
+    const { add, remove } = diff([exGrp('c')], [{ ...inGrp('c'), links: [{ url: 'X' }] }])
+    expect(add.length).toEqual(1)
+    expect(remove.length).toEqual(1)
+  })
 })
 
 describe('Tests if all links in groups.links are not falsy', () => {
