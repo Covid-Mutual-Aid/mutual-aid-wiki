@@ -30,6 +30,9 @@ esLocalisedResources:
 usCrowdsourcedMAResources:
   handler: services/external-data/handler.usCrowdsourcedMAResourcesHandler
 
+mutualAidHubResources:
+  handler: services/external-data/handler.mutualAidHubHandler
+
 
 triggerSource:
   handler: services/external-data/handler.triggerSource
