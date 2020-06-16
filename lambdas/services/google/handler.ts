@@ -19,14 +19,17 @@ export const googlePlaceSuggest = (place: string) =>
 export const googlePlaceDetails = (place_id: string) =>
   axios.get(`${googlePlaceEnpoint}/details/json?place_id=${place_id}&key=${ENV.GOOGLE_API_KEY}`)
 
-export const googleGeoLocate = (location: string) =>
-  axios
+export const googleGeoLocate = async (location: string) => {
+  const escapedLocation = encodeURI(location).replace(/\#/g, "%23")
+  return axios
     .get(
-      `${geocodeEndpoint}/json?address=${encodeURI(location)}&region=uk&key=${ENV.GOOGLE_API_KEY}`
+      `${geocodeEndpoint}/json?address=${escapedLocation}&region=uk&key=${ENV.GOOGLE_API_KEY}`
     )
     .then((x) =>
       x.data.error_message ? Promise.reject(new Error(x.data.error_message)) : x.data.results
-    )
+         )
+
+}
 
 // Lambdas
 // google/placeSuggest
