@@ -439,16 +439,14 @@ const Information = () => {
             </p>
 
             <p data-splitting className="questions" style={{ textAlign: 'center' }}>
-              By <a href="https://tapal.es">Julian Tapales</a>
-              <br />
-              <br />
-              And <a href="https://www.danbeaven.com/">Dan Beaven</a>
+              By <a href="https://tapal.es">Julian Tapales</a> and{' '}
+              <a href="https://www.danbeaven.com/">Dan Beaven</a>
               <br />
               <br />
               With <a href="https://www.linkedin.com/in/tim-cowlishaw-0204a6151/">Tim Cowlishaw</a>
               <br />
               <br />
-              With Design by <a href="https://edcornish.com/">Edward Cornish Studio</a>
+              Design by <a href="https://edcornish.com/">Edward Cornish Studio</a>
               <br />
               <br />
               Illustrations by <a href="https://www.peonygent.com/">Peony Gent</a>
@@ -457,8 +455,8 @@ const Information = () => {
               And help of <a href="https://www.linkedin.com/in/oliviervroom/">Olivier Vroom</a>
               <br />
               <br />
-              With special thanks to Katie K, Rob Morrissey and the Folks at COVID Mutual Aid UK and
-              others we have collaborated with
+              With special thanks to Katie K, Rob Morrissey, Natasha Hicken, Nicole Poor, the folks
+              at COVID Mutual Aid UK and others we have collaborated with
               <br />
               <br />
               <br />
