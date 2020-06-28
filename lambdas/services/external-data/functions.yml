@@ -10,29 +10,56 @@ usaLocalisedResources:
 getTestData:
   handler: services/external-data/handler.getTestData
   timeout: 250
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 getReach4Help:
   handler: services/external-data/handler.getReach4Help
   timeout: 250
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 covid19MutualAidGroupsUk:
   handler: services/external-data/handler.covid19MutualAidGroupsUkHandler
   timeout: 250
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 austrailiaInformalMutualAid:
   handler: services/external-data/handler.austrailiaInformalMutualAidHandler
   timeout: 250
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 esLocalisedResources:
   handler: services/external-data/handler.esLocalisedResourcesHandler
   timeout: 250
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 usCrowdsourcedMAResources:
   handler: services/external-data/handler.usCrowdsourcedMAResourcesHandler
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 mutualAidHubResources:
   handler: services/external-data/handler.mutualAidHubHandler
-
+  events:
+    - schedule:
+        rate: rate(36 hours)
+        enabled: true
 
 triggerSource:
   handler: services/external-data/handler.triggerSource
