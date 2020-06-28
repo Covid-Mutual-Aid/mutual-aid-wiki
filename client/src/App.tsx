@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import Information from './components/Information'
 import EmailAuth from './containers/Authenticate'

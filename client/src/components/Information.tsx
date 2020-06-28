@@ -1,11 +1,11 @@
 import { useLocation, useHistory, Link } from 'react-router-dom'
-import React, { useLayoutEffect, useRef, ReactChildren, ReactChild } from 'react'
+import React, { useLayoutEffect } from 'react'
 import styled from 'styled-components'
 import useInView from 'react-cool-inview'
 
 import { useGroupsList } from '../state/reducers/groups'
-import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
-import { useI18n } from '../contexts/I18nProvider'
+// import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
+// import { useI18n } from '../contexts/I18nProvider'
 import inIframe from '../utils/inIframe'
 
 import info_add from './img/info_add.png'
@@ -23,14 +23,14 @@ const Information = () => {
   const groups = useGroupsList()
   const history = useHistory()
   const { pathname, search } = useLocation()
-  const localizedComponents = useI18n((x) => x.components)
-  const aboutInformation = localizedComponents.about
-  const heroContent = localizedComponents.heroContent
-  const highlightsContent = localizedComponents.highlightsContent
-  const addGroupContent = localizedComponents.addGroupContent
-  const editGroupContent = localizedComponents.editGroupContent
-  const embedMapContent = localizedComponents.embedMapContent
-  const sourcesContent = localizedComponents.sourcesContent
+  // const localizedComponents = useI18n((x) => x.components)
+  // const aboutInformation = localizedComponents.about
+  // const heroContent = localizedComponents.heroContent
+  // const highlightsContent = localizedComponents.highlightsContent
+  // const addGroupContent = localizedComponents.addGroupContent
+  // const editGroupContent = localizedComponents.editGroupContent
+  // const embedMapContent = localizedComponents.embedMapContent
+  // const sourcesContent = localizedComponents.sourcesContent
 
   const { ref: inViewRef, inView } = useInView({
     threshold: 0.3, // Default is 0
@@ -49,7 +49,7 @@ const Information = () => {
       <EdStyles>
         <header>
           <nav>
-            <img className="logo" src={LogoBold} />
+            <img alt="logo" className="logo" src={LogoBold} />
           </nav>
         </header>
         <section className="landingScreen floralWhite">
@@ -335,7 +335,11 @@ const Information = () => {
                 </span>
                 <span className="dimGrey">
                   We are syncing data from a number of community sources as seen below. Get in touch
-                  to add your source, or submit a <a>pull&nbsp;request</a>.
+                  to add your source, or submit a{' '}
+                  <a href="https://github.com/Covid-Mutual-Aid/mutual-aid-wiki">
+                    pull&nbsp;request
+                  </a>
+                  .
                 </span>
               </p>
             </div>
@@ -419,7 +423,8 @@ const Information = () => {
               <br />
               Our email <a href="mailto:info@mutualaid.wik ">info@mutualaid.wiki</a>
               <br />
-              Our source code on <a>github</a>
+              Our source code on{' '}
+              <a href="https://github.com/Covid-Mutual-Aid/mutual-aid-wiki">github</a>
               <br />
               <br />
               With ❤️ Mutual Aid Wiki team
@@ -434,16 +439,27 @@ const Information = () => {
             </p>
 
             <p data-splitting className="questions" style={{ textAlign: 'center' }}>
-              Credit for <a>Julian Tapales</a>
+              By <a href="https://tapal.es">Julian Tapales</a>
               <br />
               <br />
-              Illustrations by <a>Peony Gent</a>
+              And <a href="https://www.danbeaven.com/">Dan Beaven</a>
               <br />
               <br />
-              Design by <a>Edward Cornish Studio</a>
+              With <a href="https://www.linkedin.com/in/tim-cowlishaw-0204a6151/">Tim Cowlishaw</a>
               <br />
               <br />
-              Credit for others <br />
+              With Design by <a href="https://edcornish.com/">Edward Cornish Studio</a>
+              <br />
+              <br />
+              Illustrations by <a href="https://www.peonygent.com/">Peony Gent</a>
+              <br />
+              <br />
+              And help of <a href="https://www.linkedin.com/in/oliviervroom/">Olivier Vroom</a>
+              <br />
+              <br />
+              With special thanks to Katie K, Rob Morrissey and the Folks at COVID Mutual Aid UK and
+              others we have collaborated with
+              <br />
               <br />
               <br />
               <br />
@@ -1075,173 +1091,173 @@ const LandingStyles = styled.div<{ open: boolean }>`
   transition: transform 0.4s;
 `
 
-const Hero = styled.div`
-  position: relative;
-  display: flex;
-  background-color: rgba(0, 0, 0, 0.74);
-  height: calc(24rem + 12vw);
-  justify-content: center;
-  align-items: center;
+// const Hero = styled.div`
+//   position: relative;
+//   display: flex;
+//   background-color: rgba(0, 0, 0, 0.74);
+//   height: calc(24rem + 12vw);
+//   justify-content: center;
+//   align-items: center;
 
-  .map {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-  }
+//   .map {
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     z-index: -1;
+//   }
 
-  .hero-content {
-    width: 30rem;
-    padding: 1rem;
-    color: white;
-  }
+//   .hero-content {
+//     width: 30rem;
+//     padding: 1rem;
+//     color: white;
+//   }
 
-  .buttons a {
-    display: block;
-    margin: 1rem 1rem 0 0;
-  }
+//   .buttons a {
+//     display: block;
+//     margin: 1rem 1rem 0 0;
+//   }
 
-  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
-    height: calc(24rem + 32vh);
-  }
-`
+//   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+//     height: calc(24rem + 32vh);
+//   }
+// `
 
-const Highlight = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
-  background-color: white;
+// const Highlight = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   padding: 4rem 0;
+//   background-color: white;
 
-  .wrapper {
-    justify-content: space-evenly;
-    width: 72rem;
-    display: flex;
-    flex-direction: row;
-    padding: 2rem 0;
+//   .wrapper {
+//     justify-content: space-evenly;
+//     width: 72rem;
+//     display: flex;
+//     flex-direction: row;
+//     padding: 2rem 0;
 
-    div {
-      width: 16rem;
-      padding: 1rem;
+//     div {
+//       width: 16rem;
+//       padding: 1rem;
 
-      p {
-        color: rgb(87, 87, 87);
-      }
-    }
-  }
+//       p {
+//         color: rgb(87, 87, 87);
+//       }
+//     }
+//   }
 
-  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
-    padding: 1rem 0;
-    .wrapper {
-      flex-direction: column;
-      div {
-        width: 100%;
-      }
-    }
-  }
-`
+//   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+//     padding: 1rem 0;
+//     .wrapper {
+//       flex-direction: column;
+//       div {
+//         width: 100%;
+//       }
+//     }
+//   }
+// `
 
-const Feature = styled.div<{ tint: string; full?: boolean }>`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  padding: 4rem 0;
-  background-color: ${(p) => p.tint};
+// const Feature = styled.div<{ tint: string; full?: boolean }>`
+//   position: relative;
+//   display: flex;
+//   justify-content: center;
+//   padding: 4rem 0;
+//   background-color: ${(p) => p.tint};
 
-  .white {
-    color: white;
-  }
+//   .white {
+//     color: white;
+//   }
 
-  .wrapper {
-    padding: 1rem;
-    max-width: 60rem;
-    display: flex;
-    flex-direction: row;
-  }
+//   .wrapper {
+//     padding: 1rem;
+//     max-width: 60rem;
+//     display: flex;
+//     flex-direction: row;
+//   }
 
-  .description {
-    h3 {
-      color: rgb(138, 138, 138);
-    }
-  }
+//   .description {
+//     h3 {
+//       color: rgb(138, 138, 138);
+//     }
+//   }
 
-  .spacer {
-    width: 6rem;
-  }
+//   .spacer {
+//     width: 6rem;
+//   }
 
-  .img {
-    position: relative;
-    height: 20rem;
-    min-width: 30rem;
-  }
+//   .img {
+//     position: relative;
+//     height: 20rem;
+//     min-width: 30rem;
+//   }
 
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-    box-shadow: 0px 0px 22px -9px #959595;
-    border: 1px solid rgb(225, 225, 225);
-    background-size: contain;
-    background-color: transparent;
-    background-repeat: no-repeat;
-  }
+//   img {
+//     width: 100%;
+//     height: auto;
+//     border-radius: 6px;
+//     box-shadow: 0px 0px 22px -9px #959595;
+//     border: 1px solid rgb(225, 225, 225);
+//     background-size: contain;
+//     background-color: transparent;
+//     background-repeat: no-repeat;
+//   }
 
-  .full {
-    flex-wrap: wrap;
+//   .full {
+//     flex-wrap: wrap;
 
-    .img {
-      min-width: 100%;
-    }
-  }
+//     .img {
+//       min-width: 100%;
+//     }
+//   }
 
-  @media (max-width: ${MOBILE_BREAKPOINT + 120 + 'px'}) {
-    code {
-      font-size: 0.72rem;
-    }
-  }
+//   @media (max-width: ${MOBILE_BREAKPOINT + 120 + 'px'}) {
+//     code {
+//       font-size: 0.72rem;
+//     }
+//   }
 
-  @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
-    padding: 1rem;
+//   @media (max-width: ${MOBILE_BREAKPOINT + 'px'}) {
+//     padding: 1rem;
 
-    .wrapper {
-      flex-direction: column;
-    }
+//     .wrapper {
+//       flex-direction: column;
+//     }
 
-    .img {
-      order: 1;
-      min-width: 100%;
-      height: 100%;
-    }
+//     .img {
+//       order: 1;
+//       min-width: 100%;
+//       height: 100%;
+//     }
 
-    .description {
-      order: 2;
-      code {
-        font-size: 1rem;
-      }
-    }
-    .spacer {
-      display: none;
-    }
-  }
-`
+//     .description {
+//       order: 2;
+//       code {
+//         font-size: 1rem;
+//       }
+//     }
+//     .spacer {
+//       display: none;
+//     }
+//   }
+// `
 
-const FAQ = styled.div`
-  padding: 1rem;
-  background-color: white;
-  display: flex;
-  justify-content: center;
+// const FAQ = styled.div`
+//   padding: 1rem;
+//   background-color: white;
+//   display: flex;
+//   justify-content: center;
 
-  .title {
-    text-align: center;
-    padding: 1rem 0;
-  }
-  .wrapper {
-    max-width: 38rem;
-    li {
-      font-size: 1.2rem;
-    }
-  }
-`
+//   .title {
+//     text-align: center;
+//     padding: 1rem 0;
+//   }
+//   .wrapper {
+//     max-width: 38rem;
+//     li {
+//       font-size: 1.2rem;
+//     }
+//   }
+// `
