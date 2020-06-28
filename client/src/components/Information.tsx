@@ -1,7 +1,9 @@
-import { useLocation, useHistory } from 'react-router-dom'
-import React, { useLayoutEffect } from 'react'
+import { useLocation, useHistory, Link } from 'react-router-dom'
+import React, { useLayoutEffect, useRef, ReactChildren, ReactChild } from 'react'
 import styled from 'styled-components'
+import useInView from 'react-cool-inview'
 
+import { useGroupsList } from '../state/reducers/groups'
 import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
 import { useI18n } from '../contexts/I18nProvider'
 import inIframe from '../utils/inIframe'
@@ -18,6 +20,7 @@ import RoundelSimon from './img/SVGs/ROUNDEL_SIMON_3.svg'
 import VolunteerBold from './img/SVGs/VOLUNTEER_BOLD.svg'
 
 const Information = () => {
+  const groups = useGroupsList()
   const history = useHistory()
   const { pathname, search } = useLocation()
   const localizedComponents = useI18n((x) => x.components)
@@ -28,6 +31,12 @@ const Information = () => {
   const editGroupContent = localizedComponents.editGroupContent
   const embedMapContent = localizedComponents.embedMapContent
   const sourcesContent = localizedComponents.sourcesContent
+
+  const { ref: inViewRef, inView } = useInView({
+    threshold: 0.3, // Default is 0
+  })
+
+  useLayoutEffect(() => console.log(inView))
 
   useLayoutEffect(() => {
     if (inIframe() && pathname === '/') {
@@ -48,23 +57,16 @@ const Information = () => {
             <div className="introBox">
               <h1 className="introHead black">
                 <span className="wer">
-                  A <span className="baselineShift">c</span>
-                  <span className="baselineShift">o</span>
-                  <span className="baselineShift">m</span>
-                  <span className="baselineShift">m</span>
-                  <span className="baselineShift">u</span>
-                  <span className="baselineShift">n</span>
-                  <span className="baselineShift">i</span>
-                  <span className="baselineShift">t</span>
-                  <span className="baselineShift">y</span>
-                  <span className="baselineShift">-</span>
-                  <span className="baselineShift">m</span>
-                  <span className="baselineShift">a</span>
-                  <span className="baselineShift">n</span>
-                  <span className="baselineShift">a</span>
-                  <span className="baselineShift">g</span>
-                  <span className="baselineShift">e</span>
-                  <span className="baselineShift">d</span> resource documenting{' '}
+                  A{' '}
+                  {'community-managed'.split('').map((char, i) => (
+                    <span
+                      className="baselineShift baselineShifter"
+                      style={{ animationDelay: i / 10 + 's' }}
+                    >
+                      {char}
+                    </span>
+                  ))}{' '}
+                  resource documenting{' '}
                   <span className="blue">
                     <span className="ticker">3,534</span>&nbsp;mutual aid groups
                   </span>{' '}
@@ -81,9 +83,14 @@ const Information = () => {
 
             <div className="visitMapBox">
               <p className="vis">
-                <a className="visitMap" href="www.edcornish.com">
+                <Link className="visitMap" to="/map">
                   Visit the map
-                </a>
+                </Link>
+              </p>
+              <p className="vis">
+                <Link className="visitMap" to="/map/add-group">
+                  Add a group
+                </Link>
               </p>
             </div>
           </div>
@@ -93,77 +100,43 @@ const Information = () => {
           </div>
         </section>
 
-        <section className="mapPreview blueBackground">
-          <iframe className="map" src="https://mutualaid.wiki/map"></iframe>
+        <section className="mapPreview">
+          <div className="mapOverlay">
+            <Link className={'visitMap viewMap'} to="/map">
+              VISIT THE MAP
+            </Link>
+          </div>
         </section>
 
-        <section className="lightGrey aboutTester iconHolder">
+        <section ref={inViewRef} className="lightGrey aboutTester iconHolder">
           <p data-splitting className="centredText blue">
             About mutual aid wiki
           </p>
 
           <div className="aboutBlock openSourceBlock">
             <h6 className="typoIcon openSourceRoundel">
-              <span className="fadeIn circleText blue">
-                <span className="spinner">O</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">P</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">E</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">N</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">-</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">S</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">O</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">U</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">R</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">C</span>
-              </span>
-              <span className="fadeIn circleText blue">
-                <span className="spinner">E</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">C</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">R</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">U</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">O</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">S</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">-</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">N</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">E</span>
-              </span>
-              <span className="fadeIn circleText dimGrey">
-                <span className="spinner">P</span>
-              </span>
+              {['OPEN-SOURCECRUOS-NEP']
+                .map(
+                  (txt) =>
+                    [txt.split(''), txt.length, 360 / txt.length] as [string[], number, number]
+                )
+                .map(([text, length, degree]) =>
+                  text.map((char, i) => (
+                    <span
+                      className={`fadeIn ${inView && 'fader'} circleText ${
+                        i > length * 0.5 ? 'blue' : 'dimGrey'
+                      }`}
+                      style={{
+                        transform: `rotate( ${i * degree}deg)`,
+                        transitionDelay: i * 40 * 2 + 'ms',
+                      }}
+                    >
+                      <span style={{ transform: `rotate(${-i * degree}deg)` }} className="spinner">
+                        {char}
+                      </span>
+                    </span>
+                  ))
+                )}
             </h6>
 
             <p className="aboutText dimGrey openSourceText">
@@ -175,25 +148,45 @@ const Information = () => {
           <div className="aboutBlock">
             <h6 className="typoIcon">
               <span className="dimGrey">
-                <span className="fadeIn">
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 2 + 'ms',
+                  }}
+                >
                   c<br />
                 </span>
-                <span className="fadeIn">
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 3 + 'ms',
+                  }}
+                >
                   com&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c
                   <br />
                 </span>
-                <span className="fadeIn">
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 4 + 'ms',
+                  }}
+                >
                   commu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cre
                   <br />
                 </span>
-                <span className="fadeIn">
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 5 + 'ms',
+                  }}
+                >
                   communi&nbsp;&nbsp;&nbsp;creat
                   <br />
                 </span>
               </span>
 
               <span className="blue">
-                <span className="fadeIn">community&nbsp;created</span>
+                <span className={`fadeIn ${inView && 'fader'}`}>community&nbsp;created</span>
               </span>
             </h6>
 
@@ -207,32 +200,59 @@ const Information = () => {
           <div id="communities" className="aboutBlock">
             <h6 className="typoIcon">
               <span className="dimGrey">
-                <span className="fadeIn">
-                  &nbsp;&nbsp;&nbsp;1234
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 2 + 'ms',
+                  }}
+                >
+                  &nbsp;&nbsp;&nbsp;{groups.length - 3}
                   <br />
                 </span>
-                <span className="fadeIn">
-                  &nbsp;&nbsp;1235
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 3 + 'ms',
+                  }}
+                >
+                  &nbsp;&nbsp;{groups.length - 2}
                   <br />
                 </span>
-                <span className="fadeIn">
-                  &nbsp;1236
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 4 + 'ms',
+                  }}
+                >
+                  &nbsp;{groups.length - 1}
                   <br />
                 </span>
               </span>
 
               <span className="blue">
-                <span className="fadeIn">
-                  1237
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 5 + 'ms',
+                  }}
+                >
+                  {groups.length}
                   <br />
                 </span>
-                <span className="fadeIn">communities</span>
+                <span
+                  className={`fadeIn ${inView && 'fader'}`}
+                  style={{
+                    transitionDelay: 220 * 6 + 'ms',
+                  }}
+                >
+                  communities
+                </span>
               </span>
             </h6>
 
             <p className="aboutText dimGrey">
-              This resource currently documents 3537 groups from around the world, with new groups
-              being added daily. Please get in touch if you would like to sync your data.
+              This resource currently documents {groups.length} groups from around the world, with
+              new groups being added daily. Please get in touch if you would like to sync your data.
             </p>
           </div>
         </section>
@@ -284,31 +304,6 @@ const Information = () => {
             <div className="textContainer">
               <p className="demoText">
                 <span className="blue">
-                  Sync your data
-                  <br />
-                </span>
-                <span className="dimGrey">
-                  We are syncing data from a number of community sources as seen below. Get in touch
-                  to add your source, or submit a <a>pull&nbsp;request</a>.
-                </span>
-              </p>
-            </div>
-
-            <div className="screebgrabContainer">
-              <iframe
-                title="Sources"
-                className="screengrab"
-                src="https://airtable.com/embed/shrgJ4OdI7KBMWVqj?backgroundColor=green"
-                frameBorder="0"
-                width="100%"
-                height="320"
-                style={{ background: 'transparent; border: 1px solid #ccc' }}
-              ></iframe>
-            </div>
-
-            <div className="textContainer">
-              <p className="demoText">
-                <span className="blue">
                   Embed this map
                   <br />
                 </span>
@@ -331,76 +326,105 @@ const Information = () => {
             <div className="screebgrabContainer">
               <img alt="" className="screengrab" src={info_embed} />
             </div>
+
+            <div className="textContainer">
+              <p className="demoText">
+                <span className="blue">
+                  Sync your data
+                  <br />
+                </span>
+                <span className="dimGrey">
+                  We are syncing data from a number of community sources as seen below. Get in touch
+                  to add your source, or submit a <a>pull&nbsp;request</a>.
+                </span>
+              </p>
+            </div>
+
+            <div style={{ width: '100%' }} className="screebgrabContainer">
+              <iframe
+                title="Sources"
+                className="screengrab"
+                src="https://airtable.com/embed/shrgJ4OdI7KBMWVqj?backgroundColor=green"
+                frameBorder="0"
+                width="100%"
+                height="540"
+                style={{ background: 'transparent; border: 1px solid #ccc', maxWidth: '100%' }}
+              ></iframe>
+            </div>
           </div>
         </section>
 
-        <section className="iconHolder blackBackground">
+        <section className="blackBackground">
           <div className="roundelContainer">
             <img alt="" className="roundel" id="roundel1" src={Roundel} />
             <img alt="" className="roundel" id="roundel2" src={RoundelSimon} />
           </div>
         </section>
 
-        <section className="FAQ">
-          <p data-splitting className="centredText blue">
-            F.A.Q.
-          </p>
+        <section className="FAQ lightGrey">
+          <div className="faq-content">
+            <p data-splitting className="centredText blue">
+              F.A.Q.
+            </p>
 
-          <p className="dimGrey questions">
-            <span className="blue">Can I edit my group info?</span>
-            <br />
-            Yes! Find your group in the sidebar, click the icon on the top right corner and select
-            edit group from the dropdown. Submit your email and check your inbox for further
-            instructions 🙂.
-            <br />
-            <br />
-            <span className="blue">Can I report a group?</span>
-            <br />
-            Yes, click the icon on the top right corner and select report group from the dropdown.
-            Once you have completed the form, we will review your report and remove the group if we
-            deem it appropriate. We will usually remove the group if it is a link to an individual,
-            spam or promotional, no longer accesible or spreading hate speech/misinformation.
-            <br />
-            <br />
-            <span className="blue">Is my personal data safe?</span>
-            <br />
-            While your group information is public, the email addresses you provide are not. We care
-            a lot about privacy and will not disclose this without your written consent.
-            <br />
-            <br />
-            <span className="blue">Can you help me find my group?</span>
-            <br />
-            If you send us an email we will do our best to help, but we hope you find this easier
-            after the recent redesign!
-            <br />
-            <br />
-            <span className="blue">Why can't I add more information to my group?</span>
-            <br />
-            We are working on this and more. If there is a feature you would really like, please
-            email us or create an issue on github
-            <br />
-            <br />
-            <span className="blue">Something is broken...</span>
-            <br />
-            Oops, sorry about this. The project is quite young and this does happen from time to
-            time. Would you kindly send us an email to let us know or create an issue?
-            <br />
-            <br />
-            <span className="blue">Who is behind this?</span>
-            <br />
-            We are an open source, volunteer run group from different countries. We also part of the
-            technical team at covidmutualaid.org. Get in touch if you would like to work with us!
-            <br />
-            <br />
-            Here is some information you may find useful:
-            <br />
-            Our email <a href="mailto:info@mutualaid.wik ">info@mutualaid.wiki</a>
-            <br />
-            Our source code on <a>github</a>
-            <br />
-            <br />
-            With ❤️ Mutual Aid Wiki team
-          </p>
+            <p className="dimGrey questions">
+              <span className="blue">Can I edit my group info?</span>
+              <br />
+              Yes! Find your group in the sidebar, click the icon on the top right corner and select
+              edit group from the dropdown. Submit your email and check your inbox for further
+              instructions 🙂.
+              <br />
+              <br />
+              <span className="blue">Can I report a group?</span>
+              <br />
+              Yes, click the icon on the top right corner and select report group from the dropdown.
+              Once you have completed the form, we will review your report and remove the group if
+              we deem it appropriate. We will usually remove the group if it is a link to an
+              individual, spam or promotional, no longer accesible or spreading hate
+              speech/misinformation.
+              <br />
+              <br />
+              <span className="blue">Is my personal data safe?</span>
+              <br />
+              While your group information is public, the email addresses you provide are not. We
+              care a lot about privacy and will not disclose this without your written consent.
+              <br />
+              <br />
+              <span className="blue">Can you help me find my group?</span>
+              <br />
+              If you send us an email we will do our best to help, but we hope you find this easier
+              after the recent redesign!
+              <br />
+              <br />
+              <span className="blue">Why can't I add more information to my group?</span>
+              <br />
+              We are working on this and more. If there is a feature you would really like, please
+              email us or create an issue on github
+              <br />
+              <br />
+              <span className="blue">Something is broken...</span>
+              <br />
+              Oops, sorry about this. The project is quite young and this does happen from time to
+              time. Would you kindly send us an email to let us know or create an issue?
+              <br />
+              <br />
+              <span className="blue">Who is behind this?</span>
+              <br />
+              We are an open source, volunteer run group from different countries. We also part of
+              the technical team at covidmutualaid.org. Get in touch if you would like to work with
+              us!
+              <br />
+              <br />
+              Here is some information you may find useful:
+              <br />
+              Our email <a href="mailto:info@mutualaid.wik ">info@mutualaid.wiki</a>
+              <br />
+              Our source code on <a>github</a>
+              <br />
+              <br />
+              With ❤️ Mutual Aid Wiki team
+            </p>
+          </div>
         </section>
 
         <section className="tanBackground" style={{ height: '100%' }}>
@@ -409,7 +433,7 @@ const Information = () => {
               Website Credits
             </p>
 
-            <p data-splitting className="questions" style={{ height: '100%' }}>
+            <p data-splitting className="questions" style={{ textAlign: 'center' }}>
               Credit for <a>Julian Tapales</a>
               <br />
               <br />
@@ -499,25 +523,27 @@ const Information = () => {
 export default Information
 
 const EdStyles = styled.div`
+  margin: 0;
+  font-family: sans-serif;
+  font-weight: 400;
+  font-style: normal;
+
+  * {
+    box-sizing: content-box;
+  }
+
   section {
+    box-sizing: border-box;
     display: flex;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     margin: auto;
     flex-flow: row wrap;
     justify-content: space-evenly;
     overflow: hidden;
   }
 
-  body {
-    margin: 0;
-    font-family: sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-
   /* T Y P O G R A P H Y */
-
   h1 {
     font-family: 'Gap-Sans', 'Helvetica Neue', sans-serif;
     font-weight: lighter;
@@ -802,9 +828,9 @@ const EdStyles = styled.div`
   .volunteerContainer {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     margin: auto;
-    background-image: url({VolunteerBold});
+    background-image: url(${VolunteerBold});
     background-repeat: no-repeat;
     background-position: center;
     background-size: 90%;
@@ -830,6 +856,26 @@ const EdStyles = styled.div`
     width: 100%;
     padding: 20px;
     border: 0px;
+  }
+
+  .mapPreview {
+    border: 20px solid rgb(0, 0, 255);
+  }
+
+  .mapOverlay {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 255, 0.6);
+    color: white;
+  }
+
+  .viewMap {
+    color: white !important;
+    font-size: 1.8rem;
   }
 
   .works {
@@ -884,10 +930,14 @@ const EdStyles = styled.div`
   }
 
   .FAQ {
+    display: flex;
+    justify-content: center;
+  }
+
+  .faq-content {
     position: relative;
     max-width: 800px;
     height: 100%;
-    margin: auto;
   }
 
   .questions {
