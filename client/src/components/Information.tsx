@@ -68,7 +68,7 @@ const Information = () => {
                   ))}{' '}
                   resource documenting{' '}
                   <span className="blue">
-                    <span className="ticker">3,534</span>&nbsp;mutual aid groups
+                    <span className="ticker">{groups.length}</span>&nbsp;mutual aid groups
                   </span>{' '}
                   throughout the&nbsp;world.
                 </span>
