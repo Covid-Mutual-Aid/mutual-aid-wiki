@@ -138,7 +138,7 @@ const Information = () => {
                   text.map((char, i) => (
                     <span
                       className={`fadeIn ${inView && 'fader'} circleText ${
-                        i > length * 0.5 ? 'blue' : 'dimGrey'
+                        i > length * 0.5 ? 'dimGrey' : 'blue'
                       }`}
                       style={{
                         transform: `rotate( ${i * degree}deg)`,
@@ -447,11 +447,10 @@ const Information = () => {
         </section>
 
         <section className="tanBackground" style={{ height: '100%' }}>
+          <p data-splitting="" className="centredText blue">
+            Website Credits
+          </p>
           <div className="FAQ">
-            <p data-splitting="" className="centredText blue">
-              Website Credits
-            </p>
-
             <p data-splitting="" className="questions" style={{ textAlign: 'center' }}>
               By <a href="https://tapal.es">Julian Tapales</a> and{' '}
               <a href="https://www.danbeaven.com/">Dan Beaven</a>
@@ -564,7 +563,7 @@ const EdStyles = styled.div`
     box-sizing: border-box;
     display: flex;
     width: 100vw;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     margin: auto;
     flex-flow: row wrap;
     justify-content: space-evenly;
@@ -625,6 +624,7 @@ const EdStyles = styled.div`
   .landingScreen {
     display: flex;
     flex-flow: row wrap;
+    height: 100vh;
   }
 
   .intro {
@@ -839,6 +839,7 @@ const EdStyles = styled.div`
     height: 350px;
     position: relative;
     margin: auto;
+    margin: 24vh;
   }
 
   .roundel {
@@ -856,7 +857,7 @@ const EdStyles = styled.div`
   .volunteerContainer {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 60vh;
     margin: auto;
     background-image: url(${VolunteerBold});
     background-repeat: no-repeat;
@@ -871,7 +872,6 @@ const EdStyles = styled.div`
     /*     font-weight: bolder; */
 
     font-family: neue-haas-unica, sans-serif;
-    position: absolute;
     text-transform: uppercase;
     width: 100%;
     text-align: center;
@@ -893,7 +893,7 @@ const EdStyles = styled.div`
   .mapOverlay {
     position: relative;
     width: 100%;
-    height: calc(100vh - 40px);
+    height: calc(60vh - 40px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -969,7 +969,7 @@ const EdStyles = styled.div`
   }
 
   .questions {
-    margin: 150px 30px 100px 30px;
+    margin: 30px 30px 100px 30px;
   }
 
   .aboutText {
@@ -979,7 +979,7 @@ const EdStyles = styled.div`
   .aboutBlock {
     width: 28%;
     height: 280px;
-    margin-top: 35vh;
+    margin: 12vh 0;
     text-align: center;
   }
 
