@@ -21,6 +21,7 @@
     "react-select": "^3.0.8",
     "react-spring": "^8.0.27",
     "react-textarea-autosize": "^7.1.2",
+    "splitting": "^1.0.6",
     "styled-components": "^5.0.1",
     "typescript": "~3.7.2",
     "whatwg-fetch": "^3.0.0"

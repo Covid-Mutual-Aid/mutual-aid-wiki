@@ -1,7 +1,11 @@
 import { useLocation, useHistory, Link } from 'react-router-dom'
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useEffect } from 'react'
 import styled from 'styled-components'
 import useInView from 'react-cool-inview'
+
+import 'splitting/dist/splitting.css'
+import 'splitting/dist/splitting-cells.css'
+import Splitting from 'splitting'
 
 import { useGroupsList } from '../state/reducers/groups'
 // import { MOBILE_BREAKPOINT } from '../utils/CONSTANTS'
@@ -36,7 +40,17 @@ const Information = () => {
     threshold: 0.3, // Default is 0
   })
 
-  useLayoutEffect(() => console.log(inView))
+  useEffect(() => {
+    Splitting()
+    const baselineWonky = (document as Document).querySelectorAll('.char')
+
+    baselineWonky.forEach((baselineWonky, index) => {
+      const random_1 = (min: number, max: number) =>
+        Math.floor(Math.random() * (max - min + 1) + min)
+      const randomNumber = random_1(-1, 1)
+      ;(baselineWonky as any).style.verticalAlign = randomNumber + 'px'
+    })
+  }, [])
 
   useLayoutEffect(() => {
     if (inIframe() && pathname === '/') {
@@ -109,7 +123,7 @@ const Information = () => {
         </section>
 
         <section ref={inViewRef} className="lightGrey aboutTester iconHolder">
-          <p data-splitting className="centredText blue">
+          <p data-splitting="" className="centredText blue">
             About mutual aid wiki
           </p>
 
@@ -262,7 +276,7 @@ const Information = () => {
         </section>
 
         <section className="lightGrey works">
-          <p data-splitting className="centredText blue">
+          <p data-splitting="" className="centredText blue">
             HOW IT WORKS
           </p>
 
@@ -367,7 +381,7 @@ const Information = () => {
 
         <section className="FAQ lightGrey">
           <div className="faq-content">
-            <p data-splitting className="centredText blue">
+            <p data-splitting="" className="centredText blue">
               F.A.Q.
             </p>
 
@@ -434,11 +448,11 @@ const Information = () => {
 
         <section className="tanBackground" style={{ height: '100%' }}>
           <div className="FAQ">
-            <p data-splitting className="centredText blue">
+            <p data-splitting="" className="centredText blue">
               Website Credits
             </p>
 
-            <p data-splitting className="questions" style={{ textAlign: 'center' }}>
+            <p data-splitting="" className="questions" style={{ textAlign: 'center' }}>
               By <a href="https://tapal.es">Julian Tapales</a> and{' '}
               <a href="https://www.danbeaven.com/">Dan Beaven</a>
               <br />
