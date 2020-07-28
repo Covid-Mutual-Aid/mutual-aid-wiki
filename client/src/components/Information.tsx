@@ -862,7 +862,11 @@ const EdStyles = styled.div`
     background-image: url(${VolunteerBold});
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 90%;
+    /* background-size: 90%; */
+
+    background-origin: content-box;
+    padding: 4rem;
+    box-sizing: border-box;
 
     /*background-color: red;*/
   }
@@ -915,7 +919,7 @@ const EdStyles = styled.div`
     flex-flow: row wrap;
     justify-content: space-between;
     max-width: 800px;
-    margin: 150px 20px 0px 20px;
+    margin: 30px 20px 0px 20px;
     padding: 20px;
   }
 
@@ -1080,7 +1084,7 @@ const EdStyles = styled.div`
     }
 
     .openSourceBlock {
-      margin-top: 150px;
+      margin-top: 30px;
     }
 
     .openSourceRoundel {
