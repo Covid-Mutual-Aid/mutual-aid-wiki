@@ -1,0 +1,536 @@
+@font-face {
+    font-family: "Gap-Sans";
+    src: url("./Assets/Fonts/gapsansbold-webfont.eot"),
+    url("./Assets/Fonts/gapsansbold-webfont.woff"),
+    url("./Assets/Fonts/gapsansbold-webfont.woff2");
+}
+
+section {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    font-weight: 400;
+    font-style: normal
+}
+
+/* T Y P O G R A P H Y */
+
+h1{
+    font-family: "Gap-Sans", "Helvetica Neue", sans-serif;
+    font-weight: lighter;
+    text-align: left;
+    font-size: 3vw;
+    line-height: 2.75vw;
+    letter-spacing: 0.1vw;
+}
+
+p {
+    font-family: neue-haas-unica, "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    line-height: 23px;
+    text-align: left;
+}
+
+p a{
+    color: black;
+    text-decoration: none;
+}
+
+p a:hover {
+    color: blue;
+}
+
+
+h6 {
+/*     font-family: "Compagnon-Roman", Courier, monospace; */
+  font-family: Courier, monospace;
+  font-weight: lighter;
+    letter-spacing: 0.5em;
+    text-align: left;
+    font-size: 1em;
+    line-height: 22px;
+    text-transform: uppercase;
+
+    display: inline-block;
+    margin: auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+.italics {
+    font-style: italic;
+}
+
+
+
+
+/* S E C T I O N S */
+
+.landingScreen {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.intro {
+}
+
+.introContainer {
+    width: 35vw;
+    margin: auto 0 auto 0;
+    padding-left: 30px;
+}
+
+.introHead{
+    padding-bottom: 25px;
+}
+
+.introP {
+    max-width: 350px;
+    margin-bottom: 50px;
+    padding-right: 50px;
+}
+
+.homepageImage {
+    mix-blend-mode: multiply;
+    margin: auto 0px auto 0px;
+}
+
+.PG {
+    max-width: 52vw;
+    max-height: 100vh;
+}
+
+
+
+.scaler {
+    transform: scale(2);
+    transform-origin: -10px -0px;
+    transition: transform(0.5s);
+}
+
+#os {
+    margin-top: 100px;
+}
+
+.iconBox {
+    max-width: 400px;
+    display: block;
+    margin: auto;
+    padding: 0 30px 0 30px;
+}
+
+/* C O L O U R S */
+.dimGrey {
+    color: dimgrey;
+}
+
+.midGrey {
+    color: #969696;
+}
+
+.black {
+    color: black;
+}
+
+.blue {
+    color: blue;
+}
+
+.blueBackground {
+    background-color: blue;
+}
+
+.lightGrey {
+    color: whitesmoke;
+    background-color: whitesmoke;
+}
+
+.blackBackground {
+    background-color: black;
+}
+
+.white {
+    color: white;
+}
+
+.floralWhite {
+    background-color: floralWhite;
+}
+
+.red {
+    color: red;
+    background-color: red;
+}
+
+.redBackground {
+    background-color: red;
+}
+
+.tanBackground {
+    background-color: tan;
+}
+
+/* Starting opacity for all text */
+.fadeIn {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Added to each individual span by the Javascript */
+.fader {
+    opacity: 1;
+    transition: opacity 0.1s;
+}
+
+/* Sets the offset for the rotation of the characters in OPEN-SOURCE */
+.circleText {
+    position: absolute;
+    transform-origin: 0.65em 70px;
+}
+
+/* Positions the OPEN-SOURCE back in the centre of its container */
+.openSourceRoundel{
+    transform: translateY(-20px);
+}
+
+/* Keeps all the letters in OPEN-SOURCE parrallel when they're rotated back by the Javascript */
+.spinner {
+    position: absolute; 
+}
+
+.shearLinks {
+    transform: skew(-20deg, 0deg);
+}
+
+
+header {
+  padding: 20px 0px 20px 0px;
+  margin-left: 2.5vw;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 95vw;
+
+  z-index: 10;
+}
+
+.logo {
+    padding: 10px 0px 0px 10px;
+    max-width: 65px;
+}
+
+/* A N I M A T I O N  K E Y F R A M E S*/
+
+@keyframes roundelSpinner {
+    0% {transform: rotate(0deg);}
+    
+    100% {transform: rotate(-360deg);
+    }
+}
+
+
+@keyframes faceSpinner {
+    0% {transform: rotate(-15deg);
+    }
+    
+    25% {transform: rotate(15deg);
+    }
+
+    100% {transform: rotate(-15deg);
+    }
+}
+
+
+@keyframes baselineShifter {
+    50% {   vertical-align: 0px;
+/*         color: dimgrey; */
+      color: black;
+    }
+    
+    55% {   vertical-align: 15px;
+        color: blue;
+    }
+    
+    60% {  vertical-align: 0px;
+/*         color: dimgrey; */
+      color: black;
+    }
+}
+
+
+.baselineShifter{
+    animation: baselineShifter 3s infinite;
+}
+
+.wer {
+    vertical-align: -15px;
+}
+
+
+#roundel2 {
+    animation: roundelSpinner 30s infinite linear;
+}
+
+#roundel1 {
+    animation: faceSpinner 5s infinite;
+}
+
+.roundelContainer {
+    width: 350px;
+    height: 350px;
+    position: relative;
+    margin: auto;
+}
+
+.roundel {
+    position: absolute;
+}
+
+.volunteer {
+    position: relative;
+    display: inline-block; 
+    background-color: greenyellow;
+    text-align: center;
+    margin-bottom: -5px;
+}
+
+.volunteerContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background-image: url("./assets/SVGs/VOLUNTEER_BOLD.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 90%;
+
+    /*background-color: red;*/
+}
+
+.centredText {
+/*     font-family: "Gap-Sans", "Helvetica", sans-serif; */
+/*     font-weight: bolder; */
+  
+    font-family: neue-haas-unica, sans-serif;
+    position: absolute;
+    text-transform: uppercase;
+    width: 100%;
+    text-align: center;
+    margin: 50px auto 50px auto;
+    letter-spacing: 2.5px;
+}
+
+.map {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    border: 0px;
+}
+
+.works {
+    height: 100%;
+}
+
+.howItWorks {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 150px 20px 0px 20px;
+    padding: 20px;
+}
+
+.textContainer {
+    max-width: 400px;
+    margin-bottom: 20px; 
+}
+
+.screengrab {
+    display: inline-block;
+    max-width: 400px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 255, 0.5);
+    border-radius: 5px;
+    margin: 0px 0px 75px 0px;
+}
+
+.demoText {
+    padding-right: 50px;
+}
+
+#iframetext {
+    font-family: courier, monospace;
+    font-weight: lighter;
+    margin-top: 0px;
+}
+
+
+.visitMap {
+    color: blue;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    transition: 0.25s;
+    padding: 20px 20px 20px 0px;
+    /*margin: -20px;*/
+}
+
+.visitMap:hover {
+    margin-left: 10px; 
+    transition: 0.25s;
+    font-style: italic;
+}
+
+.FAQ {
+
+    position: relative;
+    max-width: 800px;
+    height: 100%;
+    margin: auto;
+}
+
+.questions {
+    margin: 150px 30px 100px 30px;
+}
+
+.aboutText{
+    text-align: center;
+}
+
+.aboutBlock {
+    width: 28%;
+    height: 280px;
+    margin-top: 35vh;
+    text-align: center;
+}
+
+
+.typoIcon {
+    margin-bottom: 20px;
+}
+
+.openSourceText {
+    margin-top: 122.5px;
+}
+
+
+
+/*  M O B I L E  A L T E R A T I O N S */
+
+
+@media (max-width: 1100px) {
+
+    .aboutBlock {
+        width: 45%;
+        margin-top: 20vh;
+    }
+
+    #communities {
+        margin-top: -100px;
+    }
+}
+
+
+
+@media (max-width: 900px) { 
+
+    h1 {
+        font-size: 25px;
+        line-height: 18px;
+        letter-spacing: 1.5px;
+    }
+
+    p {
+        font-size: 15px;
+        line-height: 22px;
+    }
+
+    h6 {
+        font-size: 15px;
+        line-height: 20px;
+
+    }
+
+    .introContainer {
+        margin-top: 75px;
+        margin-bottom: 25px;
+        width: 80%;
+        height: 100%;
+        padding-left: 10px;
+    }
+
+    .landingScreen {
+        height: 100%;
+    }
+
+    .map {
+        padding: 10px;
+    }
+
+    .roundelContainer {
+        width: 200px;
+        height: 200px;
+    }
+
+
+    .introP {
+        max-width: 500px;
+        margin-bottom: 25px;
+    }
+
+    .PG {
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+
+    .openSourceText {
+        margin-top: 110px;
+    }
+
+    .logo {
+        width: 50px;
+    }
+
+  .screengrab {
+    max-width: 100%;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+    .aboutTester {
+        height: 100%;
+    }
+
+    .aboutBlock {
+        width: 100%;
+        margin: 0px 50px 0px 50px;
+    }
+
+
+    #communities {
+        margin-top: 0px;
+    }
+
+    .openSourceBlock {
+        margin-top: 150px;
+    }
+
+     .openSourceRoundel{
+    transform: translateY(-30px);
+    }
+
+}
+
