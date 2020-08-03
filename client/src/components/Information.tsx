@@ -1,5 +1,5 @@
-import { useLocation, useHistory, Link } from 'react-router-dom'
 import React, { useLayoutEffect, useEffect } from 'react'
+import { useLocation, useHistory, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import useInView from 'react-cool-inview'
 
@@ -22,6 +22,7 @@ import Roundel from './img/SVGs/MAW_ROUNDEL_1.svg'
 import Smiley from './img/SVGs/MAW_SMILEY.svg'
 import RoundelSimon from './img/SVGs/ROUNDEL_SIMON_3.svg'
 import VolunteerBold from './img/SVGs/VOLUNTEER_BOLD.svg'
+import isIosSafari from '../utils/isIosSafari'
 
 const Information = () => {
   const groups = useGroupsList()
@@ -60,67 +61,78 @@ const Information = () => {
 
   return (
     <LandingStyles open={pathname === '/'}>
+      {isIosSafari() && (
+        <span>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </span>
+      )}
       <EdStyles>
-        <header>
-          <nav>
-            <img alt="logo" className="logo" src={LogoBold} />
-          </nav>
-        </header>
-        <section className="landingScreen floralWhite">
-          <div className="introContainer">
-            <div className="introBox">
-              <h1 className="introHead black">
-                <span className="wer">
-                  A{' '}
-                  {'community-managed'.split('').map((char, i) => (
-                    <span
-                      className="baselineShift baselineShifter"
-                      style={{ animationDelay: i / 10 + 's' }}
-                    >
-                      {char}
-                    </span>
-                  ))}{' '}
-                  resource documenting{' '}
-                  <span className="blue">
-                    <span className="ticker">{groups.length}</span>&nbsp;mutual aid groups
-                  </span>{' '}
-                  throughout the&nbsp;world.
-                </span>
-              </h1>
-            </div>
+        <section
+          style={{ justifyContent: 'space-between', height: 'auto' }}
+          className="landingScreen"
+        >
+          <div className="banner banner-left">
+            <div className="introContainer">
+              <img alt="logo" className="logo" src={LogoBold} />
+              <div className="introBox">
+                <h1 className="introHead black">
+                  <span className="wer">
+                    A{' '}
+                    {'community-managed'.split('').map((char, i) => (
+                      <span
+                        className="baselineShift baselineShifter"
+                        style={{ animationDelay: i / 10 + 's' }}
+                      >
+                        {char}
+                      </span>
+                    ))}{' '}
+                    resource documenting{' '}
+                    <span className="blue">
+                      <span className="ticker">{groups.length}</span>&nbsp;mutual aid groups
+                    </span>{' '}
+                    throughout the&nbsp;world.
+                  </span>
+                </h1>
+              </div>
 
-            <p className="introP dimGrey">
-              Created to enable individuals to connect with their mutual aid communities and to
-              enable mutual aid communities find each other, share approaches and support
-              one&nbsp;another.
-            </p>
+              <p className="introP dimGrey">
+                Created to enable individuals to connect with their mutual aid communities and to
+                enable mutual aid communities find each other, share approaches and support
+                one&nbsp;another.
+              </p>
 
-            <div className="visitMapBox">
-              <p className="vis">
-                <Link className="visitMap" to="/map">
-                  Visit the map
-                </Link>
-              </p>
-              <p className="vis">
-                <Link className="visitMap" to="/map/add-group">
-                  Add a group
-                </Link>
-              </p>
+              <div className="visitMapBox">
+                <p className="vis">
+                  <Link className="visitMap" to="/map">
+                    Find a group
+                  </Link>
+                </p>
+                <p className="vis">
+                  <Link style={{ color: 'black' }} className="visitMap" to="/map/add-group">
+                    Add a group
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
-
-          <div className="homepageImage">
-            <img alt="" className="PG" src={peony} />
+          <div className="banner banner-right floralWhite">
+            <div className="homepageImage">
+              <img alt="" className="PG" src={peony} />
+            </div>
           </div>
         </section>
 
-        <section className="mapPreview">
-          <div className="mapOverlay">
-            <Link className={'visitMap viewMap'} to="/map">
-              VISIT THE MAP
-            </Link>
-          </div>
-        </section>
+        <Link style={{ padding: 0 }} className={'visitMap viewMap'} to="/map">
+          <section className="mapPreview">
+            <div className="mapOverlay">
+              <h1>Find a group</h1>
+            </div>
+          </section>
+        </Link>
 
         <section ref={inViewRef} className="lightGrey aboutTester iconHolder">
           <p data-splitting="" className="centredText blue">
@@ -263,7 +275,6 @@ const Information = () => {
                 </span>
               </span>
             </h6>
-
             <p className="aboutText dimGrey">
               This resource currently documents {groups.length} groups from around the world, with
               new groups being added daily. Please get in touch if you would like to sync your data.
@@ -451,7 +462,7 @@ const Information = () => {
             Website Credits
           </p>
           <div className="FAQ">
-            <p data-splitting="" className="questions" style={{ textAlign: 'center' }}>
+            <p className="questions" style={{ textAlign: 'center', maxWidth: '500px' }}>
               By <a href="https://tapal.es">Julian Tapales</a> and{' '}
               <a href="https://www.danbeaven.com/">Dan Beaven</a>
               <br />
@@ -625,6 +636,7 @@ const EdStyles = styled.div`
     display: flex;
     flex-flow: row wrap;
     height: 100vh;
+    background-color: white;
   }
 
   .intro {
@@ -648,12 +660,14 @@ const EdStyles = styled.div`
 
   .homepageImage {
     mix-blend-mode: multiply;
-    margin: auto 0px auto 0px;
+    width: 60vw;
+    display: flex;
+    justify-content: center;
   }
 
   .PG {
-    max-width: 52vw;
-    max-height: 100vh;
+    max-width: 50vw;
+    height: auto;
   }
 
   .scaler {
@@ -671,6 +685,22 @@ const EdStyles = styled.div`
     display: block;
     margin: auto;
     padding: 0 30px 0 30px;
+  }
+
+  .visitMapBox {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .banner {
+    padding: 4rem 0;
+  }
+
+  .banner-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
 
   /* C O L O U R S */
@@ -757,6 +787,7 @@ const EdStyles = styled.div`
   }
 
   header {
+    margin-top: ${isIosSafari() ? '6rem' : '0'};
     padding: 20px 0px 20px 0px;
     margin-left: 2.5vw;
     overflow: hidden;
@@ -769,8 +800,8 @@ const EdStyles = styled.div`
   }
 
   .logo {
-    padding: 10px 0px 0px 10px;
     max-width: 65px;
+    padding-top: 2rem;
   }
 
   /* A N I M A T I O N  K E Y F R A M E S*/
@@ -839,7 +870,7 @@ const EdStyles = styled.div`
     height: 350px;
     position: relative;
     margin: auto;
-    margin: 24vh;
+    margin: 24vw;
   }
 
   .roundel {
@@ -891,7 +922,7 @@ const EdStyles = styled.div`
   }
 
   .mapPreview {
-    border: 20px solid rgb(0, 0, 255);
+    /* border: 20px solid rgb(0, 0, 255); */
   }
 
   .mapOverlay {
@@ -948,15 +979,14 @@ const EdStyles = styled.div`
 
   .visitMap {
     color: blue;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
+    /* text-transform: uppercase; */
+    letter-spacing: 0.5px;
     transition: 0.25s;
     padding: 20px 20px 20px 0px;
     /*margin: -20px;*/
   }
 
   .visitMap:hover {
-    margin-left: 10px;
     transition: 0.25s;
     font-style: italic;
   }
@@ -1006,13 +1036,15 @@ const EdStyles = styled.div`
     #communities {
       margin-top: -100px;
     }
+    .banner {
+      padding-top: 0rem;
+    }
   }
 
   @media (max-width: 900px) {
     h1 {
       font-size: 25px;
       line-height: 18px;
-      letter-spacing: 1.5px;
     }
 
     p {
@@ -1026,11 +1058,11 @@ const EdStyles = styled.div`
     }
 
     .introContainer {
-      margin-top: 75px;
+      margin-top: 42px;
       margin-bottom: 25px;
       width: 80%;
       height: 100%;
-      padding-left: 10px;
+      padding-left: 20px;
     }
 
     .landingScreen {
@@ -1052,8 +1084,7 @@ const EdStyles = styled.div`
     }
 
     .PG {
-      max-width: 100vw;
-      max-height: 100vh;
+      width: 100vw;
     }
 
     .openSourceText {
@@ -1062,10 +1093,23 @@ const EdStyles = styled.div`
 
     .logo {
       width: 50px;
+      padding-top: 0;
     }
 
     .screengrab {
       max-width: 100%;
+    }
+
+    .homepageImage {
+      width: 100vw;
+    }
+
+    .PG {
+      min-width: 100vw;
+    }
+
+    .banner-left {
+      padding-bottom: 0;
     }
   }
 
