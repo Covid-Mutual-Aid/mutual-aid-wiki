@@ -31,19 +31,18 @@ const mocGroup: Group = {
   name: 'some name',
   location_name: 'some location',
   link_facebook: 'www.link.com',
-  links: [{url: 'www.link.com'}],
+  links: [{ url: 'www.link.com' }],
   location_coord: { lat: 0, lng: 0 },
   location_country: 'UK',
 }
 
 test('Info box appears when group is selected', async () => {
-
   const request = (input: string, opt?: any) => {
     if (input === '/group/get') return Promise.resolve([mocGroup])
     console.log({ input, opt })
   }
   const p = render(<Render request={request} />)
   await new Promise((res) => setTimeout(res, 0))
-  fireEvent.click(p.getByText('Visit the Map'))
+  fireEvent.click(p.getAllByText('Find a group')[0])
   await new Promise((res) => setTimeout(res, 100))
 })
