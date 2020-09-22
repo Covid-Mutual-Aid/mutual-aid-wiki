@@ -121,7 +121,7 @@ const Information = () => {
           </div>
           <div className="banner banner-right floralWhite">
             <div className="homepageImage">
-              <img alt="" className="PG" src={peony} />
+              <img alt="" className="PG" src={peony} style={{ width: '100%', height: '100%' }} />
             </div>
           </div>
         </section>
