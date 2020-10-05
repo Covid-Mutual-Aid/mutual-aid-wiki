@@ -1,5 +1,6 @@
-import { switchMap, mergeMap } from 'rxjs/operators'
+import { switchMap, mergeMap, map } from 'rxjs/operators'
 import { of, throwError } from 'rxjs'
+import { createHash } from 'crypto'
 import P from 'ts-prove'
 
 import lambda, { params, body, select, responseJson$ } from '../_utility_/lib/lambdaRx'
@@ -56,7 +57,14 @@ export const getGroups = lambda((req$) =>
           )
         )
     }),
-    responseJson$
+    map((payload) => ({
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        ETag: createHash('md5').update(JSON.stringify(payload)).digest('hex'),
+      },
+      body: JSON.stringify(payload),
+    }))
   )
 )
 
