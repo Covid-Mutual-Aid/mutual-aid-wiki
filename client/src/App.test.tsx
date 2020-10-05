@@ -38,11 +38,10 @@ const mocGroup: Group = {
 
 test('Info box appears when group is selected', async () => {
   const request = (input: string, opt?: any) => {
-    if (input === '/group/get') return Promise.resolve([mocGroup])
-    console.log({ input, opt })
+    if (input === '/group/get')
+      return Promise.resolve([mocGroup, { ...mocGroup, id: 'two' }, { ...mocGroup, id: 'three' }])
   }
-  const p = render(<Render request={request} />)
+  render(<Render request={request} />)
   await new Promise((res) => setTimeout(res, 0))
-  fireEvent.click(p.getAllByText('Find a group')[0])
-  await new Promise((res) => setTimeout(res, 100))
+  expect(document.querySelector('.ticker')?.innerHTML).toBe('3')
 })

@@ -6,7 +6,7 @@ import axios from 'axios'
 import { readFileSync } from 'fs'
 import { Group } from '../services/_utility_/types'
 
-const JWT_SECRET = process.env.JWT_SECRET as string
+const JWT_SECRET = (process.env.JWT_SECRET as string) || 'LOCAL_TEST_KEY'
 const endpoint = process.env.CI
   ? JSON.parse(readFileSync(join(__dirname, '../../stack.json'), 'utf8')).ServiceEndpoint
   : 'http://localhost:4000/local'
@@ -92,7 +92,6 @@ describe('Groups API', () => {
     expect(data).toEqual('FAIL')
   })
 
-  //
   it('should update group', async () => {
     const editToken = sign({ id: created.id, type: 'EDIT_GROUP' }, JWT_SECRET)
     const { data } = await axios
