@@ -34,7 +34,7 @@ jobs:
         working-directory: lambdas
         run: |
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          yarn sls deploy --verbose --stage test
+          yarn sls deploy --stage test
         env:
           # AWS
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -55,17 +55,18 @@ jobs:
           CLIENT_ENDPOINT: https://staging.mutualaid.wiki
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET: LOCAL_TEST_KEY
 
       - name: 'Run intergration tests'
         run: 'yarn test:integration'
         working-directory: lambdas
         env:
           STAGE: test
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET: LOCAL_TEST_KEY
 
       - name: Tear down lambdas
         working-directory: lambdas
+        if: ${{ always() }}
         run: |
           yarn sls config credentials --provider aws --profile covid --secret "${{ secrets.AWS_SECRET_ACCESS_KEY }}" --key "${{ secrets.AWS_ACCESS_KEY_ID }}"
           yarn sls remove --verbose --stage test
@@ -90,6 +91,7 @@ jobs:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
       - name: Remove dynamodb tables
+        if: ${{ always() }}
         run: |
           export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
