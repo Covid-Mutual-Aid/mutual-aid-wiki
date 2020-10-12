@@ -5,6 +5,11 @@ getGroups:
     - http:
         method: get
         path: group/get
+        cors: true
+    - http:
+        method: get
+        path: group/get
+        cors: true
   timeout: 15
 
 createGroup:
