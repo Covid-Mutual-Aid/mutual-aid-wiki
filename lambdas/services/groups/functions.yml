@@ -7,7 +7,7 @@ getGroups:
         path: group/get
         cors: true
     - http:
-        method: get
+        method: head
         path: group/get
         cors: true
   timeout: 15
