@@ -33,11 +33,6 @@ Submit a pull request to sync with an external source. Helper functions to parse
 
 We are looking for developers to integrate community maintained lists of groups and maintain and improve this resource. We are also looking for volunteers to help us with outreach and community support.
 
-- Get in touch here: info@mutualaid.wiki
-- Join our community slack channel: XXXXX
-- Have a look at our issues here: XXXX
-- Our project management board here: XXXX
-
 # Getting started
 
 Clone the repository
