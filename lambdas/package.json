@@ -18,7 +18,7 @@
     "fp-ts": "^2.5.3",
     "get-urls": "^9.2.0",
     "googleapis": "^48.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "rxjs": "^6.5.5",
     "serverless-offline": "^6.1.4",
     "serverless-stack-output": "^0.2.3",
