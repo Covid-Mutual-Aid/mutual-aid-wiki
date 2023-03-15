@@ -446,7 +446,7 @@ const Information = () => {
               <br />
               Here is some information you may find useful:
               <br />
-              Our email <a href="mailto:info@mutualaid.wik ">info@mutualaid.wiki</a>
+              Our email <a href="mailto:info@mutualaid.wiki">info@mutualaid.wiki</a>
               <br />
               Our source code on{' '}
               <a href="https://github.com/Covid-Mutual-Aid/mutual-aid-wiki">github</a>
