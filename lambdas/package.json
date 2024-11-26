@@ -42,7 +42,7 @@
     "@types/uuid": "^7.0.2",
     "@types/x-ray": "^2.3.3",
     "aws-lambda": "^1.0.5",
-    "aws-sdk": "^2.656.0",
+    "aws-sdk": "^2.814.0",
     "copy-webpack-plugin": "^5.1.1",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "jest": "^25.1.0",
