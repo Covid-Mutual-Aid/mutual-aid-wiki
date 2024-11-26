@@ -14,7 +14,7 @@
     "@sendgrid/mail": "^7.0.1",
     "@slack/web-api": "^5.8.0",
     "airtable": "^0.8.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "fp-ts": "^2.5.3",
     "get-urls": "^9.2.0",
     "googleapis": "^48.0.0",
